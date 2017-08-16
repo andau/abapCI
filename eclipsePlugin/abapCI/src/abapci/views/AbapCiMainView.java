@@ -5,9 +5,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
+import java.util.prefs.Preferences;
 
 import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.preferences.ConfigurationScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -16,7 +18,7 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.dialogs.PopupDialog;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -32,9 +34,10 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.part.ViewPart;
+import org.osgi.service.prefs.BackingStoreException;
 
+import abapci.Activator;
 import abapci.handlers.JenkinsHandler;
 
 public class AbapCiMainView extends ViewPart {
@@ -78,7 +81,29 @@ public class AbapCiMainView extends ViewPart {
 		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 
 		viewer.setContentProvider(ArrayContentProvider.getInstance());
-		viewer.setInput(new String[] { "ZABAP_UI", "ZABAP_GIT", "ZCOMMONS" });
+		
+		IEclipsePreferences preferences = ConfigurationScope.INSTANCE
+                .getNode("packageNames");
+
+		try 
+		{
+			
+			ArrayList<String> preferenceList = new ArrayList<String>(); 
+			
+			for (String key : preferences.keys()) 
+			{
+				preferenceList.add(preferences.get(key, "default")); 
+			}
+			if (!preferenceList.isEmpty())
+			{
+				viewer.setInput((String[]) preferenceList.toArray(new String[1]));
+			}
+			
+		} catch (BackingStoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 
 		viewer.setLabelProvider(new ViewLabelProvider());
 
@@ -210,14 +235,33 @@ public class AbapCiMainView extends ViewPart {
 			public void run() {
 				
 				String[] currentPackages = (String[]) viewer.getInput();
-				ArrayList<String> currentPackagesList = new ArrayList<String>(Arrays.asList(currentPackages));
+				ArrayList<String> currentPackagesList; 
+				
+				if (currentPackages != null) 
+				{
+					currentPackagesList = new ArrayList<String>(Arrays.asList(currentPackages));
+				}
+				else 
+				{
+					currentPackagesList = new ArrayList<String>(); 
+				}
 
 				InputDialog packageNameDialog = new InputDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Add new package",
 			            "Adding a new abap package", "", null); 
 				
 				if (packageNameDialog.open() == Window.OK) {
 						currentPackagesList.add(packageNameDialog.getValue());
-						viewer.setInput((String[]) currentPackagesList.toArray(currentPackages));
+						viewer.setInput(currentPackagesList.toArray(new String[1]));
+				
+						IEclipsePreferences preferences = ConfigurationScope.INSTANCE
+				                .getNode("packageNames");
+						preferences.put(packageNameDialog.getValue(), packageNameDialog.getValue());
+						try {
+							preferences.sync();
+						} catch (BackingStoreException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 				} 
 			}
 		};
@@ -236,8 +280,7 @@ public class AbapCiMainView extends ViewPart {
 
 				Predicate<String> packageNamePredicate = p -> p.equals(packageName);
 				currentPackagesList.removeIf(packageNamePredicate);
-				viewer.setInput(currentPackagesList.toArray(new String[1]));
-
+				viewer.setInput(currentPackagesList.toArray(new String[0])); 
 			}
 		};
 		deleteAction.setText(("Delete element"));
