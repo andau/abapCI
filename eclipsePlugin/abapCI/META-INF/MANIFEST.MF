@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: AbapCI
+Bundle-SymbolicName: com.abapci.core;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: abapci.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.equinox.preferences
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: abapci,
+ abapci.connections,
+ abapci.handlers,
+ abapci.preferences,
+ abapci.views
+Bundle-ActivationPolicy: lazy

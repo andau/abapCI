@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            name="Sample Category"
+            id="abapci.commands.category">
+      </category>
+      <command
+            name="Sample Command"
+            categoryId="abapci.commands.category"
+            id="abapci.commands.sampleCommand">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            commandId="abapci.commands.sampleCommand"
+            class="abapci.handlers.AbapCiHandler">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="abapci.commands.sampleCommand"
+            contextId="org.eclipse.ui.contexts.window"
+            sequence="M1+6"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
+      </key>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+         <toolbar
+               id="abapci.toolbars.sampleToolbar">
+            <command
+                  commandId="abapci.commands.sampleCommand"
+                  icon="icons/ci.ico"
+                  tooltip="Open View for Continuous integration"
+                  id="abapci.toolbars.sampleCommand">
+            </command>
+         </toolbar>
+      </menuContribution>
+
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            name="ABAP CI"
+            class="abapci.preferences.AbapCiPreferences"
+            id="abapci.preferences.abapCiPreferences">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="abapci.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="ABAP Continuous Integration"
+            id="abapCI">
+      </category>
+      <view
+            name="ABAP Continuous Integration"
+            icon="icons/ci.ico"
+            category="abapCI"
+            class="abapci.views.AbapCiMainView"
+            id="abapci.views.AbapCiMainView">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.jdt.ui.JavaPerspective">
+         <view
+               ratio="0.5"
+               relative="org.eclipse.ui.views.ProblemView"
+               relationship="right"
+               id="abapci.views.AbapCiMainView">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.help.contexts">
+      <contexts
+            file="contexts.xml">
+      </contexts>
+   </extension>
+
+</plugin>
