@@ -32,9 +32,7 @@ public class JenkinsConnection {
 		try {
 
 			URL url = new URL(urlstring);
-			String user = username;
-			String pass = password;
-			String authStr = user + ":" + pass;
+			String authStr = username + ":" + password;
 			String encoding = DatatypeConverter.printBase64Binary(authStr.getBytes("utf-8"));
 
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();

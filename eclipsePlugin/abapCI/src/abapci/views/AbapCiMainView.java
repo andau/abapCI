@@ -63,16 +63,9 @@ public class AbapCiMainView extends ViewPart {
 		}
 	}
 
-	/**
-	 * The constructor.
-	 */
 	public AbapCiMainView() {
 	}
 
-	/**
-	 * This is a callback that will allow us to create the viewer and initialize
-	 * it.
-	 */
 	public void createPartControl(Composite parent) {
 		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 
@@ -103,7 +96,6 @@ public class AbapCiMainView extends ViewPart {
 
 		viewer.setLabelProvider(new ViewLabelProvider());
 
-		// Create the help context id for the viewer's control
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "abapCI.viewer");
 		getSite().setSelectionProvider(viewer);
 		makeActions();
