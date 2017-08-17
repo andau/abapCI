@@ -37,14 +37,16 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 				getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_PASSWORD, "&Jenkins Password:",
 				getFieldEditorParent()));
-
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_INTEGRATE, "&Use Jenkins",
+		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_BUILD_TOKEN, "&Jenkins Build Token:",
 				getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_URL, "&SAP Testsystem Url:",
+		
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_INTEGRATE, "&Use ABAP Unittest:",
 				getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_USERNAME, "&SAP Username:",
+		addField(new StringFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_URL, "&ABAP Unittest Url:",
 				getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_PASSWORD, "&SAP Password:",
+		addField(new StringFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_USERNAME, "&ABAP Unittest Username:",
+				getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_PASSWORD, "&ABAP Unittest Password:",
 				getFieldEditorParent()));
 
 	}

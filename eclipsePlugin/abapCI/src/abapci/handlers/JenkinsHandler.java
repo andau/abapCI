@@ -5,6 +5,9 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.osgi.service.prefs.Preferences;
+
 import abapci.Activator;
 import abapci.connections.JenkinsConnection;
 import abapci.preferences.PreferenceConstants;
@@ -21,13 +24,14 @@ public class JenkinsHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		String packageName = event.getParameter("1");
 
-		IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(Activator.PLUGIN_ID);
+		IPreferenceStore prefs = Activator.getDefault().getPreferenceStore(); 
 
-		String baseurl = prefs.get(PreferenceConstants.PREF_JENKINS_URL, "");
-		String username = prefs.get(PreferenceConstants.PREF_JENKINS_USERNAME, "");
-		String password = prefs.get(PreferenceConstants.PREF_JENKINS_PASSWORD, "");
+		String baseurl = prefs.getString(PreferenceConstants.PREF_JENKINS_URL);
+		String username = prefs.getString(PreferenceConstants.PREF_JENKINS_USERNAME);
+		String password = prefs.getString(PreferenceConstants.PREF_JENKINS_PASSWORD);
+		String buildToken = prefs.getString(PreferenceConstants.PREF_JENKINS_BUILD_TOKEN); 
 
-		JenkinsConnection jenkinsConnection = new JenkinsConnection(baseurl, username, password);
+		JenkinsConnection jenkinsConnection = new JenkinsConnection(baseurl, username, password, buildToken);
 		jenkinsConnection.runJob(packageName);
 		return null;
 	}

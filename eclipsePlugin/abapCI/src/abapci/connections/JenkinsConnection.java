@@ -16,21 +16,23 @@ public class JenkinsConnection {
 	private final String baseUrl;
 	private final String username;
 	private final String password;
+	private final String buildToken; 
 
-	public JenkinsConnection(String baseUrl, String username, String password) {
+	public JenkinsConnection(String baseUrl, String username, String password, String buildToken) {
 		this.baseUrl = baseUrl;
 		this.username = username;
 		this.password = password;
+		this.buildToken = buildToken; 
 	}
 
 	public void runJob(String packageName) {
-		String urlstring = String.format("http://%s/job/%s/build?token=PUT_YOUR_TOKEN_OWN_FOR_ABAP_CI&cause=abapCI",
-				baseUrl, packageName);
+		String urlstring = String.format("http://%s/job/%s/build?token=%s&cause=Build_launched_by_abapCI",
+				baseUrl, packageName, buildToken);
 
 		try {
 
 			URL url = new URL(urlstring);
-			String user = username; // username
+			String user = username;
 			String pass = password;
 			String authStr = user + ":" + pass;
 			String encoding = DatatypeConverter.printBase64Binary(authStr.getBytes("utf-8"));

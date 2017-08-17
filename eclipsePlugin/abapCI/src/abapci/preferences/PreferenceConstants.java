@@ -11,7 +11,9 @@ public class PreferenceConstants {
 
 	public static final String PREF_JENKINS_USERNAME = "jenkinsUsernamePreference";
 
-	public static final String PREF_JENKINS_PASSWORD = "jeninsPasswordPreference";
+	public static final String PREF_JENKINS_PASSWORD = "jenkinsPasswordPreference";
+	
+	public static final String PREF_JENKINS_BUILD_TOKEN = "jenkinsBuildTokenPreference";
 
 	public static final String PREF_ABAP_UNIT_INTEGRATE = "sapIntegratePreference";
 
