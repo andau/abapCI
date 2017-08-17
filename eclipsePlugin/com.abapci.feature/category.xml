@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
+   <bundle id="com.abapci.core" version="1.0.0.qualifier">
+      <category name="abapCI_category"/>
+   </bundle>
    <category-def name="abapCI_category" label="ABAP CI category"/>
 </site>

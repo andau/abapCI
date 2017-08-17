@@ -1,6 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: AbapCI
+Bundle-Name: %Bundle-Name
+Bundle-Vendor: %Bundle-Vendor
 Bundle-SymbolicName: com.abapci.core;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: abapci.Activator
