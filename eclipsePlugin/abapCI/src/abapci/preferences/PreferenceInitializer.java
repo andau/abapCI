@@ -18,7 +18,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	 */
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.setDefault(PreferenceConstants.PREF_INTEGRATE_JENKINS, true);
+		store.setDefault(PreferenceConstants.PREF_JENKINS_INTEGRATE, true);
 	}
 
 }

@@ -20,8 +20,6 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 
 	public AbapCiPreferences() {
 		super(GRID);
-		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("General settings for ABAP Continuous Integration");
 	}
 
 	/**
@@ -31,7 +29,7 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 	 */
 	public void createFieldEditors() {
 
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_INTEGRATE_JENKINS, "&Use Jenkins",
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_JENKINS_INTEGRATE, "&Use Jenkins",
 				getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_URL, "&Jenkins BaseUrl (eg. localhost:8080):",
 				getFieldEditorParent()));
@@ -40,7 +38,7 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_PASSWORD, "&Jenkins Password:",
 				getFieldEditorParent()));
 
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_INTEGRATE_ABAP_UNIT, "&Use Jenkins",
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_INTEGRATE, "&Use Jenkins",
 				getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_URL, "&SAP Testsystem Url:",
 				getFieldEditorParent()));
@@ -58,6 +56,8 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 	 * org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
 	public void init(IWorkbench workbench) {
+		setPreferenceStore(Activator.getDefault().getPreferenceStore());
+		setDescription("General settings for ABAP Continuous Integration");
 	}
 
 }
