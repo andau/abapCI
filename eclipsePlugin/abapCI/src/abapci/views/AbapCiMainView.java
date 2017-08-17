@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
-import java.util.prefs.Preferences;
-
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.runtime.preferences.ConfigurationScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -18,7 +16,6 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -37,7 +34,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.osgi.service.prefs.BackingStoreException;
 
-import abapci.Activator;
 import abapci.handlers.JenkinsHandler;
 
 public class AbapCiMainView extends ViewPart {
@@ -88,15 +84,15 @@ public class AbapCiMainView extends ViewPart {
 		try 
 		{
 			
-			ArrayList<String> preferenceList = new ArrayList<String>(); 
+			ArrayList<String> prefPackageList = new ArrayList<String>(); 
 			
 			for (String key : preferences.keys()) 
 			{
-				preferenceList.add(preferences.get(key, "default")); 
+				prefPackageList.add(preferences.get(key, "default")); 
 			}
-			if (!preferenceList.isEmpty())
+			if (!prefPackageList.isEmpty())
 			{
-				viewer.setInput((String[]) preferenceList.toArray(new String[1]));
+				viewer.setInput((String[]) prefPackageList.toArray(new String[1]));
 			}
 			
 		} catch (BackingStoreException e) {
