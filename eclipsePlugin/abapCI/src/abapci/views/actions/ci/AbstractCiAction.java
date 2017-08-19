@@ -3,7 +3,6 @@ package abapci.views.actions.ci;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
@@ -11,8 +10,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.jface.action.Action;
 
 import abapci.Domain.AbapPackageInfo;
-import abapci.Domain.RunInfo;
-import abapci.handlers.JenkinsHandler;
+import abapci.Domain.AbapPackageTestState;
+import abapci.views.ModelProvider;
 
 public abstract class AbstractCiAction extends Action {
 	private static final String NOT_YET_CALLED = "not yet called";
@@ -27,7 +26,7 @@ public abstract class AbstractCiAction extends Action {
 
 	protected void UpdateViewerInput(AbapPackageInfo abapPackageInfo, AbapCiActionEnum ciActionType) 
 	{
-		String[] currentPackages = (String[]) viewer.getInput();
+		java.util.List<AbapPackageTestState> viewerAbapPackageTestStates = ModelProvider.INSTANCE.getPersons(); 
 		
 		if (ciActionType == AbapCiActionEnum.JENKINS) 
 		{
@@ -39,15 +38,17 @@ public abstract class AbstractCiAction extends Action {
 		}
 				
 		
-		for(int i = 0; i < currentPackages.length; i++) 
+		for(AbapPackageTestState abapPackageTestState : viewerAbapPackageTestStates) 
 		{
-			if (currentPackages[i] == abapPackageInfo.getPackageName()) 
+			if (abapPackageTestState.getPackageName() == abapPackageInfo.getPackageName()) 
 			{
-				currentPackages[i] = abapPackageInfo.getPackageName() + " " + abapPackageInfo.getPackageRunInfos(); 
+				abapPackageTestState.setJenkinsState(abapPackageInfo.getJenkinsRunInfo().getExecutionResult()); 
+				abapPackageTestState.setAbapState(abapPackageInfo.getAbapUnitRunInfo().getExecutionResult()); 
 			}
 		}
+
 		
-		viewer.setInput(currentPackages);
+		viewer.setInput(viewerAbapPackageTestStates);
 
 	}
 	
@@ -55,10 +56,10 @@ public abstract class AbstractCiAction extends Action {
 
 		ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getSelection();
-		String packageName = ((StructuredSelection) selection).getFirstElement().toString();
+		AbapPackageTestState abapPackageTestState = (AbapPackageTestState)((StructuredSelection) selection).getFirstElement();
 
 		Map<String, String> packageNames = new HashMap<String, String>();
-		packageNames.put("1", packageName);
+		packageNames.put("1", abapPackageTestState.getPackageName());
 
 		return packageNames;
 	}

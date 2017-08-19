@@ -6,6 +6,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.jface.viewers.TableViewer;
 
 import abapci.Domain.AbapPackageInfo;
+import abapci.Domain.AbapPackageTestState;
 import abapci.handlers.AbapUnitHandler;
 
 public class AbapUnitCiAction extends AbstractCiAction {

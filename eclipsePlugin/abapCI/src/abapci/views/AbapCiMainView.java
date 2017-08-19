@@ -1,11 +1,7 @@
 package abapci.views;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Predicate;
-import org.eclipse.core.commands.ExecutionEvent;
+
 import org.eclipse.core.runtime.preferences.ConfigurationScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jface.action.Action;
@@ -14,19 +10,19 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.dialogs.InputDialog;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.window.Window;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -34,8 +30,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.osgi.service.prefs.BackingStoreException;
 
-import abapci.Domain.TestResultSummary;
-import abapci.handlers.AbapUnitHandler;
+import abapci.Domain.AbapPackageTestState;
 import abapci.views.actions.ci.AbapUnitCiAction;
 import abapci.views.actions.ci.JenkinsCiAction;
 import abapci.views.actions.ui.AddAction;
@@ -73,12 +68,24 @@ public class AbapCiMainView extends ViewPart {
 
 	public void createPartControl(Composite parent) {
 		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
-
+		createColumns(parent, viewer);
+		final Table table = viewer.getTable();
+        table.setHeaderVisible(true);
+ 
+		
 		viewer.setContentProvider(ArrayContentProvider.getInstance());
 		
-		IEclipsePreferences preferences = ConfigurationScope.INSTANCE
-                .getNode("packageNames");
-
+		viewer.setInput(ModelProvider.INSTANCE.getPersons());
+		
+		GridData gridData = new GridData();
+        gridData.verticalAlignment = GridData.FILL;
+        gridData.horizontalSpan = 2;
+        gridData.grabExcessHorizontalSpace = true;
+        gridData.grabExcessVerticalSpace = true;
+        gridData.horizontalAlignment = GridData.FILL;
+        viewer.getControl().setLayoutData(gridData);
+        
+		/**
 		try 
 		{
 			
@@ -97,9 +104,10 @@ public class AbapCiMainView extends ViewPart {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
 
 
-		viewer.setLabelProvider(new ViewLabelProvider());
+		//viewer.setLabelProvider(new ViewLabelProvider());
 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "abapCI.viewer");
 		getSite().setSelectionProvider(viewer);
@@ -166,7 +174,50 @@ public class AbapCiMainView extends ViewPart {
 		deleteAction.setText(("Delete element"));
 	}
 
+	private void createColumns(final Composite parent, final TableViewer viewer) {
+        String[] titles = { "ABAP package", "Jenkins state", "ABAP Unit state"};
+        int[] bounds = { 100, 100, 100 };
 
+        TableViewerColumn col = createTableViewerColumn(titles[0], bounds[0], 0);
+        col.setLabelProvider(new ColumnLabelProvider() {
+            @Override
+            public String getText(Object element) {
+                AbapPackageTestState p = (AbapPackageTestState) element;
+                return p.getPackageName();
+            }
+        });
+
+        col = createTableViewerColumn(titles[1], bounds[1], 1);
+        col.setLabelProvider(new ColumnLabelProvider() {
+            @Override
+            public String getText(Object element) {
+                AbapPackageTestState p = (AbapPackageTestState) element;
+                return p.getJenkinsState();
+            }
+        });
+
+        col = createTableViewerColumn(titles[2], bounds[2], 2);
+        col.setLabelProvider(new ColumnLabelProvider() {
+            @Override
+            public String getText(Object element) {
+                AbapPackageTestState p = (AbapPackageTestState) element;
+                return p.getAbapState();
+            }
+        });
+
+ 
+    }
+
+    private TableViewerColumn createTableViewerColumn(String title, int bound, final int colNumber) {
+        final TableViewerColumn viewerColumn = new TableViewerColumn(viewer, SWT.NONE);
+        final TableColumn column = viewerColumn.getColumn();
+        column.setText(title);
+        column.setWidth(bound);
+        column.setResizable(true);
+        column.setMoveable(true);
+        return viewerColumn;
+    }
+    
 	public void setFocus() {
 		viewer.getControl().setFocus();
 	}
