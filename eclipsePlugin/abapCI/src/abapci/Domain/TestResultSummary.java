@@ -1,4 +1,4 @@
-package abapci.connections;
+package abapci.Domain;
 
 public class TestResultSummary {
 

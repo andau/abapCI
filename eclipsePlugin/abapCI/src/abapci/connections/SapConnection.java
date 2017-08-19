@@ -6,8 +6,10 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import abapci.Domain.TestResultSummary;
 
-public class SapConnection {
+
+public class SapConnection implements ISapConnection {
 
 	private String sapUrl;
 	private String username;
@@ -19,6 +21,7 @@ public class SapConnection {
 		this.password = password;
 	}
 
+	@Override
 	public TestResultSummary executeTests(String packageName) {
 		try {
 
@@ -61,4 +64,5 @@ public class SapConnection {
 		// TODO Auto-generated method stub
 
 	}
+
 }

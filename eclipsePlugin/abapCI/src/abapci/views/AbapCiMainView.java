@@ -34,7 +34,12 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.osgi.service.prefs.BackingStoreException;
 
-import abapci.handlers.JenkinsHandler;
+import abapci.Domain.TestResultSummary;
+import abapci.handlers.AbapUnitHandler;
+import abapci.views.actions.ci.AbapUnitCiAction;
+import abapci.views.actions.ci.JenkinsCiAction;
+import abapci.views.actions.ui.AddAction;
+import abapci.views.actions.ui.DeleteAction;
 
 public class AbapCiMainView extends ViewPart {
 
@@ -143,141 +148,24 @@ public class AbapCiMainView extends ViewPart {
 	}
 
 	private void makeActions() {
-		jenkinsAction = new Action() {
-			public void run() {
 
-				// TODO errorhandling for wrong Url, username, password, ...
-
-				try {
-					Map<String, String> packageNames = getSelectedPackages();
-
-					new JenkinsHandler().execute(new ExecutionEvent(null, packageNames, null, null));
-					showMessage(String.format("Jenkins jobs for packages %s started",
-							packageNames.entrySet().iterator().next().getValue()));
-
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					showMessage("Please select exactly one item of the package list");
-				}
-
-				// TODO Refactor duplicate code
-			}
-
-			private Map<String, String> getSelectedPackages() {
-
-				ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-						.getSelection();
-				String packageName = ((StructuredSelection) selection).getFirstElement().toString();
-
-				Map<String, String> packageNames = new HashMap<String, String>();
-				packageNames.put("1", packageName);
-
-				return packageNames;
-			}
-
-		};
+		//TODO set Images for actions 
+		
+		jenkinsAction = new JenkinsCiAction(viewer); 		
 		jenkinsAction.setText("Run jenkins");
-		jenkinsAction.setToolTipText("Run jenkins for SAP package");
-		// TODO set image jenkinsAction.setImageDescriptor()));
+		jenkinsAction.setToolTipText("Run jenkins for ABAP package");
 
-		aUnitAction = new Action() {
-			public void run() {
-
-				try {
-					Map<String, String> packageNames = getSelectedPackages();
-
-					new JenkinsHandler().execute(new ExecutionEvent(null, packageNames, null, null));
-
-					showMessage(String.format("ABAP Unittests for packages %s started",
-							packageNames.entrySet().iterator().next().getValue()));
-
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					showMessage("Please select exactly one item of the package list");
-				}
-
-			}
-
-			// TODO Refactor duplicate code
-			private Map<String, String> getSelectedPackages() {
-				ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-						.getSelection();
-				String packageName = ((StructuredSelection) selection).getFirstElement().toString();
-
-				Map<String, String> packageNames = new HashMap<String, String>();
-				packageNames.put("1", packageName);
-
-				return packageNames;
-			}
-
-		};
-
+		aUnitAction = new AbapUnitCiAction(viewer);
 		aUnitAction.setText("Run ABAP Unittest");
 		aUnitAction.setToolTipText("Run ABAP Unittest for given package");
-		// TODO set image aUnitAction.setImageDescriptor()));
 
-		// aUnitAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().
-		// getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
-
-		addAction = new Action() {
-			public void run() {
-				
-				String[] currentPackages = (String[]) viewer.getInput();
-				ArrayList<String> currentPackagesList; 
-				
-				if (currentPackages != null) 
-				{
-					currentPackagesList = new ArrayList<String>(Arrays.asList(currentPackages));
-				}
-				else 
-				{
-					currentPackagesList = new ArrayList<String>(); 
-				}
-
-				InputDialog packageNameDialog = new InputDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Add new package",
-			            "Adding a new abap package", "", null); 
-				
-				if (packageNameDialog.open() == Window.OK) {
-						currentPackagesList.add(packageNameDialog.getValue());
-						viewer.setInput(currentPackagesList.toArray(new String[1]));
-				
-						IEclipsePreferences preferences = ConfigurationScope.INSTANCE
-				                .getNode("packageNames");
-						preferences.put(packageNameDialog.getValue(), packageNameDialog.getValue());
-						try {
-							preferences.sync();
-						} catch (BackingStoreException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-				} 
-			}
-		};
+		addAction = new AddAction(viewer); 		
 		addAction.setText(("Insert element"));
 
-		deleteAction = new Action() {
-
-			public void run() {
-
-				ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-						.getSelection();
-				String packageName = ((StructuredSelection) selection).getFirstElement().toString();
-
-				String[] currentPackages = (String[]) viewer.getInput();
-				ArrayList<String> currentPackagesList = new ArrayList<String>(Arrays.asList(currentPackages));
-
-				Predicate<String> packageNamePredicate = p -> p.equals(packageName);
-				currentPackagesList.removeIf(packageNamePredicate);
-				viewer.setInput(currentPackagesList.toArray(new String[0])); 
-			}
-		};
+		deleteAction = new DeleteAction(viewer); 
 		deleteAction.setText(("Delete element"));
-
 	}
 
-	private void showMessage(String message) {
-		MessageDialog.openInformation(viewer.getControl().getShell(), "ABAP CI View", message);
-	}
 
 	public void setFocus() {
 		viewer.getControl().setFocus();
