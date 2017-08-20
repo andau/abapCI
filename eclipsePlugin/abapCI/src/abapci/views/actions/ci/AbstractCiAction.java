@@ -15,7 +15,7 @@ import abapci.views.ModelProvider;
 
 public abstract class AbstractCiAction extends Action {
 	private static final String NOT_YET_CALLED = "not yet called";
-	private TableViewer viewer; 
+	protected TableViewer viewer; 
 	
 	String lastResult = NOT_YET_CALLED; 
 	

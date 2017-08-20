@@ -1,7 +1,6 @@
 package abapci.views.actions.ui;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 import java.util.function.Predicate;
 
 import org.eclipse.jface.action.Action;
@@ -9,6 +8,9 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.ui.PlatformUI;
+
+import abapci.Domain.AbapPackageTestState;
+import abapci.views.ModelProvider;
 
 public class DeleteAction extends Action {
 	private TableViewer viewer;
@@ -21,14 +23,13 @@ public class DeleteAction extends Action {
 
 		ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getSelection();
-		String packageName = ((StructuredSelection) selection).getFirstElement().toString();
+		AbapPackageTestState abapPackageTestState = (AbapPackageTestState) ((StructuredSelection) selection).getFirstElement();
 
-		String[] currentPackages = (String[]) viewer.getInput();
-		ArrayList<String> currentPackagesList = new ArrayList<String>(Arrays.asList(currentPackages));
+		List<AbapPackageTestState> viewerAbapPackageTestStates = ModelProvider.INSTANCE.getPersons(); 
 
-		Predicate<String> packageNamePredicate = p -> p.equals(packageName);
-		currentPackagesList.removeIf(packageNamePredicate);
-		viewer.setInput(currentPackagesList.toArray(new String[0])); 
+		Predicate<AbapPackageTestState> packageNamePredicate = p -> p.getPackageName().equals(abapPackageTestState.getPackageName());
+		viewerAbapPackageTestStates.removeIf(packageNamePredicate);
+		viewer.setInput(viewerAbapPackageTestStates); 
 	}
 
 }

@@ -2,6 +2,7 @@ package abapci.views.actions.ui;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.core.runtime.preferences.ConfigurationScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -12,6 +13,9 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.ui.PlatformUI;
 import org.osgi.service.prefs.BackingStoreException;
 
+import abapci.Domain.AbapPackageTestState;
+import abapci.views.ModelProvider;
+
 public class AddAction extends Action {
 	private TableViewer viewer;
 
@@ -21,21 +25,14 @@ public class AddAction extends Action {
 
 	public void run() {
 
-		String[] currentPackages = (String[]) viewer.getInput();
-		ArrayList<String> currentPackagesList;
-
-		if (currentPackages != null) {
-			currentPackagesList = new ArrayList<String>(Arrays.asList(currentPackages));
-		} else {
-			currentPackagesList = new ArrayList<String>();
-		}
-
+		List<AbapPackageTestState> viewerAbapPackageTestStates = ModelProvider.INSTANCE.getPersons(); 
+		
 		InputDialog packageNameDialog = new InputDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
 				"Add new package", "Adding a new ABAP package", "", null);
 
 		if (packageNameDialog.open() == Window.OK) {
-			currentPackagesList.add(packageNameDialog.getValue());
-			viewer.setInput(currentPackagesList.toArray(new String[1]));
+			viewerAbapPackageTestStates.add(new AbapPackageTestState(packageNameDialog.getValue(), "", ""));
+			viewer.setInput(viewerAbapPackageTestStates);
 
 			IEclipsePreferences preferences = ConfigurationScope.INSTANCE.getNode("packageNames");
 			preferences.put(packageNameDialog.getValue(), packageNameDialog.getValue());

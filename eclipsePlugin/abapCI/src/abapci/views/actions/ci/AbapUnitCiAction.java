@@ -4,9 +4,10 @@ import java.util.Map;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.ui.PlatformUI;
 
 import abapci.Domain.AbapPackageInfo;
-import abapci.Domain.AbapPackageTestState;
+import abapci.Domain.TestResultSummary;
 import abapci.handlers.AbapUnitHandler;
 
 public class AbapUnitCiAction extends AbstractCiAction {
@@ -21,12 +22,13 @@ public class AbapUnitCiAction extends AbstractCiAction {
 		//TODO Handling for more than one package 
 		
 		String firstPackage = null; 
+		TestResultSummary testResultSummary = null; 
 		
 		try {
 			Map<String, String> packageNames = getSelectedPackages();
             firstPackage = packageNames.entrySet().iterator().next().getValue(); 
 			
-			new AbapUnitHandler().execute(new ExecutionEvent(null, packageNames, null, null));
+			testResultSummary = (TestResultSummary) new AbapUnitHandler().execute(new ExecutionEvent(null, packageNames, null, null));
 		
 		}
 		catch(Exception ex) 
@@ -35,5 +37,17 @@ public class AbapUnitCiAction extends AbstractCiAction {
 		}
 		
 		UpdateViewerInput(new AbapPackageInfo(firstPackage), AbapCiActionEnum.ABAP_UNIT); 
+		
+	     PlatformUI.getWorkbench().getThemeManager().getCurrentTheme(); 
+
+	     if (testResultSummary != null && testResultSummary.getNumErrors() > 0) 
+		 {
+		     PlatformUI.getWorkbench().getThemeManager().setCurrentTheme("com.abapCi.custom.theme"); 			 
+		 }
+		 else
+		 {
+		     PlatformUI.getWorkbench().getThemeManager().setCurrentTheme("org.eclipse.ui.r30"); 			 
+		 }	     
+	 	
 	}
 }

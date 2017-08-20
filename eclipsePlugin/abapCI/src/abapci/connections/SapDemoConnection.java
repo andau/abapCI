@@ -10,7 +10,7 @@ public class SapDemoConnection implements ISapConnection {
 		
 		switch(packageName) 
 		{
-		   case "ZSAMPLE_PACKAGE_WITH_ERROR":  
+		   case "ZSAMPLE_ERROR":  
 		   {
 			   testResultSummary = new TestResultSummary(packageName, 1); 
 			   break; 
