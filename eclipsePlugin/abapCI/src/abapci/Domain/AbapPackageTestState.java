@@ -3,12 +3,16 @@ package abapci.Domain;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
+import abapci.lang.UiTexts;
+
 public class AbapPackageTestState {
     private String packageName;
     private String jenkinsState;
     private String abapState;
+	private String lastRun;
     private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(
             this);
+
 
     public AbapPackageTestState() {
     }
@@ -20,6 +24,14 @@ public class AbapPackageTestState {
         this.abapState = abapState;
     }
 
+    public AbapPackageTestState(String packageName) {
+        super();
+        this.packageName = packageName;
+        this.jenkinsState = UiTexts.JENKINS_NOT_YET_EXECUTED;
+        this.abapState = UiTexts.AUNIT_NOT_YET_EXECUTED;
+    }
+
+    
     public void addPropertyChangeListener(String propertyName,
             PropertyChangeListener listener) {
         propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
@@ -42,6 +54,10 @@ public class AbapPackageTestState {
         return abapState;
     }
 
+	public String getLastRun() {
+		return lastRun;
+	}
+
     public void setPackageName(String packageName) {
         propertyChangeSupport.firePropertyChange("packageName", this.packageName,
                 this.packageName = packageName);
@@ -58,10 +74,16 @@ public class AbapPackageTestState {
                 this.abapState = abapState);
     }
 
+    public void setLastRun(String lastRun) {
+        propertyChangeSupport.firePropertyChange("lastRun", this.lastRun,
+                this.lastRun = lastRun);
+    }
 
+    
     @Override
     public String toString() {
         return packageName + " " + jenkinsState + " " + abapState;
     }
+
 
 }

@@ -11,22 +11,17 @@ import org.eclipse.jface.action.Action;
 
 import abapci.Domain.AbapPackageInfo;
 import abapci.Domain.AbapPackageTestState;
-import abapci.views.ModelProvider;
+import abapci.views.ViewModel;
 
 public abstract class AbstractCiAction extends Action {
 	private static final String NOT_YET_CALLED = "not yet called";
-	protected TableViewer viewer; 
 	
 	String lastResult = NOT_YET_CALLED; 
 	
-	public AbstractCiAction(TableViewer viewer) {
-		this.viewer = viewer; 
-	}
-
 
 	protected void UpdateViewerInput(AbapPackageInfo abapPackageInfo, AbapCiActionEnum ciActionType) 
 	{
-		java.util.List<AbapPackageTestState> viewerAbapPackageTestStates = ModelProvider.INSTANCE.getPersons(); 
+		java.util.List<AbapPackageTestState> abapPackageTestStates = ViewModel.INSTANCE.getPackageTestStates(); 
 		
 		if (ciActionType == AbapCiActionEnum.JENKINS) 
 		{
@@ -38,7 +33,7 @@ public abstract class AbstractCiAction extends Action {
 		}
 				
 		
-		for(AbapPackageTestState abapPackageTestState : viewerAbapPackageTestStates) 
+		for(AbapPackageTestState abapPackageTestState : abapPackageTestStates) 
 		{
 			if (abapPackageTestState.getPackageName() == abapPackageInfo.getPackageName()) 
 			{
@@ -48,7 +43,7 @@ public abstract class AbstractCiAction extends Action {
 		}
 
 		
-		viewer.setInput(viewerAbapPackageTestStates);
+		ViewModel.INSTANCE.setPackageTestStates(abapPackageTestStates);
 
 	}
 	

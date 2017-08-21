@@ -1,9 +1,5 @@
 package abapci.views;
 
-import java.util.ArrayList;
-
-import org.eclipse.core.runtime.preferences.ConfigurationScope;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -28,9 +24,9 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
-import org.osgi.service.prefs.BackingStoreException;
-
 import abapci.Domain.AbapPackageTestState;
+import abapci.jobs.RepeatingAUnitJob;
+import abapci.lang.UiTexts;
 import abapci.views.actions.ci.AbapUnitCiAction;
 import abapci.views.actions.ci.JenkinsCiAction;
 import abapci.views.actions.ui.AddAction;
@@ -71,11 +67,16 @@ public class AbapCiMainView extends ViewPart {
 		createColumns(parent, viewer);
 		final Table table = viewer.getTable();
         table.setHeaderVisible(true);
- 
-		
+         
 		viewer.setContentProvider(ArrayContentProvider.getInstance());
 		
-		viewer.setInput(ModelProvider.INSTANCE.getPersons());
+		viewer.setInput(ViewModel.INSTANCE.getPackageTestStates());
+		
+		//TODO Viewer is needed because ViewModel is not yet implemented with full functionality 
+		ViewModel.INSTANCE.setView(viewer);
+		
+		getSite().setSelectionProvider(viewer);
+		
 		
 		GridData gridData = new GridData();
         gridData.verticalAlignment = GridData.FILL;
@@ -85,27 +86,6 @@ public class AbapCiMainView extends ViewPart {
         gridData.horizontalAlignment = GridData.FILL;
         viewer.getControl().setLayoutData(gridData);
         
-		/**
-		try 
-		{
-			
-			ArrayList<String> prefPackageList = new ArrayList<String>(); 
-			
-			for (String key : preferences.keys()) 
-			{
-				prefPackageList.add(preferences.get(key, "default")); 
-			}
-			if (!prefPackageList.isEmpty())
-			{
-				viewer.setInput((String[]) prefPackageList.toArray(new String[1]));
-			}
-			
-		} catch (BackingStoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
-
 
 		//viewer.setLabelProvider(new ViewLabelProvider());
 
@@ -114,6 +94,19 @@ public class AbapCiMainView extends ViewPart {
 		makeActions();
 		hookContextMenu();
 		contributeToActionBars();
+	
+	
+		RepeatingAUnitJob job = new RepeatingAUnitJob(); 
+		    //{
+			//protected IStatus run(IProgressMonitor monitor){ 
+		  	//	schedule(60000);
+		  	//	List<AbapPackageTestState> abapPackageTestStates = ViewModel.INSTANCE.getPackageTestStates(); 
+		  	//	ViewModel.INSTANCE.setPackageTestStates(abapPackageTestStates);
+
+		  	//	return org.eclipse.core.runtime.Status.OK_STATUS;
+			//}
+		    // };
+		job.schedule(6000); 
 	}
 
 	private void hookContextMenu() {
@@ -159,24 +152,15 @@ public class AbapCiMainView extends ViewPart {
 
 		//TODO set Images for actions 
 		
-		jenkinsAction = new JenkinsCiAction(viewer); 		
-		jenkinsAction.setText("Run jenkins");
-		jenkinsAction.setToolTipText("Run jenkins for ABAP package");
-
-		aUnitAction = new AbapUnitCiAction(viewer);
-		aUnitAction.setText("Run ABAP Unittest");
-		aUnitAction.setToolTipText("Run ABAP Unittest for given package");
-
-		addAction = new AddAction(viewer); 		
-		addAction.setText(("Insert element"));
-
-		deleteAction = new DeleteAction(viewer); 
-		deleteAction.setText(("Delete element"));
+		jenkinsAction = new JenkinsCiAction("Run jenkins", "Run jenkins for ABAP package"); 		
+		aUnitAction = new AbapUnitCiAction("Run ABAP Unittest", "Run ABAP Unittest for given package");
+		addAction = new AddAction(UiTexts.LABEL_ACTION_ADD_PACKAGE); 		
+		deleteAction = new DeleteAction(UiTexts.LABEL_ACTION_REMOVE_PACKAGE); 
 	}
-
+	
 	private void createColumns(final Composite parent, final TableViewer viewer) {
-        String[] titles = { "ABAP package", "Jenkins state", "ABAP Unit state"};
-        int[] bounds = { 100, 100, 100 };
+        String[] titles = { "ABAP package", "Unit test", "Last run", "Jenkins state"};
+        int[] bounds = { 100, 80, 80, 100 };
 
         TableViewerColumn col = createTableViewerColumn(titles[0], bounds[0], 0);
         col.setLabelProvider(new ColumnLabelProvider() {
@@ -192,7 +176,7 @@ public class AbapCiMainView extends ViewPart {
             @Override
             public String getText(Object element) {
                 AbapPackageTestState p = (AbapPackageTestState) element;
-                return p.getJenkinsState();
+                return p.getAbapState();
             }
         });
 
@@ -201,11 +185,19 @@ public class AbapCiMainView extends ViewPart {
             @Override
             public String getText(Object element) {
                 AbapPackageTestState p = (AbapPackageTestState) element;
-                return p.getAbapState();
+                return p.getLastRun();
             }
         });
 
- 
+        col = createTableViewerColumn(titles[3], bounds[3], 2);
+        col.setLabelProvider(new ColumnLabelProvider() {
+            @Override
+            public String getText(Object element) {
+                AbapPackageTestState p = (AbapPackageTestState) element;
+                return p.getJenkinsState();
+            }
+        });
+
     }
 
     private TableViewerColumn createTableViewerColumn(String title, int bound, final int colNumber) {

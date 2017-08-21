@@ -5,16 +5,20 @@ import java.util.List;
 
 import org.eclipse.core.runtime.preferences.ConfigurationScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.widgets.Display;
 import org.osgi.service.prefs.BackingStoreException;
 
 import abapci.Domain.AbapPackageTestState;
 
-public enum ModelProvider {
+public enum ViewModel {
     INSTANCE;
+	
+	Viewer viewer; 
 
     private List<AbapPackageTestState> abapPackageTestStates;
 
-    private ModelProvider() {
+    private ViewModel() {
 
       	abapPackageTestStates = new ArrayList<AbapPackageTestState>();
 
@@ -33,8 +37,25 @@ public enum ModelProvider {
 
 	}
 
-    public List<AbapPackageTestState> getPersons() {
+    //TODO Dirty but working for the beginning - observableList should make this obsolete in future   
+    public void setView(Viewer viewer) 
+    {
+    	INSTANCE.viewer = viewer;
+    }
+    
+    public List<AbapPackageTestState> getPackageTestStates() {
         return abapPackageTestStates;
     }
+
+	public void setPackageTestStates(List<AbapPackageTestState> abapPackageTestStates) {
+		
+		this.abapPackageTestStates = abapPackageTestStates; 
+		Display.getDefault().asyncExec(new Runnable() {
+		    public void run() {
+		    	viewer.setInput(abapPackageTestStates);
+		    }
+		});
+		
+	}
 
 }

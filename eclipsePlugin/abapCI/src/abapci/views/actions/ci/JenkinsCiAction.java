@@ -9,10 +9,12 @@ import abapci.Domain.AbapPackageInfo;
 import abapci.handlers.JenkinsHandler;
 
 public class JenkinsCiAction extends AbstractCiAction {
-	public JenkinsCiAction(TableViewer viewer) {
-		super(viewer);
+	
+
+	public JenkinsCiAction(String label, String tooltip) {
+		this.setText(label);
+		this.setToolTipText(tooltip);
 	}
-		
 
 	public void run() {
 		

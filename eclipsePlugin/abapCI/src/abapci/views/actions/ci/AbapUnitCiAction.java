@@ -10,11 +10,12 @@ import abapci.Domain.AbapPackageInfo;
 import abapci.Domain.TestResultSummary;
 import abapci.handlers.AbapUnitHandler;
 
-public class AbapUnitCiAction extends AbstractCiAction {
-	public AbapUnitCiAction(TableViewer viewer) {
-		super(viewer);
+public class AbapUnitCiAction extends AbstractCiAction {	
+
+	public AbapUnitCiAction(String label, String tooltip) {
+		this.setText(label);
+		this.setToolTipText(tooltip);
 	}
-		
 
 	public void run() {
 		
@@ -27,8 +28,7 @@ public class AbapUnitCiAction extends AbstractCiAction {
 		try {
 			Map<String, String> packageNames = getSelectedPackages();
             firstPackage = packageNames.entrySet().iterator().next().getValue(); 
-			
-			testResultSummary = (TestResultSummary) new AbapUnitHandler().execute(new ExecutionEvent(null, packageNames, null, null));
+		    testResultSummary = (TestResultSummary) new AbapUnitHandler().execute(new ExecutionEvent(null, packageNames, null, null));
 		
 		}
 		catch(Exception ex) 
