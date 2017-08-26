@@ -23,4 +23,10 @@ public class PreferenceConstants {
 
 	public static final String PREF_ABAP_UNIT_PASSWORD = "abapUnitPasswordPreference";
 
+	public static final String PREF_ABAP_UNIT_RUN_INTERVAL = "abapUnitIntervalPreference";
+
+	public static final String PREF_ABAP_UNIT_RUN_ON_SAVE = "abapUnitRunOnSavePreference";
+
+	public static final String PREF_JENKINS_RUN_ON_SAVE = "jenkinsRunOnSavePreference";
+
 }

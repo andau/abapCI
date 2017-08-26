@@ -1,68 +1,50 @@
 package abapci.connections;
-
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
 import abapci.Domain.TestResultSummary;
 
-
 public class SapConnection implements ISapConnection {
-
-	private String sapUrl;
-	private String username;
-	private String password;
-
-	public SapConnection(String sapUrl, String username, String password) {
-		this.sapUrl = sapUrl;
-		this.username = username;
-		this.password = password;
-	}
-
-	@Override
-	public TestResultSummary executeTests(String packageName) {
-		try {
-
-			URL url = new URL(sapUrl);
-
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-			connection.setRequestMethod("GET");
-			connection.setDoOutput(true);
-			connection.setDoInput(true);
-			connection.setUseCaches(false);
-			connection.setRequestProperty("Content-Type", "application/json;charset=utf-8");
-			connection.setRequestProperty("Accept", "application/json");
-			String userpass = username + ":" + password;
-
-			String request = "";
-			OutputStream out = connection.getOutputStream();
-			out.write(request.getBytes());
-			out.close();
-
-			if (connection.getResponseCode() == 200)
-				;
-			{
-				BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-
-				String inputLine;
-				while ((inputLine = in.readLine()) != null)
-					System.out.println(inputLine);
-				in.close();
-			}
-
-		} catch (Exception ex) {
-			System.out.println(ex.getMessage());
-		}
-
-		return new TestResultSummary(packageName, 0);
-	}
-
-	public void call(String packageName) {
-		// TODO Auto-generated method stub
-
-	}
-
+    private String sapUrl;
+    private String username;
+    private String password;
+    public SapConnection(String sapUrl, String username, String password) {
+        this.sapUrl = sapUrl;
+        this.username = username;
+        this.password = password;
+    }
+    @Override
+    public TestResultSummary executeTests(String packageName) {
+        
+        TestResultSummary testResultSummary = new TestResultSummary(packageName, 1);
+        
+        try {
+            String fullSapUrl = String.format("http://%s('%s')", sapUrl, packageName);   
+            URL url = new URL(fullSapUrl);
+            //http://saphed.hella.int:8000/sap/opu/odata/sap/ZODATA_ABAP_CI_SRV/AbapCiSummarySet('ZHE_FINSTRAL')
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            String userpass = username + ":" + password;
+            String basicAuth = "Basic " + javax.xml.bind.DatatypeConverter.printBase64Binary(userpass.getBytes());
+            
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty ("Authorization", basicAuth);
+            connection.setUseCaches(false);
+            connection.setDoOutput(true);
+            connection.setRequestProperty("Content-Type", "application/json;charset=utf-8");
+            //connection.setRequestProperty("Accept", "application/json");
+            InputStream content = connection.getInputStream();
+            BufferedReader in1 = new BufferedReader(new InputStreamReader(content));
+            String line =  in1.readLine();
+            
+            if (line.contains("TESTRUN_OK"))
+            {
+                testResultSummary = new TestResultSummary(packageName, 0);
+            }                        
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+        return testResultSummary;
+    }
 }

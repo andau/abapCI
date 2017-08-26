@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.prefs.Preferences;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -12,72 +13,38 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 
+import abapci.Activator;
 import abapci.Domain.AbapPackageTestState;
 import abapci.Domain.TestResultSummary;
 import abapci.handlers.AbapUnitHandler;
+import abapci.manager.AUnitTestManager;
+import abapci.preferences.PreferenceConstants;
 import abapci.views.ViewModel;
 
 public class RepeatingAUnitJob extends Job {
     private boolean running = true;
+    private AUnitTestManager aUnitTestManager; 
     public RepeatingAUnitJob() {
        super("Repeating AUnit Job");
+       aUnitTestManager = new AUnitTestManager(); 
     }
     
     @Override
     protected IStatus run(IProgressMonitor monitor) {
-       schedule(6000);
-       List<AbapPackageTestState> packageTestStates = ViewModel.INSTANCE.getPackageTestStates(); 
+       schedule(100);
        
-       boolean allTestsOk = true; 
+       IPreferenceStore prefs = Activator.getDefault().getPreferenceStore(); 
+       int runningInterval = prefs.getInt(PreferenceConstants.PREF_ABAP_UNIT_RUN_INTERVAL);
        
-       TestResultSummary testResultSummary = new TestResultSummary("none", -1);
-       
-       for(AbapPackageTestState packageTestState : packageTestStates)
+       if (runningInterval > 0)
        {
-    	   Map<String, String> packageNames = new HashMap<String, String>(); 
-    	   packageNames.put("1", packageTestState.getPackageName()); 
-    	   
-    	   try {
-			testResultSummary = (TestResultSummary) new AbapUnitHandler().execute(new ExecutionEvent(null, packageNames, null, null));
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			allTestsOk = false; 
-		}
-    	   if (testResultSummary.getNumErrors() > 0)
-    	   {
-    		   allTestsOk = false;    
-    	   }; 
-    	   String testResultMessage = testResultSummary.getNumErrors() == 0 ? "OK" : "NOK";
-    	   
-       	   String currentTime = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
-       	   
-       	   packageTestState.setAbapState(testResultMessage);
-    	   packageTestState.setLastRun(currentTime);
-    	   
+           schedule(runningInterval * 60 * 100 );
+           aUnitTestManager.executeAllPackages();
        }
-       ViewModel.INSTANCE.setPackageTestStates(packageTestStates);
-              
-	   if (allTestsOk) 
-	   {
-		   Display.getDefault().asyncExec(new Runnable() {
-			    public void run() {
-			 	   PlatformUI.getWorkbench().getThemeManager().setCurrentTheme("org.eclipse.ui.r30"); 			 
-			    }
-			});		   
-	   }
-	   else 
-	   {
-		   Display.getDefault().asyncExec(new Runnable() {
-			    public void run() {
-			 	   PlatformUI.getWorkbench().getThemeManager().setCurrentTheme("com.abapCi.custom.theme"); 			 
-			    }
-			});
-	   }
-	   
 
        return Status.OK_STATUS;
     }

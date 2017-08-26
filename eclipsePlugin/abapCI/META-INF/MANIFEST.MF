@@ -16,4 +16,5 @@ Export-Package: abapci,
  abapci.preferences,
  abapci.views
 Bundle-ActivationPolicy: lazy
-Import-Package: org.eclipse.jface.text
+Import-Package: org.eclipse.core.resources,
+ org.eclipse.jface.text

@@ -1,5 +1,8 @@
 package abapci.views;
 
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -24,6 +27,8 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
+
+import abapci.GeneralResourceChangeListener;
 import abapci.Domain.AbapPackageTestState;
 import abapci.jobs.RepeatingAUnitJob;
 import abapci.lang.UiTexts;
@@ -97,16 +102,13 @@ public class AbapCiMainView extends ViewPart {
 	
 	
 		RepeatingAUnitJob job = new RepeatingAUnitJob(); 
-		    //{
-			//protected IStatus run(IProgressMonitor monitor){ 
-		  	//	schedule(60000);
-		  	//	List<AbapPackageTestState> abapPackageTestStates = ViewModel.INSTANCE.getPackageTestStates(); 
-		  	//	ViewModel.INSTANCE.setPackageTestStates(abapPackageTestStates);
-
-		  	//	return org.eclipse.core.runtime.Status.OK_STATUS;
-			//}
-		    // };
 		job.schedule(6000); 
+		
+		//TODO CHECK why IResourceChangeListener is not found 
+		IResourceChangeListener listener = new GeneralResourceChangeListener();
+		   ResourcesPlugin.getWorkspace().addResourceChangeListener(
+		      listener, IResourceChangeEvent.POST_CHANGE);
+
 	}
 
 	private void hookContextMenu() {

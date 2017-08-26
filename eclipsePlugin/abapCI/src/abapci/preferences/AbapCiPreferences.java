@@ -49,6 +49,14 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 		addField(new StringFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_PASSWORD, "&ABAP Unittest Password:",
 				getFieldEditorParent()));
 
+		addField(new IntegerFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_RUN_INTERVAL, "&ABAP Unittest Interval (minutes):",
+				getFieldEditorParent()));
+
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_RUN_ON_SAVE, "&ABAP Unittests bei Datei speichern ausführen",
+				getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_JENKINS_RUN_ON_SAVE, "&Jenkins Job bei Datei speichern ausführen",
+				getFieldEditorParent()));
+
 	}
 
 	/*

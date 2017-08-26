@@ -7,5 +7,6 @@
 		</accessrules>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="/org.eclipse.core.resources/org.eclipse.core.resources_3.11.0.v20160503-1608.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
