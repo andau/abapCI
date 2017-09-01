@@ -29,8 +29,8 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 	 */
 	public void createFieldEditors() {
 
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_JENKINS_INTEGRATE, "&Use Jenkins",
-				getFieldEditorParent()));
+		//addField(new BooleanFieldEditor(PreferenceConstants.PREF_JENKINS_INTEGRATE, "&Use Jenkins",
+		//		getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_URL, "&Jenkins BaseUrl (eg. localhost:8080):",
 				getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_USERNAME, "&Jenkins Username:",
@@ -40,8 +40,8 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_BUILD_TOKEN, "&Jenkins Build Token:",
 				getFieldEditorParent()));
 		
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_INTEGRATE, "&Use ABAP Unittest:",
-				getFieldEditorParent()));
+		//addField(new BooleanFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_INTEGRATE, "&Use ABAP Unittest:",
+		//		getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_URL, "&ABAP Unittest Url:",
 				getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_USERNAME, "&ABAP Unittest Username:",

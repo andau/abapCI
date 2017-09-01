@@ -34,7 +34,7 @@ public class JenkinsManager {
 	    	   
 	       	   String currentTime = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
 	       	   
-	       	   packageTestState.setJenkinsState("started");
+	       	   packageTestState.setJenkinsState("last started: " + currentTime);
 	    	   packageTestState.setLastRun(currentTime);
 	    	   
 	       }

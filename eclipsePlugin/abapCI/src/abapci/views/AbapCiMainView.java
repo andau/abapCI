@@ -162,7 +162,7 @@ public class AbapCiMainView extends ViewPart {
 	
 	private void createColumns(final Composite parent, final TableViewer viewer) {
         String[] titles = { "ABAP package", "Unit test", "Last run", "Jenkins state"};
-        int[] bounds = { 100, 80, 80, 100 };
+        int[] bounds = { 150, 70, 70, 200 };
 
         TableViewerColumn col = createTableViewerColumn(titles[0], bounds[0], 0);
         col.setLabelProvider(new ColumnLabelProvider() {

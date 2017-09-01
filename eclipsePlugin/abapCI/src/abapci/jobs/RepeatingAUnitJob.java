@@ -1,29 +1,13 @@
 package abapci.jobs;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.prefs.Preferences;
-
-import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.PlatformUI;
-
 import abapci.Activator;
-import abapci.Domain.AbapPackageTestState;
-import abapci.Domain.TestResultSummary;
-import abapci.handlers.AbapUnitHandler;
 import abapci.manager.AUnitTestManager;
 import abapci.preferences.PreferenceConstants;
-import abapci.views.ViewModel;
 
 public class RepeatingAUnitJob extends Job {
     private boolean running = true;

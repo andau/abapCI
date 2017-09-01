@@ -3,11 +3,7 @@ package abapci.handlers;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.osgi.service.prefs.Preferences;
-
 import abapci.Activator;
 import abapci.connections.JenkinsConnection;
 import abapci.preferences.PreferenceConstants;

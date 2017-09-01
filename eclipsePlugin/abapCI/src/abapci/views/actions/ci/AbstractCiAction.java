@@ -3,11 +3,10 @@ package abapci.views.actions.ci;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.jface.action.Action;
 
 import abapci.Domain.AbapPackageInfo;
 import abapci.Domain.AbapPackageTestState;

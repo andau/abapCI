@@ -3,7 +3,6 @@ package abapci.views.actions.ci;
 import java.util.Map;
 
 import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.jface.viewers.TableViewer;
 
 import abapci.Domain.AbapPackageInfo;
 import abapci.handlers.JenkinsHandler;
