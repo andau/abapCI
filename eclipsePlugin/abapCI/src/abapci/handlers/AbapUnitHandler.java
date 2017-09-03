@@ -29,17 +29,17 @@ public class AbapUnitHandler extends AbstractHandler {
 		String username = prefs.getString(PreferenceConstants.PREF_ABAP_UNIT_USERNAME);
 		String password = prefs.getString(PreferenceConstants.PREF_ABAP_UNIT_PASSWORD);
 
-		String integrateAbapUnit = prefs.getString(PreferenceConstants.PREF_ABAP_UNIT_INTEGRATE); 
+		String integrateAbapUnit = prefs.getString(PreferenceConstants.PREF_ABAP_UNIT_SIMULATE); 
 		
 		
 		ISapConnection sapConnection; 
 		if (integrateAbapUnit == "true")
 		{
-			sapConnection = new SapConnection(baseurl, username, password);
+			sapConnection = new SapDemoConnection();
 		}
 		else 
 		{			
-			sapConnection = new SapDemoConnection();
+			sapConnection = new SapConnection(baseurl, username, password);
 		}
 		
 		return sapConnection.executeTests(packageName);

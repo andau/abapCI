@@ -29,6 +29,22 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 	 */
 	public void createFieldEditors() {
 
+		
+		//addField(new BooleanFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_INTEGRATE, "&Use ABAP Unittest:",
+		//		getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_URL, "&ABAP Unit test Url:",
+				getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_USERNAME, "&ABAP Unit test Username:",
+				getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_PASSWORD, "&ABAP Unit test Password:",
+				getFieldEditorParent()));
+
+		addField(new IntegerFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_RUN_INTERVAL, "&ABAP Unit test interval (minutes):",
+				getFieldEditorParent()));
+
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_RUN_ON_SAVE, "&Run ABAP Unit tests when file saved",
+				getFieldEditorParent()));
+
 		//addField(new BooleanFieldEditor(PreferenceConstants.PREF_JENKINS_INTEGRATE, "&Use Jenkins",
 		//		getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_URL, "&Jenkins BaseUrl (eg. localhost:8080):",
@@ -37,25 +53,16 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 				getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_PASSWORD, "&Jenkins Password:",
 				getFieldEditorParent()));
+
 		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_BUILD_TOKEN, "&Jenkins Build Token:",
 				getFieldEditorParent()));
+
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_JENKINS_RUN_ON_SAVE, "&Run Jenkins Builds when file saved",
+				getFieldEditorParent()));
 		
-		//addField(new BooleanFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_INTEGRATE, "&Use ABAP Unittest:",
-		//		getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_URL, "&ABAP Unittest Url:",
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_SIMULATE, "&Simulate ABAP Unit Endpoint",
 				getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_USERNAME, "&ABAP Unittest Username:",
-				getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_PASSWORD, "&ABAP Unittest Password:",
-				getFieldEditorParent()));
-
-		addField(new IntegerFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_RUN_INTERVAL, "&ABAP Unittest Interval (minutes):",
-				getFieldEditorParent()));
-
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_RUN_ON_SAVE, "&ABAP Unittests bei Datei speichern ausführen",
-				getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_JENKINS_RUN_ON_SAVE, "&Jenkins Job bei Datei speichern ausführen",
-				getFieldEditorParent()));
+		
 
 	}
 
