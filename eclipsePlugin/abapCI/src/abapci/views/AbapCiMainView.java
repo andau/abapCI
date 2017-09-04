@@ -28,10 +28,12 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
+import abapci.Activator;
 import abapci.GeneralResourceChangeListener;
 import abapci.Domain.AbapPackageTestState;
 import abapci.jobs.RepeatingAUnitJob;
 import abapci.lang.UiTexts;
+import abapci.preferences.PreferenceConstants;
 import abapci.views.actions.ci.AbapUnitCiAction;
 import abapci.views.actions.ci.JenkinsCiAction;
 import abapci.views.actions.ui.AddAction;
@@ -100,9 +102,14 @@ public class AbapCiMainView extends ViewPart {
 		hookContextMenu();
 		contributeToActionBars();
 	
-	
-		RepeatingAUnitJob job = new RepeatingAUnitJob(); 
-		job.schedule(6000); 
+	    int abapUnitRunInterval = Activator.getDefault().getPreferenceStore().
+				getInt(PreferenceConstants.PREF_ABAP_UNIT_RUN_INTERVAL); 
+	    
+		if (abapUnitRunInterval > 0)
+		{
+			RepeatingAUnitJob job = new RepeatingAUnitJob(); 
+			job.schedule(6000); 			
+		}
 		
 		//TODO CHECK why IResourceChangeListener is not found 
 		IResourceChangeListener listener = new GeneralResourceChangeListener();
