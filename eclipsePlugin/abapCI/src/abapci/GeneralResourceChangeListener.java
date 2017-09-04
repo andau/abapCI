@@ -2,6 +2,8 @@ package abapci;
 
 import org.eclipse.core.resources.*;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
 
 import abapci.manager.AUnitTestManager;
 import abapci.manager.JenkinsManager;
@@ -22,7 +24,12 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
         	 IPreferenceStore prefs = Activator.getDefault().getPreferenceStore(); 
              if (prefs.getBoolean(PreferenceConstants.PREF_ABAP_UNIT_RUN_ON_SAVE)) 
              {
-        	    aUnitTestManager.executeAllPackages();
+            	 boolean allUnitTestsOk = aUnitTestManager.executeAllPackages();
+            	 if (prefs.getBoolean(PreferenceConstants.PREF_CHANGE_COLOR_ON_FAILED_TESTS))
+            	 {
+            		 updateTheme(allUnitTestsOk); 
+            	 }
+        	    
              }
              if (prefs.getBoolean(PreferenceConstants.PREF_JENKINS_RUN_ON_SAVE)) 
              {
@@ -31,5 +38,25 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
              
             break; 
         }
+   }
+	
+   private void updateTheme(boolean allTestsOk)
+   {
+	   if (allTestsOk) 
+	   {
+		   Display.getDefault().asyncExec(new Runnable() {
+			    public void run() {
+			 	   PlatformUI.getWorkbench().getThemeManager().setCurrentTheme("org.eclipse.ui.r30"); 			 
+			    }
+			});		   
+	   }
+	   else 
+	   {
+		   Display.getDefault().asyncExec(new Runnable() {
+			    public void run() {
+			 	   PlatformUI.getWorkbench().getThemeManager().setCurrentTheme("com.abapCi.custom.theme"); 			 
+			    }
+			});
+	   }  	 
    }
 }

@@ -27,4 +27,6 @@ public class PreferenceConstants {
 
 	public static final String PREF_JENKINS_RUN_ON_SAVE = "jenkinsRunOnSavePreference";
 
+	public static final String PREF_CHANGE_COLOR_ON_FAILED_TESTS = "jenkinsChangeColorOnFailedTestsPreference";
+
 }

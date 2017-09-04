@@ -18,7 +18,7 @@ import abapci.views.ViewModel;
 
 public class AUnitTestManager {
 
-	public void executeAllPackages() 
+	public boolean executeAllPackages() 
 	{
 	       List<AbapPackageTestState> packageTestStates = ViewModel.INSTANCE.getPackageTestStates(); 
 	       
@@ -38,6 +38,7 @@ public class AUnitTestManager {
 				e.printStackTrace();
 				allTestsOk = false; 
 			}
+	    	   
 	    	   if (testResultSummary.getNumErrors() > 0)
 	    	   {
 	    		   allTestsOk = false;    
@@ -52,21 +53,6 @@ public class AUnitTestManager {
 	       }
 	       ViewModel.INSTANCE.setPackageTestStates(packageTestStates);
 	              
-		   if (allTestsOk) 
-		   {
-			   Display.getDefault().asyncExec(new Runnable() {
-				    public void run() {
-				 	   PlatformUI.getWorkbench().getThemeManager().setCurrentTheme("org.eclipse.ui.r30"); 			 
-				    }
-				});		   
+		   return allTestsOk; 
 		   }
-		   else 
-		   {
-			   Display.getDefault().asyncExec(new Runnable() {
-				    public void run() {
-				 	   PlatformUI.getWorkbench().getThemeManager().setCurrentTheme("com.abapCi.custom.theme"); 			 
-				    }
-				});
-		   }  	 
-	}
 }

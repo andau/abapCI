@@ -63,6 +63,10 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_SIMULATE, "&Simulate ABAP Unit Endpoint",
 				getFieldEditorParent()));
 		
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_CHANGE_COLOR_ON_FAILED_TESTS, "&Change Theme layout on failed tests",
+				getFieldEditorParent()));
+		
+		
 
 	}
 
