@@ -30,29 +30,48 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
     }
     
 	public void resourceChanged(IResourceChangeEvent event) {
-      switch (event.getType()) {
+		switch (event.getType()) {
+		
          case IResourceChangeEvent.POST_CHANGE:
-             if (abapUnitRunOnSave) 
-             {
-            	 boolean allUnitTestsOk = aUnitTestManager.executeAllPackages();
-            	 if (changeColorOnFailedTests)
-            	 {
-            		 updateTheme(allUnitTestsOk); 
-            	 }
-        	    
-             }
-             
-             if (jenkinsRunOnSave) 
-             {
-        	    jenkinsManager.executeAllPackages();
-             }
-             
-            break; 
-        }
+          	IResourceDelta delta = event.getDelta(); 
+         	if (delta == null) return; 
+
+         	IResourceDelta[] resourceDeltas = delta.getAffectedChildren(
+    				IResourceDelta.CHANGED |
+    				IResourceDelta.ADDED |
+    				IResourceDelta.REMOVED);
+         	
+         	if (resourceDeltas.length > 0)
+         	{
+         		runTestsForAllResources();
+         	    //TODO add possibility to run tests only for affected packages - resourceDeltas[i]....
+         	}
+         
+            break;
+         default: 
+        	 return; 
+		}
    }
 	
-   private void updateTheme(boolean allTestsOk)
-   {
+   private void runTestsForAllResources() {
+	   
+		if (abapUnitRunOnSave) 
+		{
+			boolean allUnitTestsOk = aUnitTestManager.executeAllPackages();
+		  	if (changeColorOnFailedTests)
+		  	{
+		  		updateTheme(allUnitTestsOk); 
+		  	}            		
+		}
+	        
+	   if (jenkinsRunOnSave) 
+	   {
+	    jenkinsManager.executeAllPackages();
+	   }
+  }
+	
+  private void updateTheme(boolean allTestsOk)
+  {
 	   if (allTestsOk) 
 	   {
 		   Display.getDefault().asyncExec(new Runnable() {
