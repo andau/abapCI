@@ -111,7 +111,6 @@ public class AbapCiMainView extends ViewPart {
 			job.schedule(6000); 			
 		}
 		
-		//TODO CHECK why IResourceChangeListener is not found 
 		IResourceChangeListener listener = new GeneralResourceChangeListener();
 		   ResourcesPlugin.getWorkspace().addResourceChangeListener(
 		      listener, IResourceChangeEvent.POST_CHANGE);

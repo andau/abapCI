@@ -10,28 +10,39 @@ import abapci.manager.JenkinsManager;
 import abapci.preferences.PreferenceConstants; 
 
 public class GeneralResourceChangeListener implements IResourceChangeListener {
-    private AUnitTestManager aUnitTestManager; 
+	
+	private AUnitTestManager aUnitTestManager; 
     private JenkinsManager jenkinsManager; 
+    private boolean abapUnitRunOnSave; 
+    private boolean changeColorOnFailedTests; 
+    private boolean jenkinsRunOnSave; 
 	
     public GeneralResourceChangeListener() 
     {
     	aUnitTestManager = new AUnitTestManager();
-    	jenkinsManager = new JenkinsManager(); 
+    	jenkinsManager = new JenkinsManager();
+   	    
+    	IPreferenceStore prefs = Activator.getDefault().getPreferenceStore(); 
+    	
+    	abapUnitRunOnSave  = prefs.getBoolean(PreferenceConstants.PREF_ABAP_UNIT_RUN_ON_SAVE); 
+    	changeColorOnFailedTests = prefs.getBoolean(PreferenceConstants.PREF_CHANGE_COLOR_ON_FAILED_TESTS); 
+    	jenkinsRunOnSave = prefs.getBoolean(PreferenceConstants.PREF_JENKINS_RUN_ON_SAVE);
     }
+    
 	public void resourceChanged(IResourceChangeEvent event) {
       switch (event.getType()) {
          case IResourceChangeEvent.POST_CHANGE:
-        	 IPreferenceStore prefs = Activator.getDefault().getPreferenceStore(); 
-             if (prefs.getBoolean(PreferenceConstants.PREF_ABAP_UNIT_RUN_ON_SAVE)) 
+             if (abapUnitRunOnSave) 
              {
             	 boolean allUnitTestsOk = aUnitTestManager.executeAllPackages();
-            	 if (prefs.getBoolean(PreferenceConstants.PREF_CHANGE_COLOR_ON_FAILED_TESTS))
+            	 if (changeColorOnFailedTests)
             	 {
             		 updateTheme(allUnitTestsOk); 
             	 }
         	    
              }
-             if (prefs.getBoolean(PreferenceConstants.PREF_JENKINS_RUN_ON_SAVE)) 
+             
+             if (jenkinsRunOnSave) 
              {
         	    jenkinsManager.executeAllPackages();
              }
