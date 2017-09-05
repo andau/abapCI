@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description name="ABAP Continous Integration" url="https://github.com/andau/abapCI/tree/master/repository">
+      A Continous Integration plugin for ABAP
+   </description>
+   <feature url="features/com.abapci.feature_0.0.1.jar" id="com.abapci.feature" version="0.0.1">
+      <category name="ABAP CI"/>
+   </feature>
+   <category-def name="ABAP CI" label="ABAP CI"/>
+</site>
