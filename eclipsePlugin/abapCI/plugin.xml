@@ -38,7 +38,7 @@
                id="abapci.toolbars.sampleToolbar">
             <command
                   commandId="abapci.commands.sampleCommand"
-                  icon="icons/ci.ico"
+                  icon="icons/abapci_logo.ico"
                   tooltip="Open View for Continuous integration"
                   id="abapci.toolbars.sampleCommand">
             </command>
@@ -68,7 +68,7 @@
       </category>
       <view
             name="ABAP Continuous Integration"
-            icon="icons/ci.ico"
+            icon="icons/abapci_logo.ico"
             category="abapCI"
             class="abapci.views.AbapCiMainView"
             id="abapci.views.AbapCiMainView">
