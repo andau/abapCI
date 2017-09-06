@@ -101,15 +101,9 @@ public class AbapCiMainView extends ViewPart {
 		makeActions();
 		hookContextMenu();
 		contributeToActionBars();
-	
-	    int abapUnitRunInterval = Activator.getDefault().getPreferenceStore().
-				getInt(PreferenceConstants.PREF_ABAP_UNIT_RUN_INTERVAL); 
-	    
-		if (abapUnitRunInterval > 0)
-		{
-			RepeatingAUnitJob job = new RepeatingAUnitJob(); 
-			job.schedule(6000); 			
-		}
+		    
+	    RepeatingAUnitJob job = new RepeatingAUnitJob(); 
+	    job.schedule(6000); 			
 		
 		IResourceChangeListener listener = new GeneralResourceChangeListener();
 		   ResourcesPlugin.getWorkspace().addResourceChangeListener(
