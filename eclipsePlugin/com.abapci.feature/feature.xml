@@ -2,7 +2,7 @@
 <feature
       id="com.abapci.feature"
       label="ABAP Continuous Integration"
-      version="0.0.2"
+      version="0.0.3"
       provider-name="andau">
 
    <description url="http://www.example.com/description">
@@ -64,14 +64,6 @@ END OF TERMS AND CONDITIONS
    <url>
       <update label="ABAP Continuous Integration" url="https://github.com/andau/abapCI/tree/master/repository"/>
    </url>
-
-   <includes
-         id="org.eclipse.e4.rcp"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.equinox.p2.core.feature"
-         version="0.0.0"/>
 
    <requires>
       <import plugin="org.eclipse.ui"/>
