@@ -1,20 +1,16 @@
 package abapci.preferences;
 
-import org.eclipse.jface.preference.*;
-import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.jface.preference.BooleanFieldEditor;
+import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.IntegerFieldEditor;
+import org.eclipse.jface.preference.StringFieldEditor;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbench;
-import abapci.Activator;
+import org.eclipse.ui.IWorkbenchPreferencePage;
 
-/**
- * This class represents a preference page that is contributed to the
- * Preferences dialog. By subclassing <samp>FieldEditorPreferencePage</samp>, we
- * can use the field support built into JFace that allows us to create a page
- * that is small and knows how to save, restore and apply itself.
- * <p>
- * This page is used to modify preferences only. They are stored in the
- * preference store that belongs to the main plug-in class. That way,
- * preferences can be accessed directly via the preference store.
- */
+import abapci.Activator;
 
 public class AbapCiPreferences extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
@@ -22,16 +18,11 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 		super(GRID);
 	}
 
-	/**
-	 * Creates the field editors. Field editors are abstractions of the common
-	 * GUI blocks needed to manipulate various types of preferences. Each field
-	 * editor knows how to save and restore itself.
-	 */
 	public void createFieldEditors() {
 
+		Label emptyLabel0 = new Label(getFieldEditorParent(), SWT.NONE);
+		emptyLabel0.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
 		
-		//addField(new BooleanFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_INTEGRATE, "&Use ABAP Unittest:",
-		//		getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_URL, "&ABAP Unit test Url:",
 				getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_USERNAME, "&ABAP Unit test Username:",
@@ -45,27 +36,32 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_RUN_ON_SAVE, "&Run ABAP Unit tests when file saved",
 				getFieldEditorParent()));
 
-		//addField(new BooleanFieldEditor(PreferenceConstants.PREF_JENKINS_INTEGRATE, "&Use Jenkins",
-		//		getFieldEditorParent()));
+		Label emptyLabel1 = new Label(getFieldEditorParent(), SWT.NONE);
+		emptyLabel1.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
+		
 		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_URL, "&Jenkins BaseUrl (eg. localhost:8080):",
 				getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_USERNAME, "&Jenkins Username:",
 				getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_PASSWORD, "&Jenkins Password:",
 				getFieldEditorParent()));
-
 		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_BUILD_TOKEN, "&Jenkins Build Token:",
 				getFieldEditorParent()));
-
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_JENKINS_RUN_ON_SAVE, "&Run Jenkins Builds when file saved",
 				getFieldEditorParent()));
-		
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_SIMULATE, "&Simulate ABAP Unit Endpoint",
-				getFieldEditorParent()));
+
+		Label emptyLabel2 = new Label(getFieldEditorParent(), SWT.NONE);
+		emptyLabel2.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
+
 		
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_CHANGE_COLOR_ON_FAILED_TESTS, "&Change Theme layout on failed tests",
 				getFieldEditorParent()));
+
+		Label emptyLabel3 = new Label(getFieldEditorParent(), SWT.NONE);
+		emptyLabel3.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
 		
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_SIMULATE, "&Simulate ABAP Unit Endpoint",
+				getFieldEditorParent()));
 		
 
 	}
