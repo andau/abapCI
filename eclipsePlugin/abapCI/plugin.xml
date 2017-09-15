@@ -5,26 +5,26 @@
    <extension
          point="org.eclipse.ui.commands">
       <category
-            name="Sample Category"
+            name="ABAP CI Category"
             id="abapci.commands.category">
       </category>
       <command
-            name="Sample Command"
+            name="ABAP CI command"
             categoryId="abapci.commands.category"
-            id="abapci.commands.sampleCommand">
+            id="abapci.commands.abapCiViewCommand">
       </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            commandId="abapci.commands.sampleCommand"
+            commandId="abapci.commands.abapCiViewCommand"
             class="abapci.handlers.AbapCiHandler">
       </handler>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
       <key
-            commandId="abapci.commands.sampleCommand"
+            commandId="abapci.commands.abapCiViewCommand"
             contextId="org.eclipse.ui.contexts.window"
             sequence="M1+6"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
@@ -35,12 +35,12 @@
       <menuContribution
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
          <toolbar
-               id="abapci.toolbars.sampleToolbar">
+               id="abapci.toolbars.abapCiToolbar">
             <command
-                  commandId="abapci.commands.sampleCommand"
+                  commandId="abapci.commands.abapCiViewCommand"
                   icon="icons/abapci_logo.ico"
                   tooltip="Open View for Continuous integration"
-                  id="abapci.toolbars.sampleCommand">
+                  id="abapci.toolbars.abapCiViewCommand">
             </command>
          </toolbar>
       </menuContribution>

@@ -8,7 +8,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 
-import abapci.Activator;
+import abapci.AbapCiPlugin;
 import abapci.manager.AUnitTestManager;
 import abapci.manager.JenkinsManager;
 import abapci.preferences.PreferenceConstants;
@@ -32,7 +32,7 @@ public class RepeatingAUnitJob extends Job {
        aUnitTestManager = new AUnitTestManager();
        jenkinsManager = new JenkinsManager(); 
 
-       IPreferenceStore prefs = Activator.getDefault().getPreferenceStore(); 
+       IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore(); 
        abapUnitRunOnSave = prefs.getBoolean(PreferenceConstants.PREF_ABAP_UNIT_RUN_ON_SAVE);
        changeColorOnFailedTests = prefs.getBoolean(PreferenceConstants.PREF_CHANGE_COLOR_ON_FAILED_TESTS);
        jenkinsRunOnSave = prefs.getBoolean(PreferenceConstants.PREF_JENKINS_RUN_ON_SAVE);

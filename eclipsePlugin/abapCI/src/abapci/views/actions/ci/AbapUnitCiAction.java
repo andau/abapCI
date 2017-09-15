@@ -5,6 +5,7 @@ import java.util.Map;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.ui.PlatformUI;
 
+import abapci.AbapCiPlugin;
 import abapci.Domain.AbapPackageInfo;
 import abapci.Domain.TestResultSummary;
 import abapci.handlers.AbapUnitHandler;
@@ -14,6 +15,7 @@ public class AbapUnitCiAction extends AbstractCiAction {
 	public AbapUnitCiAction(String label, String tooltip) {
 		this.setText(label);
 		this.setToolTipText(tooltip);
+		this.setImageDescriptor(AbapCiPlugin.getImageDescriptor("icons/abapci_logo.ico"));
 	}
 
 	public void run() {

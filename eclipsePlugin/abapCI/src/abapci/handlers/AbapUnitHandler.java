@@ -5,7 +5,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.preference.IPreferenceStore;
 
-import abapci.Activator;
+import abapci.AbapCiPlugin;
 import abapci.connections.ISapConnection;
 import abapci.connections.SapConnection;
 import abapci.connections.SapDemoConnection;
@@ -23,7 +23,7 @@ public class AbapUnitHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		String packageName = event.getParameter("1");
 
-		IPreferenceStore prefs = Activator.getDefault().getPreferenceStore(); 
+		IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore(); 
 
 		String baseurl = prefs.getString(PreferenceConstants.PREF_ABAP_UNIT_URL);
 		String username = prefs.getString(PreferenceConstants.PREF_ABAP_UNIT_USERNAME);

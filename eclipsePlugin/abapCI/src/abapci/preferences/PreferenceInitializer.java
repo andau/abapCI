@@ -3,13 +3,13 @@ package abapci.preferences;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 
-import abapci.Activator;
+import abapci.AbapCiPlugin;
 
 
 public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 	public void initializeDefaultPreferences() {
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		IPreferenceStore store = AbapCiPlugin.getDefault().getPreferenceStore();
 		
 		store.setDefault(PreferenceConstants.PREF_ABAP_UNIT_URL, "<sap_host>:<sap_port>/sap/opu/odata/ZABAP_CI_EP_SRV/AbapCiSummarySet"); 
 		store.setDefault(PreferenceConstants.PREF_ABAP_UNIT_USERNAME,  "sapUsername");

@@ -4,7 +4,7 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.preference.IPreferenceStore;
-import abapci.Activator;
+import abapci.AbapCiPlugin;
 import abapci.connections.JenkinsConnection;
 import abapci.preferences.PreferenceConstants;
 
@@ -20,7 +20,7 @@ public class JenkinsHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		String packageName = event.getParameter("1");
 
-		IPreferenceStore prefs = Activator.getDefault().getPreferenceStore(); 
+		IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore(); 
 
 		String baseurl = prefs.getString(PreferenceConstants.PREF_JENKINS_URL);
 		String username = prefs.getString(PreferenceConstants.PREF_JENKINS_USERNAME);

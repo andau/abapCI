@@ -3,7 +3,10 @@ package abapci.views.actions.ci;
 import java.util.Map;
 
 import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 
+import abapci.AbapCiPlugin;
 import abapci.Domain.AbapPackageInfo;
 import abapci.handlers.JenkinsHandler;
 
@@ -13,6 +16,7 @@ public class JenkinsCiAction extends AbstractCiAction {
 	public JenkinsCiAction(String label, String tooltip) {
 		this.setText(label);
 		this.setToolTipText(tooltip);
+		this.setImageDescriptor(AbapCiPlugin.getImageDescriptor("icons/jenkins.ico"));
 	}
 
 	public void run() {

@@ -28,12 +28,10 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
-import abapci.Activator;
 import abapci.GeneralResourceChangeListener;
 import abapci.Domain.AbapPackageTestState;
 import abapci.jobs.RepeatingAUnitJob;
 import abapci.lang.UiTexts;
-import abapci.preferences.PreferenceConstants;
 import abapci.views.actions.ci.AbapUnitCiAction;
 import abapci.views.actions.ci.JenkinsCiAction;
 import abapci.views.actions.ui.AddAction;
@@ -137,19 +135,22 @@ public class AbapCiMainView extends ViewPart {
 	}
 
 	private void fillContextMenu(IMenuManager manager) {
-		manager.add(jenkinsAction);
-		manager.add(aUnitAction);
-		// Other plug-ins can contribute there actions here
-		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 		manager.add(addAction);
 		manager.add(deleteAction);
-	}
-
-	private void fillLocalToolBar(IToolBarManager manager) {
+		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 		manager.add(jenkinsAction);
 		manager.add(aUnitAction);
 	}
 
+//TODO fill Action Methoden zusammenfügen
+	private void fillLocalToolBar(IToolBarManager manager) {
+		manager.add(addAction);
+		manager.add(deleteAction);
+		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+		manager.add(jenkinsAction);
+		manager.add(aUnitAction);
+	}
+	
 	private void makeActions() {
 
 		//TODO set Images for actions 

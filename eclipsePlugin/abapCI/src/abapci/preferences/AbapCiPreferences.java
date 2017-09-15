@@ -10,7 +10,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-import abapci.Activator;
+import abapci.AbapCiPlugin;
 
 public class AbapCiPreferences extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
@@ -73,7 +73,7 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 	 * org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
 	public void init(IWorkbench workbench) {
-		setPreferenceStore(Activator.getDefault().getPreferenceStore());
+		setPreferenceStore(AbapCiPlugin.getDefault().getPreferenceStore());
 		setDescription("General settings for ABAP Continuous Integration");
 	}
 
