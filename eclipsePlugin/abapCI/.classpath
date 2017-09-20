@@ -3,10 +3,19 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins">
 		<accessrules>
-			<accessrule kind="accessible" pattern="org.eclipse.ui.workbench_3.108.1.v20160819-2118.jar"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/tools/abapsource/abapunit/IAbapUnitAlert"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/tools/abapsource/abapunit/AbapUnitTask"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/tools/abapsource/abapunit/IAbapUnitResult"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/tools/abapsource/abapunit/IAbapUnitResultItem"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/tools/abapsource/abapunit/IAbapUnitService"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/tools/abapsource/abapunit/TestItem"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/tools/abapsource/abapunit/TestRunException"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/tools/abapsource/abapunit/services/AdtServicesPlugin"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/tools/abapsource/abapunit/services/IAdtServicesFactory"/>
 		</accessrules>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="lib" path="C:/eclipse/java-lib/bundles/easymock-3.5/easymock-3.5.jar" sourcepath="C:/Users/Rosi/AppData/Local/Temp/.org.sf.feeling.decompiler1505936718563/source/easymock-3.5-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
