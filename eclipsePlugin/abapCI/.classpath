@@ -12,6 +12,12 @@
 			<accessrule kind="accessible" pattern="com/sap/adt/tools/abapsource/abapunit/TestRunException"/>
 			<accessrule kind="accessible" pattern="com/sap/adt/tools/abapsource/abapunit/services/AdtServicesPlugin"/>
 			<accessrule kind="accessible" pattern="com/sap/adt/tools/abapsource/abapunit/services/IAdtServicesFactory"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/tools/abapsource/abapunit/AbapUnitAlertKind"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/tools/abapsource/abapunit/AbapUnitAlertSeverity"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/tools/abapsource/abapunit/IAbapUnitAlertDetail"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/tools/abapsource/abapunit/IAbapUnitAlertStackEntry"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/tools/abapsource/abapunit/AbapUnitTimeUnitKind"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/tools/abapsource/abapunit/AbapUnitResultItemType"/>
 		</accessrules>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>

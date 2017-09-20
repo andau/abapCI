@@ -3,9 +3,6 @@ package abapci.views.actions.ci;
 import java.util.Map;
 
 import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
-
 import abapci.AbapCiPlugin;
 import abapci.Domain.AbapPackageInfo;
 import abapci.handlers.JenkinsHandler;
