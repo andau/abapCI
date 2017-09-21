@@ -6,6 +6,7 @@ import org.easymock.*;
 
 import com.sap.adt.tools.abapsource.abapunit.IAbapUnitAlert;
 import abapci.Domain.TestResultSummary;
+import abapci.Domain.TestState;
 import abapci.result.TestResultSummaryFactory;
 
 public class TestResultSummaryFactoryTest extends EasyMockSupport {
@@ -19,13 +20,27 @@ public class TestResultSummaryFactoryTest extends EasyMockSupport {
 	AbapUnitResultItemMock abapUnitResultItemSubSubMock = new AbapUnitResultItemMock(); 
 
 	
+	@Test
+	public void testNoError() {
+		abapUnitResultItemMock.addChildItem(abapUnitResultItemSubMock); 
+		unitResultMock.addItem(abapUnitResultItemMock);  
+
+		TestResultSummary testResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME, unitResultMock);
+		Assert.assertEquals(TestState.OK, testResultSummary.getTestState()); 
+	}
+
+	public void testSubitemsNoError() {
+
+		TestResultSummary testResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME, unitResultMock);
+		Assert.assertEquals(TestState.OK, testResultSummary.getTestState()); 
+	}
 	
 	@Test
 	public void testOneError() {
 		unitResultMock.addAlert(abapUnitAlertMock);
 
 		TestResultSummary testResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME, unitResultMock);
-		Assert.assertEquals(1, testResultSummary.getNumErrors()); 
+		Assert.assertEquals(TestState.NOK, testResultSummary.getTestState()); 
 	}
 
 	@Test
@@ -34,7 +49,7 @@ public class TestResultSummaryFactoryTest extends EasyMockSupport {
 		unitResultMock.addItem(abapUnitResultItemMock);  
 
 		TestResultSummary testResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME, unitResultMock);
-		Assert.assertEquals(1, testResultSummary.getNumErrors()); 
+		Assert.assertEquals(TestState.NOK, testResultSummary.getTestState()); 
 	}
 
 	@Test
@@ -44,7 +59,7 @@ public class TestResultSummaryFactoryTest extends EasyMockSupport {
 		unitResultMock.addItem(abapUnitResultItemMock);  
 
 		TestResultSummary testResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME, unitResultMock);
-		Assert.assertEquals(1, testResultSummary.getNumErrors()); 
+		Assert.assertEquals(TestState.NOK, testResultSummary.getTestState()); 
 	}
 
 	@Test
@@ -55,7 +70,7 @@ public class TestResultSummaryFactoryTest extends EasyMockSupport {
 		unitResultMock.addItem(abapUnitResultItemMock);  
 
 		TestResultSummary testResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME, unitResultMock);
-		Assert.assertEquals(1, testResultSummary.getNumErrors()); 
+		Assert.assertEquals(TestState.NOK, testResultSummary.getTestState()); 
 	}
 
 }

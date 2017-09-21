@@ -8,9 +8,13 @@ import org.eclipse.ui.PlatformUI;
 import abapci.AbapCiPlugin;
 import abapci.Domain.AbapPackageInfo;
 import abapci.Domain.TestResultSummary;
+import abapci.Domain.TestState;
 import abapci.handlers.AbapUnitHandler;
 
 public class AbapUnitCiAction extends AbstractCiAction {	
+
+	private static final String ECLIPSE_STANDARD_THEME = "org.eclipse.ui.r30";
+	private static final String COM_ABAP_CI_CUSTOM_THEME = "com.abapCi.custom.theme";
 
 	public AbapUnitCiAction(String label, String tooltip) {
 		this.setText(label);
@@ -41,14 +45,13 @@ public class AbapUnitCiAction extends AbstractCiAction {
 		
 	     PlatformUI.getWorkbench().getThemeManager().getCurrentTheme(); 
 
-	     if (testResultSummary != null && testResultSummary.getNumErrors() > 0) 
-		 {
-		     PlatformUI.getWorkbench().getThemeManager().setCurrentTheme("com.abapCi.custom.theme"); 			 
-		 }
-		 else
-		 {
-		     PlatformUI.getWorkbench().getThemeManager().setCurrentTheme("org.eclipse.ui.r30"); 			 
-		 }	     
-	 	
+	     String currentTheme = (testResultSummary.getTestState() == TestState.NOK) 
+	    		 ?  COM_ABAP_CI_CUSTOM_THEME : ECLIPSE_STANDARD_THEME; 			 
+	     
+	     if (currentTheme != PlatformUI.getWorkbench().getThemeManager().getCurrentTheme().getLabel())
+	     {
+	    	 PlatformUI.getWorkbench().getThemeManager().setCurrentTheme(currentTheme);
+	     }
+
 	}
 }

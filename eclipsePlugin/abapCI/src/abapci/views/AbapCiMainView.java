@@ -1,5 +1,6 @@
 package abapci.views;
 
+
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -18,7 +19,10 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -68,11 +72,24 @@ public class AbapCiMainView extends ViewPart {
 	}
 
 	public void createPartControl(Composite parent) {
+		
 		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 		createColumns(parent, viewer);
 		final Table table = viewer.getTable();
         table.setHeaderVisible(true);
-         
+        
+        /**
+        Composite statesContainer = new Composite(parent, SWT.NONE); 
+        statesContainer.setLayout(new GridLayout(1, false));
+		
+        Label tddLabel = new Label(statesContainer, SWT.NONE);
+        tddLabel.setBounds(0, 10, 200, 200);
+        tddLabel.setText("TDD State");
+        Button btnMybutton2 = new Button(statesContainer, SWT.NONE);
+        btnMybutton2.setBounds(0, 10, 200, 200);
+        btnMybutton2.setText("Launch abapGIT");
+        **/
+        
 		viewer.setContentProvider(ArrayContentProvider.getInstance());
 		
 		viewer.setInput(ViewModel.INSTANCE.getPackageTestStates());

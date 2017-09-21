@@ -5,7 +5,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import abapci.Domain.TestResultSummary;
+import abapci.Domain.TestState;
 
+@Deprecated 
 public class SapConnection implements ISapConnection {
     private String sapUrl;
     private String username;
@@ -15,10 +17,11 @@ public class SapConnection implements ISapConnection {
         this.username = username;
         this.password = password;
     }
+
     @Override
     public TestResultSummary executeTests(String packageName) {
         
-        TestResultSummary testResultSummary = new TestResultSummary(packageName, 1);
+        TestResultSummary testResultSummary = new TestResultSummary(packageName,  TestState.NOK);
         
         try {
             String fullSapUrl = String.format("http://%s('%s')", sapUrl, packageName);   
@@ -40,7 +43,7 @@ public class SapConnection implements ISapConnection {
             
             if (line.contains("TESTRUN_OK"))
             {
-                testResultSummary = new TestResultSummary(packageName, 0);
+                testResultSummary = new TestResultSummary(packageName, TestState.OK);
             }                        
         } catch (Exception ex) {
             System.out.println(ex.getMessage());

@@ -1,7 +1,9 @@
 package abapci.connections;
 
 import abapci.Domain.TestResultSummary;
+import abapci.Domain.TestState;
 
+@Deprecated
 public class SapDemoConnection implements ISapConnection {
 
 
@@ -12,11 +14,11 @@ public class SapDemoConnection implements ISapConnection {
 		{
 		   case "ZSAMPLE_ERROR":  
 		   {
-			   testResultSummary = new TestResultSummary(packageName, 1); 
+			   testResultSummary = new TestResultSummary(packageName, TestState.NOK); 
 			   break; 
 		   }
 		   default: 
-			   testResultSummary = new TestResultSummary(packageName, 0); 
+			   testResultSummary = new TestResultSummary(packageName, TestState.OK); 
 		}
 		
 		return testResultSummary; 

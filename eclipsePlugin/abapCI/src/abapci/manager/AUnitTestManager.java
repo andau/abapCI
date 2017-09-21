@@ -10,6 +10,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import abapci.Domain.AbapPackageTestState;
 import abapci.Domain.TestResultSummary;
+import abapci.Domain.TestState;
 import abapci.handlers.AbapUnitHandler;
 import abapci.views.ViewModel;
 
@@ -21,7 +22,7 @@ public class AUnitTestManager {
 	       
 	       boolean allTestsOk = true; 
 	       
-	       TestResultSummary testResultSummary = new TestResultSummary("none", -1);
+	       TestResultSummary testResultSummary = new TestResultSummary("none", TestState.UNDEF);
 	       
 	       for(AbapPackageTestState packageTestState : packageTestStates)
 	       {
@@ -36,12 +37,9 @@ public class AUnitTestManager {
 				allTestsOk = false; 
 			}
 	    	   
-	    	   if (testResultSummary.getNumErrors() > 0)
-	    	   {
-	    		   allTestsOk = false;    
-	    	   }; 
-	    	   String testResultMessage = testResultSummary.getNumErrors() == 0 ? "OK" : "NOK";
+	    	   allTestsOk = testResultSummary.getTestState() == TestState.OK; 
 	    	   
+	    	   String testResultMessage = testResultSummary.getTestState().toString();
 	       	   String currentTime = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
 	       	   
 	       	   packageTestState.setAbapState(testResultMessage);

@@ -5,6 +5,7 @@ import com.sap.adt.tools.abapsource.abapunit.IAbapUnitResult;
 import com.sap.adt.tools.abapsource.abapunit.IAbapUnitResultItem;
 
 import abapci.Domain.TestResultSummary;
+import abapci.Domain.TestState;
 
 public class TestResultSummaryFactory {
 
@@ -16,7 +17,8 @@ public class TestResultSummaryFactory {
 	    {
 	    	numCritialAlerts = numCritialAlerts + getNumCriticalAlerts(abapUnitResultItem);     	
 	    }
-		return new TestResultSummary(packageName, numCritialAlerts);
+	    TestState testState = numCritialAlerts == 0 ? TestState.OK : TestState.NOK; 
+		return new TestResultSummary(packageName, testState);
 	}
 	
 	private static int getNumCriticalAlerts(IAbapUnitResultItem abapUnitResultItem) 

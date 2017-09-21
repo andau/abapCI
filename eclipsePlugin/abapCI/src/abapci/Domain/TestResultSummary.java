@@ -3,19 +3,20 @@ package abapci.Domain;
 public class TestResultSummary {
 
 	private final String packageName;
-	private final int numErrors;
+	private final TestState testState;
 
-	public TestResultSummary(String packageName, int numErrors) {
+	public TestResultSummary(String packageName, TestState testState) {
 		this.packageName = packageName;
-		this.numErrors = numErrors;
+		this.testState = testState;
 	}
 
 	public String getPackageName() {
 		return packageName;
 	}
 
-	public int getNumErrors() {
-		return numErrors;
+	public TestState getTestState() {
+		return testState;
 	}
+	
 
 }
