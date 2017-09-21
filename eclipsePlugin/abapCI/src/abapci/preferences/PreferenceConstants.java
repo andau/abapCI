@@ -29,7 +29,7 @@ public class PreferenceConstants {
 
 	public static final String PREF_CHANGE_COLOR_ON_FAILED_TESTS = "jenkinsChangeColorOnFailedTestsPreference";
 
-	public static final String PREF_ABAP_UNIT_DESTINATION = "abapUnitDestinationPreference";
+	public static final String PREF_ABAP_UNIT_DEV_PROJECT = "abapUnitDestinationPreference";
 
 	public static String PREF_ABAP_UNIT_USE_ODATA = "abapUnitUseOdataPreference";
 

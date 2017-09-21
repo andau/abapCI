@@ -14,6 +14,7 @@ import com.sap.adt.tools.abapsource.abapunit.services.AdtServicesPlugin;
 import com.sap.adt.tools.abapsource.abapunit.services.IAdtServicesFactory;
 
 import abapci.AbapCiPlugin;
+import abapci.Domain.TestResultSummary;
 import abapci.connections.ISapConnection;
 import abapci.connections.SapConnection;
 import abapci.connections.SapDemoConnection;
@@ -31,7 +32,7 @@ public class AbapUnitHandler extends AbstractHandler {
 	private static final String TESTOBJECT_PREFIX = "/sap/bc/adt/vit/wb/object_type/devck/object_name/";
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+	public TestResultSummary execute(ExecutionEvent event) throws ExecutionException {
 		
 		String packageName = event.getParameter("1");
 		IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore(); 
@@ -39,7 +40,7 @@ public class AbapUnitHandler extends AbstractHandler {
 		
 		if (prefs.getBoolean(PreferenceConstants.PREF_ABAP_UNIT_USE_ODATA)) 
 		{			
-			return executeWithOdataService(packageName, prefs);
+			return (TestResultSummary) executeWithOdataService(packageName, prefs);
 		}
 		else 
 		{
@@ -47,9 +48,9 @@ public class AbapUnitHandler extends AbstractHandler {
 		}
 	}
 
-	private Object executeWithAdtTools(String packageName, IPreferenceStore prefs) {
+	private TestResultSummary executeWithAdtTools(String packageName, IPreferenceStore prefs) {
 		
-		String projectName = prefs.getString(PreferenceConstants.PREF_ABAP_UNIT_DESTINATION);
+		String projectName = prefs.getString(PreferenceConstants.PREF_ABAP_UNIT_DEV_PROJECT);
 		boolean enableDebugging = false;
 		
 		IAdtServicesFactory servicesFactory = AdtServicesPlugin.getDefault().getFactory();
@@ -68,7 +69,7 @@ public class AbapUnitHandler extends AbstractHandler {
 		    // TODO Auto-generated catch block
 		    e.printStackTrace();
 		}
-		return null;
+		return TestResultSummaryFactory.createUndefined(packageName); 
 	}
 
 	private Object executeWithOdataService(String packageName, IPreferenceStore prefs) {

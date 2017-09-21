@@ -11,6 +11,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = AbapCiPlugin.getDefault().getPreferenceStore();
 		
+		store.setDefault(PreferenceConstants.PREF_ABAP_UNIT_DEV_PROJECT, "<INSERT DEV_PROJECT NAME (see Package Explorer)>"); 
 		store.setDefault(PreferenceConstants.PREF_ABAP_UNIT_URL, "<sap_host>:<sap_port>/sap/opu/odata/ZABAP_CI_EP_SRV/AbapCiSummarySet"); 
 		store.setDefault(PreferenceConstants.PREF_ABAP_UNIT_USERNAME,  "sapUsername");
 		store.setDefault(PreferenceConstants.PREF_ABAP_UNIT_PASSWORD,  "sapPassword");

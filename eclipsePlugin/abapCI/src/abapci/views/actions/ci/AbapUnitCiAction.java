@@ -10,6 +10,7 @@ import abapci.Domain.AbapPackageInfo;
 import abapci.Domain.TestResultSummary;
 import abapci.Domain.TestState;
 import abapci.handlers.AbapUnitHandler;
+import abapci.result.TestResultSummaryFactory;
 
 public class AbapUnitCiAction extends AbstractCiAction {	
 
@@ -28,12 +29,12 @@ public class AbapUnitCiAction extends AbstractCiAction {
 		//TODO Handling for more than one package 
 		
 		String firstPackage = null; 
-		TestResultSummary testResultSummary = null; 
+		TestResultSummary testResultSummary = TestResultSummaryFactory.createUndefined(); 
 		
 		try {
 			Map<String, String> packageNames = getSelectedPackages();
             firstPackage = packageNames.entrySet().iterator().next().getValue(); 
-		    testResultSummary = (TestResultSummary) new AbapUnitHandler().execute(new ExecutionEvent(null, packageNames, null, null));
+		    testResultSummary =  (TestResultSummary) new AbapUnitHandler().execute(new ExecutionEvent(null, packageNames, null, null));
 		
 		}
 		catch(Exception ex) 
@@ -43,15 +44,13 @@ public class AbapUnitCiAction extends AbstractCiAction {
 		
 		UpdateViewerInput(new AbapPackageInfo(firstPackage), AbapCiActionEnum.ABAP_UNIT); 
 		
-	     PlatformUI.getWorkbench().getThemeManager().getCurrentTheme(); 
-
-	     String currentTheme = (testResultSummary.getTestState() == TestState.NOK) 
+	    String currentTheme = (testResultSummary.getTestState() == TestState.NOK) 
 	    		 ?  COM_ABAP_CI_CUSTOM_THEME : ECLIPSE_STANDARD_THEME; 			 
 	     
-	     if (currentTheme != PlatformUI.getWorkbench().getThemeManager().getCurrentTheme().getLabel())
-	     {
-	    	 PlatformUI.getWorkbench().getThemeManager().setCurrentTheme(currentTheme);
-	     }
+	    if (currentTheme != PlatformUI.getWorkbench().getThemeManager().getCurrentTheme().getLabel())
+	    {
+	    	PlatformUI.getWorkbench().getThemeManager().setCurrentTheme(currentTheme);
+	    }
 
 	}
 }

@@ -23,22 +23,22 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 		Label emptyLabel0 = new Label(getFieldEditorParent(), SWT.NONE);
 		emptyLabel0.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
 		
-		addField(new StringFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_URL, "&ABAP Unit test Url:",
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_RUN_ON_SAVE, "&Run ABAP Unit tests when file saved",
 				getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_USERNAME, "&ABAP Unit test Username:",
-				getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_PASSWORD, "&ABAP Unit test Password:",
+		addField(new StringFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_DEV_PROJECT, "&ABAP Development Project:",
 				getFieldEditorParent()));
 
 		addField(new IntegerFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_RUN_INTERVAL, "&ABAP Unit test interval (minutes):",
 				getFieldEditorParent()));
 
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_RUN_ON_SAVE, "&Run ABAP Unit tests when file saved",
-				getFieldEditorParent()));
 
+		
 		Label emptyLabel1 = new Label(getFieldEditorParent(), SWT.NONE);
 		emptyLabel1.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
 		
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_JENKINS_RUN_ON_SAVE, "&Run Jenkins Builds when file saved",
+				getFieldEditorParent()));
+
 		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_URL, "&Jenkins BaseUrl (eg. localhost:8080):",
 				getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_USERNAME, "&Jenkins Username:",
@@ -46,8 +46,6 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_PASSWORD, "&Jenkins Password:",
 				getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_BUILD_TOKEN, "&Jenkins Build Token:",
-				getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_JENKINS_RUN_ON_SAVE, "&Run Jenkins Builds when file saved",
 				getFieldEditorParent()));
 
 		Label emptyLabel2 = new Label(getFieldEditorParent(), SWT.NONE);
@@ -60,6 +58,25 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 		Label emptyLabel3 = new Label(getFieldEditorParent(), SWT.NONE);
 		emptyLabel3.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
 		
+		Label emptyLabel4 = new Label(getFieldEditorParent(), SWT.NONE);
+		emptyLabel4.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
+
+		Label deprecatedLabel = new Label(getFieldEditorParent(), SWT.NONE);
+		deprecatedLabel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
+		deprecatedLabel.setText("Deprecated settings for Abap Unit run");
+
+		
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_USE_ODATA, "&Simulate ABAP Unit Endpoint",
+				getFieldEditorParent()));
+
+		addField(new StringFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_URL, "&ABAP Unit test Url:",
+				getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_USERNAME, "&ABAP Unit test Username:",
+				getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_PASSWORD, "&ABAP Unit test Password:",
+				getFieldEditorParent()));
+
+
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_SIMULATE, "&Simulate ABAP Unit Endpoint",
 				getFieldEditorParent()));
 		
