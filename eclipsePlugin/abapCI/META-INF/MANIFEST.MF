@@ -43,7 +43,8 @@ Require-Bundle: org.eclipse.ui,
  com.sap.adt.util;bundle-version="2.68.2",
  com.sap.adt.util.ui;bundle-version="2.68.2",
  org.eclipse.debug.core;bundle-version="3.10.100",
- org.eclipse.debug.ui;bundle-version="3.11.201"
+ org.eclipse.debug.ui;bundle-version="3.11.201",
+ org.eclipse.jface
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: abapci,
  abapci.connections,
@@ -51,7 +52,8 @@ Export-Package: abapci,
  abapci.preferences,
  abapci.views
 Bundle-ActivationPolicy: lazy
-Import-Package: com.sap.adt.tools.abapsource.abapunit,
+Import-Package: com.sap.adt.sapgui.ui.editors,
+ com.sap.adt.tools.abapsource.abapunit,
  com.sap.adt.tools.abapsource.abapunit.services,
  org.eclipse.core.resources,
  org.eclipse.jface.text
