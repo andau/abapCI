@@ -47,6 +47,7 @@ public class AbapUnitHandler extends AbstractHandler {
 		task.addTestItem(itemObject);
 		
 		try {
+
 			IAbapUnitResult abapUnitResult = abapUnitService.executeUnitTests(task, false, packageName);
 			int numAlerts = abapUnitResult.getAlerts().size();
 			for (IAbapUnitResultItem item : abapUnitResult.getItems()) {

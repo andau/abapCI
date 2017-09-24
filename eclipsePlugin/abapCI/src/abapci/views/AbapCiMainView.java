@@ -66,13 +66,12 @@ public class AbapCiMainView extends ViewPart {
 			return getImage(obj);
 		}
 
+		@Override
 		public Image getImage(Object obj) {
 			return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ELEMENT);
 		}
 	}
 
-	public AbapCiMainView() {
-	}
 
 	public void createPartControl(Composite parent) {
 
@@ -80,7 +79,7 @@ public class AbapCiMainView extends ViewPart {
 		entireContainer.setLayout(new GridLayout(1, false));
 
 		viewer = new TableViewer(entireContainer, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
-		createColumns(entireContainer, viewer);
+		createColumns(viewer);
 		final Table table = viewer.getTable();
 		table.setHeaderVisible(true);
 
@@ -89,10 +88,9 @@ public class AbapCiMainView extends ViewPart {
 		abapGitButton.setText("Launch abapGit");
 		abapGitButton.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event e) {
-				switch (e.type) {
-				case SWT.Selection:
+				if (e.type == SWT.Selection) 
+				{
 					abapGitAction.run();
-					break;
 				}
 			}
 		});
@@ -186,7 +184,7 @@ public class AbapCiMainView extends ViewPart {
 		abapGitAction = new AbapGitCiAction("Open abapGIT", "Open abapGIT in SAP GUI");
 	}
 
-	private void createColumns(final Composite parent, final TableViewer viewer) {
+	private void createColumns(final TableViewer viewer) {
 		String[] titles = { "ABAP package", "Unit test", "Last run", "Jenkins state" };
 		int[] bounds = { 150, 70, 70, 200 };
 

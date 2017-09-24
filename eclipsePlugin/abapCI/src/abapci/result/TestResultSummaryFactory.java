@@ -11,6 +11,8 @@ public class TestResultSummaryFactory {
 
 	private static final String UNDEFINED_PACKAGE_NAME = null;
 
+	private TestResultSummaryFactory() {}
+	
 	public static TestResultSummary create(String packageName, IAbapUnitResult abapUnitResult) 
 	{
 	    int numCritialAlerts = abapUnitResult.getAlerts().size();

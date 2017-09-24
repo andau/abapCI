@@ -4,5 +4,6 @@
       A Continous Integration plugin for ABAP
    </description>
    <feature url="features/com.abapci.feature_0.0.4.jar" id="com.abapci.feature" version="0.0.4"/>
+   <feature url="features/com.abapci.feature_0.0.5.jar" id="com.abapci.feature" version="0.0.5"/>
    <category-def name="ABAP CI" label="ABAP CI"/>
 </site>

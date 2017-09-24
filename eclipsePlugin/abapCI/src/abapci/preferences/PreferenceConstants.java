@@ -10,7 +10,7 @@ public class PreferenceConstants {
 	public static final String PREF_JENKINS_USERNAME = "jenkinsUsernamePreference";
 
 	public static final String PREF_JENKINS_PASSWORD = "jenkinsPasswordPreference";
-	
+
 	public static final String PREF_JENKINS_BUILD_TOKEN = "jenkinsBuildTokenPreference";
 
 	public static final String PREF_ABAP_UNIT_SIMULATE = "abapUnitSimulatePreference";
@@ -31,6 +31,9 @@ public class PreferenceConstants {
 
 	public static final String PREF_ABAP_UNIT_DEV_PROJECT = "abapUnitDestinationPreference";
 
-	public static String PREF_ABAP_UNIT_USE_ODATA = "abapUnitUseOdataPreference";
+	public static final String PREF_ABAP_UNIT_USE_ODATA = "abapUnitUseOdataPreference";
+
+	private PreferenceConstants() {
+	}
 
 }
