@@ -7,16 +7,21 @@ import org.eclipse.core.runtime.preferences.ConfigurationScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.osgi.service.prefs.BackingStoreException;
 
-import abapci.Domain.AbapPackageTestState;
+import abapci.domain.AbapPackageTestState;
+import abapci.domain.GlobalTestState;
+import abapci.domain.TestState;
 
 public enum ViewModel {
     INSTANCE;
 	
 	Viewer viewer; 
+	Label lblOverallTestState; 
 
     private List<AbapPackageTestState> abapPackageTestStates;
+    private TestState overallTestState; 
 
     private ViewModel() {
 
@@ -34,7 +39,9 @@ public enum ViewModel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
+		overallTestState = TestState.UNDEF; 
+		
 	}
 
     //TODO Dirty but working for the beginning - observableList should make this obsolete in future   
@@ -48,14 +55,29 @@ public enum ViewModel {
     }
 
 	public void setPackageTestStates(List<AbapPackageTestState> abapPackageTestStates) {
-		
 		this.abapPackageTestStates = abapPackageTestStates; 
 		Display.getDefault().asyncExec(new Runnable() {
 		    public void run() {
 		    	viewer.setInput(abapPackageTestStates);
 		    }
 		});
-		
+	}
+
+	public void setGlobalTestState(GlobalTestState globalTestState) {	
+		Display.getDefault().asyncExec(new Runnable() {
+		    public void run() {
+		    	lblOverallTestState.setText(globalTestState.getTestStateOutputForDashboard()); 
+		    	lblOverallTestState.setBackground(globalTestState.getColor());
+		    }
+		});		
+	}
+
+	public TestState getOverallTestState() {
+		return INSTANCE.overallTestState; 
+	}
+
+	public void setLblOverallTestState(Label lblOverallTestState) {
+		INSTANCE.lblOverallTestState = lblOverallTestState; 	
 	}
 
 }

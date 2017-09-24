@@ -9,7 +9,7 @@ import java.util.Map;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 
-import abapci.Domain.AbapPackageTestState;
+import abapci.domain.AbapPackageTestState;
 import abapci.handlers.JenkinsHandler;
 import abapci.views.ViewModel;
 

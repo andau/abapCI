@@ -1,4 +1,4 @@
-package abapci.Domain;
+package abapci.domain;
 
 import org.eclipse.swt.widgets.DateTime;
 

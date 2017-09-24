@@ -1,8 +1,8 @@
-package unit;
+package abapci.domain;
 
 import static org.junit.Assert.*;
 
-import abapci.Domain.AbapPackageInfo;
+import abapci.domain.AbapPackageInfo;
 
 public class AbapPackageInfoTest {
 

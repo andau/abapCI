@@ -1,12 +1,13 @@
-package unit;
+package abapci.domain;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.easymock.*;
 
 import com.sap.adt.tools.abapsource.abapunit.IAbapUnitAlert;
-import abapci.Domain.TestResultSummary;
-import abapci.Domain.TestState;
+
+import abapci.domain.TestResultSummary;
+import abapci.domain.TestState;
 import abapci.result.TestResultSummaryFactory;
 
 public class TestResultSummaryFactoryTest extends EasyMockSupport {

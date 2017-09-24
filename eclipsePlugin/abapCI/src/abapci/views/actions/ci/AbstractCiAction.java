@@ -8,8 +8,8 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.PlatformUI;
 
-import abapci.Domain.AbapPackageInfo;
-import abapci.Domain.AbapPackageTestState;
+import abapci.domain.AbapPackageInfo;
+import abapci.domain.AbapPackageTestState;
 import abapci.views.ViewModel;
 
 public abstract class AbstractCiAction extends Action {

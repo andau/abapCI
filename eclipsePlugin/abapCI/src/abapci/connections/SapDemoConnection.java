@@ -1,7 +1,7 @@
 package abapci.connections;
 
-import abapci.Domain.TestResultSummary;
-import abapci.Domain.TestState;
+import abapci.domain.TestResultSummary;
+import abapci.domain.TestState;
 
 @Deprecated
 public class SapDemoConnection implements ISapConnection {

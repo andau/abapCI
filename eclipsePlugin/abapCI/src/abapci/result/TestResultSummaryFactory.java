@@ -4,8 +4,8 @@ package abapci.result;
 import com.sap.adt.tools.abapsource.abapunit.IAbapUnitResult;
 import com.sap.adt.tools.abapsource.abapunit.IAbapUnitResultItem;
 
-import abapci.Domain.TestResultSummary;
-import abapci.Domain.TestState;
+import abapci.domain.TestResultSummary;
+import abapci.domain.TestState;
 
 public class TestResultSummaryFactory {
 

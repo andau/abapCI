@@ -1,4 +1,4 @@
-package abapci.Domain;
+package abapci.domain;
 
 public class AbapPackageInfo {
 	private final String packageName;

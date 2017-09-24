@@ -73,6 +73,13 @@
             class="abapci.views.AbapCiMainView"
             id="abapci.views.AbapCiMainView">
       </view>
+      <view
+            name="ABAP CI Dashboard"
+            icon="icons/abapci_logo.ico"
+            category="abapCI"
+            class="abapci.views.AbapCiDashboardView"
+            id="abapci.views.AbapCiDashboardView">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.perspectiveExtensions">

@@ -6,9 +6,9 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.ui.PlatformUI;
 
 import abapci.AbapCiPlugin;
-import abapci.Domain.AbapPackageInfo;
-import abapci.Domain.TestResultSummary;
-import abapci.Domain.TestState;
+import abapci.domain.AbapPackageInfo;
+import abapci.domain.TestResultSummary;
+import abapci.domain.TestState;
 import abapci.handlers.AbapUnitHandler;
 import abapci.result.TestResultSummaryFactory;
 

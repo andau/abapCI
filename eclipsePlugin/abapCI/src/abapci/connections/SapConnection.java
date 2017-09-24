@@ -4,8 +4,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import abapci.Domain.TestResultSummary;
-import abapci.Domain.TestState;
+
+import abapci.domain.TestResultSummary;
+import abapci.domain.TestState;
 
 @Deprecated 
 public class SapConnection implements ISapConnection {

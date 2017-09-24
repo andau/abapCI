@@ -1,4 +1,4 @@
-package unit;
+package abapci.domain;
 
 import java.math.BigDecimal;
 import java.net.URI;

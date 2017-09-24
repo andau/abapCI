@@ -22,6 +22,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
@@ -33,7 +34,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 import abapci.GeneralResourceChangeListener;
-import abapci.Domain.AbapPackageTestState;
+import abapci.domain.AbapPackageTestState;
 import abapci.jobs.RepeatingAUnitJob;
 import abapci.lang.UiTexts;
 import abapci.views.actions.ci.AbapGitCiAction;
@@ -95,7 +96,7 @@ public class AbapCiMainView extends ViewPart {
 				}
 			}
 		});
-
+		
 		viewer.setContentProvider(ArrayContentProvider.getInstance());
 
 		viewer.setInput(ViewModel.INSTANCE.getPackageTestStates());
@@ -125,6 +126,7 @@ public class AbapCiMainView extends ViewPart {
 		RepeatingAUnitJob job = new RepeatingAUnitJob();
 		job.schedule(6000);
 
+		
 		IResourceChangeListener listener = new GeneralResourceChangeListener();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(listener, IResourceChangeEvent.POST_CHANGE);
 
@@ -223,7 +225,6 @@ public class AbapCiMainView extends ViewPart {
 				return p.getJenkinsState();
 			}
 		});
-
 	}
 
 	private TableViewerColumn createTableViewerColumn(String title, int bound, final int colNumber) {

@@ -8,9 +8,11 @@ import java.util.Map;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import abapci.Domain.AbapPackageTestState;
-import abapci.Domain.TestResultSummary;
-import abapci.Domain.TestState;
+
+import abapci.domain.AbapPackageTestState;
+import abapci.domain.GlobalTestState;
+import abapci.domain.TestResultSummary;
+import abapci.domain.TestState;
 import abapci.handlers.AbapUnitHandler;
 import abapci.views.ViewModel;
 
@@ -20,9 +22,9 @@ public class AUnitTestManager {
 	{
 	       List<AbapPackageTestState> packageTestStates = ViewModel.INSTANCE.getPackageTestStates(); 
 	       
-	       boolean allTestsOk = true; 
+	       TestState overallTestState = TestState.UNDEF; 
 	       
-	       TestResultSummary testResultSummary = new TestResultSummary("none", TestState.UNDEF);
+	       TestResultSummary testResultSummary = new TestResultSummary("none", overallTestState);
 	       
 	       for(AbapPackageTestState packageTestState : packageTestStates)
 	       {
@@ -34,10 +36,9 @@ public class AUnitTestManager {
 			} catch (ExecutionException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				allTestsOk = false; 
 			}
 	    	   
-	    	   allTestsOk = testResultSummary.getTestState() == TestState.OK; 
+	    	   overallTestState = testResultSummary.getTestState(); 
 	    	   
 	    	   String testResultMessage = testResultSummary.getTestState().toString();
 	       	   String currentTime = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
@@ -46,8 +47,12 @@ public class AUnitTestManager {
 	    	   packageTestState.setLastRun(currentTime);
 	    	   
 	       }
+	       
 	       ViewModel.INSTANCE.setPackageTestStates(packageTestStates);
+	       GlobalTestState globalTestState = new GlobalTestState(overallTestState);  
+	       
+	       ViewModel.INSTANCE.setGlobalTestState(globalTestState); 
 	              
-		   return allTestsOk; 
+		   return overallTestState == TestState.OK;  
 		   }
 }

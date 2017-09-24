@@ -1,6 +1,6 @@
 package abapci.connections;
 
-import abapci.Domain.TestResultSummary;
+import abapci.domain.TestResultSummary;
 
 public interface ISapConnection {
 	

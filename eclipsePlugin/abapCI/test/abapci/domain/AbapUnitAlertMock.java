@@ -1,4 +1,4 @@
-package unit;
+package abapci.domain;
 
 import java.util.List;
 

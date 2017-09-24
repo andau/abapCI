@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import abapci.AbapCiPlugin;
-import abapci.Domain.AbapPackageInfo;
+import abapci.domain.AbapPackageInfo;
 import abapci.handlers.JenkinsHandler;
 
 public class JenkinsCiAction extends AbstractCiAction {

@@ -11,7 +11,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.osgi.service.prefs.BackingStoreException;
 
-import abapci.Domain.AbapPackageTestState;
+import abapci.domain.AbapPackageTestState;
 import abapci.lang.UiTexts;
 import abapci.views.ViewModel;
 

@@ -63,7 +63,7 @@ public class RepeatingAUnitJob extends Job {
  		if (abapUnitRunOnSave) 
  		{
  			boolean allUnitTestsOk = aUnitTestManager.executeAllPackages();
- 		  	if (changeColorOnFailedTests)
+ 			if (changeColorOnFailedTests)
  		  	{
  		  		updateTheme(allUnitTestsOk); 
  		  	}            		

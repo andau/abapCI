@@ -1,4 +1,4 @@
-package abapci.Domain;
+package abapci.domain;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
