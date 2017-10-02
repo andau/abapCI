@@ -18,6 +18,13 @@
 			<accessrule kind="accessible" pattern="com/sap/adt/tools/abapsource/abapunit/IAbapUnitAlertStackEntry"/>
 			<accessrule kind="accessible" pattern="com/sap/adt/tools/abapsource/abapunit/AbapUnitTimeUnitKind"/>
 			<accessrule kind="accessible" pattern="com/sap/adt/tools/abapsource/abapunit/AbapUnitResultItemType"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/atc/AtcBackendServices"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/atc/IAtcCheckableItem"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/atc/IAtcWorklistBackendAccess"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/tools/core/internal/AbapProjectService"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/atc/model/atcworklist/IAtcWorklist"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/atc/model/atcworklist/IAtcWorklistRun"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/atc/model/atcobject/IAtcObjectList"/>
 		</accessrules>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>

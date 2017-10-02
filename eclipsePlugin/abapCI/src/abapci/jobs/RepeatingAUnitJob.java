@@ -10,6 +10,7 @@ import org.eclipse.ui.PlatformUI;
 
 import abapci.AbapCiPlugin;
 import abapci.manager.AUnitTestManager;
+import abapci.manager.AtcTestManager;
 import abapci.manager.JenkinsManager;
 import abapci.preferences.PreferenceConstants;
 
@@ -21,8 +22,10 @@ public class RepeatingAUnitJob extends Job {
 	private boolean isRunning = true;
 	private AUnitTestManager aUnitTestManager;
 	private JenkinsManager jenkinsManager;
+	private AtcTestManager atcTestManager;
 
 	private boolean abapUnitRunOnSave;
+	private boolean atcRunOnSave;
 	private boolean changeColorOnFailedTests;
 	private boolean jenkinsRunOnSave;
 
@@ -31,9 +34,11 @@ public class RepeatingAUnitJob extends Job {
 		super("Repeating AUnit Job");
 		aUnitTestManager = new AUnitTestManager();
 		jenkinsManager = new JenkinsManager();
+		atcTestManager = new AtcTestManager();
 
 		IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore();
 		abapUnitRunOnSave = prefs.getBoolean(PreferenceConstants.PREF_ABAP_UNIT_RUN_ON_SAVE);
+		atcRunOnSave = prefs.getBoolean(PreferenceConstants.PREF_ATC_RUN_AFTER_UNIT_TESTS);
 		changeColorOnFailedTests = prefs.getBoolean(PreferenceConstants.PREF_CHANGE_COLOR_ON_FAILED_TESTS);
 		jenkinsRunOnSave = prefs.getBoolean(PreferenceConstants.PREF_JENKINS_RUN_ON_SAVE);
 	}
@@ -43,7 +48,7 @@ public class RepeatingAUnitJob extends Job {
 		schedule(1000);
 		if (ScheduleNextJob) {
 			ScheduleNextJob = false;
-			
+
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
@@ -57,7 +62,7 @@ public class RepeatingAUnitJob extends Job {
 		return Status.OK_STATUS;
 	}
 
-	@Override 
+	@Override
 	public boolean shouldSchedule() {
 		return isRunning;
 	}
@@ -72,6 +77,10 @@ public class RepeatingAUnitJob extends Job {
 			boolean allUnitTestsOk = aUnitTestManager.executeAllPackages();
 			if (changeColorOnFailedTests) {
 				updateTheme(allUnitTestsOk);
+			}
+
+			if (allUnitTestsOk && atcRunOnSave) {
+				atcTestManager.executeAllPackages();
 			}
 		}
 

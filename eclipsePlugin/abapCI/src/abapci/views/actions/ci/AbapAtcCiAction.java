@@ -5,19 +5,18 @@ import java.util.Map;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.ui.PlatformUI;
 
+import com.sap.adt.atc.model.atcworklist.IAtcWorklist;
+
 import abapci.AbapCiPlugin;
 import abapci.domain.AbapPackageInfo;
-import abapci.domain.TestResultSummary;
-import abapci.domain.TestState;
-import abapci.handlers.AbapUnitHandler;
-import abapci.result.TestResultSummaryFactory;
+import abapci.handlers.AbapAtcHandler;
 
-public class AbapUnitCiAction extends AbstractCiAction {	
+public class AbapAtcCiAction extends AbstractCiAction {	
 
 	private static final String ECLIPSE_STANDARD_THEME = "org.eclipse.ui.r30";
 	private static final String COM_ABAP_CI_CUSTOM_THEME = "com.abapCi.custom.theme";
 
-	public AbapUnitCiAction(String label, String tooltip) {
+	public AbapAtcCiAction(String label, String tooltip) {
 		this.setText(label);
 		this.setToolTipText(tooltip);
 		this.setImageDescriptor(AbapCiPlugin.getImageDescriptor("icons/abapci_logo.ico"));
@@ -25,26 +24,25 @@ public class AbapUnitCiAction extends AbstractCiAction {
 
 	public void run() {
 		
-		//TODO errorhandling if called without valid package name 
-		//TODO Handling for more than one package 
-		
 		String firstPackage = null; 
-		TestResultSummary testResultSummary = TestResultSummaryFactory.createUndefined(); 
+		IAtcWorklist atcWorklist;
+		int numErrors = 0; 
 		
 		try {
 			Map<String, String> packageNames = getSelectedPackages();
             firstPackage = packageNames.entrySet().iterator().next().getValue(); 
-		    testResultSummary =  (TestResultSummary) new AbapUnitHandler().execute(new ExecutionEvent(null, packageNames, null, null));
-		
+		    atcWorklist = (IAtcWorklist) new AbapAtcHandler().execute(new ExecutionEvent(null, packageNames, null, null));
+		    
+		    numErrors = atcWorklist.getObjects().getObject().size(); 
 		}
 		catch(Exception ex) 
 		{
-			// TODO errorhandling for exception in Jenkins call, e.g. wrong Url, username, password, ...	
+			// TODO errorhandling for exception 
 		}
 		
-		updateViewerInput(new AbapPackageInfo(firstPackage), AbapCiActionEnum.ABAP_UNIT); 
+		updateViewerInput(new AbapPackageInfo(firstPackage), AbapCiActionEnum.ABAP_ATC); 
 		
-	    String currentTheme = (testResultSummary.getTestState() == TestState.NOK) 
+	    String currentTheme = (numErrors > 0) 
 	    		 ?  COM_ABAP_CI_CUSTOM_THEME : ECLIPSE_STANDARD_THEME; 			 
 	     
 	    if (currentTheme != PlatformUI.getWorkbench().getThemeManager().getCurrentTheme().getLabel())

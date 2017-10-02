@@ -35,6 +35,6 @@ public class JenkinsCiAction extends AbstractCiAction {
 			// TODO errorhandling for exception in Jenkins call, e.g. wrong Url, username, password, ...	
 		}
 		
-		UpdateViewerInput(new AbapPackageInfo(firstPackage), AbapCiActionEnum.JENKINS); 
+		updateViewerInput(new AbapPackageInfo(firstPackage), AbapCiActionEnum.JENKINS); 
 	}
 }

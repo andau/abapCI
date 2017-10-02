@@ -185,8 +185,8 @@ public class AbapCiMainView extends ViewPart {
 	}
 
 	private void createColumns(final TableViewer viewer) {
-		String[] titles = { "ABAP package", "Unit test", "Last run", "Jenkins state" };
-		int[] bounds = { 150, 70, 70, 200 };
+		String[] titles = { "ABAP package", "Unit test", "Last run", "ATC state", "Jenkins state" };
+		int[] bounds = { 150, 70, 70, 70, 100 };
 
 		TableViewerColumn col = createTableViewerColumn(titles[0], bounds[0], 0);
 		col.setLabelProvider(new ColumnLabelProvider() {
@@ -216,6 +216,15 @@ public class AbapCiMainView extends ViewPart {
 		});
 
 		col = createTableViewerColumn(titles[3], bounds[3], 2);
+		col.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				AbapPackageTestState p = (AbapPackageTestState) element;
+				return p.getAtcState();
+			}
+		});
+
+		col = createTableViewerColumn(titles[4], bounds[4], 2);
 		col.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {

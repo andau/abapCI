@@ -25,6 +25,8 @@ public class PreferenceConstants {
 
 	public static final String PREF_ABAP_UNIT_RUN_ON_SAVE = "abapUnitRunOnSavePreference";
 
+	public static final String PREF_ATC_RUN_AFTER_UNIT_TESTS = "atcRunAfterUnitTetsPreference";
+
 	public static final String PREF_JENKINS_RUN_ON_SAVE = "jenkinsRunOnSavePreference";
 
 	public static final String PREF_CHANGE_COLOR_ON_FAILED_TESTS = "jenkinsChangeColorOnFailedTestsPreference";
@@ -32,6 +34,7 @@ public class PreferenceConstants {
 	public static final String PREF_ABAP_UNIT_DEV_PROJECT = "abapUnitDestinationPreference";
 
 	public static final String PREF_ABAP_UNIT_USE_ODATA = "abapUnitUseOdataPreference";
+
 
 	private PreferenceConstants() {
 	}

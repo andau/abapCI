@@ -13,6 +13,7 @@ import org.osgi.service.prefs.BackingStoreException;
 import abapci.domain.AbapPackageTestState;
 import abapci.domain.GlobalTestState;
 import abapci.domain.TestState;
+import abapci.lang.UiTexts;
 
 public enum ViewModel {
     INSTANCE;
@@ -33,7 +34,8 @@ public enum ViewModel {
 		try {
 			for (String key : packageNamePrefs.keys()) 
 			{
-			    abapPackageTestStates.add(new AbapPackageTestState(packageNamePrefs.get(key, "default"), "n/a", "n/a"));
+			    abapPackageTestStates.add(new AbapPackageTestState(packageNamePrefs.get(key, "default"), 
+			    		UiTexts.NOT_YET_EXECUTED, UiTexts.NOT_YET_EXECUTED, UiTexts.NOT_YET_EXECUTED));
 			}
 		} catch (BackingStoreException e) {
 			// TODO Auto-generated catch block

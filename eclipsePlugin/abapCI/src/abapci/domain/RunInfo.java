@@ -5,7 +5,7 @@ import org.eclipse.swt.widgets.DateTime;
 public class RunInfo {
     private DateTime executionDateTime; 
     private String  executionResult;
-    private int NumErrors;
+    private int numErrors;
 
  	public DateTime getExecutionDateTime() {
 		return executionDateTime;
@@ -21,11 +21,11 @@ public class RunInfo {
 	} 
 
    public int getNumErrors() {
-    	return NumErrors;
+    	return numErrors;
     }
 
     public void setNumErrors(int numErrors) {
-    	NumErrors = numErrors;
+    	this.numErrors = numErrors;
     } 
 
 }

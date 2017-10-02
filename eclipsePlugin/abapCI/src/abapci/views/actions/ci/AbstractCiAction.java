@@ -18,17 +18,23 @@ public abstract class AbstractCiAction extends Action {
 	String lastResult = NOT_YET_CALLED; 
 	
 
-	protected void UpdateViewerInput(AbapPackageInfo abapPackageInfo, AbapCiActionEnum ciActionType) 
+	protected void updateViewerInput(AbapPackageInfo abapPackageInfo, AbapCiActionEnum ciActionType) 
 	{
 		java.util.List<AbapPackageTestState> abapPackageTestStates = ViewModel.INSTANCE.getPackageTestStates(); 
 		
-		if (ciActionType == AbapCiActionEnum.JENKINS) 
+		switch(ciActionType) 
 		{
-			abapPackageInfo.getJenkinsRunInfo().setExecutionResult("Jenkins executed"); 
-		}
-		else 
-		{
-			abapPackageInfo.getAbapUnitRunInfo().setExecutionResult("ABAP Unittests executed"); 
+		  case JENKINS: 
+			  abapPackageInfo.getJenkinsRunInfo().setExecutionResult("Jenkins executed"); 
+			  break; 
+		  case ABAP_UNIT: 
+		      abapPackageInfo.getAbapUnitRunInfo().setExecutionResult("ABAP Unittests executed"); 			  
+			  break;
+		  case ABAP_ATC: 
+		      abapPackageInfo.getAbapUnitRunInfo().setExecutionResult("ABAP ATC executed"); 			  
+			  break;
+	      default: 
+	    	  throw new UnsupportedOperationException("Not yet implemented"); 
 		}
 				
 		
@@ -38,6 +44,7 @@ public abstract class AbstractCiAction extends Action {
 			{
 				abapPackageTestState.setJenkinsState(abapPackageInfo.getJenkinsRunInfo().getExecutionResult()); 
 				abapPackageTestState.setAbapState(abapPackageInfo.getAbapUnitRunInfo().getExecutionResult()); 
+				abapPackageTestState.setAtcState(abapPackageInfo.getAbapAtcRunInfo().getExecutionResult()); 
 			}
 		}
 

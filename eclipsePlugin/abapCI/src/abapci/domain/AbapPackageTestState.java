@@ -9,6 +9,8 @@ public class AbapPackageTestState {
     private String packageName;
     private String jenkinsState;
     private String abapState;
+	private String atcState;
+	
 	private String lastRun;
     private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(
             this);
@@ -17,18 +19,20 @@ public class AbapPackageTestState {
     public AbapPackageTestState() {
     }
 
-    public AbapPackageTestState(String packageName, String jenkinsState, String abapState) {
+    public AbapPackageTestState(String packageName, String jenkinsState, String abapState, String atcState) {
         super();
         this.packageName = packageName;
         this.jenkinsState = jenkinsState;
         this.abapState = abapState;
+        this.atcState = atcState; 
     }
 
     public AbapPackageTestState(String packageName) {
         super();
         this.packageName = packageName;
-        this.jenkinsState = UiTexts.JENKINS_NOT_YET_EXECUTED;
-        this.abapState = UiTexts.AUNIT_NOT_YET_EXECUTED;
+        this.jenkinsState = UiTexts.NOT_YET_EXECUTED;
+        this.abapState = UiTexts.NOT_YET_EXECUTED;
+        this.atcState = UiTexts.NOT_YET_EXECUTED;
     }
 
     
@@ -54,26 +58,35 @@ public class AbapPackageTestState {
         return abapState;
     }
 
+    public String getAtcState() {
+        return atcState;
+    }
+
 	public String getLastRun() {
 		return lastRun;
 	}
 
     public void setPackageName(String packageName) {
-        propertyChangeSupport.firePropertyChange("packageName", this.packageName,
-                this.packageName = packageName);
+    	this.packageName = packageName; 
+        propertyChangeSupport.firePropertyChange("packageName", this.packageName, packageName);
     }
 
  
     public void setJenkinsState(String jenkinsState) {
-        propertyChangeSupport.firePropertyChange("jenkinsState", this.jenkinsState,
-                this.jenkinsState = jenkinsState);
+    	this.jenkinsState = jenkinsState; 
+    	propertyChangeSupport.firePropertyChange("jenkinsState", this.jenkinsState, jenkinsState);
     }
 
     public void setAbapState(String abapState) {
-        propertyChangeSupport.firePropertyChange("abapState", this.abapState,
-                this.abapState = abapState);
+    	this.abapState = abapState; 
+        propertyChangeSupport.firePropertyChange("abapState", this.abapState, abapState);
     }
 
+	public void setAtcState(String atcState) {
+		this.atcState = atcState; 
+        propertyChangeSupport.firePropertyChange("atcState", this.atcState,   atcState);
+	}
+	
     public void setLastRun(String lastRun) {
         propertyChangeSupport.firePropertyChange("lastRun", this.lastRun,
                 this.lastRun = lastRun);
@@ -84,6 +97,5 @@ public class AbapPackageTestState {
     public String toString() {
         return packageName + " " + jenkinsState + " " + abapState;
     }
-
 
 }

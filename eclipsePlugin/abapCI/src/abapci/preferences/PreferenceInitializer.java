@@ -17,6 +17,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.PREF_ABAP_UNIT_PASSWORD,  "sapPassword");
 		store.setDefault(PreferenceConstants.PREF_ABAP_UNIT_RUN_INTERVAL, 0);
 		store.setDefault(PreferenceConstants.PREF_ABAP_UNIT_RUN_ON_SAVE, true);
+		store.setDefault(PreferenceConstants.PREF_ATC_RUN_AFTER_UNIT_TESTS, false);
+		
 		
 		store.setDefault(PreferenceConstants.PREF_JENKINS_URL, "<jenkins_host>:<jenkins_port>"); 
 		store.setDefault(PreferenceConstants.PREF_JENKINS_USERNAME, "jenkins_username"); 

@@ -30,6 +30,10 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 
 		addField(new IntegerFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_RUN_INTERVAL, "&ABAP Unit test interval (minutes):",
 				getFieldEditorParent()));
+		
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ATC_RUN_AFTER_UNIT_TESTS, "&Run ATC when after successful Unit testrun",
+				getFieldEditorParent()));
+
 
 
 		
