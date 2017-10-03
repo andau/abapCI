@@ -7,7 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class TestStateTest{
-	private static final String TESTSTATE_OUTPUT_PREFIX = "Teststate: ";
 	private GlobalTestState globalTestState; 
 	
 	@Before
