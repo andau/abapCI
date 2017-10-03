@@ -2,7 +2,6 @@ package abapci.domain;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.easymock.*;
 
 import com.sap.adt.tools.abapsource.abapunit.IAbapUnitAlert;
 
@@ -10,7 +9,7 @@ import abapci.domain.TestResultSummary;
 import abapci.domain.TestState;
 import abapci.result.TestResultSummaryFactory;
 
-public class TestResultSummaryFactoryTest extends EasyMockSupport {
+public class TestResultSummaryFactoryTest {
 
 	final String TEST_PACKAGE_NAME = "TEST_PACKAGE"; 
 

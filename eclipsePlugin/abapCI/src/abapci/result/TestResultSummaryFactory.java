@@ -34,10 +34,10 @@ public class TestResultSummaryFactory {
 	}
 
 	private static List<IAbapUnitAlert> getCriticalAlerts(List<IAbapUnitAlert> alerts) {
-		List<IAbapUnitAlert> criticalAlerts = new ArrayList<IAbapUnitAlert>();
+		List<IAbapUnitAlert> criticalAlerts = new ArrayList<>();
 		for (IAbapUnitAlert alert : alerts) {
-			if (alert.getSeverity() != AbapUnitAlertSeverity.TOLERABLE
-					&& !alert.getTitle().contains("Invalid parameter ID")) {
+			if (alert != null && alert.getSeverity() != AbapUnitAlertSeverity.TOLERABLE
+					&& (alert.getTitle() == null  || !alert.getTitle().contains("Invalid parameter ID"))) {
 				criticalAlerts.add(alert);
 			}
 		}

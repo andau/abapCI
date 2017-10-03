@@ -9,13 +9,10 @@ import java.util.Map;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 
-import com.sap.adt.atc.model.atcworklist.IAtcWorklist;
-
 import abapci.domain.AbapPackageTestState;
 import abapci.domain.GlobalTestState;
 import abapci.domain.TestResultSummary;
 import abapci.domain.TestState;
-import abapci.handlers.AbapAtcHandler;
 import abapci.handlers.AbapUnitHandler;
 import abapci.views.ViewModel;
 
@@ -30,7 +27,7 @@ public class AUnitTestManager {
        
 	       for(AbapPackageTestState packageTestState : packageTestStates)
 	       {
-	    	   Map<String, String> packageNames = new HashMap<String, String>(); 
+	    	   Map<String, String> packageNames = new HashMap<>(); 
 	    	   packageNames.put("1", packageTestState.getPackageName()); 
 	    	   
 	    	   try {
