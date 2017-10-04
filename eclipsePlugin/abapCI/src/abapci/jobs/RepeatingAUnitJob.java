@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 
 import abapci.AbapCiPlugin;
+import abapci.feature.FeatureDecision;
 import abapci.manager.AUnitTestManager;
 import abapci.manager.AtcTestManager;
 import abapci.manager.JenkinsManager;
@@ -24,23 +25,17 @@ public class RepeatingAUnitJob extends Job {
 	private JenkinsManager jenkinsManager;
 	private AtcTestManager atcTestManager;
 
-	private boolean abapUnitRunOnSave;
-	private boolean atcRunOnSave;
-	private boolean changeColorOnFailedTests;
-	private boolean jenkinsRunOnSave;
-
+	FeatureDecision featureDecision; 
+	
 	public RepeatingAUnitJob() {
 
 		super("Repeating AUnit Job");
 		aUnitTestManager = new AUnitTestManager();
 		jenkinsManager = new JenkinsManager();
 		atcTestManager = new AtcTestManager();
+		
+		featureDecision = new FeatureDecision(); 
 
-		IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore();
-		abapUnitRunOnSave = prefs.getBoolean(PreferenceConstants.PREF_ABAP_UNIT_RUN_ON_SAVE);
-		atcRunOnSave = prefs.getBoolean(PreferenceConstants.PREF_ATC_RUN_AFTER_UNIT_TESTS);
-		changeColorOnFailedTests = prefs.getBoolean(PreferenceConstants.PREF_CHANGE_COLOR_ON_FAILED_TESTS);
-		jenkinsRunOnSave = prefs.getBoolean(PreferenceConstants.PREF_JENKINS_RUN_ON_SAVE);
 	}
 
 	@Override
@@ -56,7 +51,7 @@ public class RepeatingAUnitJob extends Job {
 				e.printStackTrace();
 			}
 
-			runTestsForAllResources();
+			processAllResources();
 		}
 
 		return Status.OK_STATUS;
@@ -71,20 +66,21 @@ public class RepeatingAUnitJob extends Job {
 		isRunning = false;
 	}
 
-	private void runTestsForAllResources() {
-
-		if (abapUnitRunOnSave) {
+	private void processAllResources() {
+		
+		if (featureDecision.runUnitTestsOnSaveFeatureEnabled()) {
 			boolean allUnitTestsOk = aUnitTestManager.executeAllPackages();
-			if (changeColorOnFailedTests) {
+			
+			if (featureDecision.changeColorOnFailedTestsFeatureEnabled()) {
 				updateTheme(allUnitTestsOk);
 			}
 
-			if (allUnitTestsOk && atcRunOnSave) {
+			if (allUnitTestsOk && featureDecision.runAtcOnSaveFeatureEnabled()) {
 				atcTestManager.executeAllPackages();
 			}
 		}
 
-		if (jenkinsRunOnSave) {
+		if (featureDecision.runJenkinsOnSaveFeatureEnabled()) {
 			jenkinsManager.executeAllPackages();
 		}
 	}
