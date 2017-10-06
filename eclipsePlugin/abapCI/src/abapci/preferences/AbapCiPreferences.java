@@ -31,7 +31,7 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 		addField(new IntegerFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_RUN_INTERVAL, "&ABAP Unit test interval (minutes):",
 				getFieldEditorParent()));
 		
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ATC_RUN_AFTER_UNIT_TESTS, "&Run ATC when after successful Unit testrun",
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ATC_RUN_AFTER_UNIT_TESTS_TURN_GREEN, "&Run ATC when after successful Unit testrun",
 				getFieldEditorParent()));
 
 
@@ -40,7 +40,7 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 		Label emptyLabel1 = new Label(getFieldEditorParent(), SWT.NONE);
 		emptyLabel1.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
 		
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_JENKINS_RUN_ON_SAVE, "&Run Jenkins Builds when file saved",
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_JENKINS_RUN_AFTER_UNIT_TESTS_TURN_GREEN, "&Run Jenkins Builds when file saved",
 				getFieldEditorParent()));
 
 		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_URL, "&Jenkins BaseUrl (eg. localhost:8080):",

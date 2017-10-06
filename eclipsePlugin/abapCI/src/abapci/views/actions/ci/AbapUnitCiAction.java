@@ -7,7 +7,7 @@ import org.eclipse.ui.PlatformUI;
 
 import abapci.AbapCiPlugin;
 import abapci.domain.AbapPackageInfo;
-import abapci.domain.TestResultSummary;
+import abapci.domain.UnitTestResultSummary;
 import abapci.domain.TestState;
 import abapci.handlers.AbapUnitHandler;
 import abapci.result.TestResultSummaryFactory;
@@ -29,12 +29,12 @@ public class AbapUnitCiAction extends AbstractCiAction {
 		//TODO Handling for more than one package 
 		
 		String firstPackage = null; 
-		TestResultSummary testResultSummary = TestResultSummaryFactory.createUndefined(); 
+		UnitTestResultSummary unitTestResultSummary = TestResultSummaryFactory.createUndefined(); 
 		
 		try {
 			Map<String, String> packageNames = getSelectedPackages();
             firstPackage = packageNames.entrySet().iterator().next().getValue(); 
-		    testResultSummary =  (TestResultSummary) new AbapUnitHandler().execute(new ExecutionEvent(null, packageNames, null, null));
+		    unitTestResultSummary =  (UnitTestResultSummary) new AbapUnitHandler().execute(new ExecutionEvent(null, packageNames, null, null));
 		
 		}
 		catch(Exception ex) 
@@ -44,7 +44,7 @@ public class AbapUnitCiAction extends AbstractCiAction {
 		
 		updateViewerInput(new AbapPackageInfo(firstPackage), AbapCiActionEnum.ABAP_UNIT); 
 		
-	    String currentTheme = (testResultSummary.getTestState() == TestState.NOK) 
+	    String currentTheme = (unitTestResultSummary.getTestState() == TestState.NOK) 
 	    		 ?  COM_ABAP_CI_CUSTOM_THEME : ECLIPSE_STANDARD_THEME; 			 
 	     
 	    if (currentTheme != PlatformUI.getWorkbench().getThemeManager().getCurrentTheme().getLabel())

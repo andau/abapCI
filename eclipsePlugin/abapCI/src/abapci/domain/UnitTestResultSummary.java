@@ -2,14 +2,14 @@ package abapci.domain;
 
 import java.beans.PropertyChangeSupport;
 
-public class TestResultSummary {
+public class UnitTestResultSummary {
 
 	private final String packageName;
 	private TestState testState;
     private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(
             this);
 
-	public TestResultSummary(String packageName, TestState testState) {
+	public UnitTestResultSummary(String packageName, TestState testState) {
 		this.packageName = packageName;
 		this.testState = testState;
 	}
@@ -23,8 +23,8 @@ public class TestResultSummary {
 	}
 	
 	public void setTestState(TestState testState) {
-		propertyChangeSupport.firePropertyChange("jenkinsState", this.testState,
-	                this.testState = testState);
+		this.testState = testState; 
+		propertyChangeSupport.firePropertyChange("testState", this.testState, testState);
 	}
 	
 

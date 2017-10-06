@@ -8,7 +8,6 @@ import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.powermock.reflect.Whitebox;
 
 import abapci.AbapCiPlugin;
 import abapci.preferences.PreferenceConstants;
@@ -28,8 +27,9 @@ public class FeatureDecisionTest {
 		FeatureDecision featureDecision = new FeatureDecision(preferenceStore);
 	
 		PowerMockito.when(preferenceStore.getBoolean(PreferenceConstants.PREF_ABAP_UNIT_RUN_ON_SAVE)).thenReturn(false);
-		Whitebox.setInternalState(featureDecision, "prefs", preferenceStore);
+		featureDecision = new FeatureDecision(preferenceStore);
+		
 
-		Assert.assertFalse(featureDecision.runUnitTestsOnSaveFeatureEnabled());
+		Assert.assertFalse(featureDecision.runUnitTestsOnSave());
 	}
 }

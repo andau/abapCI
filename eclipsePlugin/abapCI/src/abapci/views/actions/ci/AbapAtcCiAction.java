@@ -5,6 +5,9 @@ import java.util.Map;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.ui.PlatformUI;
 
+import com.sap.adt.atc.model.atcfinding.IAtcFinding;
+import com.sap.adt.atc.model.atcfinding.IAtcFindingList;
+import com.sap.adt.atc.model.atcobject.IAtcObject;
 import com.sap.adt.atc.model.atcworklist.IAtcWorklist;
 
 import abapci.AbapCiPlugin;
@@ -22,6 +25,7 @@ public class AbapAtcCiAction extends AbstractCiAction {
 		this.setImageDescriptor(AbapCiPlugin.getImageDescriptor("icons/abapci_logo.ico"));
 	}
 
+	@Override
 	public void run() {
 		
 		String firstPackage = null; 
@@ -33,7 +37,17 @@ public class AbapAtcCiAction extends AbstractCiAction {
             firstPackage = packageNames.entrySet().iterator().next().getValue(); 
 		    atcWorklist = (IAtcWorklist) new AbapAtcHandler().execute(new ExecutionEvent(null, packageNames, null, null));
 		    
-		    numErrors = atcWorklist.getObjects().getObject().size(); 
+		    for(IAtcObject object : atcWorklist.getObjects().getObject()) 
+		    { 
+		    	IAtcFindingList findingList = object.getFindings();
+		    	for(IAtcFinding finding : findingList.getFinding()) 
+		    	{
+		    		if (finding.getPriority() == 1 )
+				    {
+		    			numErrors = numErrors + 1;   		    			    		
+				    }
+		    	}
+		    }
 		}
 		catch(Exception ex) 
 		{

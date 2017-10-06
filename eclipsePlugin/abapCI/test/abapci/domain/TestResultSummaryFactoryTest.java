@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import com.sap.adt.tools.abapsource.abapunit.IAbapUnitAlert;
 
-import abapci.domain.TestResultSummary;
+import abapci.domain.UnitTestResultSummary;
 import abapci.domain.TestState;
 import abapci.result.TestResultSummaryFactory;
 
@@ -25,22 +25,22 @@ public class TestResultSummaryFactoryTest {
 		abapUnitResultItemMock.addChildItem(abapUnitResultItemSubMock); 
 		unitResultMock.addItem(abapUnitResultItemMock);  
 
-		TestResultSummary testResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME, unitResultMock);
-		Assert.assertEquals(TestState.OK, testResultSummary.getTestState()); 
+		UnitTestResultSummary unitTestResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME, unitResultMock);
+		Assert.assertEquals(TestState.OK, unitTestResultSummary.getTestState()); 
 	}
 
 	public void testSubitemsNoError() {
 
-		TestResultSummary testResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME, unitResultMock);
-		Assert.assertEquals(TestState.OK, testResultSummary.getTestState()); 
+		UnitTestResultSummary unitTestResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME, unitResultMock);
+		Assert.assertEquals(TestState.OK, unitTestResultSummary.getTestState()); 
 	}
 	
 	@Test
 	public void testOneError() {
 		unitResultMock.addAlert(abapUnitAlertMock);
 
-		TestResultSummary testResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME, unitResultMock);
-		Assert.assertEquals(TestState.NOK, testResultSummary.getTestState()); 
+		UnitTestResultSummary unitTestResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME, unitResultMock);
+		Assert.assertEquals(TestState.NOK, unitTestResultSummary.getTestState()); 
 	}
 
 	@Test
@@ -48,8 +48,8 @@ public class TestResultSummaryFactoryTest {
 		abapUnitResultItemMock.setAlert(abapUnitAlertMock); 
 		unitResultMock.addItem(abapUnitResultItemMock);  
 
-		TestResultSummary testResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME, unitResultMock);
-		Assert.assertEquals(TestState.NOK, testResultSummary.getTestState()); 
+		UnitTestResultSummary unitTestResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME, unitResultMock);
+		Assert.assertEquals(TestState.NOK, unitTestResultSummary.getTestState()); 
 	}
 
 	@Test
@@ -58,8 +58,8 @@ public class TestResultSummaryFactoryTest {
 		abapUnitResultItemMock.addChildItem(abapUnitResultItemSubMock); 
 		unitResultMock.addItem(abapUnitResultItemMock);  
 
-		TestResultSummary testResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME, unitResultMock);
-		Assert.assertEquals(TestState.NOK, testResultSummary.getTestState()); 
+		UnitTestResultSummary unitTestResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME, unitResultMock);
+		Assert.assertEquals(TestState.NOK, unitTestResultSummary.getTestState()); 
 	}
 
 	@Test
@@ -69,8 +69,8 @@ public class TestResultSummaryFactoryTest {
 		abapUnitResultItemMock.addChildItem(abapUnitResultItemSubMock); 
 		unitResultMock.addItem(abapUnitResultItemMock);  
 
-		TestResultSummary testResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME, unitResultMock);
-		Assert.assertEquals(TestState.NOK, testResultSummary.getTestState()); 
+		UnitTestResultSummary unitTestResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME, unitResultMock);
+		Assert.assertEquals(TestState.NOK, unitTestResultSummary.getTestState()); 
 	}
 
 }

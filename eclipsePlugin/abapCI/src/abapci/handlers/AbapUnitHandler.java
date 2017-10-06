@@ -13,7 +13,7 @@ import com.sap.adt.tools.abapsource.abapunit.TestRunException;
 import com.sap.adt.tools.abapsource.abapunit.services.AdtServicesPlugin;
 import com.sap.adt.tools.abapsource.abapunit.services.IAdtServicesFactory;
 import abapci.AbapCiPlugin;
-import abapci.domain.TestResultSummary;
+import abapci.domain.UnitTestResultSummary;
 import abapci.preferences.PreferenceConstants;
 import abapci.result.TestResultSummaryFactory;
 
@@ -38,7 +38,7 @@ public class AbapUnitHandler extends AbstractHandler {
 		TestItem itemObject = new TestItem(testobjectUrl, testobjectUrl);
 		task.addTestItem(itemObject);
 
-		TestResultSummary testResultSummary;
+		UnitTestResultSummary unitTestResultSummary;
 
 		try {
 			IAbapUnitResult abapUnitResult = abapUnitService.executeUnitTests(task, false, packageName);
@@ -46,15 +46,15 @@ public class AbapUnitHandler extends AbstractHandler {
 		} catch (TestRunException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			testResultSummary = TestResultSummaryFactory.createUndefined(packageName);
+			unitTestResultSummary = TestResultSummaryFactory.createUndefined(packageName);
 		} catch (CommunicationException e) {
 			// TODO Eventually Output message that connection to SAP was not
 			// successful
 			// !consider also not ABAP mode - where no connection to an ABAPsystem exists
 			e.printStackTrace();
-			testResultSummary = TestResultSummaryFactory.createUndefined(packageName);
+			unitTestResultSummary = TestResultSummaryFactory.createUndefined(packageName);
 		}
 
-		return testResultSummary;
+		return unitTestResultSummary;
 	}
 }

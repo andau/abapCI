@@ -6,7 +6,7 @@ import com.sap.adt.tools.abapsource.abapunit.AbapUnitAlertSeverity;
 import com.sap.adt.tools.abapsource.abapunit.IAbapUnitAlert;
 import com.sap.adt.tools.abapsource.abapunit.IAbapUnitResult;
 import com.sap.adt.tools.abapsource.abapunit.IAbapUnitResultItem;
-import abapci.domain.TestResultSummary;
+import abapci.domain.UnitTestResultSummary;
 import abapci.domain.TestState;
 
 public class TestResultSummaryFactory {
@@ -15,14 +15,14 @@ public class TestResultSummaryFactory {
 	private TestResultSummaryFactory() {
 	}
 
-	public static TestResultSummary create(String packageName, IAbapUnitResult abapUnitResult) {
+	public static UnitTestResultSummary create(String packageName, IAbapUnitResult abapUnitResult) {
 		int numCritialAlerts = getCriticalAlerts(abapUnitResult.getAlerts()).size();
 
 		for (IAbapUnitResultItem abapUnitResultItem : abapUnitResult.getItems()) {
 			numCritialAlerts = numCritialAlerts + getNumCriticalAlerts(abapUnitResultItem);
 		}
 		TestState testState = numCritialAlerts == 0 ? TestState.OK : TestState.NOK;
-		return new TestResultSummary(packageName, testState);
+		return new UnitTestResultSummary(packageName, testState);
 	}
 
 	private static int getNumCriticalAlerts(IAbapUnitResultItem abapUnitResultItem) {
@@ -44,11 +44,11 @@ public class TestResultSummaryFactory {
 		return criticalAlerts;
 	}
 
-	public static TestResultSummary createUndefined(String packageName) {
-		return new TestResultSummary(packageName, TestState.UNDEF);
+	public static UnitTestResultSummary createUndefined(String packageName) {
+		return new UnitTestResultSummary(packageName, TestState.UNDEF);
 	}
 
-	public static TestResultSummary createUndefined() {
+	public static UnitTestResultSummary createUndefined() {
 		return createUndefined(UNDEFINED_PACKAGE_NAME);
 	}
 }

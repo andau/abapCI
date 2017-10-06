@@ -4,16 +4,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.PlatformUI;
 
-import abapci.AbapCiPlugin;
-import abapci.feature.FeatureDecision;
-import abapci.manager.AUnitTestManager;
-import abapci.manager.AtcTestManager;
-import abapci.manager.JenkinsManager;
-import abapci.preferences.PreferenceConstants;
+import abapci.feature.FeatureProcessor;
 
 public class RepeatingAUnitJob extends Job {
 
@@ -21,20 +13,14 @@ public class RepeatingAUnitJob extends Job {
 	public static boolean ScheduleNextJob;
 
 	private boolean isRunning = true;
-	private AUnitTestManager aUnitTestManager;
-	private JenkinsManager jenkinsManager;
-	private AtcTestManager atcTestManager;
-
-	FeatureDecision featureDecision; 
+	FeatureProcessor featureProcessor; 
+	
 	
 	public RepeatingAUnitJob() {
 
 		super("Repeating AUnit Job");
-		aUnitTestManager = new AUnitTestManager();
-		jenkinsManager = new JenkinsManager();
-		atcTestManager = new AtcTestManager();
 		
-		featureDecision = new FeatureDecision(); 
+		featureProcessor = new FeatureProcessor();  
 
 	}
 
@@ -51,7 +37,7 @@ public class RepeatingAUnitJob extends Job {
 				e.printStackTrace();
 			}
 
-			processAllResources();
+			featureProcessor.processEnabledFeatures();
 		}
 
 		return Status.OK_STATUS;
@@ -64,41 +50,6 @@ public class RepeatingAUnitJob extends Job {
 
 	public void stop() {
 		isRunning = false;
-	}
-
-	private void processAllResources() {
-		
-		if (featureDecision.runUnitTestsOnSaveFeatureEnabled()) {
-			boolean allUnitTestsOk = aUnitTestManager.executeAllPackages();
-			
-			if (featureDecision.changeColorOnFailedTestsFeatureEnabled()) {
-				updateTheme(allUnitTestsOk);
-			}
-
-			if (allUnitTestsOk && featureDecision.runAtcOnSaveFeatureEnabled()) {
-				atcTestManager.executeAllPackages();
-			}
-		}
-
-		if (featureDecision.runJenkinsOnSaveFeatureEnabled()) {
-			jenkinsManager.executeAllPackages();
-		}
-	}
-
-	private void updateTheme(boolean allTestsOk) {
-		if (allTestsOk) {
-			Display.getDefault().asyncExec(new Runnable() {
-				public void run() {
-					PlatformUI.getWorkbench().getThemeManager().setCurrentTheme("org.eclipse.ui.r30");
-				}
-			});
-		} else {
-			Display.getDefault().asyncExec(new Runnable() {
-				public void run() {
-					PlatformUI.getWorkbench().getThemeManager().setCurrentTheme("com.abapCi.custom.theme");
-				}
-			});
-		}
 	}
 
 }

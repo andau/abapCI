@@ -11,19 +11,19 @@ import org.eclipse.core.commands.ExecutionException;
 
 import abapci.domain.AbapPackageTestState;
 import abapci.domain.GlobalTestState;
-import abapci.domain.TestResultSummary;
+import abapci.domain.UnitTestResultSummary;
 import abapci.domain.TestState;
 import abapci.handlers.AbapUnitHandler;
 import abapci.views.ViewModel;
 
 public class AUnitTestManager {
 
-	public boolean executeAllPackages() 
+	public TestState executeAllPackages() 
 	{
 	       List<AbapPackageTestState> packageTestStates = ViewModel.INSTANCE.getPackageTestStates(); 
 	       
 	       TestState overallTestState = TestState.UNDEF; 
-	       TestResultSummary testResultSummary = new TestResultSummary("none", overallTestState);
+	       UnitTestResultSummary unitTestResultSummary = new UnitTestResultSummary("none", overallTestState);
        
 	       for(AbapPackageTestState packageTestState : packageTestStates)
 	       {
@@ -31,14 +31,14 @@ public class AUnitTestManager {
 	    	   packageNames.put("1", packageTestState.getPackageName()); 
 	    	   
 	    	   try {
-	    		   testResultSummary = (TestResultSummary) new AbapUnitHandler().execute(new ExecutionEvent(null, packageNames, null, null));
+	    		   unitTestResultSummary = (UnitTestResultSummary) new AbapUnitHandler().execute(new ExecutionEvent(null, packageNames, null, null));
 			} catch (ExecutionException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-	    	   overallTestState = testResultSummary.getTestState(); 
+	    	   overallTestState = unitTestResultSummary.getTestState(); 
 	    	   
-	    	   String testResultMessage = testResultSummary.getTestState().toString();
+	    	   String testResultMessage = unitTestResultSummary.getTestState().toString();
 	       	   String currentTime = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
 	       	   
 	       	   packageTestState.setAbapState(testResultMessage);
@@ -51,7 +51,7 @@ public class AUnitTestManager {
 	       
 	       ViewModel.INSTANCE.setGlobalTestState(globalTestState); 
 	              
-		   return overallTestState == TestState.OK;  
+		   return overallTestState;  
 	}
 }
 	

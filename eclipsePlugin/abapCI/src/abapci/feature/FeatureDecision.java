@@ -8,32 +8,34 @@ import abapci.preferences.PreferenceConstants;
 public class FeatureDecision 
 {
 	
-	private IPreferenceStore prefs; 
+	private static IPreferenceStore prefs; 
 	
     public FeatureDecision() 
     {
-    	this.prefs = AbapCiPlugin.getDefault().getPreferenceStore();     		
+    	if (FeatureDecision.prefs == null) 
+    		FeatureDecision.prefs = AbapCiPlugin.getDefault().getPreferenceStore();     		
     }
 
     public FeatureDecision(IPreferenceStore prefs) 
     {
-    	this.prefs = prefs;     		
+    	FeatureDecision.prefs = prefs;     		
     }
     
-	public boolean runUnitTestsOnSaveFeatureEnabled() 
+	public boolean runUnitTestsOnSave() 
     {
        return prefs.getBoolean(PreferenceConstants.PREF_ABAP_UNIT_RUN_ON_SAVE);	
     }
 
-	public boolean changeColorOnFailedTestsFeatureEnabled() {
+	public boolean changeColorOnFailedTests() {
 		return prefs.getBoolean(PreferenceConstants.PREF_CHANGE_COLOR_ON_FAILED_TESTS);
 	}
 
-	public boolean runAtcOnSaveFeatureEnabled() {
-		return prefs.getBoolean(PreferenceConstants.PREF_ATC_RUN_AFTER_UNIT_TESTS);
+	public boolean runAtcAfterUnitTestTurnOk() {
+		return prefs.getBoolean(PreferenceConstants.PREF_ATC_RUN_AFTER_UNIT_TESTS_TURN_GREEN);
 	}
 
-	public boolean runJenkinsOnSaveFeatureEnabled() {
-		return prefs.getBoolean(PreferenceConstants.PREF_JENKINS_RUN_ON_SAVE);
+	public boolean runJenkinsAfterUnitTestTurnOk() {
+		return prefs.getBoolean(PreferenceConstants.PREF_JENKINS_RUN_AFTER_UNIT_TESTS_TURN_GREEN);
 	}
+	
 }

@@ -13,6 +13,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import com.sap.adt.atc.AtcBackendServices;
 import com.sap.adt.atc.IAtcCheckableItem;
 import com.sap.adt.atc.IAtcWorklistBackendAccess;
+import com.sap.adt.atc.model.atcworklist.IAtcWorklist;
 import com.sap.adt.atc.model.atcworklist.IAtcWorklistRun;
 import com.sap.adt.project.AdtCoreProjectServiceFactory;
 import com.sap.adt.tools.core.internal.AbapProjectService;
@@ -38,12 +39,12 @@ public class AbapAtcHandler extends AbstractHandler {
         checkableItems.add(new MyAtcCheckableItem(URI.create("/sap/bc/adt/vit/wb/object_type/devck/object_name/" + packageName), packageName, "DEVC/K"));
         IAtcWorklistRun worklistRun = worklistBackendAccess.startAtcRunForWorklist(abapProject, checkableItems, worklistId, progressMonitor);
         String objectSetName = packageName;
-        boolean forceObjectSet = false;
+        boolean forceObjectSet = true;
         boolean includeExemptedFindings = false;
         
         
-        return worklistBackendAccess.getWorklist(abapProject, worklistRun.getWorklistId(), worklistRun.getWorklistTimestamp().toString(), objectSetName, forceObjectSet, includeExemptedFindings , progressMonitor);
-        
+        IAtcWorklist worklist =  worklistBackendAccess.getWorklist(abapProject, worklistRun.getWorklistId(), worklistRun.getWorklistTimestamp().toString(), objectSetName, forceObjectSet, includeExemptedFindings, progressMonitor);
+        return worklist; 
     }
 }
  
