@@ -1,5 +1,6 @@
 package abapci.views;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -9,12 +10,14 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -24,6 +27,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IActionBars;
@@ -32,10 +36,14 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
+import com.sap.adt.project.AdtCoreProjectServiceFactory;
+import com.sap.adt.tools.core.internal.AbapProjectService;
+import abapci.AbapCiPlugin;
 import abapci.GeneralResourceChangeListener;
 import abapci.domain.AbapPackageTestState;
 import abapci.jobs.RepeatingAUnitJob;
 import abapci.lang.UiTexts;
+import abapci.preferences.PreferenceConstants;
 import abapci.views.actions.ci.AbapGitCiAction;
 import abapci.views.actions.ci.AbapUnitCiAction;
 import abapci.views.actions.ci.JenkinsCiAction;
@@ -74,6 +82,7 @@ public class AbapCiMainView extends ViewPart {
 
 	public void createPartControl(Composite parent) {
 
+		
 		Composite entireContainer = new Composite(parent, SWT.NONE);
 		entireContainer.setLayout(new GridLayout(1, false));
 
@@ -126,8 +135,35 @@ public class AbapCiMainView extends ViewPart {
 		
 		IResourceChangeListener listener = new GeneralResourceChangeListener();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(listener, IResourceChangeEvent.POST_CHANGE);
-
+		
+		
+		if (!checkActualAbapProject())
+		{		
+			Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(); 
+			ProjectSelectionDialog projectSelectionDialog = 
+					new ProjectSelectionDialog(shell, new LabelProvider()); 
+			if (projectSelectionDialog.open() == Window.OK) {
+				Object[] result = projectSelectionDialog.getResult();
+				if (result.length  == 1 ) 
+				{
+					setProjectName((String)result[0]); 
+				}
+		    }
+		}
 	}
+
+	private void setProjectName(String projectName) {
+		IPreferenceStore prefs  = AbapCiPlugin.getDefault().getPreferenceStore(); 
+		prefs.setValue(PreferenceConstants.PREF_ABAP_UNIT_DEV_PROJECT, projectName);
+	}
+
+	private boolean checkActualAbapProject() {
+		IPreferenceStore prefs  = AbapCiPlugin.getDefault().getPreferenceStore(); 
+		String actualDevProject = prefs.getString(PreferenceConstants.PREF_ABAP_UNIT_DEV_PROJECT);
+	    IProject project = AdtCoreProjectServiceFactory.createCoreProjectService().findProject(actualDevProject);
+        return AbapProjectService.getInstance().isAbapProject(project);
+	}
+	
 
 	private void hookContextMenu() {
 		MenuManager menuMgr = new MenuManager("#PopupMenu");
