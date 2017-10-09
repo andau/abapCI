@@ -28,7 +28,7 @@ public class AbapCiDashboardView extends ViewPart {
 		FillLayout fillLayout = new FillLayout();
 		fillLayout.type = SWT.VERTICAL;
 		parent.setLayout(fillLayout);
-		Label lblOverallTestState = new Label(parent, SWT.BORDER);
+		Label lblOverallTestState = new Label(parent, SWT.CENTER);
 		ViewModel.INSTANCE.setLblOverallTestState(lblOverallTestState);
 
 		FontData[] fontData = lblOverallTestState.getFont().getFontData();

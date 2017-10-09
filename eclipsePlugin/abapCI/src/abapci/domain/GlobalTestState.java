@@ -13,27 +13,25 @@ public class GlobalTestState {
 	}
 
 	public GlobalTestState(TestState testState) {
-		this.testState = testState; 
+		this.testState = testState;
 	}
 
 	public String getTestStateOutputForDashboard() {
-		String testStateOutput = ""; 
-		
-		switch(this.testState) 
-		{
-		case UNDEF: 
-			testStateOutput = "Unit testrun not completed"; 
-			break; 
-		case NOK: 
-			testStateOutput = "Unit testrun has failures"; 
-			break; 
-		case OK: 
-			testStateOutput = "Unit testrun successful"; 
-			break; 
+		String testStateOutput = "";
+
+		switch (this.testState) {
+		case UNDEF:
+			testStateOutput = "Tests n/a";
+			break;
+		case NOK:
+			testStateOutput = "Tests fail";
+			break;
+		case OK:
+			testStateOutput = "Tests OK";
+			break;
 		}
-		return testStateOutput; 
+		return testStateOutput;
 	}
-		
 
 	public Color getColor() {
 		Color colorForTestState = Display.getCurrent().getSystemColor(SWT.COLOR_GRAY);
@@ -54,8 +52,8 @@ public class GlobalTestState {
 	}
 
 	public void setTestState(TestState testState) {
-		this.testState = testState; 
-		
+		this.testState = testState;
+
 	}
 
 }
