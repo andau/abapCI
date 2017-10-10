@@ -1,23 +1,20 @@
 package abapci.views.actions.ci;
 
+import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.ui.PlatformUI;
-
-import com.sap.adt.atc.model.atcfinding.IAtcFinding;
-import com.sap.adt.atc.model.atcfinding.IAtcFindingList;
-import com.sap.adt.atc.model.atcobject.IAtcObject;
 import com.sap.adt.atc.model.atcworklist.IAtcWorklist;
 
 import abapci.AbapCiPlugin;
-import abapci.domain.AbapPackageInfo;
+import abapci.domain.AbapPackageTestState;
+import abapci.domain.TestState;
 import abapci.handlers.AbapAtcHandler;
+import abapci.manager.DevelopmentProcessManager;
+import abapci.manager.ThemeUpdateManager;
+import abapci.utils.AtcResultAnalyzer;
+import abapci.views.ViewModel;
 
-public class AbapAtcCiAction extends AbstractCiAction {	
-
-	private static final String ECLIPSE_STANDARD_THEME = "org.eclipse.ui.r30";
-	private static final String COM_ABAP_CI_CUSTOM_THEME = "com.abapCi.custom.theme";
+public class AbapAtcCiAction extends AbstractCiAction {
 
 	public AbapAtcCiAction(String label, String tooltip) {
 		this.setText(label);
@@ -27,42 +24,36 @@ public class AbapAtcCiAction extends AbstractCiAction {
 
 	@Override
 	public void run() {
-		
-		String firstPackage = null; 
-		IAtcWorklist atcWorklist;
-		int numErrors = 0; 
-		
+
+		String firstPackage = null;
+		IAtcWorklist atcWorklist = null;
+
 		try {
 			Map<String, String> packageNames = getSelectedPackages();
-            firstPackage = packageNames.entrySet().iterator().next().getValue(); 
-		    atcWorklist = (IAtcWorklist) new AbapAtcHandler().execute(new ExecutionEvent(null, packageNames, null, null));
-		    
-		    for(IAtcObject object : atcWorklist.getObjects().getObject()) 
-		    { 
-		    	IAtcFindingList findingList = object.getFindings();
-		    	for(IAtcFinding finding : findingList.getFinding()) 
-		    	{
-		    		if (finding.getPriority() == 1 )
-				    {
-		    			numErrors = numErrors + 1;   		    			    		
-				    }
-		    	}
-		    }
+			firstPackage = packageNames.entrySet().iterator().next().getValue();
+
+			atcWorklist = new AbapAtcHandler().executePackage(firstPackage);
 		}
-		catch(Exception ex) 
-		{
-			// TODO errorhandling for exception 
+
+		catch (Exception ex) {
+			// TODO errorhandling for exception
 		}
-		
-		updateViewerInput(new AbapPackageInfo(firstPackage), AbapCiActionEnum.ABAP_ATC); 
-		
-	    String currentTheme = (numErrors > 0) 
-	    		 ?  COM_ABAP_CI_CUSTOM_THEME : ECLIPSE_STANDARD_THEME; 			 
-	     
-	    if (currentTheme != PlatformUI.getWorkbench().getThemeManager().getCurrentTheme().getLabel())
-	    {
-	    	PlatformUI.getWorkbench().getThemeManager().setCurrentTheme(currentTheme);
-	    }
+
+		TestState atcTestState = AtcResultAnalyzer.getTestState(atcWorklist);
+		DevelopmentProcessManager developmentProcessManager = new DevelopmentProcessManager();
+		developmentProcessManager.setAtcTeststate(atcTestState);
+
+		ThemeUpdateManager themeUpdateManager = new ThemeUpdateManager();
+		themeUpdateManager.updateTheme(developmentProcessManager.getSourcecodeState());
+
+		List<AbapPackageTestState> packageTestStates = ViewModel.INSTANCE.getPackageTestStates();
+
+		for (AbapPackageTestState packageTestState : packageTestStates) {
+			if (firstPackage == packageTestState.getPackageName()) {
+				String atcOutputLabel = AtcResultAnalyzer.getOutputLabel(atcWorklist);
+				packageTestState.setAtcInfo(atcOutputLabel);
+			}
+		}
 
 	}
 }

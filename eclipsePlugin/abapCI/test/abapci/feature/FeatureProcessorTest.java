@@ -28,7 +28,9 @@ public class FeatureProcessorTest {
 	@Mock
 	IPreferenceStore preferenceStore; 
 	@Mock
-	FeatureDecision featureDecision; 
+	FeatureFacade featureFacade; 
+	@Mock
+	FeatureFactory featureFactory; 
 	@Mock
 	AUnitTestManager aUnitTestManager; 
 	@Mock
@@ -42,12 +44,14 @@ public class FeatureProcessorTest {
 	
 	@Before
     public void setUp() throws Exception {
-		PowerMockito.when(abapCiPlugin.getPreferenceStore()).thenReturn(preferenceStore);
-
-		featureDecision = new FeatureDecision(preferenceStore);
+		
+		featureFacade = new FeatureFacade();
+		featureFactory = new FeatureFactory(); 
+		Whitebox.setInternalState(featureFactory, "prefs", preferenceStore);
+		Whitebox.setInternalState(featureFacade, "featureFactory", featureFactory);
 
 		featureProcessor = new FeatureProcessor();
-		Whitebox.setInternalState(featureProcessor, "featureDecision", featureDecision);
+		Whitebox.setInternalState(featureProcessor, "featureFacade", featureFacade);
 		Whitebox.setInternalState(featureProcessor, "aUnitTestManager", aUnitTestManager);
 		Whitebox.setInternalState(featureProcessor, "atcTestManager", atcTestManager);
 		Whitebox.setInternalState(featureProcessor, "themeUpdateManager", themeUpdateManager);
@@ -57,7 +61,7 @@ public class FeatureProcessorTest {
 	@Test
 	public void featureProcessorUnitRunTest() throws Exception {
 		
-		PowerMockito.when(preferenceStore.getBoolean(PreferenceConstants.PREF_ABAP_UNIT_RUN_ON_SAVE)).thenReturn(true);
+		PowerMockito.when(preferenceStore.getBoolean(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE)).thenReturn(true);
 
 		PowerMockito.when(aUnitTestManager.executeAllPackages()).thenReturn(TestState.OK); 
 		featureProcessor.processEnabledFeatures();
@@ -75,7 +79,7 @@ public class FeatureProcessorTest {
 	@Test
 	public void featureProcessorUnitAndAtcRunTest() throws Exception {
 		
-		PowerMockito.when(preferenceStore.getBoolean(PreferenceConstants.PREF_ABAP_UNIT_RUN_ON_SAVE)).thenReturn(true);
+		PowerMockito.when(preferenceStore.getBoolean(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE)).thenReturn(true);
 		PowerMockito.when(preferenceStore.getBoolean(PreferenceConstants.PREF_ATC_RUN_AFTER_UNIT_TESTS_TURN_GREEN)).thenReturn(true);
 
 		PowerMockito.when(aUnitTestManager.executeAllPackages()).thenReturn(TestState.OK); 

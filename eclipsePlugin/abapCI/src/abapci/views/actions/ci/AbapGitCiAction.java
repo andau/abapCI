@@ -21,7 +21,7 @@ public class AbapGitCiAction extends AbstractCiAction {
 	public void run() {
 				
 		IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore();
-        String projectName = prefs.getString(PreferenceConstants.PREF_ABAP_UNIT_DEV_PROJECT);        
+        String projectName = prefs.getString(PreferenceConstants.PREF_DEV_PROJECT);        
         IProject project = AdtCoreProjectServiceFactory.createCoreProjectService().findProject(projectName);      
         
         String transactionName = "ZABAPGIT";

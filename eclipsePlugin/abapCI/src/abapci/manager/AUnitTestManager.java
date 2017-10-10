@@ -18,7 +18,7 @@ import abapci.views.ViewModel;
 
 public class AUnitTestManager {
 
-	TestState overallTestState;
+	private TestState overallTestState;
 
 	public TestState executeAllPackages() {
 		overallTestState = null;
@@ -45,7 +45,7 @@ public class AUnitTestManager {
 			String testResultMessage = unitTestResultSummary.getTestState().toString();
 			String currentTime = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
 
-			packageTestState.setAbapState(testResultMessage);
+			packageTestState.setAUnitInfo(testResultMessage);
 			packageTestState.setLastRun(currentTime);
 
 		}

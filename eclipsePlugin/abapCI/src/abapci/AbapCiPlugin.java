@@ -11,7 +11,7 @@ import org.osgi.framework.BundleContext;
 public class AbapCiPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "com.abapci.core"; //$NON-NLS-1$
+	private static final String PLUGIN_ID = "com.abapci.core"; //$NON-NLS-1$
 
 	// The shared instance
 	private static AbapCiPlugin plugin;

@@ -3,13 +3,13 @@ package abapci.handlers;
 import com.sap.adt.atc.IAtcCheckableItem;
 import java.net.URI;
 
-public class MyAtcCheckableItem implements IAtcCheckableItem {
+class MyAtcCheckableItem implements IAtcCheckableItem {
 
 	private final URI uri;
 	private final String name;
 	private final String type;
 
-	public MyAtcCheckableItem(URI uri, String name, String type) {
+	MyAtcCheckableItem(URI uri, String name, String type) {
 		this.uri = uri;
 		this.name = name;
 		this.type = type;

@@ -16,19 +16,19 @@ import abapci.preferences.PreferenceConstants;
 
 
 
-public class ProjectSelectionDialog extends ElementListSelectionDialog {
+class ProjectSelectionDialog extends ElementListSelectionDialog {
 
 	private static final String DIALOG_HEADER = "ABAP development system selection";
 	private static final String DIALOG_MESSAGE_LINE1 = "Please select your ABAP development system.";
 	private static final String DIALOG_MESSAGE_LINE2 = "The current setting <%s> seems not be a valid ABAP project.";
 	
-	public ProjectSelectionDialog(Shell parent, LabelProvider labelProvider) {
+	ProjectSelectionDialog(Shell parent, LabelProvider labelProvider) {
 		super(parent, labelProvider);
 		init(); 
 	}
 	private void init() {
 		IPreferenceStore prefs  = AbapCiPlugin.getDefault().getPreferenceStore(); 
-		String actualDevProject = prefs.getString(PreferenceConstants.PREF_ABAP_UNIT_DEV_PROJECT);
+		String actualDevProject = prefs.getString(PreferenceConstants.PREF_DEV_PROJECT);
 		this.setTitle(DIALOG_HEADER);
 		StringBuilder messageBuilder = new StringBuilder(); 
 		messageBuilder.append(DIALOG_MESSAGE_LINE1 + "\n"); 

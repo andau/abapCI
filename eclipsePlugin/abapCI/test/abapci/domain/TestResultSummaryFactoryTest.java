@@ -6,7 +6,6 @@ import org.junit.Test;
 import com.sap.adt.tools.abapsource.abapunit.IAbapUnitAlert;
 
 import abapci.domain.UnitTestResultSummary;
-import abapci.domain.TestState;
 import abapci.result.TestResultSummaryFactory;
 
 public class TestResultSummaryFactoryTest {

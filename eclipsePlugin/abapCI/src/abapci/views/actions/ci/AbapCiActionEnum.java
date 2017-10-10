@@ -1,6 +1,6 @@
 package abapci.views.actions.ci;
 
-public enum AbapCiActionEnum {
+enum AbapCiActionEnum {
      JENKINS,
      ABAP_UNIT, 
      ABAP_ATC

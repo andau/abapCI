@@ -8,6 +8,7 @@ import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 import abapci.AbapCiPlugin;
 import abapci.preferences.PreferenceConstants;
@@ -23,13 +24,16 @@ public class FeatureDecisionTest {
 
 		PowerMockito.when(abapCiPlugin.getPreferenceStore()).thenReturn(preferenceStore);
 
-		PowerMockito.when(preferenceStore.getBoolean(PreferenceConstants.PREF_ABAP_UNIT_RUN_ON_SAVE)).thenReturn(true);
-		FeatureDecision featureDecision = new FeatureDecision(preferenceStore);
+		PowerMockito.when(preferenceStore.getBoolean(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE)).thenReturn(true);
+		FeatureFacade featureFacade = new FeatureFacade();
+	    FeatureFactory featureFactory = new FeatureFactory(); 
+	    Whitebox.setInternalState(featureFactory, "prefs", preferenceStore);
+	    Whitebox.setInternalState(featureFacade, "featureFactory", featureFactory);
 	
-		PowerMockito.when(preferenceStore.getBoolean(PreferenceConstants.PREF_ABAP_UNIT_RUN_ON_SAVE)).thenReturn(false);
-		featureDecision = new FeatureDecision(preferenceStore);
+		PowerMockito.when(preferenceStore.getBoolean(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE)).thenReturn(false);
+	    Whitebox.setInternalState(featureFactory, "prefs", preferenceStore);
 		
 
-		Assert.assertFalse(featureDecision.runUnitTestsOnSave());
+		Assert.assertFalse(featureFacade.getUnitFeature().isActive());
 	}
 }

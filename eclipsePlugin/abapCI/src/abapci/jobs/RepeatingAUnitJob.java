@@ -13,7 +13,7 @@ public class RepeatingAUnitJob extends Job {
 	public static boolean ScheduleNextJob;
 
 	private boolean isRunning = true;
-	FeatureProcessor featureProcessor; 
+	private FeatureProcessor featureProcessor; 
 	
 	
 	public RepeatingAUnitJob() {

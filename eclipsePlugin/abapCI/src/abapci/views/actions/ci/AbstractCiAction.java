@@ -12,10 +12,10 @@ import abapci.domain.AbapPackageInfo;
 import abapci.domain.AbapPackageTestState;
 import abapci.views.ViewModel;
 
-public abstract class AbstractCiAction extends Action {
+abstract class AbstractCiAction extends Action {
 	private static final String NOT_YET_CALLED = "not yet called";
 	
-	String lastResult = NOT_YET_CALLED; 
+	private String lastResult = NOT_YET_CALLED; 
 	
 
 	protected void updateViewerInput(AbapPackageInfo abapPackageInfo, AbapCiActionEnum ciActionType) 
@@ -42,9 +42,9 @@ public abstract class AbstractCiAction extends Action {
 		{
 			if (abapPackageTestState.getPackageName() == abapPackageInfo.getPackageName()) 
 			{
-				abapPackageTestState.setJenkinsState(abapPackageInfo.getJenkinsRunInfo().getExecutionResult()); 
-				abapPackageTestState.setAbapState(abapPackageInfo.getAbapUnitRunInfo().getExecutionResult()); 
-				abapPackageTestState.setAtcState(abapPackageInfo.getAbapAtcRunInfo().getExecutionResult()); 
+				abapPackageTestState.setJenkinsInfo(abapPackageInfo.getJenkinsRunInfo().getExecutionResult()); 
+				abapPackageTestState.setAUnitInfo(abapPackageInfo.getAbapUnitRunInfo().getExecutionResult()); 
+				abapPackageTestState.setAtcInfo(abapPackageInfo.getAbapAtcRunInfo().getExecutionResult()); 
 			}
 		}
 

@@ -24,7 +24,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
@@ -38,6 +37,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.sap.adt.project.AdtCoreProjectServiceFactory;
 import com.sap.adt.tools.core.internal.AbapProjectService;
+
 import abapci.AbapCiPlugin;
 import abapci.GeneralResourceChangeListener;
 import abapci.domain.AbapPackageTestState;
@@ -79,10 +79,8 @@ public class AbapCiMainView extends ViewPart {
 		}
 	}
 
-
 	public void createPartControl(Composite parent) {
 
-		
 		Composite entireContainer = new Composite(parent, SWT.NONE);
 		entireContainer.setLayout(new GridLayout(1, false));
 
@@ -94,15 +92,12 @@ public class AbapCiMainView extends ViewPart {
 		Button abapGitButton = new Button(entireContainer, SWT.NONE);
 		abapGitButton.setBounds(0, 10, 200, 200);
 		abapGitButton.setText("Launch abapGit");
-		abapGitButton.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event e) {
-				if (e.type == SWT.Selection) 
-				{
-					abapGitAction.run();
-				}
+		Listener listener = (e) -> {
+			if (e.type == SWT.Selection) {
+				abapGitAction.run();
 			}
-		});
-		
+		};
+		abapGitButton.addListener(SWT.Selection, listener);
 		viewer.setContentProvider(ArrayContentProvider.getInstance());
 
 		viewer.setInput(ViewModel.INSTANCE.getPackageTestStates());
@@ -132,47 +127,39 @@ public class AbapCiMainView extends ViewPart {
 		RepeatingAUnitJob job = new RepeatingAUnitJob();
 		job.schedule(6000);
 
-		
-		IResourceChangeListener listener = new GeneralResourceChangeListener();
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(listener, IResourceChangeEvent.POST_CHANGE);
-		
-		
-		if (!checkActualAbapProject())
-		{		
-			Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(); 
-			ProjectSelectionDialog projectSelectionDialog = 
-					new ProjectSelectionDialog(shell, new LabelProvider()); 
+		IResourceChangeListener resourceChangeListener = new GeneralResourceChangeListener();
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceChangeListener,
+				IResourceChangeEvent.POST_CHANGE);
+
+		if (!checkActualAbapProject()) {
+			Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+			ProjectSelectionDialog projectSelectionDialog = new ProjectSelectionDialog(shell, new LabelProvider());
 			if (projectSelectionDialog.open() == Window.OK) {
 				Object[] result = projectSelectionDialog.getResult();
-				if (result.length  == 1 ) 
-				{
-					setProjectName((String)result[0]); 
+				if (result.length == 1) {
+					setProjectName((String) result[0]);
 				}
-		    }
+			}
 		}
 	}
 
 	private void setProjectName(String projectName) {
-		IPreferenceStore prefs  = AbapCiPlugin.getDefault().getPreferenceStore(); 
-		prefs.setValue(PreferenceConstants.PREF_ABAP_UNIT_DEV_PROJECT, projectName);
+		IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore();
+		prefs.setValue(PreferenceConstants.PREF_DEV_PROJECT, projectName);
 	}
 
 	private boolean checkActualAbapProject() {
-		IPreferenceStore prefs  = AbapCiPlugin.getDefault().getPreferenceStore(); 
-		String actualDevProject = prefs.getString(PreferenceConstants.PREF_ABAP_UNIT_DEV_PROJECT);
-	    IProject project = AdtCoreProjectServiceFactory.createCoreProjectService().findProject(actualDevProject);
-        return AbapProjectService.getInstance().isAbapProject(project);
+		IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore();
+		String actualDevProject = prefs.getString(PreferenceConstants.PREF_DEV_PROJECT);
+		IProject project = AdtCoreProjectServiceFactory.createCoreProjectService().findProject(actualDevProject);
+		return AbapProjectService.getInstance().isAbapProject(project);
 	}
-	
 
 	private void hookContextMenu() {
 		MenuManager menuMgr = new MenuManager("#PopupMenu");
 		menuMgr.setRemoveAllWhenShown(true);
-		menuMgr.addMenuListener(new IMenuListener() {
-			public void menuAboutToShow(IMenuManager manager) {
-				AbapCiMainView.this.fillContextMenu(manager);
-			}
-		});
+		IMenuListener menuListener = (manager) -> AbapCiMainView.this.fillContextMenu(manager);
+		menuMgr.addMenuListener(menuListener);
 		Menu menu = menuMgr.createContextMenu(viewer.getControl());
 		viewer.getControl().setMenu(menu);
 		getSite().registerContextMenu(menuMgr, viewer);
@@ -237,7 +224,7 @@ public class AbapCiMainView extends ViewPart {
 			@Override
 			public String getText(Object element) {
 				AbapPackageTestState p = (AbapPackageTestState) element;
-				return p.getAbapState();
+				return p.getAUnitInfo();
 			}
 		});
 
@@ -255,7 +242,7 @@ public class AbapCiMainView extends ViewPart {
 			@Override
 			public String getText(Object element) {
 				AbapPackageTestState p = (AbapPackageTestState) element;
-				return p.getAtcState();
+				return p.getAtcInfo();
 			}
 		});
 
@@ -264,7 +251,7 @@ public class AbapCiMainView extends ViewPart {
 			@Override
 			public String getText(Object element) {
 				AbapPackageTestState p = (AbapPackageTestState) element;
-				return p.getJenkinsState();
+				return p.getJenkinsInfo();
 			}
 		});
 	}

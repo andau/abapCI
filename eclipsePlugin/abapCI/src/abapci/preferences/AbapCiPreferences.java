@@ -23,17 +23,19 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 		Label emptyLabel0 = new Label(getFieldEditorParent(), SWT.NONE);
 		emptyLabel0.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
 		
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_RUN_ON_SAVE, "&Run ABAP Unit tests when file saved",
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE, "&Run ABAP Unit tests when file saved",
 				getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_DEV_PROJECT, "&ABAP Development Project:",
+		addField(new StringFieldEditor(PreferenceConstants.PREF_DEV_PROJECT, "&ABAP Development Project:",
 				getFieldEditorParent()));
 
-		addField(new IntegerFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_RUN_INTERVAL, "&ABAP Unit test interval (minutes):",
+		addField(new IntegerFieldEditor(PreferenceConstants.PREF_UNIT_RUN_INTERVAL, "&ABAP Unit test interval (minutes):",
 				getFieldEditorParent()));
 		
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ATC_RUN_AFTER_UNIT_TESTS_TURN_GREEN, "&Run ATC when after successful Unit testrun",
 				getFieldEditorParent()));
 
+		addField(new StringFieldEditor(PreferenceConstants.PREF_ATC_VARIANT, "&Run ATC with variant:",
+				getFieldEditorParent()));
 
 
 		
@@ -65,26 +67,7 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 		Label emptyLabel4 = new Label(getFieldEditorParent(), SWT.NONE);
 		emptyLabel4.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
 
-		Label deprecatedLabel = new Label(getFieldEditorParent(), SWT.NONE);
-		deprecatedLabel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
-		deprecatedLabel.setText("Deprecated settings for Abap Unit run");
-
 		
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_USE_ODATA, "&Simulate ABAP Unit Endpoint",
-				getFieldEditorParent()));
-
-		addField(new StringFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_URL, "&ABAP Unit test Url:",
-				getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_USERNAME, "&ABAP Unit test Username:",
-				getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_PASSWORD, "&ABAP Unit test Password:",
-				getFieldEditorParent()));
-
-
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ABAP_UNIT_SIMULATE, "&Simulate ABAP Unit Endpoint",
-				getFieldEditorParent()));
-		
-
 	}
 
 	/*

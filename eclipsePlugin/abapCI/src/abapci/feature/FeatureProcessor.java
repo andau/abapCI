@@ -16,7 +16,7 @@ public class FeatureProcessor {
 	private ThemeUpdateManager themeUpdateManager; 
 	private DevelopmentProcessManager developmentProcessManager;  
 
-	FeatureDecision featureDecision; 
+	private FeatureFacade featureFacade; 
 
 	public FeatureProcessor() 
 	{
@@ -27,25 +27,25 @@ public class FeatureProcessor {
 		themeUpdateManager = new ThemeUpdateManager(); 
 		developmentProcessManager = new DevelopmentProcessManager(); 
 
-		featureDecision = new FeatureDecision(); 
+		featureFacade = new FeatureFacade(); 
 
 	}
 	
 	public void processEnabledFeatures() {
 		
-		if (featureDecision.runUnitTestsOnSave()) 
+		if (featureFacade.getUnitFeature().isActive()) 
 		{
 			TestState unitTestState = aUnitTestManager.executeAllPackages();
 			developmentProcessManager.setUnitTeststate(unitTestState); 
 			themeUpdateManager.updateTheme(developmentProcessManager.getSourcecodeState());
 
-			if (unitTestState == TestState.OK && featureDecision.runAtcAfterUnitTestTurnOk()) {
+			if (unitTestState == TestState.OK && featureFacade.getAtcFeature().isActive()) {
 				TestState atcTestState = atcTestManager.executeAllPackages();
 				developmentProcessManager.setAtcTeststate(atcTestState); 
 			    themeUpdateManager.updateTheme(developmentProcessManager.getSourcecodeState());
 			}
 
-			if (unitTestState == TestState.OK && featureDecision.runJenkinsAfterUnitTestTurnOk()) {
+			if (unitTestState == TestState.OK && featureFacade.getJenkinsFeature().isActive()) {
 				jenkinsManager.executeAllPackages();
 			}
 		}

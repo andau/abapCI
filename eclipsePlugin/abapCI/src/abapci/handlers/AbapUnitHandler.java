@@ -29,7 +29,7 @@ public class AbapUnitHandler extends AbstractHandler {
 
 		String packageName = event.getParameter("1");
 		IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore();
-		String destinationId = prefs.getString(PreferenceConstants.PREF_ABAP_UNIT_DEV_PROJECT);
+		String destinationId = prefs.getString(PreferenceConstants.PREF_DEV_PROJECT);
 		boolean flag = false;
 		IAdtServicesFactory servicesFactory = AdtServicesPlugin.getDefault().getFactory();
 		IAbapUnitService abapUnitService = servicesFactory.createAbapUnitService(destinationId, flag);
