@@ -36,7 +36,6 @@ public class RepeatingAUnitJob extends Job {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
 			featureProcessor.processEnabledFeatures();
 		}
 

@@ -55,5 +55,7 @@ public class AbapAtcCiAction extends AbstractCiAction {
 			}
 		}
 
+		ViewModel.INSTANCE.updatePackageTestStates(); 
+
 	}
 }

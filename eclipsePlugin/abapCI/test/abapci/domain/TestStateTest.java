@@ -11,7 +11,7 @@ public class TestStateTest{
 	
 	@Before
 	public void before() {
-		globalTestState = new GlobalTestState();
+		globalTestState = new GlobalTestState(SourcecodeState.UNDEF);
 	}
 	
 	@Test
@@ -23,11 +23,11 @@ public class TestStateTest{
 	
 	@Test
 	public void globalsTestStateChangeTest() {
-		globalTestState.setTestState(TestState.NOK); 
+		globalTestState.setSourcecodeState(SourcecodeState.UT_FAIL); 
 		Assert.assertEquals("Tests fail", globalTestState.getTestStateOutputForDashboard());
 		Assert.assertEquals(Display.getDefault().getSystemColor(SWT.COLOR_YELLOW), globalTestState.getColor()); 		
 
-		globalTestState.setTestState(TestState.OK); 
+		globalTestState.setSourcecodeState(SourcecodeState.OK); 
 		Assert.assertEquals("Tests OK", globalTestState.getTestStateOutputForDashboard());
 		Assert.assertEquals(Display.getDefault().getSystemColor(SWT.COLOR_GREEN), globalTestState.getColor()); 		
 

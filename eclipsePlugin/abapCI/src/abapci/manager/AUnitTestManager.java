@@ -2,23 +2,15 @@ package abapci.manager;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
-
 import abapci.domain.AbapPackageTestState;
-import abapci.domain.GlobalTestState;
 import abapci.domain.UnitTestResultSummary;
 import abapci.domain.TestState;
 import abapci.handlers.AbapUnitHandler;
 import abapci.views.ViewModel;
 
-public class AUnitTestManager {
+public class AUnitTestManager extends AbstractTestManager {
 
-	private TestState overallTestState;
 
 	public TestState executeAllPackages() {
 		overallTestState = null;
@@ -28,50 +20,21 @@ public class AUnitTestManager {
 		UnitTestResultSummary unitTestResultSummary = new UnitTestResultSummary("none", overallTestState);
 
 		for (AbapPackageTestState packageTestState : packageTestStates) {
-			Map<String, String> packageNames = new HashMap<>();
-			packageNames.put("1", packageTestState.getPackageName());
-
-			try {
-				unitTestResultSummary = (UnitTestResultSummary) new AbapUnitHandler()
-						.execute(new ExecutionEvent(null, packageNames, null, null));
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
+			
+	        unitTestResultSummary = new AbapUnitHandler().executePackage(packageTestState.getPackageName());
 			TestState testStateForCurrentPackage = unitTestResultSummary.getTestState();
 			mergePackageTestStateIntoGlobalTestState(testStateForCurrentPackage);
 
 			String testResultMessage = unitTestResultSummary.getTestState().toString();
-			String currentTime = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
-
 			packageTestState.setAUnitInfo(testResultMessage);
-			packageTestState.setLastRun(currentTime);
 
+			String currentTime = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
+			packageTestState.setLastRun(currentTime);
 		}
 
-		ViewModel.INSTANCE.setPackageTestStates(packageTestStates);
-		GlobalTestState globalTestState = new GlobalTestState(overallTestState);
-
-		ViewModel.INSTANCE.setGlobalTestState(globalTestState);
+		setAbapPackagesTestState(packageTestStates);
 
 		return overallTestState;
 	}
 
-	private void mergePackageTestStateIntoGlobalTestState(TestState packageTestState) {
-		if (overallTestState == null && packageTestState == TestState.OK) {
-			overallTestState = packageTestState;
-		}
-
-		switch (packageTestState) {
-		case UNDEF:
-		case NOK:
-			overallTestState = packageTestState;
-			break;
-		case OK:
-			overallTestState = (overallTestState == TestState.UNDEF) ? packageTestState : overallTestState;
-			break;
-		}
-
-	}
 }

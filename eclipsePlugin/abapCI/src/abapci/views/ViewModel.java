@@ -59,6 +59,11 @@ public enum ViewModel {
 		Display.getDefault().asyncExec(runnable);
 	}
 
+	public void updatePackageTestStates() {
+		Runnable runnable = () -> viewer.setInput(abapPackageTestStates);
+		Display.getDefault().asyncExec(runnable);
+	}
+
 	public void setGlobalTestState(GlobalTestState globalTestState) {
 		Runnable runnable = () -> {
 			lblOverallTestState.setText(globalTestState.getTestStateOutputForDashboard());

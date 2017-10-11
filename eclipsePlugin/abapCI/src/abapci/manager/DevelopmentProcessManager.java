@@ -31,7 +31,7 @@ public class DevelopmentProcessManager {
 			state = SourcecodeState.UT_FAIL;
 			break; 
 		case OK: 
-			state = atcTestState == TestState.NOK ? SourcecodeState.ATC_FAIL : SourcecodeState.CLEAN; 
+			state = atcTestState == TestState.NOK ? SourcecodeState.ATC_FAIL : SourcecodeState.OK; 
 	    break; 
 		case UNDEF:
 	    default:  

@@ -65,7 +65,7 @@ public class FeatureProcessorTest {
 
 		PowerMockito.when(aUnitTestManager.executeAllPackages()).thenReturn(TestState.OK); 
 		featureProcessor.processEnabledFeatures();
-		Mockito.verify(themeUpdateManager, Mockito.times(1)).updateTheme(SourcecodeState.CLEAN);
+		Mockito.verify(themeUpdateManager, Mockito.times(1)).updateTheme(SourcecodeState.OK);
 		
 		PowerMockito.when(aUnitTestManager.executeAllPackages()).thenReturn(TestState.NOK); 
 		featureProcessor.processEnabledFeatures();
@@ -85,7 +85,7 @@ public class FeatureProcessorTest {
 		PowerMockito.when(aUnitTestManager.executeAllPackages()).thenReturn(TestState.OK); 
 		PowerMockito.when(atcTestManager.executeAllPackages()).thenReturn(TestState.NOK); 
 		featureProcessor.processEnabledFeatures();
-		Mockito.verify(themeUpdateManager, Mockito.times(1)).updateTheme(SourcecodeState.CLEAN);
+		Mockito.verify(themeUpdateManager, Mockito.times(1)).updateTheme(SourcecodeState.OK);
 		Mockito.verify(themeUpdateManager, Mockito.times(1)).updateTheme(SourcecodeState.ATC_FAIL);
 
 		PowerMockito.when(aUnitTestManager.executeAllPackages()).thenReturn(TestState.NOK); 

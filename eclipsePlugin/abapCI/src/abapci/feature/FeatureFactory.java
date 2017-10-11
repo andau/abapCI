@@ -21,6 +21,7 @@ public class FeatureFactory {
 	}
 
 	public UnitFeature createAbapUnitFeature() {
+		initPrefs();
 		UnitFeature feature = new UnitFeature();
 		feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE));
 		feature.setInterval(prefs.getInt(PreferenceConstants.PREF_UNIT_RUN_INTERVAL));
@@ -28,6 +29,7 @@ public class FeatureFactory {
 	}
 
 	public AtcFeature createAtcFeature() {
+		initPrefs();
 		AtcFeature feature = new AtcFeature(); 
 		feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_ATC_RUN_AFTER_UNIT_TESTS_TURN_GREEN));
 		feature.setVariant(prefs.getString(PreferenceConstants.PREF_ATC_VARIANT)); 
@@ -35,12 +37,14 @@ public class FeatureFactory {
 	}
 
 	public ColorChangerFeature createColorChangerFeature() {
+		initPrefs();
 		ColorChangerFeature feature = new ColorChangerFeature(); 
 		feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_CHANGE_COLOR_ON_FAILED_TESTS));
 		return feature;
 	}
 
 	public JenkinsFeature createJenkinsFeature() {
+		initPrefs();
 		JenkinsFeature feature = new JenkinsFeature(); 
 		feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_JENKINS_RUN_AFTER_UNIT_TESTS_TURN_GREEN));
 		return feature;

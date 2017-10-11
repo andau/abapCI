@@ -9,10 +9,10 @@ import abapci.handlers.AbapAtcHandler;
 import abapci.utils.AtcResultAnalyzer;
 import abapci.views.ViewModel;
 
-public class AtcTestManager {
+public class AtcTestManager extends AbstractTestManager {
 
 	public TestState executeAllPackages() {
-		TestState testState = TestState.UNDEF;
+		overallTestState = null;
 
 		List<AbapPackageTestState> packageTestStates = ViewModel.INSTANCE.getPackageTestStates();
 
@@ -26,14 +26,16 @@ public class AtcTestManager {
 				e.printStackTrace();
 			}
 
+			TestState testState = AtcResultAnalyzer.getTestState(atcWorklist); 
+			mergePackageTestStateIntoGlobalTestState(testState); 
+
 			String atcOutputLabel = AtcResultAnalyzer.getOutputLabel(atcWorklist);
 			packageTestState.setAtcInfo(atcOutputLabel);
-
 		}
 
-		ViewModel.INSTANCE.setPackageTestStates(packageTestStates);
-
-		return testState;
+		setAbapPackagesTestState(packageTestStates); 
+		
+		return overallTestState;
 
 	}
 }

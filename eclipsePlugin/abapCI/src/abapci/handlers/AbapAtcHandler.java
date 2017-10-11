@@ -46,7 +46,7 @@ public class AbapAtcHandler extends AbstractHandler {
         IAbapProject abapProject =  AbapProjectService.getInstance().createFromProjectUnchecked(project);
         
         //TODO Make check variant variable 
-        
+                
         String atcVariant = featureFacade.getAtcFeature().getVariant(); 
         String worklistId = worklistBackendAccess.createWorklist(abapProject, atcVariant, progressMonitor);       
         checkableItems.add(new MyAtcCheckableItem(createAtcUri(packageName), packageName, "DEVC/K"));
@@ -59,7 +59,7 @@ public class AbapAtcHandler extends AbstractHandler {
         		objectSetName, forceObjectSet, includeExemptedFindings, progressMonitor);
     }
     
-    private URI createAtcUri(String packageName) 
+    private URI createAtcUri(String packageName)
     {
     	return URI.create("/sap/bc/adt/vit/wb/object_type/devck/object_name/" + packageName); 
     }

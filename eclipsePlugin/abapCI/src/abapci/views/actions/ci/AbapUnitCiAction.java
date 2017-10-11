@@ -1,21 +1,18 @@
 package abapci.views.actions.ci;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.ui.PlatformUI;
-
 import abapci.AbapCiPlugin;
-import abapci.domain.AbapPackageInfo;
+import abapci.domain.AbapPackageTestState;
 import abapci.domain.UnitTestResultSummary;
-import abapci.domain.TestState;
 import abapci.handlers.AbapUnitHandler;
 import abapci.result.TestResultSummaryFactory;
+import abapci.views.ViewModel;
 
 public class AbapUnitCiAction extends AbstractCiAction {	
-
-	private static final String ECLIPSE_STANDARD_THEME = "org.eclipse.ui.r30";
-	private static final String COM_ABAP_CI_CUSTOM_THEME = "com.abapCi.custom.theme";
 
 	public AbapUnitCiAction(String label, String tooltip) {
 		this.setText(label);
@@ -24,33 +21,35 @@ public class AbapUnitCiAction extends AbstractCiAction {
 	}
 
 	public void run() {
-		
-		//TODO errorhandling if called without valid package name 
-		//TODO Handling for more than one package 
-		
+				
 		String firstPackage = null; 
 		UnitTestResultSummary unitTestResultSummary = TestResultSummaryFactory.createUndefined(); 
 		
 		try {
 			Map<String, String> packageNames = getSelectedPackages();
-            firstPackage = packageNames.entrySet().iterator().next().getValue(); 
-		    unitTestResultSummary =  (UnitTestResultSummary) new AbapUnitHandler().execute(new ExecutionEvent(null, packageNames, null, null));
+            firstPackage = packageNames.entrySet().iterator().next().getValue();
+            
+		    unitTestResultSummary =  new AbapUnitHandler().executePackage(firstPackage);
 		
 		}
+
 		catch(Exception ex) 
 		{
-			// TODO errorhandling for exception in Jenkins call, e.g. wrong Url, username, password, ...	
+			unitTestResultSummary = TestResultSummaryFactory.createUndefined(firstPackage); 
 		}
 		
-		updateViewerInput(new AbapPackageInfo(firstPackage), AbapCiActionEnum.ABAP_UNIT); 
+		List<AbapPackageTestState> packageTestStates = ViewModel.INSTANCE.getPackageTestStates();
+
+		for (AbapPackageTestState packageTestState : packageTestStates) {
+			if (firstPackage == packageTestState.getPackageName()) {
+				packageTestState.setAUnitInfo(unitTestResultSummary.getTestState().toString());
+
+				String currentTime = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
+				packageTestState.setLastRun(currentTime);
+			}			
+		}
 		
-	    String currentTheme = (unitTestResultSummary.getTestState() == TestState.NOK) 
-	    		 ?  COM_ABAP_CI_CUSTOM_THEME : ECLIPSE_STANDARD_THEME; 			 
-	     
-	    if (currentTheme != PlatformUI.getWorkbench().getThemeManager().getCurrentTheme().getLabel())
-	    {
-	    	PlatformUI.getWorkbench().getThemeManager().setCurrentTheme(currentTheme);
-	    }
+		ViewModel.INSTANCE.updatePackageTestStates(); 
 
 	}
 }

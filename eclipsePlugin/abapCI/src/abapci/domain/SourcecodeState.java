@@ -2,7 +2,8 @@ package abapci.domain;
 
 public enum SourcecodeState {
 	UNDEF, 
-	CLEAN, 	
+	OK, 	
 	UT_FAIL, 
 	ATC_FAIL, 
+	OFFLINE, 
 }

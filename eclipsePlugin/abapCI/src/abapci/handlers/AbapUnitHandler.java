@@ -26,8 +26,12 @@ import abapci.result.TestResultSummaryFactory;
 public class AbapUnitHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-
 		String packageName = event.getParameter("1");
+		return executePackage(packageName);
+	}
+
+	public UnitTestResultSummary executePackage(String packageName) {
+		
 		IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore();
 		String destinationId = prefs.getString(PreferenceConstants.PREF_DEV_PROJECT);
 		boolean flag = false;
@@ -44,16 +48,25 @@ public class AbapUnitHandler extends AbstractHandler {
 			IAbapUnitResult abapUnitResult = abapUnitService.executeUnitTests(task, false, packageName);
 			return TestResultSummaryFactory.create(packageName, abapUnitResult);
 		} catch (TestRunException e) {
+			if (e.getCause() instanceof CommunicationException) 
+			{
+				unitTestResultSummary = TestResultSummaryFactory.createOffline(packageName);
+			}
+			else 
+			{
+				unitTestResultSummary = TestResultSummaryFactory.createUndefined(packageName);				
+			}
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			unitTestResultSummary = TestResultSummaryFactory.createUndefined(packageName);
 		} catch (CommunicationException e) {
-			// TODO Eventually Output message that connection to SAP was not
-			// successful
-			// !consider also not ABAP mode - where no connection to an ABAPsystem exists
 			e.printStackTrace();
-			unitTestResultSummary = TestResultSummaryFactory.createUndefined(packageName);
+			unitTestResultSummary = TestResultSummaryFactory.createUndefined(packageName);							
+		} catch (Exception ex) 
+		{
+			unitTestResultSummary = TestResultSummaryFactory.createUndefined(packageName);										
 		}
+		
+		
 
 		return unitTestResultSummary;
 	}

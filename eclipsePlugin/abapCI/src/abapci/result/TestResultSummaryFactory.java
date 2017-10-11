@@ -48,6 +48,10 @@ public class TestResultSummaryFactory {
 		return new UnitTestResultSummary(packageName, TestState.UNDEF);
 	}
 
+	public static UnitTestResultSummary createOffline(String packageName) {
+		return new UnitTestResultSummary(packageName, TestState.OFFL);
+	}
+
 	public static UnitTestResultSummary createUndefined() {
 		return createUndefined(UNDEFINED_PACKAGE_NAME);
 	}

@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.part.ViewPart;
 
 import abapci.domain.GlobalTestState;
+import abapci.domain.SourcecodeState;
 
 public class AbapCiDashboardView extends ViewPart {
 
@@ -36,7 +37,7 @@ public class AbapCiDashboardView extends ViewPart {
 		lblOverallTestState.setFont(new Font(Display.getCurrent(), fontData[0]));
 		lblOverallTestState.setLayoutData(new GridData(SWT.CENTER, SWT.FILL, true, true));
 
-		GlobalTestState initialGlobalTestState = new GlobalTestState();
+		GlobalTestState initialGlobalTestState = new GlobalTestState(SourcecodeState.UNDEF);
 		ViewModel.INSTANCE.setGlobalTestState(initialGlobalTestState);
 		lblOverallTestState.setText(initialGlobalTestState.getTestStateOutputForDashboard());
 		lblOverallTestState.setBackground(initialGlobalTestState.getColor());

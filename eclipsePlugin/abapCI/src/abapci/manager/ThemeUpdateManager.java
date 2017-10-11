@@ -24,7 +24,7 @@ public class ThemeUpdateManager {
 		case UT_FAIL:
 			targetTheme = featureFacade.getColorChangerFeature().isActive() ? ABAP_CI_CUSTOM_THEME : STANDARD_THEME;
 			break;
-		case CLEAN:
+		case OK:
 		default:
 			targetTheme = STANDARD_THEME;
 			break;

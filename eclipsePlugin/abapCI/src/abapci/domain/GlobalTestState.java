@@ -6,53 +6,77 @@ import org.eclipse.swt.widgets.Display;
 
 public class GlobalTestState {
 
-	private TestState testState;
+	private SourcecodeState sourcecodeState;
 
-	public GlobalTestState() {
-		this.testState = TestState.UNDEF;
+	public GlobalTestState(TestState overallTestState) {
+		switch (overallTestState) {
+		case OK:
+			sourcecodeState = SourcecodeState.OK;
+			break;
+		case NOK:
+			sourcecodeState = SourcecodeState.UT_FAIL;
+			break;
+		case OFFL:
+			sourcecodeState = SourcecodeState.OFFLINE;
+			break;
+		default:
+			sourcecodeState = SourcecodeState.UNDEF;
+		}
 	}
 
-	public GlobalTestState(TestState testState) {
-		this.testState = testState;
+	public GlobalTestState(SourcecodeState sourcecodeState) {
+		this.sourcecodeState = sourcecodeState;
 	}
 
 	public String getTestStateOutputForDashboard() {
 		String testStateOutput = "";
 
-		switch (this.testState) {
-		case UNDEF:
-			testStateOutput = "Tests n/a";
-			break;
-		case NOK:
+		switch (this.sourcecodeState) {
+		case UT_FAIL:
 			testStateOutput = "Tests fail";
+			break;
+		case ATC_FAIL:
+			testStateOutput = "ATC findings";
 			break;
 		case OK:
 			testStateOutput = "Tests OK";
+			break;
+		case OFFLINE:
+			testStateOutput = "No connection";
+			break;
+		case UNDEF:
+		default:
+			testStateOutput = "Tests n/a";
 			break;
 		}
 		return testStateOutput;
 	}
 
 	public Color getColor() {
-		Color colorForTestState = Display.getCurrent().getSystemColor(SWT.COLOR_GRAY);
+		Color colorForTestState;
 
-		switch (this.testState) {
-		case UNDEF:
-			colorForTestState = Display.getCurrent().getSystemColor(SWT.COLOR_GRAY);
-			break;
-		case NOK:
+		switch (this.sourcecodeState) {
+		case UT_FAIL:
 			colorForTestState = Display.getCurrent().getSystemColor(SWT.COLOR_YELLOW);
+			break;
+		case ATC_FAIL:
+			colorForTestState = Display.getCurrent().getSystemColor(SWT.COLOR_BLUE);
 			break;
 		case OK:
 			colorForTestState = Display.getCurrent().getSystemColor(SWT.COLOR_GREEN);
+			break;
+		case UNDEF:
+		case OFFLINE:
+		default:
+			colorForTestState = Display.getCurrent().getSystemColor(SWT.COLOR_GRAY);
 			break;
 		}
 
 		return colorForTestState;
 	}
 
-	public void setTestState(TestState testState) {
-		this.testState = testState;
+	public void setSourcecodeState(SourcecodeState testState) {
+		this.sourcecodeState = testState;
 
 	}
 
