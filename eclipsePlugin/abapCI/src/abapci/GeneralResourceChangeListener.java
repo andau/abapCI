@@ -12,10 +12,8 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 	}
 
 	public void resourceChanged(IResourceChangeEvent event) {
-		int eventType = event.getType();
-		switch (eventType) {
 
-		case IResourceChangeEvent.POST_CHANGE:
+		if (event.getType() == IResourceChangeEvent.POST_CHANGE) {
 			IResourceDelta delta = event.getDelta();
 			if (delta == null)
 				return;
@@ -27,10 +25,6 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 				// TODO add possibility to run tests only for affected packages
 				// - resourceDeltas[i]....
 			}
-
-			break;
-		default:
-			return;
 		}
 	}
 }

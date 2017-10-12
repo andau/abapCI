@@ -1,7 +1,5 @@
 package abapci.domain;
 
-import java.awt.List;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.junit.Assert;

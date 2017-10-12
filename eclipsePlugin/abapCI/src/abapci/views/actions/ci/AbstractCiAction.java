@@ -59,7 +59,7 @@ abstract class AbstractCiAction extends Action {
 				.getSelection();
 		AbapPackageTestState abapPackageTestState = (AbapPackageTestState)((StructuredSelection) selection).getFirstElement();
 
-		Map<String, String> packageNames = new HashMap<String, String>();
+		Map<String, String> packageNames = new HashMap<>();
 		packageNames.put("1", abapPackageTestState.getPackageName());
 
 		return packageNames;

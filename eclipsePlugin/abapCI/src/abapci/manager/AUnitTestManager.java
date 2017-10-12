@@ -32,7 +32,7 @@ public class AUnitTestManager extends AbstractTestManager {
 			packageTestState.setLastRun(currentTime);
 		}
 
-		setAbapPackagesTestState(packageTestStates);
+		setAbapPackagesTestState(packageTestStates, overallTestState, TestStateType.UNIT);
 
 		return overallTestState;
 	}

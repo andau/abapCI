@@ -2,7 +2,7 @@ package abapci.domain;
 
 import org.eclipse.swt.widgets.DateTime;
 
-public class RunInfo {
+class RunInfo {
     private DateTime executionDateTime; 
     private String  executionResult;
     private int numErrors;

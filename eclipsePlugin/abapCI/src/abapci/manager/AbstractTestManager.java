@@ -29,12 +29,23 @@ abstract class AbstractTestManager {
 
 	}
 	
-	protected void setAbapPackagesTestState(List<AbapPackageTestState> packageTestStates) {
+	protected void setAbapPackagesTestState(List<AbapPackageTestState> packageTestStates, TestState testState, TestStateType teststateType) {
 		ViewModel.INSTANCE.setPackageTestStates(packageTestStates);
-		GlobalTestState globalTestState = new GlobalTestState(overallTestState);
 
-		ViewModel.INSTANCE.setGlobalTestState(globalTestState);		
+		if (teststateType == teststateType.UNIT) {
+			ViewModel.INSTANCE.setUnitState(testState);					
+		}
+		else 
+		{
+			ViewModel.INSTANCE.setAtcState(testState);								
+		}
 	}
 
+	
+	public enum TestStateType 
+	{
+		UNIT, 
+		ATC
+	}
 
 }

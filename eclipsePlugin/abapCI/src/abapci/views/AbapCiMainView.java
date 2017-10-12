@@ -50,7 +50,7 @@ import abapci.views.actions.ci.JenkinsCiAction;
 import abapci.views.actions.ui.AddAction;
 import abapci.views.actions.ui.DeleteAction;
 
-public class AbapCiMainView extends ViewPart {
+class AbapCiMainView extends ViewPart {
 
 	/**
 	 * The ID of the view as specified by the extension.
@@ -92,7 +92,7 @@ public class AbapCiMainView extends ViewPart {
 		Button abapGitButton = new Button(entireContainer, SWT.NONE);
 		abapGitButton.setBounds(0, 10, 200, 200);
 		abapGitButton.setText("Launch abapGit");
-		Listener listener = (e) -> {
+		Listener listener = e -> {
 			if (e.type == SWT.Selection) {
 				abapGitAction.run();
 			}
@@ -158,7 +158,7 @@ public class AbapCiMainView extends ViewPart {
 	private void hookContextMenu() {
 		MenuManager menuMgr = new MenuManager("#PopupMenu");
 		menuMgr.setRemoveAllWhenShown(true);
-		IMenuListener menuListener = (manager) -> AbapCiMainView.this.fillContextMenu(manager);
+		IMenuListener menuListener = manager -> this.fillContextMenu(manager);
 		menuMgr.addMenuListener(menuListener);
 		Menu menu = menuMgr.createContextMenu(viewer.getControl());
 		viewer.getControl().setMenu(menu);

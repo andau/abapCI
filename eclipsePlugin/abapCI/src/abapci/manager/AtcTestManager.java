@@ -27,13 +27,13 @@ public class AtcTestManager extends AbstractTestManager {
 			}
 
 			TestState testState = AtcResultAnalyzer.getTestState(atcWorklist); 
-			mergePackageTestStateIntoGlobalTestState(testState); 
+			mergePackageTestStateIntoGlobalTestState(testState);
 
 			String atcOutputLabel = AtcResultAnalyzer.getOutputLabel(atcWorklist);
 			packageTestState.setAtcInfo(atcOutputLabel);
 		}
-
-		setAbapPackagesTestState(packageTestStates); 
+		
+		setAbapPackagesTestState(packageTestStates, overallTestState, TestStateType.ATC); 
 		
 		return overallTestState;
 

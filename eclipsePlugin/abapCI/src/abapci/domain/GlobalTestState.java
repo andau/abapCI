@@ -8,20 +8,7 @@ public class GlobalTestState {
 
 	private SourcecodeState sourcecodeState;
 
-	public GlobalTestState(TestState overallTestState) {
-		switch (overallTestState) {
-		case OK:
-			sourcecodeState = SourcecodeState.OK;
-			break;
-		case NOK:
-			sourcecodeState = SourcecodeState.UT_FAIL;
-			break;
-		case OFFL:
-			sourcecodeState = SourcecodeState.OFFLINE;
-			break;
-		default:
-			sourcecodeState = SourcecodeState.UNDEF;
-		}
+	public GlobalTestState() {
 	}
 
 	public GlobalTestState(SourcecodeState sourcecodeState) {
@@ -57,10 +44,10 @@ public class GlobalTestState {
 
 		switch (this.sourcecodeState) {
 		case UT_FAIL:
-			colorForTestState = Display.getCurrent().getSystemColor(SWT.COLOR_YELLOW);
+			colorForTestState = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
 			break;
 		case ATC_FAIL:
-			colorForTestState = Display.getCurrent().getSystemColor(SWT.COLOR_BLUE);
+			colorForTestState = Display.getCurrent().getSystemColor(SWT.COLOR_YELLOW);
 			break;
 		case OK:
 			colorForTestState = Display.getCurrent().getSystemColor(SWT.COLOR_GREEN);
@@ -78,6 +65,38 @@ public class GlobalTestState {
 	public void setSourcecodeState(SourcecodeState testState) {
 		this.sourcecodeState = testState;
 
+	}
+
+	public void setUnitTeststate(TestState unittestState) {
+		switch (unittestState) {
+		case OK:
+			sourcecodeState = (sourcecodeState == SourcecodeState.ATC_FAIL) ? SourcecodeState.ATC_FAIL : SourcecodeState.OK;    
+			break;
+		case NOK:
+			sourcecodeState = SourcecodeState.UT_FAIL;
+			break;
+		case OFFL:
+			sourcecodeState = SourcecodeState.OFFLINE;
+			break;
+		default:
+			sourcecodeState = SourcecodeState.UNDEF;
+		}		
+	}
+
+	public void setAtcTeststate(TestState unittestState) {
+		switch (unittestState) {
+		case OK:
+			sourcecodeState = (sourcecodeState == SourcecodeState.UT_FAIL) ? SourcecodeState.UT_FAIL : SourcecodeState.OK;    
+			break;
+		case NOK:
+			sourcecodeState = (sourcecodeState == SourcecodeState.UT_FAIL) ? SourcecodeState.UT_FAIL : SourcecodeState.ATC_FAIL;    
+			break;
+		case OFFL:
+			sourcecodeState = SourcecodeState.OFFLINE;
+			break;
+		default:
+			sourcecodeState = SourcecodeState.UNDEF;
+		}		
 	}
 
 }

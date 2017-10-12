@@ -12,6 +12,7 @@ import org.osgi.service.prefs.BackingStoreException;
 
 import abapci.domain.AbapPackageTestState;
 import abapci.domain.GlobalTestState;
+import abapci.domain.SourcecodeState;
 import abapci.domain.TestState;
 
 public enum ViewModel {
@@ -22,6 +23,7 @@ public enum ViewModel {
 
 	private List<AbapPackageTestState> abapPackageTestStates;
 	private TestState overallTestState;
+	private GlobalTestState globalTestState; 
 
 	private ViewModel() {
 
@@ -40,6 +42,7 @@ public enum ViewModel {
 		}
 
 		overallTestState = TestState.UNDEF;
+		globalTestState = new GlobalTestState(SourcecodeState.UNDEF); 
 
 	}
 
@@ -64,13 +67,24 @@ public enum ViewModel {
 		Display.getDefault().asyncExec(runnable);
 	}
 
-	public void setGlobalTestState(GlobalTestState globalTestState) {
+	public void setUnitState(TestState testState) {
+	    globalTestState.setUnitTeststate(testState); 
+		setGlobalTestState(); 
+	}
+	public void setAtcState(TestState testState) {
+	    globalTestState.setAtcTeststate(testState); 
+		setGlobalTestState(); 
+	}
+
+	
+	private void setGlobalTestState() {
 		Runnable runnable = () -> {
 			lblOverallTestState.setText(globalTestState.getTestStateOutputForDashboard());
 			lblOverallTestState.setBackground(globalTestState.getColor());
 		};
 		Display.getDefault().asyncExec(runnable);
 	}
+
 
 	public TestState getOverallTestState() {
 		return INSTANCE.overallTestState;

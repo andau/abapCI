@@ -12,6 +12,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import abapci.domain.GlobalTestState;
 import abapci.domain.SourcecodeState;
+import abapci.domain.TestState;
 
 public class AbapCiDashboardView extends ViewPart {
 
@@ -38,7 +39,7 @@ public class AbapCiDashboardView extends ViewPart {
 		lblOverallTestState.setLayoutData(new GridData(SWT.CENTER, SWT.FILL, true, true));
 
 		GlobalTestState initialGlobalTestState = new GlobalTestState(SourcecodeState.UNDEF);
-		ViewModel.INSTANCE.setGlobalTestState(initialGlobalTestState);
+		ViewModel.INSTANCE.setUnitState(TestState.UNDEF);
 		lblOverallTestState.setText(initialGlobalTestState.getTestStateOutputForDashboard());
 		lblOverallTestState.setBackground(initialGlobalTestState.getColor());
 

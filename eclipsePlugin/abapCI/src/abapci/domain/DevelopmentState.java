@@ -4,5 +4,5 @@ public enum DevelopmentState {
 	TEST, 
 	CODE, 
 	REFACTOR, 
-	PUSH 
+	GIT_PUSH 
 }
