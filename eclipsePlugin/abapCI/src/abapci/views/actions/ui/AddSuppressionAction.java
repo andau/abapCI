@@ -12,13 +12,14 @@ import org.eclipse.ui.PlatformUI;
 import org.osgi.service.prefs.BackingStoreException;
 
 import abapci.domain.AbapPackageTestState;
+import abapci.domain.Suppression;
 import abapci.lang.UiTexts;
 import abapci.views.ViewModel;
 
-public class AddAction extends Action {
+public class AddSuppressionAction extends Action {
     
 	
-	public AddAction(String label) {
+	public AddSuppressionAction(String label) {
 		this.setText(label);
 		this.setImageDescriptor(
 				PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
@@ -27,17 +28,17 @@ public class AddAction extends Action {
 
 	public void run() {
 
-		List<AbapPackageTestState> viewerAbapPackageTestStates = ViewModel.INSTANCE.getPackageTestStates();
+		List<Suppression> suppressions = ViewModel.INSTANCE.getSuppressions(); 
 
-		InputDialog packageNameDialog = new InputDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
-				this.getText(), UiTexts.LABEL_LONG_ACTION_ADD_NEW_PACKAGE, "", null);
+		InputDialog suppressionDialog = new InputDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+				this.getText(), UiTexts.LABEL_LONG_ACTION_ADD_NEW_SUPPRESSION, "", null);
 
-		if (packageNameDialog.open() == Window.OK) {
-			viewerAbapPackageTestStates.add(new AbapPackageTestState(packageNameDialog.getValue()));
-			ViewModel.INSTANCE.setPackageTestStates(viewerAbapPackageTestStates);
-
-			IEclipsePreferences preferences = ConfigurationScope.INSTANCE.getNode("packageNames");
-			preferences.put(packageNameDialog.getValue(), packageNameDialog.getValue());
+		if (suppressionDialog.open() == Window.OK) {
+			suppressions.add(new Suppression(suppressionDialog.getValue()));
+			ViewModel.INSTANCE.setSuppressions(suppressions); 
+			
+			IEclipsePreferences preferences = ConfigurationScope.INSTANCE.getNode("suppressions");
+			preferences.put(suppressionDialog.getValue(), suppressionDialog.getValue());
 
 			try {
 				preferences.sync();

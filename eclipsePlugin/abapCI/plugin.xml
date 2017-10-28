@@ -80,6 +80,13 @@
             class="abapci.views.AbapCiDashboardView"
             id="abapci.views.AbapCiDashboardView">
       </view>
+      <view
+            name="ABAP CI Suppressions"
+            icon="icons/abapci_logo.ico"
+            category="abapCI"
+            class="abapci.views.AbapCiSuppressionView"
+            id="abapci.views.AbapCiSuppressionView">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.perspectiveExtensions">

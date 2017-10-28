@@ -16,21 +16,29 @@ public class TestResultSummaryFactory {
 	}
 
 	public static UnitTestResultSummary create(String packageName, IAbapUnitResult abapUnitResult) {
-		int numCritialAlerts = getCriticalAlerts(abapUnitResult.getAlerts()).size();
+		int numSuppressedErrors = 0; 
+
+		List<IAbapUnitAlert> criticalAlerts = getCriticalAlerts(abapUnitResult.getAlerts());
 
 		for (IAbapUnitResultItem abapUnitResultItem : abapUnitResult.getItems()) {
-			numCritialAlerts = numCritialAlerts + getNumCriticalAlerts(abapUnitResultItem);
+			criticalAlerts.addAll(getCriticalAlerts(abapUnitResultItem));
 		}
-		TestState testState = numCritialAlerts == 0 ? TestState.OK : TestState.NOK;
-		return new UnitTestResultSummary(packageName, testState);
+		
+		//TODO Split criticalAlerts into active alerts and suppressed alerts 
+		
+		TestState testState = criticalAlerts.isEmpty() ? TestState.OK : TestState.NOK;
+		return new UnitTestResultSummary(packageName, testState, numSuppressedErrors);
 	}
 
-	private static int getNumCriticalAlerts(IAbapUnitResultItem abapUnitResultItem) {
-		int numCritialAlerts = getCriticalAlerts(abapUnitResultItem.getAlerts()).size();
-		for (IAbapUnitResultItem abapUnitResultSubItem : abapUnitResultItem.getChildItems()) {
-			numCritialAlerts = numCritialAlerts + getNumCriticalAlerts(abapUnitResultSubItem);
+	private static List<IAbapUnitAlert> getCriticalAlerts(IAbapUnitResultItem abapUnitResultItem) {
+		
+		  List<IAbapUnitAlert> criticalAlerts = getCriticalAlerts(abapUnitResultItem.getAlerts());
+	    
+	    for (IAbapUnitResultItem abapUnitResultSubItem : abapUnitResultItem.getChildItems()) {
+			criticalAlerts.addAll(getCriticalAlerts(abapUnitResultSubItem));
 		}
-		return numCritialAlerts;
+		
+		return criticalAlerts;
 	}
 
 	private static List<IAbapUnitAlert> getCriticalAlerts(List<IAbapUnitAlert> alerts) {
@@ -45,11 +53,11 @@ public class TestResultSummaryFactory {
 	}
 
 	public static UnitTestResultSummary createUndefined(String packageName) {
-		return new UnitTestResultSummary(packageName, TestState.UNDEF);
+		return new UnitTestResultSummary(packageName, TestState.UNDEF, 0);
 	}
 
 	public static UnitTestResultSummary createOffline(String packageName) {
-		return new UnitTestResultSummary(packageName, TestState.OFFL);
+		return new UnitTestResultSummary(packageName, TestState.OFFL, 0);
 	}
 
 	public static UnitTestResultSummary createUndefined() {

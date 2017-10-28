@@ -26,4 +26,9 @@ public class AbapCiHandler extends AbstractHandler {
 
 		return null;
 	}
+	
+	public boolean isSuppressed() 
+	{
+		return false; 
+	}
 }

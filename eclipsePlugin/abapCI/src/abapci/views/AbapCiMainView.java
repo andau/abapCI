@@ -4,6 +4,8 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -34,6 +36,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
+import org.osgi.service.prefs.BackingStoreException;
 
 import com.sap.adt.project.AdtCoreProjectServiceFactory;
 import com.sap.adt.tools.core.internal.AbapProjectService;
@@ -50,7 +53,7 @@ import abapci.views.actions.ci.JenkinsCiAction;
 import abapci.views.actions.ui.AddAction;
 import abapci.views.actions.ui.DeleteAction;
 
-class AbapCiMainView extends ViewPart {
+public class AbapCiMainView extends ViewPart {
 
 	/**
 	 * The ID of the view as specified by the extension.
@@ -86,8 +89,7 @@ class AbapCiMainView extends ViewPart {
 
 		viewer = new TableViewer(entireContainer, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 		createColumns(viewer);
-		final Table table = viewer.getTable();
-		table.setHeaderVisible(true);
+		viewer.getTable().setHeaderVisible(true);
 
 		Button abapGitButton = new Button(entireContainer, SWT.NONE);
 		abapGitButton.setBounds(0, 10, 200, 200);
@@ -104,7 +106,7 @@ class AbapCiMainView extends ViewPart {
 
 		// TODO Viewer is needed because ViewModel is not yet implemented with
 		// full functionality
-		ViewModel.INSTANCE.setView(viewer);
+		ViewModel.INSTANCE.setMainViewer(viewer);
 
 		getSite().setSelectionProvider(viewer);
 
@@ -115,8 +117,6 @@ class AbapCiMainView extends ViewPart {
 		gridData.grabExcessVerticalSpace = true;
 		gridData.horizontalAlignment = GridData.FILL;
 		viewer.getControl().setLayoutData(gridData);
-
-		// viewer.setLabelProvider(new ViewLabelProvider());
 
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "abapCI.viewer");
 		getSite().setSelectionProvider(viewer);
@@ -144,13 +144,22 @@ class AbapCiMainView extends ViewPart {
 	}
 
 	private void setProjectName(String projectName) {
-		IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore();
-		prefs.setValue(PreferenceConstants.PREF_DEV_PROJECT, projectName);
+		IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(AbapCiPlugin.PLUGIN_ID);
+
+		prefs.put(PreferenceConstants.PREF_DEV_PROJECT, projectName);
+		try {
+			prefs.sync();
+		} catch (BackingStoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	private boolean checkActualAbapProject() {
 		IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore();
 		String actualDevProject = prefs.getString(PreferenceConstants.PREF_DEV_PROJECT);
+		
 		IProject project = AdtCoreProjectServiceFactory.createCoreProjectService().findProject(actualDevProject);
 		return AbapProjectService.getInstance().isAbapProject(project);
 	}

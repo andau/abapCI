@@ -57,6 +57,7 @@ public class AbapAtcHandler extends AbstractHandler {
                 
         return worklistBackendAccess.getWorklist(abapProject, worklistRun.getWorklistId(), worklistRun.getWorklistTimestamp().toString(), 
         		objectSetName, forceObjectSet, includeExemptedFindings, progressMonitor);
+        
     }
     
     private URI createAtcUri(String packageName)

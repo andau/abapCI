@@ -1,6 +1,7 @@
 package abapci.views;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.runtime.preferences.ConfigurationScope;
@@ -13,22 +14,25 @@ import org.osgi.service.prefs.BackingStoreException;
 import abapci.domain.AbapPackageTestState;
 import abapci.domain.GlobalTestState;
 import abapci.domain.SourcecodeState;
+import abapci.domain.Suppression;
 import abapci.domain.TestState;
 
 public enum ViewModel {
 	INSTANCE;
 
-	Viewer viewer;
+	Viewer mainViewer;
+	Viewer suppressionsViewer; 
 	Label lblOverallTestState;
 
 	private List<AbapPackageTestState> abapPackageTestStates;
+	private List<Suppression> suppressions; 
+	
 	private TestState overallTestState;
 	private GlobalTestState globalTestState; 
 
 	private ViewModel() {
 
 		abapPackageTestStates = new ArrayList<>();
-
 		IEclipsePreferences packageNamePrefs = ConfigurationScope.INSTANCE.getNode("packageNames");
 
 		try {
@@ -44,12 +48,28 @@ public enum ViewModel {
 		overallTestState = TestState.UNDEF;
 		globalTestState = new GlobalTestState(SourcecodeState.UNDEF); 
 
+		suppressions = new ArrayList<>();
+		IEclipsePreferences suppressionPrefs = ConfigurationScope.INSTANCE.getNode("suppressions");
+
+		try {
+			for (String key : suppressionPrefs.keys()) {
+				suppressions.add(new Suppression(suppressionPrefs.get(key, "default")));
+			}
+		} catch (BackingStoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	// TODO Dirty but working for the beginning - observableList should make
 	// this obsolete in future
-	public void setView(Viewer viewer) {
-		INSTANCE.viewer = viewer;
+	public void setMainViewer(Viewer viewer) {
+		INSTANCE.mainViewer = viewer;
+	}
+
+	public void setSuppressViewer(Viewer viewer) {
+		INSTANCE.suppressionsViewer = viewer;
 	}
 
 	public List<AbapPackageTestState> getPackageTestStates() {
@@ -58,12 +78,12 @@ public enum ViewModel {
 
 	public void setPackageTestStates(List<AbapPackageTestState> abapPackageTestStates) {
 		this.abapPackageTestStates = abapPackageTestStates;
-		Runnable runnable = () -> viewer.setInput(abapPackageTestStates);
+		Runnable runnable = () -> mainViewer.setInput(abapPackageTestStates);
 		Display.getDefault().asyncExec(runnable);
 	}
 
 	public void updatePackageTestStates() {
-		Runnable runnable = () -> viewer.setInput(abapPackageTestStates);
+		Runnable runnable = () -> mainViewer.setInput(abapPackageTestStates);
 		Display.getDefault().asyncExec(runnable);
 	}
 
@@ -92,6 +112,18 @@ public enum ViewModel {
 
 	public void setLblOverallTestState(Label lblOverallTestState) {
 		INSTANCE.lblOverallTestState = lblOverallTestState;
+	}
+
+	public List<Suppression> getSuppressions() {
+		return suppressions; 
+	}
+
+	public void setSuppressions(List<Suppression> suppressions) {
+		this.suppressions = suppressions; 
+
+		Runnable runnable = () -> suppressionsViewer.setInput(suppressions);
+		Display.getDefault().asyncExec(runnable);
+
 	}
 
 }

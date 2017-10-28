@@ -13,11 +13,12 @@ import org.eclipse.ui.PlatformUI;
 import org.osgi.service.prefs.BackingStoreException;
 
 import abapci.domain.AbapPackageTestState;
+import abapci.domain.Suppression;
 import abapci.views.ViewModel;
 
-public class DeleteAction extends Action {
+public class DeleteSuppressionAction extends Action {
 
-	public DeleteAction(String label) {
+	public DeleteSuppressionAction(String label) {
 		this.setText(label);
 		this.setImageDescriptor(
 				PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ELCL_REMOVE));
@@ -28,21 +29,21 @@ public class DeleteAction extends Action {
 
 		ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getSelection();
-		AbapPackageTestState firstAbapPackageTestState = (AbapPackageTestState) ((StructuredSelection) selection).getFirstElement();
+		Suppression firstSuppression = (Suppression) ((StructuredSelection) selection).getFirstElement();
 
-		List<AbapPackageTestState> viewerAbapPackageTestStates = ViewModel.INSTANCE.getPackageTestStates(); 
+		List<Suppression> suppressions = ViewModel.INSTANCE.getSuppressions(); 
 
-		Predicate<AbapPackageTestState> packageNamePredicate = p -> p.getPackageName().equals(firstAbapPackageTestState.getPackageName());
-		viewerAbapPackageTestStates.removeIf(packageNamePredicate);
+		Predicate<Suppression> suppressionPredicate = s -> s.getClassName().equals(firstSuppression.getClassName());
+		suppressions.removeIf(suppressionPredicate);
 		
-		ViewModel.INSTANCE.setPackageTestStates(viewerAbapPackageTestStates); 
+		ViewModel.INSTANCE.setSuppressions(suppressions); 
 
 	
-		IEclipsePreferences preferences = ConfigurationScope.INSTANCE.getNode("packageNames");
+		IEclipsePreferences preferences = ConfigurationScope.INSTANCE.getNode("suppressions");
 		
 		try 
 		{
-		    preferences.remove(firstAbapPackageTestState.getPackageName());	
+		    preferences.remove(firstSuppression.getClassName());	
 		    preferences.sync();
 		} catch (BackingStoreException e) {
 			// TODO Auto-generated catch block

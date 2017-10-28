@@ -6,12 +6,15 @@ public class UnitTestResultSummary {
 
 	private final String packageName;
 	private TestState testState;
+	private int numSuppressedErrors; 
+	
     private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(
             this);
 
-	public UnitTestResultSummary(String packageName, TestState testState) {
+	public UnitTestResultSummary(String packageName, TestState testState, int numSuppressedErrors) {
 		this.packageName = packageName;
 		this.testState = testState;
+		this.numSuppressedErrors = numSuppressedErrors; 
 	}
 
 	public String getPackageName() {
@@ -20,6 +23,11 @@ public class UnitTestResultSummary {
 
 	public TestState getTestState() {
 		return testState;
+	}
+	
+	public int getNumSuppressedErrors() 
+	{
+		return numSuppressedErrors; 
 	}
 	
 	public void setTestState(TestState testState) {

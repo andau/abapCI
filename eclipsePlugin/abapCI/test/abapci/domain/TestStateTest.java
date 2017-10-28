@@ -25,7 +25,7 @@ public class TestStateTest{
 	public void globalsTestStateChangeTest() {
 		globalTestState.setSourcecodeState(SourcecodeState.UT_FAIL); 
 		Assert.assertEquals("Tests fail", globalTestState.getTestStateOutputForDashboard());
-		Assert.assertEquals(Display.getDefault().getSystemColor(SWT.COLOR_YELLOW), globalTestState.getColor()); 		
+		Assert.assertEquals(Display.getDefault().getSystemColor(SWT.COLOR_RED), globalTestState.getColor()); 		
 
 		globalTestState.setSourcecodeState(SourcecodeState.OK); 
 		Assert.assertEquals("Tests OK", globalTestState.getTestStateOutputForDashboard());

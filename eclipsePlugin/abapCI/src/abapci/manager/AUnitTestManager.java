@@ -17,7 +17,7 @@ public class AUnitTestManager extends AbstractTestManager {
 
 		List<AbapPackageTestState> packageTestStates = ViewModel.INSTANCE.getPackageTestStates();
 
-		UnitTestResultSummary unitTestResultSummary = new UnitTestResultSummary("none", overallTestState);
+		UnitTestResultSummary unitTestResultSummary = new UnitTestResultSummary("none", overallTestState, 0);
 
 		for (AbapPackageTestState packageTestState : packageTestStates) {
 			

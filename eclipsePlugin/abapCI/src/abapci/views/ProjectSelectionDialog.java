@@ -3,6 +3,8 @@ package abapci.views;
 import java.util.ArrayList;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.widgets.Shell;
@@ -27,6 +29,7 @@ class ProjectSelectionDialog extends ElementListSelectionDialog {
 		init(); 
 	}
 	private void init() {
+
 		IPreferenceStore prefs  = AbapCiPlugin.getDefault().getPreferenceStore(); 
 		String actualDevProject = prefs.getString(PreferenceConstants.PREF_DEV_PROJECT);
 		this.setTitle(DIALOG_HEADER);
