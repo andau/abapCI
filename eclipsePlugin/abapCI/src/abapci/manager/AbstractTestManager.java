@@ -3,7 +3,6 @@ package abapci.manager;
 import java.util.List;
 
 import abapci.domain.AbapPackageTestState;
-import abapci.domain.GlobalTestState;
 import abapci.domain.TestState;
 import abapci.views.ViewModel;
 
@@ -32,7 +31,7 @@ abstract class AbstractTestManager {
 	protected void setAbapPackagesTestState(List<AbapPackageTestState> packageTestStates, TestState testState, TestStateType teststateType) {
 		ViewModel.INSTANCE.setPackageTestStates(packageTestStates);
 
-		if (teststateType == teststateType.UNIT) {
+		if (teststateType == TestStateType.UNIT) {
 			ViewModel.INSTANCE.setUnitState(testState);					
 		}
 		else 

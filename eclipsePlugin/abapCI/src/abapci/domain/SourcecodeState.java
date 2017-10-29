@@ -5,5 +5,5 @@ public enum SourcecodeState {
 	OK, 	
 	UT_FAIL, 
 	ATC_FAIL, 
-	OFFLINE, 
+	OFFL, 
 }

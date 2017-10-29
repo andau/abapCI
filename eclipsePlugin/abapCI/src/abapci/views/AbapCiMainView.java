@@ -29,7 +29,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
@@ -49,6 +48,7 @@ import abapci.lang.UiTexts;
 import abapci.preferences.PreferenceConstants;
 import abapci.views.actions.ci.AbapGitCiAction;
 import abapci.views.actions.ci.AbapUnitCiAction;
+import abapci.views.actions.ci.AtcCiAction;
 import abapci.views.actions.ci.JenkinsCiAction;
 import abapci.views.actions.ui.AddAction;
 import abapci.views.actions.ui.DeleteAction;
@@ -63,6 +63,7 @@ public class AbapCiMainView extends ViewPart {
 	private TableViewer viewer;
 	private Action jenkinsAction;
 	private Action aUnitAction;
+	private Action atcAction; 
 	private Action addAction;
 	private Action deleteAction;
 	private Action abapGitAction;
@@ -191,6 +192,7 @@ public class AbapCiMainView extends ViewPart {
 		manager.add(deleteAction);
 		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 		manager.add(aUnitAction);
+		manager.add(atcAction);
 		manager.add(jenkinsAction);
 	}
 
@@ -200,6 +202,7 @@ public class AbapCiMainView extends ViewPart {
 		manager.add(deleteAction);
 		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 		manager.add(aUnitAction);
+		manager.add(atcAction);
 		manager.add(jenkinsAction);
 		manager.add(abapGitAction);
 	}
@@ -208,8 +211,9 @@ public class AbapCiMainView extends ViewPart {
 
 		// TODO set Images for actions
 
-		jenkinsAction = new JenkinsCiAction("Run jenkins", "Run jenkins for ABAP package");
-		aUnitAction = new AbapUnitCiAction("Run ABAP Unittest", "Run ABAP Unittest for given package");
+		jenkinsAction = new JenkinsCiAction("Run jenkins", "Run jenkins for selected packages");
+		aUnitAction = new AbapUnitCiAction("Run ABAP Unittest", "Run ABAP Unittest for selected package");
+		atcAction = new AtcCiAction("Run ATC", "Run ATC for selected packages"); 
 		addAction = new AddAction(UiTexts.LABEL_ACTION_ADD_PACKAGE);
 		deleteAction = new DeleteAction(UiTexts.LABEL_ACTION_REMOVE_PACKAGE);
 		abapGitAction = new AbapGitCiAction("Open abapGIT", "Open abapGIT in SAP GUI");

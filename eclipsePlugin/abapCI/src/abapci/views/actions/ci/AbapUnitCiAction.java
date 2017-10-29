@@ -2,8 +2,9 @@ package abapci.views.actions.ci;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Map.Entry;
 
 import abapci.AbapCiPlugin;
 import abapci.domain.AbapPackageTestState;
@@ -12,7 +13,7 @@ import abapci.handlers.AbapUnitHandler;
 import abapci.result.TestResultSummaryFactory;
 import abapci.views.ViewModel;
 
-public class AbapUnitCiAction extends AbstractCiAction {	
+public class AbapUnitCiAction extends AbstractCiAction {
 
 	public AbapUnitCiAction(String label, String tooltip) {
 		this.setText(label);
@@ -20,36 +21,34 @@ public class AbapUnitCiAction extends AbstractCiAction {
 		this.setImageDescriptor(AbapCiPlugin.getImageDescriptor("icons/abapci_logo.ico"));
 	}
 
+	@Override
 	public void run() {
-				
-		String firstPackage = null; 
-		UnitTestResultSummary unitTestResultSummary = TestResultSummaryFactory.createUndefined(); 
-		
-		try {
-			Map<String, String> packageNames = getSelectedPackages();
-            firstPackage = packageNames.entrySet().iterator().next().getValue();
-            
-		    unitTestResultSummary =  new AbapUnitHandler().executePackage(firstPackage);
-		
-		}
 
-		catch(Exception ex) 
-		{
-			unitTestResultSummary = TestResultSummaryFactory.createUndefined(firstPackage); 
-		}
-		
+		UnitTestResultSummary unitTestResultSummary;
 		List<AbapPackageTestState> packageTestStates = ViewModel.INSTANCE.getPackageTestStates();
 
-		for (AbapPackageTestState packageTestState : packageTestStates) {
-			if (firstPackage == packageTestState.getPackageName()) {
-				packageTestState.setAUnitInfo(unitTestResultSummary.getTestState().toString());
+		for (Iterator<Entry<String, String>> iter = getSelectedPackages().entrySet().iterator(); iter.hasNext();) {
 
-				String currentTime = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
-				packageTestState.setLastRun(currentTime);
-			}			
+			String packageName = iter.next().getValue();
+
+			try {
+				unitTestResultSummary = new AbapUnitHandler().executePackage(packageName);
+
+			} catch (Exception ex) {
+				unitTestResultSummary = TestResultSummaryFactory.createOffline(packageName);
+			}
+
+
+			for (AbapPackageTestState packageTestState : packageTestStates) {
+				if (packageName == packageTestState.getPackageName()) {
+					packageTestState.setAUnitInfo(unitTestResultSummary.getTestState().toString());
+
+					String currentTime = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
+					packageTestState.setLastRun(currentTime);
+				}
+			}
 		}
-		
-		ViewModel.INSTANCE.updatePackageTestStates(); 
 
+		ViewModel.INSTANCE.updatePackageTestStates();
 	}
 }

@@ -4,22 +4,25 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
-import abapci.AbapCiPlugin;
+import com.sap.adt.atc.model.atcworklist.IAtcWorklist;
+
 import abapci.domain.AbapPackageTestState;
-import abapci.handlers.JenkinsHandler;
+import abapci.domain.TestState;
+import abapci.handlers.AbapAtcHandler;
+import abapci.utils.AtcResultAnalyzer;
 import abapci.views.ViewModel;
 
-public class JenkinsCiAction extends AbstractCiAction {
+public class AtcCiAction extends AbstractCiAction {
 
-	public JenkinsCiAction(String label, String tooltip) {
+	public AtcCiAction(String label, String tooltip) {
 		this.setText(label);
 		this.setToolTipText(tooltip);
-		this.setImageDescriptor(AbapCiPlugin.getImageDescriptor("icons/jenkins.ico"));
 	}
 
 	@Override
 	public void run() {
 
+		TestState testState;
 		List<AbapPackageTestState> packageTestStates = ViewModel.INSTANCE.getPackageTestStates();
 
 		for (Iterator<Entry<String, String>> iter = getSelectedPackages().entrySet().iterator(); iter.hasNext();) {
@@ -27,18 +30,21 @@ public class JenkinsCiAction extends AbstractCiAction {
 			String packageName = iter.next().getValue();
 
 			try {
-				new JenkinsHandler().execute(packageName);
+				IAtcWorklist atcWorklist = new AbapAtcHandler().executePackage(packageName);
+				testState = AtcResultAnalyzer.getTestState(atcWorklist);
+
 			} catch (Exception ex) {
-				// TODO
+				testState = TestState.OFFL;
 			}
 
 			for (AbapPackageTestState packageTestState : packageTestStates) {
 				if (packageName == packageTestState.getPackageName()) {
-					packageTestState.setJenkinsInfo("Job triggered");
+					packageTestState.setAtcInfo(testState.toString());
 				}
 
-				ViewModel.INSTANCE.updatePackageTestStates();
 			}
+			
+			ViewModel.INSTANCE.updatePackageTestStates();
 		}
 	}
 }

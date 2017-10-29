@@ -28,7 +28,7 @@ public class GlobalTestState {
 		case OK:
 			testStateOutput = "Tests OK";
 			break;
-		case OFFLINE:
+		case OFFL:
 			testStateOutput = "No connection";
 			break;
 		case UNDEF:
@@ -53,7 +53,7 @@ public class GlobalTestState {
 			colorForTestState = Display.getCurrent().getSystemColor(SWT.COLOR_GREEN);
 			break;
 		case UNDEF:
-		case OFFLINE:
+		case OFFL:
 		default:
 			colorForTestState = Display.getCurrent().getSystemColor(SWT.COLOR_GRAY);
 			break;
@@ -76,7 +76,7 @@ public class GlobalTestState {
 			sourcecodeState = SourcecodeState.UT_FAIL;
 			break;
 		case OFFL:
-			sourcecodeState = SourcecodeState.OFFLINE;
+			sourcecodeState = SourcecodeState.OFFL;
 			break;
 		default:
 			sourcecodeState = SourcecodeState.UNDEF;
@@ -92,7 +92,7 @@ public class GlobalTestState {
 			sourcecodeState = (sourcecodeState == SourcecodeState.UT_FAIL) ? SourcecodeState.UT_FAIL : SourcecodeState.ATC_FAIL;    
 			break;
 		case OFFL:
-			sourcecodeState = SourcecodeState.OFFLINE;
+			sourcecodeState = SourcecodeState.OFFL;
 			break;
 		default:
 			sourcecodeState = SourcecodeState.UNDEF;

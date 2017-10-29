@@ -11,7 +11,6 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.osgi.service.prefs.BackingStoreException;
 
-import abapci.domain.AbapPackageTestState;
 import abapci.domain.Suppression;
 import abapci.lang.UiTexts;
 import abapci.views.ViewModel;
@@ -26,6 +25,7 @@ public class AddSuppressionAction extends Action {
 
 	}
 
+	@Override
 	public void run() {
 
 		List<Suppression> suppressions = ViewModel.INSTANCE.getSuppressions(); 

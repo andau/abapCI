@@ -15,6 +15,7 @@ import com.sap.adt.tools.abapsource.abapunit.IAbapUnitAlert;
 import com.sap.adt.tools.abapsource.abapunit.IAbapUnitResult;
 import com.sap.adt.tools.abapsource.abapunit.IAbapUnitResultItem;
 
+import abapci.domain.TestState;
 import abapci.domain.UnitTestResultSummary;
 import abapci.result.TestResultSummaryFactory;
 
@@ -52,8 +53,6 @@ public class TestResultSummaryFactoryTest {
 	
 	@Test
 	public void testNoError() {
-	
-
 		UnitTestResultSummary unitTestResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME, unitResultOkMock);
 		Assert.assertEquals(TestState.OK, unitTestResultSummary.getTestState()); 
 	}

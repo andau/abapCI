@@ -19,6 +19,10 @@ public class JenkinsHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		String packageName = event.getParameter("1");
+		return execute(packageName); 
+	}
+	
+    public Object execute(String packageName) throws ExecutionException {
 
 		IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore(); 
 

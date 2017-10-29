@@ -4,6 +4,7 @@ import java.util.List;
 import com.sap.adt.atc.model.atcworklist.IAtcWorklist;
 
 import abapci.domain.AbapPackageTestState;
+import abapci.domain.TestResult;
 import abapci.domain.TestState;
 import abapci.handlers.AbapAtcHandler;
 import abapci.utils.AtcResultAnalyzer;
@@ -26,8 +27,8 @@ public class AtcTestManager extends AbstractTestManager {
 				e.printStackTrace();
 			}
 
-			TestState testState = AtcResultAnalyzer.getTestState(atcWorklist); 
-			mergePackageTestStateIntoGlobalTestState(testState);
+			TestResult testResult = AtcResultAnalyzer.getTestResult(atcWorklist); 
+			mergePackageTestStateIntoGlobalTestState(testResult.getTestState());
 
 			String atcOutputLabel = AtcResultAnalyzer.getOutputLabel(atcWorklist);
 			packageTestState.setAtcInfo(atcOutputLabel);
