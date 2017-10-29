@@ -27,7 +27,7 @@ public class AtcResultAnalyzer {
 		return testResult;
 	}
 
-	public static List<InvalidItem> getInvalidItems(IAtcWorklist atcWorklist) {
+	private static List<InvalidItem> getInvalidItems(IAtcWorklist atcWorklist) {
 		List<InvalidItem> invalidItems = new ArrayList<>();
 
 		for (IAtcObject object : atcWorklist.getObjects().getObject()) {
