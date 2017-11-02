@@ -149,7 +149,7 @@ public class AbapCiMainView extends ViewPart {
 
 		prefs.put(PreferenceConstants.PREF_DEV_PROJECT, projectName);
 		try {
-			prefs.sync();
+			prefs.flush(); 
 		} catch (BackingStoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -6,5 +6,6 @@
    <feature url="features/com.abapci.feature_0.0.4.jar" id="com.abapci.feature" version="0.0.4"/>
    <feature url="features/com.abapci.feature_0.0.5.jar" id="com.abapci.feature" version="0.0.5"/>
    <feature url="features/com.abapci.feature_0.1.0.jar" id="com.abapci.feature" version="0.1.0"/>
+   <feature url="features/com.abapci.feature_0.1.1.jar" id="com.abapci.feature" version="0.1.1"/>
    <category-def name="ABAP CI" label="ABAP CI"/>
 </site>
