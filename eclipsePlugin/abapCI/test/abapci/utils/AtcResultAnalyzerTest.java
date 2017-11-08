@@ -59,7 +59,7 @@ public class AtcResultAnalyzerTest {
 
 	@Before
 	public void before() {
-		final String SUPPRESSED_FINDING_DESC = "SUPPRESSED_FINDING"; 
+		final String SUPPRESSED_FINDING_LOC = "SUPPRESSED_FINDING"; 
 		
 		PowerMockito.when(atcWorklist.getObjects()).thenReturn(atcObjectList);
 		PowerMockito.when(atcWorklist.getObjects().getObject()).thenReturn(new BasicEList<IAtcObject>(Arrays.asList(atcObject)));
@@ -68,11 +68,10 @@ public class AtcResultAnalyzerTest {
 		PowerMockito.when(activeAtcFinding.getPriority()).thenReturn(1);
 		
 		PowerMockito.when(suppressedAtcFinding.getPriority()).thenReturn(1);
-		PowerMockito.when(suppressedAtcFinding.getParentUri()).thenReturn(SUPPRESSED_FINDING_DESC);
-		
+		PowerMockito.when(suppressedAtcFinding.getLocation()).thenReturn("/" + SUPPRESSED_FINDING_LOC + "/");
 		ViewModel viewModelInstance = PowerMockito.mock(ViewModel.class);
 		Whitebox.setInternalState(ViewModel.class, "INSTANCE", viewModelInstance);
-		PowerMockito.when(viewModelInstance.getSuppressions()).thenReturn(Arrays.asList(new Suppression(SUPPRESSED_FINDING_DESC)));
+		PowerMockito.when(viewModelInstance.getSuppressions()).thenReturn(Arrays.asList(new Suppression(SUPPRESSED_FINDING_LOC)));
 	}
 
 	@Test

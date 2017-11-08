@@ -34,10 +34,9 @@ public class AtcResultAnalyzer {
 			IAtcFindingList findingList = object.getFindings();
 			for (IAtcFinding finding : findingList.getFinding()) {
 				if (finding.getPriority() == 1) {
-					// TODO Adapt check for isSuppressed
-					String className = finding.getParentUri();
+					String location = finding.getLocation(); 
 					boolean isSuppressed = ViewModel.INSTANCE.getSuppressions().stream()
-							.anyMatch(item -> item.getClassName() == className);
+							.anyMatch(item -> location.contains("/" + item.getClassName() + "/"));
 					
 					invalidItems.add(new InvalidItem(finding.getName(), finding.getDescription(), isSuppressed));
 				}
