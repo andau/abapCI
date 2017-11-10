@@ -18,7 +18,7 @@ public class AbapUnitCiAction extends AbstractCiAction {
 	public AbapUnitCiAction(String label, String tooltip) {
 		this.setText(label);
 		this.setToolTipText(tooltip);
-		this.setImageDescriptor(AbapCiPlugin.getImageDescriptor("icons/abapci_logo.ico"));
+		this.setImageDescriptor(AbapCiPlugin.getImageDescriptor("icons/aunit.png"));
 	}
 
 	@Override

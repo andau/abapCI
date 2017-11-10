@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 
 import com.sap.adt.atc.model.atcworklist.IAtcWorklist;
 
+import abapci.AbapCiPlugin;
 import abapci.domain.AbapPackageTestState;
 import abapci.domain.TestState;
 import abapci.handlers.AbapAtcHandler;
@@ -17,6 +18,7 @@ public class AtcCiAction extends AbstractCiAction {
 	public AtcCiAction(String label, String tooltip) {
 		this.setText(label);
 		this.setToolTipText(tooltip);
+		this.setImageDescriptor(AbapCiPlugin.getImageDescriptor("icons/atc.png"));
 	}
 
 	@Override
