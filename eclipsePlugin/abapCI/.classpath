@@ -32,6 +32,7 @@
 			<accessrule kind="accessible" pattern="com/sap/adt/atc/model/atcfinding/IAtcFinding"/>
 			<accessrule kind="accessible" pattern="com/sap/adt/atc/model/atcfinding/IAtcFindingList"/>
 			<accessrule kind="accessible" pattern="com/sap/adt/atc/model/atcobject/IAtcObject"/>
+			<accessrule kind="accessible" pattern="**"/>
 		</accessrules>
 	</classpathentry>
 	<classpathentry kind="src" output="target/classes" path="src">

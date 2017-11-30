@@ -20,14 +20,16 @@ public enum ViewModel {
 	INSTANCE;
 
 	Viewer mainViewer;
-	Viewer suppressionsViewer; 
+	Viewer suppressionsViewer;
 	Label lblOverallTestState;
+	Label lblOverallInfoline;
 
 	private List<AbapPackageTestState> abapPackageTestStates;
-	private List<Suppression> suppressions; 
-	
+	private List<Suppression> suppressions;
+
 	private TestState overallTestState;
-	private GlobalTestState globalTestState; 
+	private String overallInfoline; 
+	private GlobalTestState globalTestState;
 
 	private ViewModel() {
 
@@ -45,7 +47,7 @@ public enum ViewModel {
 		}
 
 		overallTestState = TestState.UNDEF;
-		globalTestState = new GlobalTestState(SourcecodeState.UNDEF); 
+		globalTestState = new GlobalTestState(SourcecodeState.UNDEF);
 
 		suppressions = new ArrayList<>();
 		IEclipsePreferences suppressionPrefs = ConfigurationScope.INSTANCE.getNode("suppressions");
@@ -87,23 +89,35 @@ public enum ViewModel {
 	}
 
 	public void setUnitState(TestState testState) {
-	    globalTestState.setUnitTeststate(testState); 
-		setGlobalTestState(); 
+		globalTestState.setUnitTeststate(testState);
+		setGlobalTestState();
 	}
+
 	public void setAtcState(TestState testState) {
-	    globalTestState.setAtcTeststate(testState); 
-		setGlobalTestState(); 
+		globalTestState.setAtcTeststate(testState);
+		setGlobalTestState();
 	}
 
-	
 	private void setGlobalTestState() {
-		Runnable runnable = () -> {
-			lblOverallTestState.setText(globalTestState.getTestStateOutputForDashboard());
-			lblOverallTestState.setBackground(globalTestState.getColor());
-		};
-		Display.getDefault().asyncExec(runnable);
-	}
+		try {
+			Runnable runnable = () -> {
+				lblOverallTestState.setText(globalTestState.getTestStateOutputForDashboard());
+				lblOverallTestState.setBackground(globalTestState.getColor());
+			};
+			Display.getDefault().asyncExec(runnable);
 
+		} catch (
+
+		Exception e) {
+			// TODO Handling, wenn Übersichts-View nicht angezeigt wird
+		}
+	}
+	
+	public void setGlobalInfoline(String text) 
+	{
+		lblOverallInfoline.setText(text); 
+		
+	}
 
 	public TestState getOverallTestState() {
 		return INSTANCE.overallTestState;
@@ -113,16 +127,31 @@ public enum ViewModel {
 		INSTANCE.lblOverallTestState = lblOverallTestState;
 	}
 
+	public String getOverallInfoline() {
+		return INSTANCE.overallInfoline; 		
+	}
+
+	public void setOverallInfoline(String infoline) {
+		lblOverallInfoline.setText(infoline); 	
+	}
+
 	public List<Suppression> getSuppressions() {
-		return suppressions; 
+		return suppressions;
 	}
 
 	public void setSuppressions(List<Suppression> suppressions) {
-		this.suppressions = suppressions; 
+		this.suppressions = suppressions;
 
 		Runnable runnable = () -> suppressionsViewer.setInput(suppressions);
 		Display.getDefault().asyncExec(runnable);
 
 	}
+
+	public void setOverallLblInfoline(Label infoline) {
+		INSTANCE.lblOverallInfoline = infoline;
+		
+	}
+
+
 
 }

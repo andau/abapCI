@@ -23,6 +23,7 @@ public class AbapCiDashboardView extends ViewPart {
 
 	public AbapCiDashboardView() {
 		ViewModel.INSTANCE.getOverallTestState();
+		ViewModel.INSTANCE.getOverallInfoline(); 
 	}
 
 	public void createPartControl(Composite parent) {
@@ -43,6 +44,8 @@ public class AbapCiDashboardView extends ViewPart {
 		lblOverallTestState.setText(initialGlobalTestState.getTestStateOutputForDashboard());
 		lblOverallTestState.setBackground(initialGlobalTestState.getColor());
 
+		Label infoline = new Label(parent, SWT.LEFT); 
+		ViewModel.INSTANCE.setOverallLblInfoline(infoline); 
 	}
 
 	@Override
