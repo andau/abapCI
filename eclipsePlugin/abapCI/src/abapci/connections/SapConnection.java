@@ -13,13 +13,14 @@ import com.sap.adt.activation.IActivationServiceFactory;
 import com.sap.adt.activation.model.inactiveObjects.IInactiveCtsObject;
 import com.sap.adt.activation.model.inactiveObjects.IInactiveCtsObjectList;
 import com.sap.adt.destinations.logon.AdtLogonServiceFactory;
-
+import com.sap.adt.tools.core.model.adtcore.IAdtObjectReference;
 import abapci.AbapCiPlugin;
+import abapci.domain.ActivationObject;
 import abapci.preferences.PreferenceConstants;
 
 public class SapConnection {
 	
-	private ArrayList<String> currentInactiveObjects;
+	private List<ActivationObject> currentInactiveObjects;
 
 	public SapConnection() 
 	{
@@ -33,8 +34,10 @@ public class SapConnection {
 		return AdtLogonServiceFactory.createLogonService().isLoggedOn(projectName);
 	}
 	
-	public boolean unprocessedActivatedObjects() 
+	public List<ActivationObject> unprocessedActivatedObjects() 
 	{
+		List<ActivationObject> activatedObjects = new ArrayList<>(); 
+		
         IActivationServiceFactory activationServiceFactory = AdtActivationPlugin.getDefault()
                 .getActivationServiceFactory();
         IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore();
@@ -42,23 +45,35 @@ public class SapConnection {
         IActivationService activationService = activationServiceFactory.createActivationService(destinationId);
         IInactiveCtsObjectList newInactiveCtsObjectList = activationService
                 .getInactiveCtsObjects(new NullProgressMonitor());
-        List<String> newInactiveObjects = convertToStringList(newInactiveCtsObjectList);
+        List<ActivationObject> newInactiveObjects = convertToStringList(newInactiveCtsObjectList);
 
-        return checkForNewInactiveItems(newInactiveObjects, currentInactiveObjects); 
+        if (checkForNewInactiveItems(newInactiveObjects, currentInactiveObjects)) 
+        {
+        	activatedObjects = currentInactiveObjects; 
+        }
+    	currentInactiveObjects = newInactiveObjects; 
+    	
+    	return activatedObjects; 
+
 	}
 	
-    private boolean checkForNewInactiveItems(List<String> newInactiveObjects,
-			ArrayList<String> currentInactiveObjects) {
+    private boolean checkForNewInactiveItems(List<ActivationObject> newInactiveObjects,
+			List<ActivationObject> currentInactiveObjects) {
 		return newInactiveObjects.size() < currentInactiveObjects.size();
 	}
 
-	private List<String> convertToStringList(IInactiveCtsObjectList newInactiveCtsObjectList) {
-        List<String> newObjects = new ArrayList<>();
+	private List<ActivationObject> convertToStringList(IInactiveCtsObjectList newInactiveCtsObjectList) {
+        List<ActivationObject> newObjects = new ArrayList<>();
         for (Iterator<IInactiveCtsObject> iterator = newInactiveCtsObjectList.getEntry().iterator(); iterator.hasNext();) {
             IInactiveCtsObject ctsObject =  iterator.next();
             if (ctsObject.hasObjectRef())
             {
-                newObjects.add(ctsObject.getObject().getClass().getName());                
+            	IAdtObjectReference ref = ctsObject.getObject().getRef();
+				String packageName = ref.getPackageName(); 
+            	if (packageName != null) 
+            	{            		
+                    newObjects.add(new ActivationObject(ref.getPackageName(), ref.getName()));                
+            	}
             }
             
         }

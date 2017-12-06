@@ -1,6 +1,8 @@
 package abapci.manager;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 import com.sap.adt.atc.model.atcworklist.IAtcWorklist;
 
 import abapci.domain.AbapPackageTestState;
@@ -12,30 +14,39 @@ import abapci.views.ViewModel;
 
 public class AtcTestManager extends AbstractTestManager {
 
+	public AtcTestManager(List<String> packageNames) {
+		super(packageNames);
+	}
+
 	public TestState executeAllPackages() {
-		overallTestState = null;
 
 		List<AbapPackageTestState> packageTestStates = ViewModel.INSTANCE.getPackageTestStates();
 
 		IAtcWorklist atcWorklist = null;
 
-		for (AbapPackageTestState packageTestState : packageTestStates) {
+		packageNames.addAll(packageTestStates.stream().filter(item -> item.getAtcInfo().equals("UNDEF"))
+				.map(item -> item.getPackageName()).collect(Collectors.<String>toList()));
+
+		for (String packageName : packageNames) {
 			try {
-				atcWorklist = new AbapAtcHandler().executePackage(packageTestState.getPackageName());
+				atcWorklist = new AbapAtcHandler().executePackage(packageName);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
-			TestResult testResult = AtcResultAnalyzer.getTestResult(atcWorklist); 
+			TestResult testResult = AtcResultAnalyzer.getTestResult(atcWorklist);
 			mergePackageTestStateIntoGlobalTestState(testResult.getTestState());
 
 			String atcOutputLabel = AtcResultAnalyzer.getOutputLabel(atcWorklist);
-			packageTestState.setAtcInfo(atcOutputLabel);
+			List<AbapPackageTestState> packageTestStatesNew = packageTestStates.stream()
+					.filter(item -> item.getPackageName().equals(packageName)).collect(Collectors.<AbapPackageTestState>toList());
+			packageTestStatesNew.forEach(item -> item.setAtcInfo(atcOutputLabel));
+
 		}
-		
-		setAbapPackagesTestState(packageTestStates, overallTestState, TestStateType.ATC); 
-		
+
+		setAbapPackagesTestState(packageTestStates, overallTestState, TestStateType.ATC);
+
 		return overallTestState;
 
 	}

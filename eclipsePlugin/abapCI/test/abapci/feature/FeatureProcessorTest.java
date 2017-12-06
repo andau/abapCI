@@ -7,6 +7,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import static org.mockito.Matchers.any;
+
+import java.util.ArrayList;
+
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -49,7 +52,7 @@ public class FeatureProcessorTest {
 		Whitebox.setInternalState(featureFactory, "prefs", preferenceStore);
 		Whitebox.setInternalState(featureFacade, "featureFactory", featureFactory);
 
-		featureProcessor = new FeatureProcessor();
+		featureProcessor = new FeatureProcessor(new ArrayList<String>());
 		Whitebox.setInternalState(featureProcessor, "featureFacade", featureFacade);
 		Whitebox.setInternalState(featureProcessor, "aUnitTestManager", aUnitTestManager);
 		Whitebox.setInternalState(featureProcessor, "atcTestManager", atcTestManager);

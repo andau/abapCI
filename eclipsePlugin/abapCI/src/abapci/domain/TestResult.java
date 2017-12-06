@@ -1,6 +1,7 @@
 package abapci.domain;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TestResult {
 
@@ -31,11 +32,11 @@ public class TestResult {
 	}
 
 	public List<InvalidItem> getActiveErrors() {
-		return InvalidItem.filterInvalidItems(invalidItems, InvalidItem.isActive());
+		return invalidItems.stream().filter(item -> !item.isSuppressed()).collect(Collectors.toList());
 	}
 
 	public List<InvalidItem> getSuppressedErrors() {
-		return InvalidItem.filterInvalidItems(invalidItems, InvalidItem.isSuppressed());
+		return invalidItems.stream().filter(item -> item.isSuppressed()).collect(Collectors.toList());
 	}
 
 }

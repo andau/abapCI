@@ -32,7 +32,12 @@
 			<accessrule kind="accessible" pattern="com/sap/adt/atc/model/atcfinding/IAtcFinding"/>
 			<accessrule kind="accessible" pattern="com/sap/adt/atc/model/atcfinding/IAtcFindingList"/>
 			<accessrule kind="accessible" pattern="com/sap/adt/atc/model/atcobject/IAtcObject"/>
-			<accessrule kind="accessible" pattern="**"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/activation/AdtActivationPlugin"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/activation/IActivationService"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/activation/IActivationServiceFactory"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/activation/model/inactiveObjects/IInactiveCtsObject"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/activation/model/inactiveObjects/IInactiveCtsObjectList"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/activation/model/inactiveObjects/IWorkingObject"/>
 		</accessrules>
 	</classpathentry>
 	<classpathentry kind="src" output="target/classes" path="src">

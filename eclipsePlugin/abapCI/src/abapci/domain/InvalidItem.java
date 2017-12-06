@@ -23,17 +23,22 @@ public class InvalidItem {
 	public String getClassName() {
 		return className;
 	}
+	
+	public boolean isSuppressed() 
+	{
+		return suppressed; 
+	}
 
 	public static List<InvalidItem> filterInvalidItems(List<InvalidItem> invalidItems, Predicate<InvalidItem> predicate) {
 		return invalidItems.stream().filter(predicate).collect(Collectors.<InvalidItem>toList());
 	}
 
-	public static Predicate<InvalidItem> isSuppressed() {
+	public static Predicate<InvalidItem> isSuppressedPredicate() {
 		return p -> p.suppressed;
 	}
 
 	public static Predicate<InvalidItem> isActive() {
-		return p -> p.suppressed == false;
+		return p -> !p.suppressed;
 	}
 
 }

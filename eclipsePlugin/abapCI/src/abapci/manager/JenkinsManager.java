@@ -15,6 +15,9 @@ import abapci.views.ViewModel;
 
 public class JenkinsManager {
 
+	public JenkinsManager(List<String> packages) {
+	}
+
 	public void executeAllPackages() 
 	{
 	       List<AbapPackageTestState> packageTestStates = ViewModel.INSTANCE.getPackageTestStates(); 

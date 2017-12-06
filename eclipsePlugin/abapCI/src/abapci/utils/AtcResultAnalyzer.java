@@ -34,9 +34,9 @@ public class AtcResultAnalyzer {
 			IAtcFindingList findingList = object.getFindings();
 			for (IAtcFinding finding : findingList.getFinding()) {
 				if (finding.getPriority() == 1) {
-					String location = finding.getLocation(); 
+					String location = finding.getLocation().toLowerCase();
 					boolean isSuppressed = ViewModel.INSTANCE.getSuppressions().stream()
-							.anyMatch(item -> location.contains("/" + item.getClassName() + "/"));
+							.anyMatch(item -> location.contains("/" + item.getClassName().toLowerCase() + "/"));
 					
 					invalidItems.add(new InvalidItem(finding.getName(), finding.getDescription(), isSuppressed));
 				}
@@ -79,11 +79,11 @@ public class AtcResultAnalyzer {
 		if (atcWorklist == null) {
 			outputLabel = TestState.UNDEF.toString();
 		} else {
-			int numFindings = getNumOfFindings(atcWorklist);
-			if (numFindings > 0) {
-				outputLabel = TestState.NOK.toString();
+			long numUnsuppressedItems = getInvalidItems(atcWorklist).stream().filter(item -> !item.isSuppressed()).count();
+			if (numUnsuppressedItems > 0) {
+				outputLabel = "Findings: " + numUnsuppressedItems;
 			} else {
-				outputLabel = "Findings: " + numFindings;
+				outputLabel = TestState.OK.toString(); 
 			}
 		}
 		return outputLabel;
