@@ -221,8 +221,8 @@ public class AbapCiMainView extends ViewPart {
 	}
 
 	private void createColumns(final TableViewer viewer) {
-		String[] titles = { "ABAP package", "Unit test", "Last run", "ATC state", "Jenkins state" };
-		int[] bounds = { 150, 70, 70, 70, 100 };
+		String[] titles = { "ABAP package", "Unit test", "Sup", "Last run", "ATC state", "Sup", "Last run", "Jenkins state" };
+		int[] bounds = { 150, 90, 40, 70, 90, 40, 70, 100 };
 
 		TableViewerColumn col = createTableViewerColumn(titles[0], bounds[0], 0);
 		col.setLabelProvider(new ColumnLabelProvider() {
@@ -247,11 +247,20 @@ public class AbapCiMainView extends ViewPart {
 			@Override
 			public String getText(Object element) {
 				AbapPackageTestState p = (AbapPackageTestState) element;
-				return p.getLastRun();
+				return p.getAUnitNumSuppressed();
 			}
 		});
 
-		col = createTableViewerColumn(titles[3], bounds[3], 2);
+		col = createTableViewerColumn(titles[3], bounds[3], 3);
+		col.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				AbapPackageTestState p = (AbapPackageTestState) element;
+				return p.getAUnitLastRun();
+			}
+		});
+
+		col = createTableViewerColumn(titles[4], bounds[4], 4);
 		col.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
@@ -260,7 +269,25 @@ public class AbapCiMainView extends ViewPart {
 			}
 		});
 
-		col = createTableViewerColumn(titles[4], bounds[4], 2);
+		col = createTableViewerColumn(titles[5], bounds[5], 5);
+		col.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				AbapPackageTestState p = (AbapPackageTestState) element;
+				return p.getAtcNumSuppressed();
+			}
+		});
+
+		col = createTableViewerColumn(titles[6], bounds[6], 6);
+		col.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				AbapPackageTestState p = (AbapPackageTestState) element;
+				return p.getAtcLastRun();
+			}
+		});
+
+		col = createTableViewerColumn(titles[7], bounds[7], 7);
 		col.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {

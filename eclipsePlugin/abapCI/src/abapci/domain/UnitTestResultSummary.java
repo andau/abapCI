@@ -1,38 +1,32 @@
 package abapci.domain;
 
 import java.beans.PropertyChangeSupport;
+import java.util.List;
 
 public class UnitTestResultSummary {
 
 	private final String packageName;
-	private TestState testState;
-	private int numSuppressedErrors; 
+	private TestResult testResult; 
 	
     private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(
             this);
 
-	public UnitTestResultSummary(String packageName, TestState testState, int numSuppressedErrors) {
+	public UnitTestResultSummary(String packageName, boolean testrunOk, List<InvalidItem> invalidItems) {
 		this.packageName = packageName;
-		this.testState = testState;
-		this.numSuppressedErrors = numSuppressedErrors; 
+		this.testResult = new TestResult(testrunOk, invalidItems); 
 	}
 
 	public String getPackageName() {
 		return packageName;
 	}
 
-	public TestState getTestState() {
-		return testState;
+	public TestResult getTestResult() {
+		return testResult;
 	}
-	
-	public int getNumSuppressedErrors() 
-	{
-		return numSuppressedErrors; 
-	}
-	
-	public void setTestState(TestState testState) {
-		this.testState = testState; 
-		propertyChangeSupport.firePropertyChange("testState", this.testState, testState);
+		
+	public void setTestState(TestResult testResult) {
+		this.testResult = testResult; 
+		propertyChangeSupport.firePropertyChange("testResult", this.testResult, testResult);
 	}
 	
 

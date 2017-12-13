@@ -1,7 +1,5 @@
 package abapci.views.actions.ci;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
@@ -41,10 +39,8 @@ public class AbapUnitCiAction extends AbstractCiAction {
 
 			for (AbapPackageTestState packageTestState : packageTestStates) {
 				if (packageName == packageTestState.getPackageName()) {
-					packageTestState.setAUnitInfo(unitTestResultSummary.getTestState().toString());
+					packageTestState.setAUnitInfo(unitTestResultSummary.getTestResult());
 
-					String currentTime = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
-					packageTestState.setLastRun(currentTime);
 				}
 			}
 		}

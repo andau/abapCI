@@ -38,10 +38,9 @@ public class AtcTestManager extends AbstractTestManager {
 			TestResult testResult = AtcResultAnalyzer.getTestResult(atcWorklist);
 			mergePackageTestStateIntoGlobalTestState(testResult.getTestState());
 
-			String atcOutputLabel = AtcResultAnalyzer.getOutputLabel(atcWorklist);
 			List<AbapPackageTestState> packageTestStatesNew = packageTestStates.stream()
 					.filter(item -> item.getPackageName().equals(packageName)).collect(Collectors.<AbapPackageTestState>toList());
-			packageTestStatesNew.forEach(item -> item.setAtcInfo(atcOutputLabel));
+			packageTestStatesNew.forEach(item -> item.setAtcInfo(testResult));
 
 		}
 

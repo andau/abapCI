@@ -38,7 +38,6 @@ public class JenkinsManager {
 	       	   String currentTime = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
 	       	   
 	       	   packageTestState.setJenkinsInfo("last started: " + currentTime);
-	    	   packageTestState.setLastRun(currentTime);
 	    	   
 	       }
 	       ViewModel.INSTANCE.setPackageTestStates(packageTestStates);   

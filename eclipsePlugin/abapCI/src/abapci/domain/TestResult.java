@@ -1,5 +1,8 @@
 package abapci.domain;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,14 +11,18 @@ public class TestResult {
 	private boolean undefined;
 	private boolean testrunOk;
 	private List<InvalidItem> invalidItems;
+	private Date lastRun;
 
 	public TestResult(boolean testrunOk, List<InvalidItem> invalidItems) {
 		this.testrunOk = testrunOk;
 		this.invalidItems = invalidItems;
+		this.lastRun = Calendar.getInstance().getTime(); 
 	}
 
 	public TestResult() {
 		undefined = true;
+		this.invalidItems = new ArrayList<>(); 
+		this.lastRun = Calendar.getInstance().getTime(); 
 	}
 
 	public TestState getTestState() {
@@ -37,6 +44,21 @@ public class TestResult {
 
 	public List<InvalidItem> getSuppressedErrors() {
 		return invalidItems.stream().filter(item -> item.isSuppressed()).collect(Collectors.toList());
+	}
+
+	public String getTestResultInfo() {
+		if (getTestState() == TestState.NOK) 
+		{
+			return "Errors: " + getActiveErrors().size(); 
+		}
+		else 
+		{
+			return getTestState().toString(); 
+		}
+	}
+
+	public Date getLastRun() {
+		return lastRun;
 	}
 
 }

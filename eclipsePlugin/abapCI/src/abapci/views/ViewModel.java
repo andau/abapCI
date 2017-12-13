@@ -14,6 +14,7 @@ import abapci.domain.AbapPackageTestState;
 import abapci.domain.GlobalTestState;
 import abapci.domain.SourcecodeState;
 import abapci.domain.Suppression;
+import abapci.domain.TestResult;
 import abapci.domain.TestState;
 
 public enum ViewModel {
@@ -39,7 +40,7 @@ public enum ViewModel {
 		try {
 			for (String key : packageNamePrefs.keys()) {
 				abapPackageTestStates.add(new AbapPackageTestState(packageNamePrefs.get(key, "default"),
-						TestState.UNDEF.toString(), TestState.UNDEF.toString(), TestState.UNDEF.toString()));
+						TestState.UNDEF.toString(), new TestResult(), new TestResult()));
 			}
 		} catch (BackingStoreException e) {
 			// TODO Auto-generated catch block

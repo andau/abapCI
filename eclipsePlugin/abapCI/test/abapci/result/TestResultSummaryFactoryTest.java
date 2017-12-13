@@ -54,7 +54,7 @@ public class TestResultSummaryFactoryTest {
 	@Test
 	public void testNoError() {
 		UnitTestResultSummary unitTestResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME, unitResultOkMock);
-		Assert.assertEquals(TestState.OK, unitTestResultSummary.getTestState()); 
+		Assert.assertEquals(TestState.OK, unitTestResultSummary.getTestResult().getTestState()); 
 	}
 
 	
@@ -63,7 +63,7 @@ public class TestResultSummaryFactoryTest {
 		PowerMockito.when(unitResultWithErrorMock.getAlerts()).thenReturn(Arrays.asList(abapUnitAlertMock));
 
 		UnitTestResultSummary unitTestResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME, unitResultWithErrorMock);
-		Assert.assertEquals(TestState.NOK, unitTestResultSummary.getTestState()); 
+		Assert.assertEquals(TestState.NOK, unitTestResultSummary.getTestResult().getTestState()); 
 	}
 
 	@Test
@@ -74,7 +74,7 @@ public class TestResultSummaryFactoryTest {
 
 
 		UnitTestResultSummary unitTestResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME, unitResultWithErrorMock);
-		Assert.assertEquals(TestState.NOK, unitTestResultSummary.getTestState()); 
+		Assert.assertEquals(TestState.NOK, unitTestResultSummary.getTestResult().getTestState()); 
 	}
 
 	@Test
@@ -83,7 +83,7 @@ public class TestResultSummaryFactoryTest {
 		PowerMockito.when(unitResultWithErrorMock.getItems()).thenReturn(Arrays.asList(abapUnitResultItemMock));
 
 		UnitTestResultSummary unitTestResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME, unitResultWithErrorMock);
-		Assert.assertEquals(TestState.NOK, unitTestResultSummary.getTestState()); 
+		Assert.assertEquals(TestState.NOK, unitTestResultSummary.getTestResult().getTestState()); 
 	}
 
 	@Test
@@ -94,7 +94,7 @@ public class TestResultSummaryFactoryTest {
 		PowerMockito.when(unitResultWithErrorMock.getItems()).thenReturn(Arrays.asList(abapUnitResultItemMock));
 
 		UnitTestResultSummary unitTestResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME, unitResultWithErrorMock);
-		Assert.assertEquals(TestState.NOK, unitTestResultSummary.getTestState()); 
+		Assert.assertEquals(TestState.NOK, unitTestResultSummary.getTestResult().getTestState()); 
 	}
 
 }

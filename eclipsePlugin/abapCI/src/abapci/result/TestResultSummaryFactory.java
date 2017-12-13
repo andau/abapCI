@@ -2,13 +2,15 @@ package abapci.result;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import com.sap.adt.tools.abapsource.abapunit.AbapUnitAlertSeverity;
 import com.sap.adt.tools.abapsource.abapunit.IAbapUnitAlert;
 import com.sap.adt.tools.abapsource.abapunit.IAbapUnitResult;
 import com.sap.adt.tools.abapsource.abapunit.IAbapUnitResultItem;
+
+import abapci.domain.InvalidItem;
 import abapci.domain.UnitTestResultSummary;
 import abapci.views.ViewModel;
-import abapci.domain.TestState;
 
 public class TestResultSummaryFactory {
 	private static final String UNDEFINED_PACKAGE_NAME = null;
@@ -17,7 +19,6 @@ public class TestResultSummaryFactory {
 	}
 
 	public static UnitTestResultSummary create(String packageName, IAbapUnitResult abapUnitResult) {
-		int numSuppressedErrors = 0;
 		List<IAbapUnitAlert> criticalAlerts = getCriticalAlerts(abapUnitResult.getAlerts(), false);
 
 		for (IAbapUnitResultItem abapUnitResultItem : abapUnitResult.getItems()) {
@@ -27,8 +28,12 @@ public class TestResultSummaryFactory {
 
 		// TODO Split criticalAlerts into active alerts and suppressed alerts
 
-		TestState testState = criticalAlerts.isEmpty() ? TestState.OK : TestState.NOK;
-		return new UnitTestResultSummary(packageName, testState, numSuppressedErrors);
+        List<InvalidItem> invalidItems = new ArrayList<>(); 
+        for(IAbapUnitAlert criticalAlert : criticalAlerts)
+        {
+        	invalidItems.add(new InvalidItem(criticalAlert.getTitle(), "", false)); 
+        }
+		return new UnitTestResultSummary(packageName, true, invalidItems);
 	}
 
 	private static List<IAbapUnitAlert> getCriticalAlerts(IAbapUnitResultItem abapUnitResultItem, boolean isSuppressed) {
@@ -55,11 +60,11 @@ public class TestResultSummaryFactory {
 	}
 
 	public static UnitTestResultSummary createUndefined(String packageName) {
-		return new UnitTestResultSummary(packageName, TestState.UNDEF, 0);
+		return new UnitTestResultSummary(packageName, false, new ArrayList<InvalidItem>());
 	}
 
 	public static UnitTestResultSummary createOffline(String packageName) {
-		return new UnitTestResultSummary(packageName, TestState.OFFL, 0);
+		return new UnitTestResultSummary(packageName, false, new ArrayList<InvalidItem>());
 	}
 
 	public static UnitTestResultSummary createUndefined() {

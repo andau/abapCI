@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
@@ -17,11 +16,11 @@ import abapci.views.ViewModel;
 public class GeneralResourceChangeListener implements IResourceChangeListener {
 
 	private SapConnection sapConnection;
-	private boolean initialRun; 
+	private boolean initialRun;
 
 	public GeneralResourceChangeListener() {
 		sapConnection = new SapConnection();
-		initialRun = false; 
+		initialRun = false;
 	}
 
 	public void resourceChanged(IResourceChangeEvent event) {
@@ -34,19 +33,26 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 			IResourceDelta[] resourceDeltas = delta.getAffectedChildren(IResourceDelta.CHANGED);
 
 			try {
-				if (resourceDeltas.length > 0 && sapConnection.isConnected()) {					
+				if (resourceDeltas.length > 0 && sapConnection.isConnected()) {
 
 					List<ActivationObject> activatedObjects = sapConnection.unprocessedActivatedObjects();
 
-					if (!initialRun) 
-					{
+					if (!initialRun) {
 						RepeatingAUnitJob.triggerProcessing = true;
-						initialRun = true; 						
-					}
-					else if (!activatedObjects.isEmpty()) {
+						initialRun = true;
+					} else if (!activatedObjects.isEmpty()) {
 						RepeatingAUnitJob.triggerProcessing = true;
-						RepeatingAUnitJob.triggerPackages = activatedObjects.stream().map(item -> item.getPackagename())
-								.distinct().collect(Collectors.<String>toList());
+
+						if (activatedObjects.stream().map(item -> item.getPackagename()).anyMatch(item -> item == null)) {
+							RepeatingAUnitJob.triggerPackages = ViewModel.INSTANCE.getPackageTestStates().stream()
+									.map(item -> item.getPackageName()).collect(Collectors.<String>toList());
+						}
+						else 
+						{
+							RepeatingAUnitJob.triggerPackages = activatedObjects.stream().map(item -> item.getPackagename())
+									.distinct().collect(Collectors.<String>toList());							
+						}
+
 					}
 				}
 				StringBuilder infotextBuilder = new StringBuilder();

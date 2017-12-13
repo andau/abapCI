@@ -31,7 +31,7 @@ public class RepeatingAUnitJob extends Job {
 
 	public RepeatingAUnitJob() {
 		super("Running abapCI");
-		triggerDate = new Date();
+		triggerDate = new Date();		
 		triggerPackages = ViewModel.INSTANCE.getPackageTestStates().stream().map(item -> item.getPackageName())
 				.collect(Collectors.<String>toList()); 		
 		featureProcessor = new FeatureProcessor(triggerPackages);

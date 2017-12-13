@@ -12,6 +12,7 @@ import org.eclipse.ui.PlatformUI;
 
 import abapci.domain.AbapPackageInfo;
 import abapci.domain.AbapPackageTestState;
+import abapci.domain.TestResult;
 import abapci.views.ViewModel;
 
 abstract class AbstractCiAction extends Action {
@@ -29,10 +30,10 @@ abstract class AbstractCiAction extends Action {
 					abapPackageTestState.setJenkinsInfo("Jenkins executed");
 					break;
 				case ABAP_UNIT:
-					abapPackageTestState.setAUnitInfo("ABAP Unit executed");
+					abapPackageTestState.setAUnitInfo(new TestResult());
 					break;
 				case ABAP_ATC:
-					abapPackageTestState.setAtcInfo("ATC executed");
+					abapPackageTestState.setAtcInfo(new TestResult());
 
 					break;
 				default:
