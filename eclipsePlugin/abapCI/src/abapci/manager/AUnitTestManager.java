@@ -22,21 +22,24 @@ public class AUnitTestManager extends AbstractTestManager {
 
 		UnitTestResultSummary unitTestResultSummary;
 
-		packageNames.addAll(packageTestStates.stream().filter(item -> item.getAtcInfo().equals("UNDEF"))
+		packageNames.addAll(packageTestStates.stream().filter(item -> item.getAUnitInfo().equals("UNDEF"))
 				.map(item -> item.getPackageName()).collect(Collectors.<String>toList()));
 
+		overallTestState = TestState.UNDEF; 
 		for (String packageName : packageNames) {
 
 			unitTestResultSummary = new AbapUnitHandler().executePackage(packageName);
 
 			TestResult testResult = unitTestResultSummary.getTestResult();
+
+			mergePackageTestStateIntoGlobalTestState(testResult.getTestState());
+
 			List<AbapPackageTestState> packageTestStatesNew = packageTestStates.stream()
-					.filter(item -> item.getPackageName().equals(packageName))
-					.collect(Collectors.<AbapPackageTestState>toList());
+					.filter(item -> item.getPackageName().equals(packageName)).collect(Collectors.<AbapPackageTestState>toList());
 			packageTestStatesNew.forEach(item -> item.setAUnitInfo(testResult));
+
 		}
 
-		calculateOverallTestState(packageTestStates, TestStateType.UNIT);
 		setAbapPackagesTestState(packageTestStates, overallTestState, TestStateType.UNIT);
 
 		return overallTestState;

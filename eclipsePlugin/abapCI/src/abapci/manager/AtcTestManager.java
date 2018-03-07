@@ -27,6 +27,7 @@ public class AtcTestManager extends AbstractTestManager {
 		packageNames.addAll(packageTestStates.stream().filter(item -> item.getAtcInfo().equals("UNDEF"))
 				.map(item -> item.getPackageName()).collect(Collectors.<String>toList()));
 
+		overallTestState = TestState.UNDEF; 
 		for (String packageName : packageNames) {
 			try {
 				atcWorklist = new AbapAtcHandler().executePackage(packageName);

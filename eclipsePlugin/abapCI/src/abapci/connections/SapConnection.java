@@ -58,18 +58,21 @@ public class SapConnection {
 		return newInactiveObjects.size() < currentInactiveObjects.size();
 	}
 
-	private List<ActivationObject> convertToStringList(IInactiveCtsObjectList newInactiveCtsObjectList) {
-		List<ActivationObject> newObjects = new ArrayList<>();
-		for (Iterator<IInactiveCtsObject> iterator = newInactiveCtsObjectList.getEntry().iterator(); iterator
+	private List<ActivationObject> convertToStringList(IInactiveCtsObjectList inactiveCtsObjectList) {
+		List<ActivationObject> activationObjects = new ArrayList<>();
+		for (Iterator<IInactiveCtsObject> iterator = inactiveCtsObjectList.getEntry().iterator(); iterator
 				.hasNext();) {
 			IInactiveCtsObject ctsObject = iterator.next();
 			if (ctsObject.hasObjectRef()) {
 				IAdtObjectReference ref = ctsObject.getObject().getRef();
-				newObjects.add(new ActivationObject(ref.getPackageName(), ref.getName()));
+				if (!ref.getName().equals("Z_BAPI_HE_VARIANT_CALC"))
+				{				   
+					activationObjects.add(new ActivationObject(ref.getPackageName(), ref.getName()));
+				}
 			}
 
 		}
-		return newObjects;
+		return activationObjects;
 	}
 
 }
