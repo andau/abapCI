@@ -14,5 +14,6 @@
    <feature url="features/com.abapci.feature_0.2.1.jar" id="com.abapci.feature" version="0.2.1">
       <category name="ABAP CI"/>
    </feature>
+   <feature url="features/com.abapci.feature_0.2.2.jar" id="com.abapci.feature" version="0.2.2"/>
    <category-def name="ABAP CI" label="ABAP CI"/>
 </site>
