@@ -1,9 +1,6 @@
 package abapci.views;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResourceChangeEvent;
-import org.eclipse.core.resources.IResourceChangeListener;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.action.Action;
@@ -31,6 +28,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
@@ -41,9 +39,7 @@ import com.sap.adt.project.AdtCoreProjectServiceFactory;
 import com.sap.adt.tools.core.internal.AbapProjectService;
 
 import abapci.AbapCiPlugin;
-import abapci.GeneralResourceChangeListener;
 import abapci.domain.AbapPackageTestState;
-import abapci.jobs.RepeatingAUnitJob;
 import abapci.lang.UiTexts;
 import abapci.preferences.PreferenceConstants;
 import abapci.views.actions.ci.AbapGitCiAction;
@@ -67,6 +63,8 @@ public class AbapCiMainView extends ViewPart {
 	private Action addAction;
 	private Action deleteAction;
 	private Action abapGitAction;
+	
+	IPartListener partListener; 
 
 	class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
 		public String getColumnText(Object obj, int index) {
@@ -125,14 +123,9 @@ public class AbapCiMainView extends ViewPart {
 		hookContextMenu();
 		contributeToActionBars();
 
+		AbapCiPlugin.initializeResourceChangeListener(); 
 
-		RepeatingAUnitJob job = new RepeatingAUnitJob();
-		job.schedule(6000);
-
-		IResourceChangeListener resourceChangeListener = new GeneralResourceChangeListener();
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceChangeListener,
-				IResourceChangeEvent.POST_CHANGE);
-
+		
 		if (!checkActualAbapProject()) {
 			Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 			ProjectSelectionDialog projectSelectionDialog = new ProjectSelectionDialog(shell, new LabelProvider());
@@ -197,7 +190,7 @@ public class AbapCiMainView extends ViewPart {
 		manager.add(jenkinsAction);
 	}
 
-	// TODO fill Action Methoden zusammenfÃ¼gen
+	// TODO fill Action Methoden zusammenfÃƒÂ¼gen
 	private void fillLocalToolBar(IToolBarManager manager) {
 		manager.add(addAction);
 		manager.add(deleteAction);

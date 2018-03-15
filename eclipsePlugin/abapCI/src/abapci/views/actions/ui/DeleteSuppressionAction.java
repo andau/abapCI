@@ -44,7 +44,7 @@ public class DeleteSuppressionAction extends Action {
 		try 
 		{
 		    preferences.remove(firstSuppression.getClassName());	
-		    preferences.sync();
+		    preferences.flush();
 		} catch (BackingStoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

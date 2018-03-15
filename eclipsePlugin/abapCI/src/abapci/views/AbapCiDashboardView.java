@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.part.ViewPart;
 
+import abapci.AbapCiPlugin;
 import abapci.domain.GlobalTestState;
 import abapci.domain.SourcecodeState;
 import abapci.domain.TestState;
@@ -46,6 +47,9 @@ public class AbapCiDashboardView extends ViewPart {
 
 		Label infoline = new Label(parent, SWT.LEFT); 
 		ViewModel.INSTANCE.setOverallLblInfoline(infoline); 
+		
+		AbapCiPlugin.initializeResourceChangeListener(); 
+
 	}
 
 	@Override

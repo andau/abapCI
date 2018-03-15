@@ -23,7 +23,7 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 		Label emptyLabel0 = new Label(getFieldEditorParent(), SWT.NONE);
 		emptyLabel0.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
 		
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE, "&Run ABAP Unit tests when file saved",
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE, "&Run ABAP Unit tests when object activated",
 				getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.PREF_DEV_PROJECT, "&ABAP Development Project:",
 				getFieldEditorParent()));

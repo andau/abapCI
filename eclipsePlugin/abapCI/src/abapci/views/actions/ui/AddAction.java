@@ -40,7 +40,7 @@ public class AddAction extends Action {
 			preferences.put(packageNameDialog.getValue(), packageNameDialog.getValue());
 
 			try {
-				preferences.sync();
+				preferences.flush();
 			} catch (BackingStoreException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

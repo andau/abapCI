@@ -43,7 +43,7 @@ public class DeleteAction extends Action {
 		try 
 		{
 		    preferences.remove(firstAbapPackageTestState.getPackageName());	
-		    preferences.sync();
+		    preferences.flush();
 		} catch (BackingStoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

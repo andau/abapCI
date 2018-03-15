@@ -10,15 +10,17 @@ import org.eclipse.core.resources.IResourceDelta;
 
 import abapci.connections.SapConnection;
 import abapci.domain.ActivationObject;
-import abapci.jobs.RepeatingAUnitJob;
+import abapci.jobs.CiJob;
 import abapci.views.ViewModel;
 
 public class GeneralResourceChangeListener implements IResourceChangeListener {
 
 	private SapConnection sapConnection;
 	private boolean initialRun;
+	private CiJob job = CiJob.getInstance();
 
-	public GeneralResourceChangeListener() {
+	public GeneralResourceChangeListener() 
+	{
 		sapConnection = new SapConnection();
 		initialRun = false;
 	}
@@ -38,28 +40,29 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 					List<ActivationObject> activatedObjects = sapConnection.unprocessedActivatedObjects();
 
 					if (!initialRun) {
-						RepeatingAUnitJob.triggerProcessing = true;
-						initialRun = true;
+					    initialRun = true;
+					    
+						job.start();
 					} else if (!activatedObjects.isEmpty()) {
-						RepeatingAUnitJob.triggerProcessing = true;
 
 						if (activatedObjects.stream().map(item -> item.getPackagename()).anyMatch(item -> item == null)) {
-							RepeatingAUnitJob.triggerPackages = ViewModel.INSTANCE.getPackageTestStates().stream()
-									.map(item -> item.getPackageName()).collect(Collectors.<String>toList());
+							job.setTriggerPackages(ViewModel.INSTANCE.getPackageTestStates().stream()
+									.map(item -> item.getPackageName()).collect(Collectors.<String>toList()));
 						}
 						else 
 						{
-							RepeatingAUnitJob.triggerPackages = activatedObjects.stream().map(item -> item.getPackagename())
-									.distinct().collect(Collectors.<String>toList());							
+							job.setTriggerPackages(activatedObjects.stream().map(item -> item.getPackagename())
+									.distinct().collect(Collectors.<String>toList()));							
 						}
-
+						job.start();
 					}
 				}
+
 				StringBuilder infotextBuilder = new StringBuilder();
 				infotextBuilder.append(
-						"Last check: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
-				infotextBuilder.append("; " + RepeatingAUnitJob.triggerProcessing);
+						"Last CI Check: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
 				ViewModel.INSTANCE.setOverallInfoline(infotextBuilder.toString());
+
 			} catch (Exception ex) {
 				// TODO exception handling
 			}

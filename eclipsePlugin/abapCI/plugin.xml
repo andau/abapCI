@@ -121,6 +121,60 @@
                value="255,255,0">
          </colorOverride>
       </theme>
+
+      <theme
+            id="com.abapCi.custom.redTheme"
+            name="Red Theme">
+         <colorOverride
+               id="org.eclipse.ui.workbench.ACTIVE_TAB_BG_START"
+               value="255,0,0">
+         </colorOverride>
+         <colorOverride
+               id="org.eclipse.ui.workbench.ACTIVE_TAB_BG_END"
+               value="255,0,0">               
+         </colorOverride>
+      </theme>
+
+      <theme
+            id="com.abapCi.custom.lightRedTheme"
+            name="Light Red Theme">
+         <colorOverride
+               id="org.eclipse.ui.workbench.ACTIVE_TAB_BG_START"
+               value="255, 153, 153">
+         </colorOverride>
+         <colorOverride
+               id="org.eclipse.ui.workbench.ACTIVE_TAB_BG_END"
+               value="255, 153, 153">               
+         </colorOverride>
+      </theme>
+
+      <theme
+            id="com.abapCi.custom.yellowTheme"
+            name="Yellow Theme">
+         <colorOverride
+               id="org.eclipse.ui.workbench.ACTIVE_TAB_BG_START"
+               value="255,255,0">
+         </colorOverride>
+         <colorOverride
+               id="org.eclipse.ui.workbench.ACTIVE_TAB_BG_END"
+               value="255,255,0">               
+         </colorOverride>
+      </theme>
+
+      <theme
+            id="com.abapCi.custom.lightYellowTheme"
+            name="Light Yellow Theme">
+         <colorOverride
+               id="org.eclipse.ui.workbench.ACTIVE_TAB_BG_START"
+               value="255, 255, 153">
+         </colorOverride>
+         <colorOverride
+               id="org.eclipse.ui.workbench.ACTIVE_TAB_BG_END"
+               value="255, 255, 153">               
+         </colorOverride>
+      </theme>
+
+
    </extension>
 
 </plugin>

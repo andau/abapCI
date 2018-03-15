@@ -12,57 +12,66 @@ import org.eclipse.core.runtime.jobs.Job;
 import abapci.feature.FeatureProcessor;
 import abapci.views.ViewModel;
 
-public class RepeatingAUnitJob extends Job {
+public class CiJob extends Job {
 
-	// TODO Make thread save
-	public static boolean triggerProcessing; 
-	public static List<String> triggerPackages;
+	private static CiJob instance;
+	
+	private List<String> triggerPackages;
 	
 	private Date triggerDate; 	
 	private boolean immediateProcessing; 
 	private boolean shortDelayProcessing; 
 	private boolean longDelayProcessing; 
 	
-	private static final long SHORT_DELAY_PROCESSING_DELAY = 10000; 
-	private static final long LONG_DELAY_PROCESSING_DELAY = 60000; 
+	private static final long SHORT_DELAY_PROCESSING_DELAY = 5000; 
+	private static final long LONG_DELAY_PROCESSING_DELAY = 20000;
 
-	private boolean isRunning = true;
+
 	private FeatureProcessor featureProcessor;
 
-	public RepeatingAUnitJob() {
+	private CiJob() {
 		super("Running abapCI");
 		triggerDate = new Date();		
 		triggerPackages = ViewModel.INSTANCE.getPackageTestStates().stream().map(item -> item.getPackageName())
 				.collect(Collectors.<String>toList()); 		
 		featureProcessor = new FeatureProcessor(triggerPackages);
 	}
+	
+	public static CiJob getInstance () {
+	    if (CiJob.instance == null) {
+	    	CiJob.instance = new CiJob ();
+	    }
+	    return CiJob.instance;
+	  }
 
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
-		schedule(1000);
 
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(500);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Thread.currentThread().interrupt(); 
+			return Status.CANCEL_STATUS;
 		}
 
-		if (triggerProcessing) {
-			immediateProcessing = true; 
-			shortDelayProcessing = true; 
-			longDelayProcessing = true;
-			triggerDate = new Date(); 
-			
-			triggerProcessing = false;
-		}
-
-			
+		immediateProcessing = true; 
+		shortDelayProcessing = true; 
+		longDelayProcessing = true;
+				
 		if (evaluateAndResetProcessingFlags()) 
 		{
 			featureProcessor.setPackages(triggerPackages);
 			featureProcessor.processEnabledFeatures();				
 		}
+		
+		if (shortDelayProcessing || longDelayProcessing ) 
+		{
+			schedule(); 
+		} 
+			
+		
+		
+		
 
 		return Status.OK_STATUS;
 	}
@@ -92,13 +101,18 @@ public class RepeatingAUnitJob extends Job {
 		return startProcessor; 
 	}
 
-	@Override
-	public boolean shouldSchedule() {
-		return isRunning;
-	}
-
 	public void stop() {
-		isRunning = false;
+	}
+	
+    public void start() 
+    {
+    	triggerDate = new Date();
+    	schedule(); 
+    }
+
+
+	public void setTriggerPackages(List<String> triggerPackages) {
+		this.triggerPackages = triggerPackages; 
 	}
 
 }
