@@ -8,13 +8,13 @@ import abapci.feature.FeatureFacade;
 
 public class ThemeUpdateManager {
 
-	private static final String STANDARD_THEME = "org.eclipse.ui.r30";
-	private static final String ABAP_CI_RED_CUSTOM_THEME = "com.abapCi.custom.redTheme";
-	private static final String ABAP_CI_LIGHT_RED_CUSTOM_THEME = "com.abapCi.custom.lightRedTheme";
+	private static final String THEME_PREFIX = "com.abapCi.custom.";
+	private static final String ABAP_CI_STANDARD_THEME = THEME_PREFIX + "STANDARD_THEME";
 
-	private static final String ABAP_CI_YELLOW_CUSTOM_THEME = "com.abapCi.custom.yellowTheme";
-	private static final String ABAP_CI_LIGHT_YELLOW_CUSTOM_THEME = "com.abapCi.custom.lightYellowTheme";
-	
+	private static final String ABAP_CI_LIGHT_RED_CUSTOM_THEME = THEME_PREFIX + "LIGHT_RED_THEME";
+	private static final String ABAP_CI_YELLOW_CUSTOM_THEME = THEME_PREFIX + "YELLOW_THEME";
+	private static final String ABAP_CI_LIGHT_YELLOW_CUSTOM_THEME = THEME_PREFIX + "LIGHT_YELLOW_THEME";
+
 	private FeatureFacade featureFacade;
 
 	public ThemeUpdateManager() {
@@ -23,28 +23,29 @@ public class ThemeUpdateManager {
 
 	public void updateTheme(SourcecodeState sourcecodeState) {
 
-		String targetTheme;
-
-		switch (sourcecodeState) {
-		case UT_FAIL:
-			targetTheme = featureFacade.getColorChangerFeature().isActive() ? ABAP_CI_LIGHT_RED_CUSTOM_THEME : STANDARD_THEME;
-			break;			
-		case ATC_WARNING: 
-			targetTheme = featureFacade.getColorChangerFeature().isActive() ? ABAP_CI_LIGHT_YELLOW_CUSTOM_THEME : STANDARD_THEME;
-			break;									
-		case ATC_FAIL: 
-			targetTheme = featureFacade.getColorChangerFeature().isActive() ? ABAP_CI_YELLOW_CUSTOM_THEME : STANDARD_THEME;
-			break;						
-		case OK:
-		default:
-			targetTheme = STANDARD_THEME;
-			break;
-		}
-
-		final String updateTargetTheme = targetTheme;
 
 		if (featureFacade.getColorChangerFeature().isActive()) {
-			Runnable task = () -> PlatformUI.getWorkbench().getThemeManager().setCurrentTheme(updateTargetTheme);
+			
+			String targetTheme;
+
+			switch (sourcecodeState) {
+			case UT_FAIL:
+				targetTheme = ABAP_CI_LIGHT_RED_CUSTOM_THEME;
+				break;
+			case ATC_WARNING:
+				targetTheme = ABAP_CI_LIGHT_YELLOW_CUSTOM_THEME;
+				break;
+			case ATC_FAIL:
+				targetTheme = ABAP_CI_YELLOW_CUSTOM_THEME;
+				break;
+			case OK:
+			default:
+				targetTheme = ABAP_CI_STANDARD_THEME;
+				break;
+			}
+
+			final String changeToTheme = targetTheme; 
+			Runnable task = () -> PlatformUI.getWorkbench().getThemeManager().setCurrentTheme(changeToTheme);
 			Display.getDefault().asyncExec(task);
 		}
 

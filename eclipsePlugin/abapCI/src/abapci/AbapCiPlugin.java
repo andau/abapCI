@@ -4,6 +4,8 @@ import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.IPartListener2;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -20,6 +22,7 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 	private static AbapCiPlugin plugin;
 	
 	private static IResourceChangeListener resourceChangeListener; 
+	private static IPartListener2 partListener; 
 
 
 	/**
@@ -37,6 +40,7 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		initializePartChangeListener(); 
 	}
 
 	/*
@@ -48,6 +52,7 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
+		initializeResourceChangeListener(); 
 	}
 
 	/**
@@ -71,13 +76,22 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
 	}
 
-	public static void initializeResourceChangeListener() {
+	public void initializeResourceChangeListener() {
 		if (resourceChangeListener == null) 
 		{
 			resourceChangeListener = new GeneralResourceChangeListener();
 			ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceChangeListener,
 					IResourceChangeEvent.POST_CHANGE);
 		}
+		
+	}
+
+	public void initializePartChangeListener() {
+		if (partListener == null)
+		{
+			partListener = new PartListener2(); 					
+		    PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().addPartListener(partListener);
+		} 
 		
 	}
 }

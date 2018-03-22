@@ -48,7 +48,7 @@ public class AbapCiDashboardView extends ViewPart {
 		Label infoline = new Label(parent, SWT.LEFT); 
 		ViewModel.INSTANCE.setOverallLblInfoline(infoline); 
 		
-		AbapCiPlugin.initializeResourceChangeListener(); 
+		AbapCiPlugin.getDefault().initializeResourceChangeListener(); 
 
 	}
 

@@ -123,7 +123,7 @@ public class AbapCiMainView extends ViewPart {
 		hookContextMenu();
 		contributeToActionBars();
 
-		AbapCiPlugin.initializeResourceChangeListener(); 
+		AbapCiPlugin.getDefault().initializeResourceChangeListener(); 
 
 		
 		if (!checkActualAbapProject()) {
@@ -190,7 +190,7 @@ public class AbapCiMainView extends ViewPart {
 		manager.add(jenkinsAction);
 	}
 
-	// TODO fill Action Methoden zusammenfÃƒÂ¼gen
+	// TODO fill Action Methoden zusammenfÃƒÆ’Ã‚Â¼gen
 	private void fillLocalToolBar(IToolBarManager manager) {
 		manager.add(addAction);
 		manager.add(deleteAction);
