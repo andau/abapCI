@@ -19,4 +19,9 @@ public class ColoredProject {
 	public UiColor getUiColor() {
 		return uiColor; 
 	}
+
+	public Object getClassName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

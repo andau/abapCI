@@ -10,11 +10,12 @@ public final class UiTexts {
    public static final String LABEL_ACTION_ADD_SUPPRESSION = "Add new suppression"; 
    public static final String LABEL_ACTION_REMOVE_SUPPRESSION = "Remove suppression";
    
+   public static final String LABEL_ACTION_ADD_COLORED_PROJECT = "Add colored project"; 
+   public static final String LABEL_ACTION_REMOVE_COLORED_PROJECT = "Remove colored project";
+
    public static final String LABEL_LONG_ACTION_ADD_NEW_SUPPRESSION = "Adding a new Suppression for a class"; 
 
    
-   private UiTexts() 
-   {
-   }
+   private UiTexts() {}
    
 }

@@ -11,22 +11,26 @@ import org.eclipse.swt.widgets.Label;
 import org.osgi.service.prefs.BackingStoreException;
 
 import abapci.domain.AbapPackageTestState;
+import abapci.domain.ColoredProject;
 import abapci.domain.GlobalTestState;
 import abapci.domain.SourcecodeState;
 import abapci.domain.Suppression;
 import abapci.domain.TestResult;
 import abapci.domain.TestState;
+import abapci.domain.UiColor;
 
 public enum ViewModel {
 	INSTANCE;
 
 	Viewer mainViewer;
 	Viewer suppressionsViewer;
+	Viewer coloredProjectsViewer; 
 	Label lblOverallTestState;
 	Label lblOverallInfoline;
 
 	private List<AbapPackageTestState> abapPackageTestStates;
 	private List<Suppression> suppressions;
+	private List<ColoredProject> coloredProjects;
 
 	private TestState overallTestState;
 	private String overallInfoline; 
@@ -62,6 +66,18 @@ public enum ViewModel {
 			e.printStackTrace();
 		}
 
+		coloredProjects = new ArrayList<>();
+		IEclipsePreferences coloredProjectsPrefs = ConfigurationScope.INSTANCE.getNode("coloredProjects");
+
+		try {
+			for (String key : coloredProjectsPrefs.keys()) {
+				coloredProjects.add(new ColoredProject(coloredProjectsPrefs.get(key, "default"), UiColor.BLUE));
+			}
+		} catch (BackingStoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	// TODO Dirty but working for the beginning - observableList should make
@@ -72,6 +88,10 @@ public enum ViewModel {
 
 	public void setSuppressViewer(Viewer viewer) {
 		INSTANCE.suppressionsViewer = viewer;
+	}
+
+	public void setColoredProjectsViewer(Viewer viewer) {
+		INSTANCE.coloredProjectsViewer = viewer;
 	}
 
 	public List<AbapPackageTestState> getPackageTestStates() {
@@ -110,7 +130,7 @@ public enum ViewModel {
 		} catch (
 
 		Exception e) {
-			// TODO Handling, wenn Übersichts-View nicht angezeigt wird
+			// TODO Handling, wenn Ãœbersichts-View nicht angezeigt wird
 		}
 	}
 	
@@ -150,6 +170,18 @@ public enum ViewModel {
 
 	public void setOverallLblInfoline(Label infoline) {
 		INSTANCE.lblOverallInfoline = infoline;
+		
+	}
+
+	public List<ColoredProject> getColoredProjects() {
+		return coloredProjects; 
+	}
+
+	public void setColoredProjects(List<ColoredProject> coloredProjects) {
+		this.coloredProjects = coloredProjects;
+
+		Runnable runnable = () -> coloredProjectsViewer.setInput(coloredProjects);
+		Display.getDefault().asyncExec(runnable);
 		
 	}
 

@@ -9,6 +9,9 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import abapci.model.ColoredProjectModel;
+import abapci.presenter.GeneralThemePresenter;
+
 
 /**
  * The activator class controls the plug-in life cycle
@@ -24,6 +27,7 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 	private static IResourceChangeListener resourceChangeListener; 
 	private static IPartListener2 partListener; 
 
+	private GeneralThemePresenter generalThemePresenter; 
 
 	/**
 	 * The constructor
@@ -40,7 +44,13 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+
+		generalThemePresenter = new GeneralThemePresenter(new ColoredProjectModel()); 
+		
+		
 		initializePartChangeListener(); 
+		
+		
 	}
 
 	/*
@@ -52,7 +62,6 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
-		initializeResourceChangeListener(); 
 	}
 
 	/**
@@ -89,7 +98,7 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 	public void initializePartChangeListener() {
 		if (partListener == null)
 		{
-			partListener = new PartListener2(); 					
+			partListener = new PartListener2(generalThemePresenter); 					
 		    PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().addPartListener(partListener);
 		} 
 		
