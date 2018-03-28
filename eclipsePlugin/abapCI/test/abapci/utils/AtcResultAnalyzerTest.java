@@ -1,16 +1,14 @@
 package abapci.utils;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
-import java.util.List;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -27,7 +25,6 @@ import abapci.domain.TestResult;
 import abapci.domain.TestState;
 import abapci.views.ViewModel;
 
-@SuppressWarnings("unused")
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ViewModel.class})
 public class AtcResultAnalyzerTest {

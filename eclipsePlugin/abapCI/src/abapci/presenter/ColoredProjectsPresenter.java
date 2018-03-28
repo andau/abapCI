@@ -26,4 +26,9 @@ public class ColoredProjectsPresenter {
 		
 	}
 
+	public void addColoredProject(ColoredProject coloredProject) {
+		model.addColoredProject(coloredProject); 
+		
+	}
+
 }

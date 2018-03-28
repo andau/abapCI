@@ -1,7 +1,11 @@
 package abapci;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPartListener2;
@@ -9,15 +13,22 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.ViewReference;
-
+import org.eclipse.ui.texteditor.SourceViewerDecorationSupport;
+import org.eclipse.ui.texteditor.StatusTextEditor;
+import abapci.utils.AnnotationRuleColorChanger;
+import abapci.domain.UiColor;
 import abapci.presenter.GeneralThemePresenter;
+
 
 @SuppressWarnings("restriction")
 public class PartListener2 implements IPartListener2 {
 	private GeneralThemePresenter generalThemePresenter;
+	private AnnotationRuleColorChanger annotationRuleColorChanger; 
 
 	public PartListener2(GeneralThemePresenter generalThemePresenter) {
 		this.generalThemePresenter = generalThemePresenter;
+		annotationRuleColorChanger = new AnnotationRuleColorChanger(); 
+
 	}
 
 	@Override
@@ -38,12 +49,20 @@ public class PartListener2 implements IPartListener2 {
 				}
 			}
 		}
-		String currentProjectname = (currentProject == null) ? "UNDEF" : currentProject.getName();
-		setProjectColor(currentProjectname);
-	}
 
-	private void setProjectColor(String projectName) {
-		generalThemePresenter.updateEditorLabel(projectName);
+		if (activeEditor != null)
+		{
+
+			String currentProjectname = (currentProject == null) ? "UNDEF" : currentProject.getName();
+			UiColor uiColor = generalThemePresenter.getUiColor(currentProjectname); 
+	
+			generalThemePresenter.updateEditorLabel(uiColor);
+					
+			annotationRuleColorChanger.change(activeEditor, uiColor);
+		}
+
+		
+		
 	}
 
 	@Override
@@ -87,4 +106,34 @@ public class PartListener2 implements IPartListener2 {
 		// TODO Auto-generated method stub
 
 	}
+	
+	protected SourceViewerDecorationSupport getSourceViewerDecorationSupport(IEditorPart editor, ISourceViewer viewer){
+		
+		try {
+			Method getSourceViewerDecorationSupport = StatusTextEditor.class
+					.getDeclaredMethod("getSourceViewerDecorationSupport",
+							ISourceViewer.class);
+			
+			getSourceViewerDecorationSupport.setAccessible(true);
+			return (SourceViewerDecorationSupport) getSourceViewerDecorationSupport
+					.invoke(editor, viewer);
+			
+		} catch (NoSuchMethodException | SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null; 
+
+	}
+	
 }

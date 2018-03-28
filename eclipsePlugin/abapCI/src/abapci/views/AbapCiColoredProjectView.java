@@ -1,12 +1,5 @@
 package abapci.views;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.part.ViewPart;
-
 import java.util.List;
 
 import org.eclipse.jface.action.Action;
@@ -18,6 +11,12 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.part.ViewPart;
 
 import abapci.domain.ColoredProject;
 import abapci.lang.UiTexts;
@@ -137,7 +136,7 @@ public class AbapCiColoredProjectView extends ViewPart {
 
 		// TODO set Images for actions
 
-		addAction = new AddColoredProjectAction(UiTexts.LABEL_ACTION_ADD_COLORED_PROJECT);
+		addAction = new AddColoredProjectAction(coloredProjectsPresenter, UiTexts.LABEL_ACTION_ADD_COLORED_PROJECT);
 		deleteAction = new DeleteColoredProjectAction(coloredProjectsPresenter, UiTexts.LABEL_ACTION_REMOVE_COLORED_PROJECT);
 	}
 

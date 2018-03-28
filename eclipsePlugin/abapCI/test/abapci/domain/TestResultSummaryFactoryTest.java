@@ -15,8 +15,6 @@ import com.sap.adt.tools.abapsource.abapunit.IAbapUnitAlert;
 import com.sap.adt.tools.abapsource.abapunit.IAbapUnitResult;
 import com.sap.adt.tools.abapsource.abapunit.IAbapUnitResultItem;
 
-import abapci.domain.TestState;
-import abapci.domain.UnitTestResultSummary;
 import abapci.result.TestResultSummaryFactory;
 
 @RunWith(PowerMockRunner.class)

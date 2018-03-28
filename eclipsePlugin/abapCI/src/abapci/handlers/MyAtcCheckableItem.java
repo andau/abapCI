@@ -1,7 +1,8 @@
 package abapci.handlers;
 
-import com.sap.adt.atc.IAtcCheckableItem;
 import java.net.URI;
+
+import com.sap.adt.atc.IAtcCheckableItem;
 
 class MyAtcCheckableItem implements IAtcCheckableItem {
 

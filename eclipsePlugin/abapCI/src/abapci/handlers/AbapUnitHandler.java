@@ -4,6 +4,7 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.preference.IPreferenceStore;
+
 import com.sap.adt.communication.exceptions.CommunicationException;
 import com.sap.adt.tools.abapsource.abapunit.AbapUnitTask;
 import com.sap.adt.tools.abapsource.abapunit.IAbapUnitResult;
@@ -12,6 +13,7 @@ import com.sap.adt.tools.abapsource.abapunit.TestItem;
 import com.sap.adt.tools.abapsource.abapunit.TestRunException;
 import com.sap.adt.tools.abapsource.abapunit.services.AdtServicesPlugin;
 import com.sap.adt.tools.abapsource.abapunit.services.IAdtServicesFactory;
+
 import abapci.AbapCiPlugin;
 import abapci.domain.UnitTestResultSummary;
 import abapci.preferences.PreferenceConstants;

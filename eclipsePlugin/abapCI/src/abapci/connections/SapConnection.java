@@ -14,6 +14,7 @@ import com.sap.adt.activation.model.inactiveObjects.IInactiveCtsObject;
 import com.sap.adt.activation.model.inactiveObjects.IInactiveCtsObjectList;
 import com.sap.adt.destinations.logon.AdtLogonServiceFactory;
 import com.sap.adt.tools.core.model.adtcore.IAdtObjectReference;
+
 import abapci.AbapCiPlugin;
 import abapci.domain.ActivationObject;
 import abapci.preferences.PreferenceConstants;

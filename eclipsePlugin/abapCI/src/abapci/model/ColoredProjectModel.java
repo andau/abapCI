@@ -36,4 +36,8 @@ public class ColoredProjectModel {
 	public void removeColoredProject(ColoredProject coloredProject) {
 	    coloredProjectModelXml.removeColoredProject(coloredProject); 
 	}
+
+	public void addColoredProject(ColoredProject coloredProject) {
+		coloredProjectModelXml.addColoredProjectToXML(coloredProject.getName(), coloredProject.getUiColor());							
+	}
 }

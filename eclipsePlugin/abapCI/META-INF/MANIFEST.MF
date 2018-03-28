@@ -31,7 +31,10 @@ Require-Bundle: org.eclipse.ui,
  com.sap.adt.compatibility;bundle-version="2.68.2",
  org.eclipse.ui.workbench,
  com.sap.adt.activation;bundle-version="2.68.3",
- com.sap.adt.activation.ui;bundle-version="2.68.3"
+ com.sap.adt.activation.ui;bundle-version="2.68.3",
+ org.eclipse.ui.workbench.texteditor;bundle-version="3.10.1",
+ org.eclipse.jface.text;bundle-version="3.11.1",
+ org.eclipse.ui.editors;bundle-version="3.10.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: abapci,
  abapci.connections,
