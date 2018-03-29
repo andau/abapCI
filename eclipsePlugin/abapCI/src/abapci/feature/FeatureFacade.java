@@ -51,5 +51,19 @@ public class FeatureFacade
 		// TODO Auto-generated method stub
 		return featureFactory.createGeneralFeature(); 
 	}
+	
+	public ColoredProjectsTabHeaderFeature getColoredProjectsTabHeaderFeature() 
+	{
+		return featureFactory.createColoredProjectsTabHeaderFeature(); 
+	}
     	
+	public ColoredProjectsLeftRulerFeature getColoredProjectsLeftRulerFeature() 
+	{
+		return featureFactory.createColoredProjectsLeftRulerFeature(); 
+	}
+
+	public ColoredProjectsRightRulerFeature getColoredProjectsRightRulerFeature() 
+	{
+		return featureFactory.createColoredProjectsRightRulerFeature(); 
+	}
 }

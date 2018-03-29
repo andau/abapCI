@@ -17,6 +17,7 @@ import org.eclipse.ui.texteditor.SourceViewerDecorationSupport;
 import org.eclipse.ui.texteditor.StatusTextEditor;
 import abapci.utils.AnnotationRuleColorChanger;
 import abapci.domain.UiColor;
+import abapci.feature.FeatureFacade;
 import abapci.presenter.GeneralThemePresenter;
 
 
@@ -33,36 +34,7 @@ public class PartListener2 implements IPartListener2 {
 
 	@Override
 	public void partActivated(IWorkbenchPartReference arg0) {
-		IProject currentProject = null;
-
-		IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-
-		IEditorPart activeEditor = activePage.getActiveEditor();
-		IWorkbenchPartReference partReference = activePage.getActivePartReference();
-		if (!partReference.getClass().equals(ViewReference.class) && (activeEditor != null)) {
-			IEditorInput input = activeEditor.getEditorInput();
-			currentProject = input.getAdapter(IProject.class);
-			if (currentProject == null) {
-				IResource resource = input.getAdapter(IResource.class);
-				if (resource != null) {
-					currentProject = resource.getProject();
-				}
-			}
-		}
-
-		if (activeEditor != null)
-		{
-
-			String currentProjectname = (currentProject == null) ? "UNDEF" : currentProject.getName();
-			UiColor uiColor = generalThemePresenter.getUiColor(currentProjectname); 
-	
-			generalThemePresenter.updateEditorLabel(uiColor);
-					
-			annotationRuleColorChanger.change(activeEditor, uiColor);
-		}
-
-		
-		
+		formatPart(); 
 	}
 
 	@Override
@@ -92,7 +64,6 @@ public class PartListener2 implements IPartListener2 {
 	@Override
 	public void partInputChanged(IWorkbenchPartReference arg0) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -104,8 +75,49 @@ public class PartListener2 implements IPartListener2 {
 	@Override
 	public void partVisible(IWorkbenchPartReference arg0) {
 		// TODO Auto-generated method stub
+	}
+	
+	private void formatPart() {
+		
+		FeatureFacade featureFacade = new FeatureFacade(); 
+
+		IProject currentProject = null;
+
+		IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+
+		IEditorPart activeEditor = activePage.getActiveEditor();
+		IWorkbenchPartReference partReference = activePage.getActivePartReference();
+		if (!partReference.getClass().equals(ViewReference.class) && (activeEditor != null)) {
+			IEditorInput input = activeEditor.getEditorInput();
+			currentProject = input.getAdapter(IProject.class);
+			if (currentProject == null) {
+				IResource resource = input.getAdapter(IResource.class);
+				if (resource != null) {
+					currentProject = resource.getProject();
+				}
+			}
+		}
+
+		if (activeEditor != null)
+		{
+
+			String currentProjectname = (currentProject == null) ? "UNDEF" : currentProject.getName();
+			UiColor uiColor = generalThemePresenter.getUiColor(currentProjectname); 
+	
+			boolean changeColorOfTabHeader = featureFacade.getColoredProjectsTabHeaderFeature().isActive();
+			boolean changeColorOfLeftRuler = featureFacade.getColoredProjectsLeftRulerFeature().isActive();
+			boolean changeColorOfRightRuler = featureFacade.getColoredProjectsRightRulerFeature().isActive();
+			
+			if (changeColorOfTabHeader)
+			{
+				generalThemePresenter.updateEditorLabel(uiColor);
+			}
+			
+			annotationRuleColorChanger.change(activeEditor, uiColor, changeColorOfLeftRuler, changeColorOfRightRuler);
+		}
 
 	}
+
 	
 	protected SourceViewerDecorationSupport getSourceViewerDecorationSupport(IEditorPart editor, ISourceViewer viewer){
 		

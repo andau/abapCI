@@ -28,7 +28,11 @@ public class PreferenceConstants {
 
 	public static final String PREF_CHANGE_COLOR_ON_FAILED_TESTS = "changeColorOnFailedTestsPreference";
 
+	public static final String PREF_COLORED_PROJECTS_LEFT_RULER_ENABLED = "coloredProjectsLeftRulerEnabled";
 
+	public static final String PREF_COLORED_PROJECTS_RIGHT_RULER_ENABLED = "coloredProjectsRightRulerEnabled";
+
+	public static final String PREF_COLORED_PROJECTS_TAB_HEADER_ENABLED = "coloredProjectsTabHeaderEnabled";
 
 
 	private PreferenceConstants() {

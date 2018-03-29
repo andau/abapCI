@@ -67,6 +67,16 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 		Label emptyLabel4 = new Label(getFieldEditorParent(), SWT.NONE);
 		emptyLabel4.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
 
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_COLORED_PROJECTS_TAB_HEADER_ENABLED, "&Change color of tab header for colored projects",
+				getFieldEditorParent()));
+
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_COLORED_PROJECTS_LEFT_RULER_ENABLED, "&Change color of left ruler for colored projects",
+				getFieldEditorParent()));
+
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_COLORED_PROJECTS_RIGHT_RULER_ENABLED, "&Change color of right ruler for colored projects",
+				getFieldEditorParent()));
+
+
 		
 	}
 

@@ -4,33 +4,58 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.jface.text.source.CompositeRuler;
 import org.eclipse.jface.text.source.IOverviewRuler;
+import org.eclipse.jface.text.source.IVerticalRuler;
 import org.eclipse.jface.text.source.OverviewRuler;
 import org.eclipse.jface.text.source.SourceViewer;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 
 import abapci.domain.UiColor;
+import abapci.feature.FeatureFacade;
 
 public class AnnotationRuleColorChanger {
 
-	public void change(IEditorPart editorPart, UiColor uiColor) {
+	public void change(IEditorPart editorPart, UiColor uiColor, boolean changeColorOfLeftRuler, boolean changeColorOfRightRuler) {
 		try {
-
-			SourceViewer sv = (SourceViewer) callGetSourceViewer((AbstractTextEditor) editorPart);
-			RGB rgb = ColorToRGBMapper.mapUiColorToTheme(uiColor);
-			OverviewRuler ruler = (OverviewRuler) getOverviewRuler(sv);
 			
-			if (rgb == null || ruler == null)
+		
+		    ITextViewer textViewer = null;
+			Object activeEditor;
+
+			if (editorPart instanceof AbstractTextEditor) {
+				activeEditor = editorPart;
+			} else {
+				activeEditor = ((MultiPageEditorPart) editorPart).getSelectedPage();
+			}
+			if (activeEditor instanceof AbstractTextEditor) {
+				textViewer = callGetSourceViewer((AbstractTextEditor) activeEditor);
+			}
+			RGB rgb = ColorToRGBMapper.mapUiColorToTheme(uiColor);
+			OverviewRuler overviewRuler = (OverviewRuler) getOverviewRuler((SourceViewer) textViewer);
+			CompositeRuler verticalRuler = (CompositeRuler) getVerticalRuler((SourceViewer) textViewer);
+
+			if (rgb == null)
 				return;
 
-			ruler.getHeaderControl().setBackground(new Color(Display.getDefault(), rgb));
-			ruler.getControl().setBackground(new Color(Display.getDefault(), rgb));
+			if (overviewRuler != null && changeColorOfLeftRuler) 
+			{
+				overviewRuler.getHeaderControl().setBackground(new Color(Display.getDefault(), rgb));
+				overviewRuler.getControl().setBackground(new Color(Display.getDefault(), rgb));
+			}
+			if (verticalRuler != null && changeColorOfRightRuler) 
+			{
+			   verticalRuler.getControl().setBackground(new Color(Display.getDefault(), rgb));
+			}
 		} catch (Exception e) {
-			// TODO handle exception
+			// coloring will fail for specific editors - so continue for the
+			// moment
+
 		}
 
 	}
@@ -51,6 +76,16 @@ public class AnnotationRuleColorChanger {
 			Field f = SourceViewer.class.getDeclaredField("fOverviewRuler"); //$NON-NLS-1$
 			f.setAccessible(true);
 			return (IOverviewRuler) f.get(viewer);
+		} catch (Exception err) {
+			return null;
+		}
+	}
+
+	private IVerticalRuler getVerticalRuler(SourceViewer viewer) {
+		try {
+			Field f = SourceViewer.class.getDeclaredField("fVerticalRuler"); //$NON-NLS-1$
+			f.setAccessible(true);
+			return (IVerticalRuler) f.get(viewer);
 		} catch (Exception err) {
 			return null;
 		}

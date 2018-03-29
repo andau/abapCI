@@ -50,5 +50,30 @@ public class FeatureFactory {
 		return feature;
 	}
 	
+	
+	public ColoredProjectsTabHeaderFeature createColoredProjectsTabHeaderFeature() {
+		initPrefs();
+		ColoredProjectsTabHeaderFeature feature = new ColoredProjectsTabHeaderFeature(); 
+		feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_COLORED_PROJECTS_TAB_HEADER_ENABLED));
+		return feature;
+	}
+
+	public ColoredProjectsLeftRulerFeature createColoredProjectsLeftRulerFeature() {
+		initPrefs();
+		ColoredProjectsLeftRulerFeature feature = new ColoredProjectsLeftRulerFeature(); 
+		feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_COLORED_PROJECTS_LEFT_RULER_ENABLED));
+		return feature;
+	}
+	
+
+	public ColoredProjectsRightRulerFeature createColoredProjectsRightRulerFeature() {
+		initPrefs();
+		ColoredProjectsRightRulerFeature feature = new ColoredProjectsRightRulerFeature(); 
+		feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_COLORED_PROJECTS_RIGHT_RULER_ENABLED));
+		return feature;
+	}
+
+
+	
 
 }
