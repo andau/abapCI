@@ -37,21 +37,23 @@ public class AnnotationRuleColorChanger {
 				textViewer = callGetSourceViewer((AbstractTextEditor) activeEditor);
 			}
 			RGB rgb = ColorToRGBMapper.mapUiColorToTheme(uiColor);
-			OverviewRuler overviewRuler = (OverviewRuler) getOverviewRuler((SourceViewer) textViewer);
 			CompositeRuler verticalRuler = (CompositeRuler) getVerticalRuler((SourceViewer) textViewer);
+			OverviewRuler overviewRuler = (OverviewRuler) getOverviewRuler((SourceViewer) textViewer);
 
 			if (rgb == null)
 				return;
 
-			if (overviewRuler != null && changeColorOfLeftRuler) 
+			if (verticalRuler != null && changeColorOfLeftRuler) 
+			{
+			   verticalRuler.getControl().setBackground(new Color(Display.getDefault(), rgb));
+			}
+
+			if (overviewRuler != null && changeColorOfRightRuler) 
 			{
 				overviewRuler.getHeaderControl().setBackground(new Color(Display.getDefault(), rgb));
 				overviewRuler.getControl().setBackground(new Color(Display.getDefault(), rgb));
 			}
-			if (verticalRuler != null && changeColorOfRightRuler) 
-			{
-			   verticalRuler.getControl().setBackground(new Color(Display.getDefault(), rgb));
-			}
+
 		} catch (Exception e) {
 			// coloring will fail for specific editors - so continue for the
 			// moment
