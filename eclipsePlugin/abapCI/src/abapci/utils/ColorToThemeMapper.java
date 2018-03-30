@@ -12,7 +12,7 @@ public class ColorToThemeMapper {
 		UiTheme uiTheme = UiTheme.STANDARD_THEME;
 
 		switch (uiColor) {
-		case STANDARD:
+		case DEFAULT:
 			uiTheme = UiTheme.STANDARD_THEME;
 			break;
 		case LIGHT_RED:

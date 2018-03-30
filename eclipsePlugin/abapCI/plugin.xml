@@ -278,6 +278,32 @@
          </colorOverride>
       </theme>
 
+      <theme
+            id="com.abapCi.custom.BLACK_THEME"
+            name="Lightgray Theme">
+         <colorOverride
+               id="org.eclipse.ui.workbench.ACTIVE_TAB_BG_START"
+               value="0,0,0">
+         </colorOverride>
+         <colorOverride
+               id="org.eclipse.ui.workbench.ACTIVE_TAB_BG_END"
+               value="0,0,0">
+         </colorOverride>
+      </theme>
+
+      <theme
+            id="com.abapCi.custom.WHITE_THEME"
+            name="Lightgray Theme">
+         <colorOverride
+               id="org.eclipse.ui.workbench.ACTIVE_TAB_BG_START"
+               value="255,255,255">
+         </colorOverride>
+         <colorOverride
+               id="org.eclipse.ui.workbench.ACTIVE_TAB_BG_END"
+               value="255,255,255">
+         </colorOverride>
+      </theme>
+
    </extension>
 	
 </plugin>

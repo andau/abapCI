@@ -155,7 +155,7 @@ public class ColoredProjectModelXml {
 
 	public UiColor getColorForProject(String projectName) {
 
-		UiColor uiColorForProject = UiColor.STANDARD; 
+		UiColor uiColorForProject = UiColor.DEFAULT; 
 		
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder;

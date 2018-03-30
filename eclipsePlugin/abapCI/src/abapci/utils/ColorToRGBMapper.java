@@ -13,7 +13,7 @@ public class ColorToRGBMapper {
 		RGB rgb;
 
 		switch (uiColor) {
-		case STANDARD:
+		case DEFAULT:
 			rgb = null;
 			break;
 		case LIGHT_RED:
