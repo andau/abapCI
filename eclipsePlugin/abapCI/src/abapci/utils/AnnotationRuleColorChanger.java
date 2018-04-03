@@ -17,7 +17,6 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 
 import abapci.domain.UiColor;
-import abapci.feature.FeatureFacade;
 
 public class AnnotationRuleColorChanger {
 

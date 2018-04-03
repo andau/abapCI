@@ -9,264 +9,153 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Platform;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.FrameworkUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 import abapci.domain.ColoredProject;
 import abapci.domain.UiColor;
 
 public class ColoredProjectModelXml {
-	Bundle bundle = FrameworkUtil.getBundle(abapci.views.AbapCiColoredProjectView.class);
-	IPath stateLoc = Platform.getStateLocation(bundle);
+
+	private static final String PROJECT_UI_COLOR_ATTRIBUTE = "UiColor";
+
+	private static final String PROJECT_NAME_ATTRIBUTE = "Name";
+
+	private static final String COLORED_PROJECT_XML_TAG = "ColoredProject";
 
 	static final String COLORED_PROJECTS_FILE_NAME = "coloredProjectModel.xml";
+
 	File coloredProjectsFile;
-	
+	XmlWriter xmlWriter;
+
 	public ColoredProjectModelXml() {
-		coloredProjectsFile = new File(stateLoc.toFile(), COLORED_PROJECTS_FILE_NAME);
+		this(null, COLORED_PROJECTS_FILE_NAME);
+	}
 
-		if (!coloredProjectsFile.exists()) {
-			try (FileWriter fileWriter = new FileWriter(stateLoc.toFile() + COLORED_PROJECTS_FILE_NAME)) {
-
-				DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-				DocumentBuilder dBuilder;
-				dBuilder = dbFactory.newDocumentBuilder();
-				Document doc;
-				doc = dBuilder.newDocument();
-				Node root = doc.createElement("coloredProjects");
-				doc.appendChild(root);
-				DOMSource source = new DOMSource(doc);
-
-				TransformerFactory transformerFactory = TransformerFactory.newInstance();
-				Transformer transformer = transformerFactory.newTransformer();
-				StreamResult result = new StreamResult(coloredProjectsFile.getPath());
-				transformer.transform(source, result);
-
-				fileWriter.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (TransformerException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ParserConfigurationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+	public ColoredProjectModelXml(IPath path, String filename) {
+		if (path == null) {
+			XmlFileLocationHelper xmlFileLocationHelper = new XmlFileLocationHelper();
+			path = xmlFileLocationHelper.getStateLocation();
 		}
+		coloredProjectsFile = new File(path.toFile(), filename);
+
+		if (!fileExists()) {
+			createFile();
+		}
+
+		xmlWriter = new XmlWriter(coloredProjectsFile);
 
 	}
 
-	public void addColoredProjectToXML(String name, UiColor uiColor) {
-		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder dBuilder;
-		try {
+	public boolean fileExists() {
+		return coloredProjectsFile.exists();
+	}
+
+	public void createFile() {
+
+		try (FileWriter fileWriter = new FileWriter(coloredProjectsFile.getAbsolutePath())) {
+
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder;
 			dBuilder = dbFactory.newDocumentBuilder();
-			Document doc;
-			try {
-				doc = dBuilder.parse(coloredProjectsFile);
-				doc.normalize();
+			Document doc = dBuilder.newDocument();
+			Node root = doc.createElement(COLORED_PROJECT_XML_TAG);
+			doc.appendChild(root);
 
-				Element rootElement = doc.getDocumentElement();
-				Element coloredProject = doc.createElement("ColoredProject");
-				coloredProject.setAttribute("Name", name);
-				coloredProject.setAttribute("UiColor", uiColor.toString());
-				rootElement.appendChild(coloredProject);
+			xmlWriter.transformDocument(doc);
 
-				DOMSource source = new DOMSource(doc);
-
-				TransformerFactory transformerFactory = TransformerFactory.newInstance();
-				Transformer transformer = transformerFactory.newTransformer();
-				StreamResult result = new StreamResult(coloredProjectsFile);
-				transformer.transform(source, result);
-			} catch (SAXException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (TransformerConfigurationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (TransformerException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			fileWriter.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		} catch (ParserConfigurationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
+	public void addColoredProjectToXML(String name, UiColor uiColor) {
+
+		Document document = xmlWriter.getNormalizedDocument();
+
+		Element rootElement = document.getDocumentElement();
+		Element coloredProject = document.createElement(COLORED_PROJECT_XML_TAG);
+		coloredProject.setAttribute(PROJECT_NAME_ATTRIBUTE, name);
+		coloredProject.setAttribute(PROJECT_UI_COLOR_ATTRIBUTE, uiColor.toString());
+		rootElement.appendChild(coloredProject);
+
+		xmlWriter.transformDocument(document);
+	}
+
 	public void clear() {
-			
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder dBuilder;
-			try {
-				dBuilder = dbFactory.newDocumentBuilder();
-				Document doc;
-				doc = dBuilder.parse(coloredProjectsFile);
-				doc.normalize();
-				NodeList nodeList = doc.getElementsByTagName("ColoredProject");
 
-				for (int nodeNumber = 0; nodeNumber < nodeList.getLength(); nodeNumber++) {
-					Element coloredProjectElement = (Element) nodeList.item(nodeNumber);
-			        coloredProjectElement.getParentNode().removeChild(coloredProjectElement);
-			    }
-				
-				DOMSource source = new DOMSource(doc);
+		Document document = xmlWriter.getNormalizedDocument();
 
-				TransformerFactory transformerFactory = TransformerFactory.newInstance();
-				Transformer transformer = transformerFactory.newTransformer();
-				StreamResult result = new StreamResult(coloredProjectsFile);
-				transformer.transform(source, result);
+		NodeList nodeList = document.getElementsByTagName(COLORED_PROJECT_XML_TAG);
 
-			
-			} catch (SAXException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ParserConfigurationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (TransformerConfigurationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (TransformerException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		for (int nodeNumber = 0; nodeNumber < nodeList.getLength(); nodeNumber++) {
+			Element coloredProjectElement = (Element) nodeList.item(nodeNumber);
+			coloredProjectElement.getParentNode().removeChild(coloredProjectElement);
+		}
+
+		xmlWriter.transformDocument(document);
 	}
 
 	public UiColor getColorForProject(String projectName) {
 
-		UiColor uiColorForProject = UiColor.DEFAULT; 
-		
-		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder dBuilder;
-		try {
-			dBuilder = dbFactory.newDocumentBuilder();
-			Document doc;
-			doc = dBuilder.parse(coloredProjectsFile);
-			doc.normalize();
-			NodeList nodeList = doc.getElementsByTagName("ColoredProject");
+		UiColor uiColorForProject = UiColor.DEFAULT;
 
-			for (int nodeNumber = 0; nodeNumber < nodeList.getLength(); nodeNumber++) {
-				Element coloredProjectElement = (Element) nodeList.item(nodeNumber);
-				if (coloredProjectElement.getAttribute("Name").equals(projectName)) {
-					String uiColorString = coloredProjectElement.getAttribute("UiColor");
-					uiColorForProject = UiColor.valueOf(uiColorString);
-				}
+		Document document = xmlWriter.getNormalizedDocument();
+		NodeList nodeList = document.getElementsByTagName(COLORED_PROJECT_XML_TAG);
+
+		for (int nodeNumber = 0; nodeNumber < nodeList.getLength(); nodeNumber++) {
+			Element coloredProjectElement = (Element) nodeList.item(nodeNumber);
+			if (coloredProjectElement.getAttribute(PROJECT_NAME_ATTRIBUTE).equals(projectName)) {
+				String uiColorString = coloredProjectElement.getAttribute(PROJECT_UI_COLOR_ATTRIBUTE);
+				uiColorForProject = UiColor.valueOf(uiColorString);
 			}
-		
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
-		return uiColorForProject; 
+
+		return uiColorForProject;
 
 	}
 
 	public List<ColoredProject> getColoredProjects() {
-		List<ColoredProject> coloredProjects = new ArrayList<>(); 
-		
-		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder dBuilder;
-		try {
-			dBuilder = dbFactory.newDocumentBuilder();
-			Document doc;
-			doc = dBuilder.parse(coloredProjectsFile);
-			doc.normalize();
-			NodeList nodeList = doc.getElementsByTagName("ColoredProject");
+		List<ColoredProject> coloredProjects = new ArrayList<>();
 
-			for (int nodeNumber = 0; nodeNumber < nodeList.getLength(); nodeNumber++) {
-				Element coloredProjectElement = (Element) nodeList.item(nodeNumber);
-				String name = coloredProjectElement.getAttribute("Name");
-				String uiColorString = coloredProjectElement.getAttribute("UiColor");
-				UiColor uiColor = UiColor.valueOf(uiColorString);
-				
-				coloredProjects.add(new ColoredProject(name, uiColor)); 
-			}
-		
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		Document document = xmlWriter.getNormalizedDocument();
+		NodeList nodeList = document.getElementsByTagName(COLORED_PROJECT_XML_TAG);
+
+		for (int nodeNumber = 0; nodeNumber < nodeList.getLength(); nodeNumber++) {
+			Element coloredProjectElement = (Element) nodeList.item(nodeNumber);
+			String name = coloredProjectElement.getAttribute(PROJECT_NAME_ATTRIBUTE);
+			String uiColorString = coloredProjectElement.getAttribute(PROJECT_UI_COLOR_ATTRIBUTE);
+			UiColor uiColor = UiColor.valueOf(uiColorString);
+
+			coloredProjects.add(new ColoredProject(name, uiColor));
 		}
-		return coloredProjects; 
+		return coloredProjects;
 	}
 
 	public void removeColoredProject(ColoredProject coloredProject) {
-		
-		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder dBuilder;
-		try {
-			dBuilder = dbFactory.newDocumentBuilder();
-			Document doc;
-			doc = dBuilder.parse(coloredProjectsFile);
-			doc.normalize();
-			NodeList nodeList = doc.getElementsByTagName("ColoredProject");
 
-			for (int nodeNumber = 0; nodeNumber < nodeList.getLength(); nodeNumber++) {
-				Element coloredProjectElement = (Element) nodeList.item(nodeNumber);
-				String coloredProjectName = coloredProject.getName();
-				String  coloredProjectElementName = coloredProjectElement.getAttribute("Name");
-				if (coloredProjectElementName.equals(coloredProjectName))  
-				{
-					coloredProjectElement.getParentNode().removeChild(coloredProjectElement); 
-				}
-		    }
-			
-			DOMSource source = new DOMSource(doc);
+		Document document = xmlWriter.getNormalizedDocument();
+		NodeList nodeList = document.getElementsByTagName(COLORED_PROJECT_XML_TAG);
 
-			TransformerFactory transformerFactory = TransformerFactory.newInstance();
-			Transformer transformer = transformerFactory.newTransformer();
-			StreamResult result = new StreamResult(coloredProjectsFile);
-			transformer.transform(source, result);
-
-		
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TransformerConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TransformerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		for (int nodeNumber = 0; nodeNumber < nodeList.getLength(); nodeNumber++) {
+			Element coloredProjectElement = (Element) nodeList.item(nodeNumber);
+			String coloredProjectName = coloredProject.getName();
+			String coloredProjectElementName = coloredProjectElement.getAttribute(PROJECT_NAME_ATTRIBUTE);
+			if (coloredProjectElementName.equals(coloredProjectName)) {
+				coloredProjectElement.getParentNode().removeChild(coloredProjectElement);
+			}
 		}
-		
+
+		xmlWriter.transformDocument(document);
+
 	}
+
 }

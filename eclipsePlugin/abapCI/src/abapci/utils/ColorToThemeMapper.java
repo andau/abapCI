@@ -12,6 +12,7 @@ public class ColorToThemeMapper {
 		UiTheme uiTheme = UiTheme.STANDARD_THEME;
 
 		switch (uiColor) {
+		case STANDARD: 
 		case DEFAULT:
 			uiTheme = UiTheme.STANDARD_THEME;
 			break;
@@ -51,6 +52,12 @@ public class ColorToThemeMapper {
 		case YELLOW:
 			uiTheme = UiTheme.YELLOW_THEME;
 			break;
+		case BLACK: 
+			uiTheme = UiTheme.BLACK_THEME; 
+			break; 
+		case WHITE: 
+			uiTheme = UiTheme.WHITE_THEME; 
+			break; 
 		}
 
 		return uiTheme;
