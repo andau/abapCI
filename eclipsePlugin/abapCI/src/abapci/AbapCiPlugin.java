@@ -6,6 +6,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -50,7 +51,9 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 		
 		initializePartChangeListener(); 
 		
-		
+		ICommandService service = PlatformUI.getWorkbench().getService(ICommandService.class);
+		service.addExecutionListener(new SaveFormattingListener());
+	
 	}
 
 	/*

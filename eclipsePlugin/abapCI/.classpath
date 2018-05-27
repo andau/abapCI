@@ -38,6 +38,7 @@
 			<accessrule kind="accessible" pattern="com/sap/adt/activation/model/inactiveObjects/IInactiveCtsObject"/>
 			<accessrule kind="accessible" pattern="com/sap/adt/activation/model/inactiveObjects/IInactiveCtsObjectList"/>
 			<accessrule kind="accessible" pattern="com/sap/adt/activation/model/inactiveObjects/IWorkingObject"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/tools/abapsource/ui/sources/prettyprinter/PrettyPrintHandler"/>
 		</accessrules>
 	</classpathentry>
 	<classpathentry kind="src" output="target/classes" path="src">

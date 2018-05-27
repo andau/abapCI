@@ -34,6 +34,10 @@ public class PreferenceConstants {
 
 	public static final String PREF_COLORED_PROJECTS_TAB_HEADER_ENABLED = "coloredProjectsTabHeaderEnabled";
 
+	public static final String PREF_SOURCE_CODE_FORMATTING_ENABLED = "sourceCodeFormattingEnabled";
+
+	public static final String PREF_SOURCE_CODE_FORMATTING_PREFIX = "sourceCodeFormattingPrefix";
+
 
 	private PreferenceConstants() {
 	}

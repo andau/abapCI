@@ -73,6 +73,14 @@ public class FeatureFactory {
 		return feature;
 	}
 
+	public SourcecodeFormattingFeature createSourcecodeFormattingFeature() {
+		initPrefs(); 
+		String prefix = prefs.getString(PreferenceConstants.PREF_SOURCE_CODE_FORMATTING_PREFIX); 
+		SourcecodeFormattingFeature feature = new SourcecodeFormattingFeature(prefix); 
+		feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_SOURCE_CODE_FORMATTING_ENABLED));
+		return feature;
+	}
+
 
 	
 

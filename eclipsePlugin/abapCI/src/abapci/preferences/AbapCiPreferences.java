@@ -37,23 +37,28 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 		addField(new StringFieldEditor(PreferenceConstants.PREF_ATC_VARIANT, "&Run ATC with variant:",
 				getFieldEditorParent()));
 
+		createSourceCodeFormattingChapter(); 
+		
+        createColorChangeChapter(); 
+		
+        createJenkinsChapter(); 
+        		
+	}
+
+
+	private void createSourceCodeFormattingChapter() {
+		Label emptyLabelSourceCode = new Label(getFieldEditorParent(), SWT.NONE);
+		emptyLabelSourceCode.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
 
 		
-		Label emptyLabel1 = new Label(getFieldEditorParent(), SWT.NONE);
-		emptyLabel1.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_SOURCE_CODE_FORMATTING_ENABLED, "&Automatic sourcecode formatting enabled",
+				getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.PREF_SOURCE_CODE_FORMATTING_PREFIX, "&Mandatory prefix in source code to enable formatter",
+				getFieldEditorParent()));
 		
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_JENKINS_RUN_AFTER_UNIT_TESTS_TURN_GREEN, "&Run Jenkins Builds when file saved",
-				getFieldEditorParent()));
+	}
 
-		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_URL, "&Jenkins BaseUrl (eg. localhost:8080):",
-				getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_USERNAME, "&Jenkins Username:",
-				getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_PASSWORD, "&Jenkins Password:",
-				getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_BUILD_TOKEN, "&Jenkins Build Token:",
-				getFieldEditorParent()));
-
+	private void createColorChangeChapter() {
 		Label emptyLabel2 = new Label(getFieldEditorParent(), SWT.NONE);
 		emptyLabel2.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
 
@@ -74,9 +79,24 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 				getFieldEditorParent()));
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_COLORED_PROJECTS_RIGHT_RULER_ENABLED, "&Change color of right ruler for colored projects",
+				getFieldEditorParent()));		
+	}
+
+	private void createJenkinsChapter() {
+		Label emptyLabel1 = new Label(getFieldEditorParent(), SWT.NONE);
+		emptyLabel1.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
+		
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_JENKINS_RUN_AFTER_UNIT_TESTS_TURN_GREEN, "&Run Jenkins Builds when file saved",
 				getFieldEditorParent()));
 
-
+		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_URL, "&Jenkins BaseUrl (eg. localhost:8080):",
+				getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_USERNAME, "&Jenkins Username:",
+				getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_PASSWORD, "&Jenkins Password:",
+				getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_BUILD_TOKEN, "&Jenkins Build Token:",
+				getFieldEditorParent()));
 		
 	}
 

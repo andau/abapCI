@@ -66,4 +66,9 @@ public class FeatureFacade
 	{
 		return featureFactory.createColoredProjectsRightRulerFeature(); 
 	}
+	
+	public SourcecodeFormattingFeature getSourcecodeFormattingFeature() 
+	{
+		return featureFactory.createSourcecodeFormattingFeature(); 
+	}
 }
