@@ -30,7 +30,7 @@ public class SourcecodeFormatHandler {
 		
 		if (editorToFormat instanceof ITextEditor) 
         {
-		    ITextEditor ite = (ITextEditor)editor;
+		    ITextEditor ite = (ITextEditor)editorToFormat;
 		    IDocument doc = ite.getDocumentProvider().getDocument(ite.getEditorInput());
 
 		    autoformat = isDocumentStartingWithPrefix(doc, sourcecodePrefix);  

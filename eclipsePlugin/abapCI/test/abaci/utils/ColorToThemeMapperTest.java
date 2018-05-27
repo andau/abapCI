@@ -15,7 +15,7 @@ public class ColorToThemeMapperTest {
 	   {
 		   UiTheme uiTheme = ColorToThemeMapper.mapUiColorToTheme(uiColor);  
 		   assertNotNull(uiTheme);
-		   if(uiColor != UiColor.DEFAULT)
+		   if(uiColor != UiColor.DEFAULT && uiColor != UiColor.STANDARD)
 		   {
 			   assertNotEquals(UiTheme.STANDARD_THEME, uiTheme);			   
 		   }

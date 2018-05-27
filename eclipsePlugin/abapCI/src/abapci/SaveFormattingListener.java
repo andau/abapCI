@@ -50,7 +50,7 @@ public class SaveFormattingListener implements IExecutionListener {
 				
 				if (sourcecodeFormatHandler.isAutoformatEnabled(editorReference.getEditor(true), sourcecodePrefix)) 
 				{
-	   				sourcecodeFormatHandler.formatEditor(sourcecodeFormatHandler.autoformattableEditor(editorReference.getEditor(true))) ; 			
+	   				sourcecodeFormatHandler.formatEditor(editorReference.getEditor(true)) ; 			
 				}	
 			}	
 	    }		
