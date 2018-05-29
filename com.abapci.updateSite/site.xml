@@ -7,19 +7,10 @@
    <feature url="features/com.abapci.feature_0.0.5.jar" id="com.abapci.feature" version="0.0.5"/>
    <feature url="features/com.abapci.feature_0.1.0.jar" id="com.abapci.feature" version="0.1.0"/>
    <feature url="features/com.abapci.feature_0.1.2.jar" id="com.abapci.feature" version="0.1.2"/>
-   <feature url="features/com.abapci.feature_0.2.0.jar" id="com.abapci.feature" version="0.2.0">
-      <category name="ABAP CI"/>
-   </feature>
-   <feature url="features/com.abapci.feature_0.2.1.jar" id="com.abapci.feature" version="0.2.1">
-      <category name="ABAP CI"/>
-   </feature>
+   <feature url="features/com.abapci.feature_0.2.0.jar" id="com.abapci.feature" version="0.2.0"/>
+   <feature url="features/com.abapci.feature_0.2.1.jar" id="com.abapci.feature" version="0.2.1"/>
    <feature url="features/com.abapci.feature_0.2.2.jar" id="com.abapci.feature" version="0.2.2"/>
    <feature url="features/com.abapci.feature_0.2.3.jar" id="com.abapci.feature" version="0.2.3"/>
-   <feature url="features/com.abapci.feature_0.2.5.jar" id="com.abapci.feature" version="0.2.5">
-      <category name="ABAP CI"/>
-   </feature>
-   <feature url="features/com.abapci.feature_0.3.1.jar" id="com.abapci.feature" version="0.3.1">
-      <category name="ABAP CI"/>
-   </feature>
-   <category-def name="ABAP CI" label="ABAP CI"/>
+   <feature url="features/com.abapci.feature_0.3.2.jar" id="com.abapci.feature" version="0.3.2"/>
+   <feature url="features/com.abapci.feature_0.3.1.jar" id="com.abapci.feature" version="0.3.1"/>
 </site>
