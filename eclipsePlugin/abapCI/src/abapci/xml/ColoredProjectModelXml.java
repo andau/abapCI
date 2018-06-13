@@ -44,6 +44,7 @@ public class ColoredProjectModelXml {
 		coloredProjectsFile = new File(path.toFile(), filename);
 
 		xmlWriter = new XmlWriter(coloredProjectsFile);
+		
 
 		if (!fileExists()) {
 			createFile();
