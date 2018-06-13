@@ -43,11 +43,12 @@ public class ColoredProjectModelXml {
 		}
 		coloredProjectsFile = new File(path.toFile(), filename);
 
+		xmlWriter = new XmlWriter(coloredProjectsFile);
+
 		if (!fileExists()) {
 			createFile();
 		}
 
-		xmlWriter = new XmlWriter(coloredProjectsFile);
 
 	}
 
@@ -132,10 +133,13 @@ public class ColoredProjectModelXml {
 		for (int nodeNumber = 0; nodeNumber < nodeList.getLength(); nodeNumber++) {
 			Element coloredProjectElement = (Element) nodeList.item(nodeNumber);
 			String name = coloredProjectElement.getAttribute(PROJECT_NAME_ATTRIBUTE);
-			String uiColorString = coloredProjectElement.getAttribute(PROJECT_UI_COLOR_ATTRIBUTE);
-			UiColor uiColor = UiColor.valueOf(uiColorString);
-
-			coloredProjects.add(new ColoredProject(name, uiColor));
+			if (name != null && name !=  "") 
+			{
+				String uiColorString = coloredProjectElement.getAttribute(PROJECT_UI_COLOR_ATTRIBUTE);
+				UiColor uiColor = UiColor.valueOf(uiColorString);
+	
+				coloredProjects.add(new ColoredProject(name, uiColor));
+			}
 		}
 		return coloredProjects;
 	}
