@@ -11,12 +11,12 @@ import abapci.feature.FeatureFacade;
 
 public class SaveFormattingListener implements IExecutionListener {
 
-	private FeatureFacade featureFacade; 
-	public SaveFormattingListener() 
-	{
-		featureFacade = new FeatureFacade(); 
-		
+	private FeatureFacade featureFacade;
+
+	public SaveFormattingListener() {
+		featureFacade = new FeatureFacade();
 	}
+
 	@Override
 	public void notHandled(String arg0, NotHandledException arg1) {
 		// TODO Auto-generated method stub
@@ -37,22 +37,20 @@ public class SaveFormattingListener implements IExecutionListener {
 
 	@Override
 	public void preExecute(String arg0, ExecutionEvent arg1) {
-		
-	    if (featureFacade.getSourcecodeFormattingFeature().isActive()) 
-	    {
-			SourcecodeFormatHandler sourcecodeFormatHandler = new SourcecodeFormatHandler(); 
 
-			IEditorReference[] editorReferences = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getEditorReferences();
-			
-			String sourcecodePrefix = featureFacade.getSourcecodeFormattingFeature().getPrefix(); 
-			for (IEditorReference editorReference : editorReferences)
-			{
-				
-				if (sourcecodeFormatHandler.isAutoformatEnabled(editorReference.getEditor(true), sourcecodePrefix)) 
-				{
-	   				sourcecodeFormatHandler.formatEditor(editorReference.getEditor(true)) ; 			
-				}	
-			}	
-	    }		
+		if ("org.eclipse.ui.file.save".equals(arg0) && featureFacade.getSourcecodeFormattingFeature().isActive()) {
+			SourcecodeFormatHandler sourcecodeFormatHandler = new SourcecodeFormatHandler();
+
+			IEditorReference[] editorReferences = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+					.getEditorReferences();
+
+			String sourcecodePrefix = featureFacade.getSourcecodeFormattingFeature().getPrefix();
+			for (IEditorReference editorReference : editorReferences) {
+
+				if (sourcecodeFormatHandler.isAutoformatEnabled(editorReference.getEditor(true), sourcecodePrefix)) {
+					sourcecodeFormatHandler.formatEditor(editorReference.getEditor(true));
+				}
+			}
+		}
 	}
 }
