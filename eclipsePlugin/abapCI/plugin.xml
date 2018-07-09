@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-
+ 
    <extension
          point="org.eclipse.ui.commands">
       <category
@@ -13,23 +13,64 @@
             categoryId="abapci.commands.category"
             id="abapci.commands.abapCiViewCommand">
       </command>
+      <command
+            name="abapGit Command"
+            categoryId="abapci.commands.category"
+            id="com.abapci.abapgit.open">
+      </command>
    </extension>
+   
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            commandId="abapci.commands.abapCiViewCommand"
-            class="abapci.handlers.AbapCiHandler">
-      </handler>
+       class="abapci.handlers.AbapGitHandler"
+       commandId="com.abapci.abapgit.open">
+    <activeWhen>
+       <iterate>
+          <and>
+             <or>
+                <instanceof
+                      value="com.sap.adt.tools.core.IAdtObjectReference">
+                </instanceof>
+                <adapt
+                      type="com.sap.adt.tools.core.IAdtObjectReference">
+                </adapt>
+             </or>
+             <or>
+                <instanceof
+                      value="com.sap.adt.project.IProjectProvider">
+                </instanceof>
+                <adapt
+                      type="com.sap.adt.project.IProjectProvider">
+                </adapt>
+             </or>
+          </and>
+       </iterate>
+    </activeWhen>
+ </handler>
+      
+      
    </extension>
+   
    <extension
          point="org.eclipse.ui.bindings">
       <key
-            commandId="abapci.commands.abapCiViewCommand"
-            contextId="org.eclipse.ui.contexts.window"
-            sequence="M1+6"
+            commandId="com.abapci.abapgit.open"
+            contextId="com.abapci.context"
+            sequence="CTRL+G"						
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
-      </key>
-   </extension>
+       </key>
+   </extension>  
+   
+   <extension
+     point="org.eclipse.ui.contexts">
+  <context
+        id="com.abapci.context"
+        name="abapCi context"
+        parentId="com.sap.adt.tools.core.ui.abap">
+  </context>
+  </extension>
+  
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
@@ -44,8 +85,49 @@
             </command>
          </toolbar>
       </menuContribution>
+        <menuContribution          
+          locationURI="popup:org.eclipse.ui.navigator.ProjectExplorer#PopupMenu?after=group.build">
+       <command
+             commandId="com.abapci.abapgit.open"
+             id="com.abapci.abapgit.open"
+             label="abapGit"
+             icon="icons/git.ico"
+             style="push"
+             tooltip="Open abapGit with SAP Transaction">
+          <visibleWhen
+                checkEnabled="false">
+             <iterate
+                   ifEmpty="false"
+                   operator="or">
+                <and>
+                   <test
+                      property="com.sap.adt.project.hasNature"
+                         value="com.sap.adt.abapnature">
+                   </test>
+                   <or>
+                      <instanceof
+                            value="com.sap.adt.tools.core.IAdtObjectReference">
+                      </instanceof>
+                      <adapt
+                            type="com.sap.adt.tools.core.IAdtObjectReference">
+                      </adapt>
+                   </or>
+                   <or>
+                      <instanceof
+                            value="com.sap.adt.project.IProjectProvider">
+                      </instanceof>
+                      <adapt
+                            type="com.sap.adt.project.IProjectProvider">
+                      </adapt>
+                   </or>
+                </and>
+             </iterate>
+          </visibleWhen>
+       </command>
+    </menuContribution>
 
    </extension>
+   
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
@@ -54,12 +136,14 @@
             id="abapci.preferences.abapCiPreferences">
       </page>
    </extension>
+  
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
             class="abapci.preferences.PreferenceInitializer">
       </initializer>
    </extension>
+   
    <extension
          point="org.eclipse.ui.views">
       <category
@@ -96,6 +180,7 @@
       </view>
 
    </extension>
+   
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension
@@ -108,6 +193,7 @@
          </view>
       </perspectiveExtension>
    </extension>
+   
    <extension
          point="org.eclipse.help.contexts">
       <contexts
