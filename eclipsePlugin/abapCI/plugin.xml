@@ -56,8 +56,8 @@
          point="org.eclipse.ui.bindings">
       <key
             commandId="com.abapci.abapgit.open"
-            contextId="com.abapci.context"
-            sequence="CTRL+G"						
+            contextId="org.eclipse.ui.contexts.window"
+            sequence="M1+M3+L"						
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
        </key>
    </extension>  
@@ -86,7 +86,7 @@
          </toolbar>
       </menuContribution>
         <menuContribution          
-          locationURI="popup:org.eclipse.ui.navigator.ProjectExplorer#PopupMenu?after=group.build">
+          locationURI="popup:org.eclipse.ui.navigator.ProjectExplorer#PopupMenu?before=additions">
        <command
              commandId="com.abapci.abapgit.open"
              id="com.abapci.abapgit.open"
