@@ -59,12 +59,12 @@ public class AbapCiMainView extends ViewPart {
 	private TableViewer viewer;
 	private Action jenkinsAction;
 	private Action aUnitAction;
-	private Action atcAction; 
+	private Action atcAction;
 	private Action addAction;
 	private Action deleteAction;
 	private Action abapGitAction;
-	
-	IPartListener partListener; 
+
+	IPartListener partListener;
 
 	class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
 		public String getColumnText(Object obj, int index) {
@@ -123,9 +123,6 @@ public class AbapCiMainView extends ViewPart {
 		hookContextMenu();
 		contributeToActionBars();
 
-		AbapCiPlugin.getDefault().initializeResourceChangeListener(); 
-
-		
 		if (!checkActualAbapProject()) {
 			Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 			ProjectSelectionDialog projectSelectionDialog = new ProjectSelectionDialog(shell, new LabelProvider());
@@ -143,7 +140,7 @@ public class AbapCiMainView extends ViewPart {
 
 		prefs.put(PreferenceConstants.PREF_DEV_PROJECT, projectName);
 		try {
-			prefs.flush(); 
+			prefs.flush();
 		} catch (BackingStoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -154,7 +151,7 @@ public class AbapCiMainView extends ViewPart {
 	private boolean checkActualAbapProject() {
 		IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore();
 		String actualDevProject = prefs.getString(PreferenceConstants.PREF_DEV_PROJECT);
-		
+
 		IProject project = AdtCoreProjectServiceFactory.createCoreProjectService().findProject(actualDevProject);
 		return AbapProjectService.getInstance().isAbapProject(project);
 	}
@@ -207,14 +204,15 @@ public class AbapCiMainView extends ViewPart {
 
 		jenkinsAction = new JenkinsCiAction("Run jenkins", "Run jenkins for selected packages");
 		aUnitAction = new AbapUnitCiAction("Run ABAP Unittest", "Run ABAP Unittest for selected package");
-		atcAction = new AtcCiAction("Run ATC", "Run ATC for selected packages"); 
+		atcAction = new AtcCiAction("Run ATC", "Run ATC for selected packages");
 		addAction = new AddAction(UiTexts.LABEL_ACTION_ADD_PACKAGE);
 		deleteAction = new DeleteAction(UiTexts.LABEL_ACTION_REMOVE_PACKAGE);
 		abapGitAction = new AbapGitCiAction("Open abapGIT", "Open abapGIT in SAP GUI");
 	}
 
 	private void createColumns(final TableViewer viewer) {
-		String[] titles = { "ABAP package", "Unit test", "Sup", "Last run", "ATC state", "Sup", "Last run", "Jenkins state" };
+		String[] titles = { "ABAP package", "Unit test", "Sup", "Last run", "ATC state", "Sup", "Last run",
+				"Jenkins state" };
 		int[] bounds = { 150, 90, 40, 70, 90, 40, 70, 100 };
 
 		TableViewerColumn col = createTableViewerColumn(titles[0], bounds[0], 0);

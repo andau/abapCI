@@ -8,17 +8,18 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreeSelection;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.sap.adt.project.AdtCoreProjectServiceFactory;
-import com.sap.adt.projectexplorer.ui.internal.node.AbapRepositoryPackageNode;
+import com.sap.adt.projectexplorer.ui.node.AbapRepositoryBaseNode;
 import com.sap.adt.sapgui.ui.editors.AdtSapGuiEditorUtilityFactory;
+import com.sap.adt.sapgui.ui.internal.editors.GuiEditorInput;
 
 import abapci.AbapCiPlugin;
 import abapci.preferences.PreferenceConstants;
@@ -36,9 +37,10 @@ public class AbapGitHandler extends AbstractHandler {
 		if (!selection.isEmpty()) {
 			if (selection instanceof TreeSelection) {
 				if (!((TreeSelection) selection).isEmpty()
-						&& ((TreeSelection) selection).getFirstElement() instanceof AbapRepositoryPackageNode) {
-					AbapRepositoryPackageNode packageNode = (AbapRepositoryPackageNode) ((TreeSelection) selection)
+						&& ((TreeSelection) selection).getFirstElement() instanceof AbapRepositoryBaseNode) {
+					AbapRepositoryBaseNode packageNode = (AbapRepositoryBaseNode) ((TreeSelection) selection)
 							.getFirstElement();
+
 					String packageName = packageNode.getPackageName();
 					projectname = packageNode.getProject().getName();
 					String username = "TBD";
@@ -64,11 +66,11 @@ public class AbapGitHandler extends AbstractHandler {
 			showMissingProjectInfo(projectname);
 		} else {
 			String transactionName = ABAP_GIT_TRANSACTION_NAME;
-			IEditorReference abapGitEditor = getAbapGitEditorReference();
+			IEditorReference abapGitEditor = getAbapGitEditorReference(project.getName());
 
 			if (abapGitEditor == null) {
-				AdtSapGuiEditorUtilityFactory.createSapGuiEditorUtility()
-						.openEditorAndStartTransaction(project, transactionName, true);
+				AdtSapGuiEditorUtilityFactory.createSapGuiEditorUtility().openEditorAndStartTransaction(project,
+						transactionName, true);
 			} else {
 				IWorkbench workbench = PlatformUI.getWorkbench();
 				IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
@@ -91,7 +93,7 @@ public class AbapGitHandler extends AbstractHandler {
 
 	}
 
-	private IEditorReference getAbapGitEditorReference() {
+	private IEditorReference getAbapGitEditorReference(String referenceProjectname) {
 
 		IWorkbench workbench = PlatformUI.getWorkbench();
 		IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
@@ -100,7 +102,17 @@ public class AbapGitHandler extends AbstractHandler {
 
 		for (IEditorReference editorReference : editorReferences) {
 			if (editorReference.getTitle().endsWith(ABAP_GIT_TRANSACTION_NAME)) {
-				return editorReference;
+				try {
+					GuiEditorInput editorInput = (GuiEditorInput) editorReference.getEditorInput();
+					IProject project = editorInput.getProject();
+					if (project.getName().equals(referenceProjectname)) {
+						return editorReference;
+					}
+
+				} catch (PartInitException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		return null;

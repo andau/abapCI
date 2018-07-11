@@ -32,13 +32,15 @@ public class SaveFormattingListener implements IExecutionListener {
 	@Override
 	public void postExecuteSuccess(String arg0, Object arg1) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void preExecute(String arg0, ExecutionEvent arg1) {
 
-		if ("org.eclipse.ui.file.save".equals(arg0) && featureFacade.getSourcecodeFormattingFeature().isActive()) {
+		if (("org.eclipse.ui.file.save".equals(arg0)
+				|| "com.sap.adt.activation.ui.command.singleActivation".equals(arg0)
+				|| "com.sap.adt.activation.ui.command.multiActivation".equals(arg0))
+				&& featureFacade.getSourcecodeFormattingFeature().isActive()) {
 			SourcecodeFormatHandler sourcecodeFormatHandler = new SourcecodeFormatHandler();
 
 			IEditorReference[] editorReferences = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()

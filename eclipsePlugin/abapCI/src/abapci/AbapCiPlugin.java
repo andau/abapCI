@@ -13,7 +13,6 @@ import org.osgi.framework.BundleContext;
 import abapci.model.ColoredProjectModel;
 import abapci.presenter.GeneralThemePresenter;
 
-
 /**
  * The activator class controls the plug-in life cycle
  */
@@ -24,11 +23,11 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 
 	// The shared instance
 	private static AbapCiPlugin plugin;
-	
-	private static IResourceChangeListener resourceChangeListener; 
-	private static IPartListener2 partListener; 
 
-	private GeneralThemePresenter generalThemePresenter; 
+	private static IResourceChangeListener resourceChangeListener;
+	private static IPartListener2 partListener;
+
+	private GeneralThemePresenter generalThemePresenter;
 
 	/**
 	 * The constructor
@@ -46,14 +45,14 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 
-		generalThemePresenter = new GeneralThemePresenter(new ColoredProjectModel()); 
-		
-		
-		initializePartChangeListener(); 
-		
+		generalThemePresenter = new GeneralThemePresenter(new ColoredProjectModel());
+
+		initializePartChangeListener();
+
 		ICommandService service = PlatformUI.getWorkbench().getService(ICommandService.class);
 		service.addExecutionListener(new SaveFormattingListener());
-	
+
+		initializeResourceChangeListener();
 	}
 
 	/*
@@ -77,8 +76,8 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 	}
 
 	/**
-	 * Returns an image descriptor for the image file at the given plug-in
-	 * relative path
+	 * Returns an image descriptor for the image file at the given plug-in relative
+	 * path
 	 *
 	 * @param path
 	 *            the path
@@ -89,21 +88,19 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 	}
 
 	public void initializeResourceChangeListener() {
-		if (resourceChangeListener == null) 
-		{
+		if (resourceChangeListener == null) {
 			resourceChangeListener = new GeneralResourceChangeListener();
 			ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceChangeListener,
 					IResourceChangeEvent.POST_CHANGE);
 		}
-		
+
 	}
 
 	public void initializePartChangeListener() {
-		if (partListener == null)
-		{
-			partListener = new PartListener2(generalThemePresenter); 					
-		    PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().addPartListener(partListener);
-		} 
-		
+		if (partListener == null) {
+			partListener = new PartListener2(generalThemePresenter);
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().addPartListener(partListener);
+		}
+
 	}
 }

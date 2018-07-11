@@ -6,7 +6,8 @@
          point="org.eclipse.ui.commands">
       <category
             name="ABAP CI Category"
-            id="abapci.commands.category">
+            id="abapci.commands.category"
+            categoryId="abapci.commands.category">
       </category>
       <command
             name="ABAP CI command"
@@ -22,10 +23,14 @@
    
    <extension
          point="org.eclipse.ui.handlers">
+       <handler
+		class="abapci.handlers.AbapCiHandler"            
+		commandId="abapci.commands.abapCiViewCommand">
+      </handler>
       <handler
        class="abapci.handlers.AbapGitHandler"
        commandId="com.abapci.abapgit.open">
-    <activeWhen>
+       <activeWhen>
        <iterate>
           <and>
              <or>
@@ -57,7 +62,7 @@
       <key
             commandId="com.abapci.abapgit.open"
             contextId="org.eclipse.ui.contexts.window"
-            sequence="M1+M3+L"						
+            sequence="M1+M2+K"							
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
        </key>
    </extension>  
@@ -100,10 +105,8 @@
                    ifEmpty="false"
                    operator="or">
                 <and>
-                   <test
                       property="com.sap.adt.project.hasNature"
                          value="com.sap.adt.abapnature">
-                   </test>
                    <or>
                       <instanceof
                             value="com.sap.adt.tools.core.IAdtObjectReference">

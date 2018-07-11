@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-Vendor: %Bundle-Vendor
 Bundle-SymbolicName: com.abapci.core;singleton:=true
-Bundle-Version: 0.3.9
+Bundle-Version: 0.3.10
 Bundle-Activator: abapci.AbapCiPlugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -46,6 +46,7 @@ Export-Package: abapci,
  abapci.views
 Bundle-ActivationPolicy: lazy
 Import-Package: com.sap.adt.sapgui.ui.editors,
+ com.sap.adt.sapgui.ui.internal.editors,
  com.sap.adt.tools.abapsource.abapunit,
  com.sap.adt.tools.abapsource.abapunit.services,
  org.eclipse.core.resources,

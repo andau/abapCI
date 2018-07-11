@@ -10,7 +10,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.part.ViewPart;
 
-import abapci.AbapCiPlugin;
 import abapci.domain.GlobalTestState;
 import abapci.domain.SourcecodeState;
 import abapci.domain.TestState;
@@ -24,11 +23,11 @@ public class AbapCiDashboardView extends ViewPart {
 
 	public AbapCiDashboardView() {
 		ViewModel.INSTANCE.getOverallTestState();
-		ViewModel.INSTANCE.getOverallInfoline(); 
+		ViewModel.INSTANCE.getOverallInfoline();
 	}
 
 	public void createPartControl(Composite parent) {
-		
+
 		FillLayout fillLayout = new FillLayout();
 		fillLayout.type = SWT.VERTICAL;
 		parent.setLayout(fillLayout);
@@ -45,16 +44,14 @@ public class AbapCiDashboardView extends ViewPart {
 		lblOverallTestState.setText(initialGlobalTestState.getTestStateOutputForDashboard());
 		lblOverallTestState.setBackground(initialGlobalTestState.getColor());
 
-		Label infoline = new Label(parent, SWT.LEFT); 
-		ViewModel.INSTANCE.setOverallLblInfoline(infoline); 
-		
-		AbapCiPlugin.getDefault().initializeResourceChangeListener(); 
+		Label infoline = new Label(parent, SWT.LEFT);
+		ViewModel.INSTANCE.setOverallLblInfoline(infoline);
 
 	}
 
 	@Override
 	public void setFocus() {
-		// TODO Auto-generated method stub	
+		// TODO Auto-generated method stub
 	}
 
 }
