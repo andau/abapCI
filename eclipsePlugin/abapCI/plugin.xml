@@ -58,7 +58,7 @@
    </extension>
    
    <extension
-         point="org.eclipse.ui.bindings">
+         point="org.eclipse.ui.bindings">l
       <key
             commandId="com.abapci.abapgit.open"
             contextId="org.eclipse.ui.contexts.window"

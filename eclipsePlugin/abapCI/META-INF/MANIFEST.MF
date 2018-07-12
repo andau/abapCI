@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-Vendor: %Bundle-Vendor
 Bundle-SymbolicName: com.abapci.core;singleton:=true
-Bundle-Version: 0.3.10
+Bundle-Version: 0.3.11
 Bundle-Activator: abapci.AbapCiPlugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -37,7 +37,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jface.text;bundle-version="3.11.1",
  org.eclipse.ui.editors;bundle-version="3.10.0",
  com.sap.adt.tools.abapsource.ui;bundle-version="2.68.3",
- org.eclipse.core.expressions;bundle-version="3.5.100"
+ org.eclipse.core.expressions;bundle-version="3.5.100",
+ com.sap.adt.ris.whereused.ui;bundle-version="2.94.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: abapci,
  abapci.connections,

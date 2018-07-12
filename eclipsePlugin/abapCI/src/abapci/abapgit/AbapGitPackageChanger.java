@@ -3,8 +3,9 @@ package abapci.abapgit;
 import java.net.URI;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.jface.preference.IPreferenceStore;
 
+import com.sap.adt.communication.destinations.AdtDestinationRegistryFactory;
+import com.sap.adt.communication.destinations.IDestinationRegistry;
 import com.sap.adt.communication.message.IMessageBody;
 import com.sap.adt.communication.resources.AdtRestResourceFactory;
 import com.sap.adt.communication.resources.IQueryParameter;
@@ -15,16 +16,16 @@ import com.sap.adt.compatibility.discovery.AdtDiscoveryFactory;
 import com.sap.adt.compatibility.discovery.IAdtDiscovery;
 import com.sap.adt.compatibility.discovery.IAdtDiscoveryCollectionMember;
 
-import abapci.AbapCiPlugin;
 import abapci.Exception.AdtDiscoveryNotFoundException;
-import abapci.preferences.PreferenceConstants;
 import abapci.views.actions.ci.IAdtAbapCiConstants;
 
 public class AbapGitPackageChanger {
 
-	public void changePackage(String packagename, String username) {
-		IPreferenceStore prefs1 = AbapCiPlugin.getDefault().getPreferenceStore();
-		String destination = prefs1.getString(PreferenceConstants.PREF_DEV_PROJECT);
+	public void changePackage(String projectname, String packagename) {
+
+		String destination = projectname;
+		IDestinationRegistry destRegistry = AdtDestinationRegistryFactory.getDestinationRegistry();
+		String username = destRegistry.getEffectiveDestinationData(projectname).getUser();
 
 		try {
 

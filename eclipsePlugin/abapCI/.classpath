@@ -40,6 +40,8 @@
 			<accessrule kind="accessible" pattern="com/sap/adt/activation/model/inactiveObjects/IWorkingObject"/>
 			<accessrule kind="accessible" pattern="com/sap/adt/tools/abapsource/ui/sources/prettyprinter/PrettyPrintHandler"/>
 			<accessrule kind="accessible" pattern="com/sap/adt/projectexplorer/ui/internal/node/AbapRepositoryPackageNode"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/projectexplorer/ui/node/AbapRepositoryBaseNode"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/sapgui/ui/internal/editors/GuiEditorInput"/>
 		</accessrules>
 	</classpathentry>
 	<classpathentry kind="src" output="target/classes" path="src">

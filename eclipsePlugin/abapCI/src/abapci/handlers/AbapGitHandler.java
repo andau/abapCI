@@ -22,11 +22,14 @@ import com.sap.adt.sapgui.ui.editors.AdtSapGuiEditorUtilityFactory;
 import com.sap.adt.sapgui.ui.internal.editors.GuiEditorInput;
 
 import abapci.AbapCiPlugin;
+import abapci.abapgit.AbapGitPackageChanger;
+import abapci.feature.FeatureFacade;
 import abapci.preferences.PreferenceConstants;
 
 public class AbapGitHandler extends AbstractHandler {
 
 	private static final String ABAP_GIT_TRANSACTION_NAME = "ZABAPGIT";
+	final boolean PACKAGE_CHANGE_FEATURE_ENABLED = false;
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -41,10 +44,17 @@ public class AbapGitHandler extends AbstractHandler {
 					AbapRepositoryBaseNode packageNode = (AbapRepositoryBaseNode) ((TreeSelection) selection)
 							.getFirstElement();
 
-					String packageName = packageNode.getPackageName();
 					projectname = packageNode.getProject().getName();
-					String username = "TBD";
-					// call AbapGitPackageChanger
+
+					// abapGit Package change is currently not yet implemented on ABAP side
+					FeatureFacade featureFacade = new FeatureFacade();
+					if (featureFacade.getAbapGitPackageChangeFeature().isActive()) {
+
+						String packagename = packageNode.getPackageName();
+
+						AbapGitPackageChanger packageChanger = new AbapGitPackageChanger();
+						packageChanger.changePackage(projectname, packagename);
+					}
 				}
 			}
 		}
