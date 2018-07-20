@@ -43,6 +43,10 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 
 		createJenkinsChapter();
 
+		// Unit test level selection seems currently not supported ( at least with 7.50)
+		// - therefore its deactived for the moment
+		// createAbapUnitDetailsChapter();
+
 	}
 
 	private void createSourceCodeFormattingChapter() {
@@ -98,6 +102,34 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ABAP_GIT_PACKAGE_CHANGE_ENABLED,
 				"&Package changer for abapGit (noch nicht implementiert)", getFieldEditorParent()));
+
+	}
+
+	private void createAbapUnitDetailsChapter() {
+
+		Label emptyLabelAbapUnitDetails = new Label(getFieldEditorParent(), SWT.NONE);
+		emptyLabelAbapUnitDetails.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
+
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_UNIT_RUN_CRITICAL_TESTS_ENABLED, "&run critical tests",
+				getFieldEditorParent()));
+
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_UNIT_RUN_DANGEROUS_TESTS_ENABLED,
+				"&run dangerous tests", getFieldEditorParent()));
+
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_UNIT_RUN_HARMLESS_TESTS_ENABLED, "&run harmless tests",
+				getFieldEditorParent()));
+
+		Label emptyLabelAbapUnitDetails1 = new Label(getFieldEditorParent(), SWT.NONE);
+		emptyLabelAbapUnitDetails1.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
+
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_UNIT_RUN_DURATION_LONG_TESTS_ENABLED,
+				"&run long tests", getFieldEditorParent()));
+
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_UNIT_RUN_DURATION_MEDIUM_TESTS_ENABLED,
+				"&run medium tests", getFieldEditorParent()));
+
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_UNIT_RUN_DURATION_SHORT_TESTS_ENABLED,
+				"&run short tests", getFieldEditorParent()));
 
 	}
 

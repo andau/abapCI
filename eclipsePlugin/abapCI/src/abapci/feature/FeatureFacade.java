@@ -65,4 +65,28 @@ public class FeatureFacade {
 		return featureFactory.createAbapGitPackageChangeFeature();
 	}
 
+	public SimpleToggleFeature getUnitCriticalActiveFeature() {
+		return featureFactory.createSimpleToggleFeature(FeatureType.UNIT_RUN_CRITICAL_TESTS);
+	}
+
+	public ActiveFeature getUnitDangerousActiveFeature() {
+		return featureFactory.createSimpleToggleFeature(FeatureType.UNIT_RUN_DANGEROUS_TESTS);
+	}
+
+	public ActiveFeature getUnitHarmlessActiveFeature() {
+		return featureFactory.createSimpleToggleFeature(FeatureType.UNIT_RUN_HARMLESS_TESTS);
+	}
+
+	public ActiveFeature getUnitTestDurationLongFeature() {
+		return featureFactory.createSimpleToggleFeature(FeatureType.UNIT_RUN_DURATION_LONG_TESTS);
+	}
+
+	public ActiveFeature getUnitTestDurationMediumFeature() {
+		return featureFactory.createSimpleToggleFeature(FeatureType.UNIT_RUN_DURATION_MEDIUM_TESTS);
+	}
+
+	public ActiveFeature getUnitTestDurationShortFeature() {
+		return featureFactory.createSimpleToggleFeature(FeatureType.UNIT_RUN_DURATION_SHORT_TESTS);
+	}
+
 }

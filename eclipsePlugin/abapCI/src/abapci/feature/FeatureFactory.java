@@ -86,4 +86,34 @@ public class FeatureFactory {
 		return feature;
 	}
 
+	public SimpleToggleFeature createSimpleToggleFeature(FeatureType featureType) {
+		initPrefs();
+		SimpleToggleFeature feature = new SimpleToggleFeature();
+
+		switch (featureType) {
+		case UNIT_RUN_CRITICAL_TESTS:
+			feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_UNIT_RUN_CRITICAL_TESTS_ENABLED));
+			break;
+		case UNIT_RUN_DANGEROUS_TESTS:
+			feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_UNIT_RUN_DANGEROUS_TESTS_ENABLED));
+			break;
+		case UNIT_RUN_HARMLESS_TESTS:
+			feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_UNIT_RUN_HARMLESS_TESTS_ENABLED));
+			break;
+		case UNIT_RUN_DURATION_LONG_TESTS:
+			feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_UNIT_RUN_DURATION_LONG_TESTS_ENABLED));
+			break;
+		case UNIT_RUN_DURATION_MEDIUM_TESTS:
+			feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_UNIT_RUN_DURATION_MEDIUM_TESTS_ENABLED));
+			break;
+		case UNIT_RUN_DURATION_SHORT_TESTS:
+			feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_UNIT_RUN_DURATION_SHORT_TESTS_ENABLED));
+			break;
+		default:
+			throw new UnsupportedOperationException();
+		}
+
+		return feature;
+	}
+
 }

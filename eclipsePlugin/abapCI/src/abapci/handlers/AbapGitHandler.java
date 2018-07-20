@@ -65,7 +65,7 @@ public class AbapGitHandler extends AbstractHandler {
 
 	public Object execute(String projectname) {
 
-		if (projectname == null) {
+		if (projectname == null || projectname.equals("")) {
 			IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore();
 			projectname = prefs.getString(PreferenceConstants.PREF_DEV_PROJECT);
 		}

@@ -39,6 +39,18 @@ public class PreferenceConstants {
 
 	public static final String PREF_ABAP_GIT_PACKAGE_CHANGE_ENABLED = "abapGitPackageChangeEnabled";
 
+	public static final String PREF_UNIT_RUN_CRITICAL_TESTS_ENABLED = "unitRunCriticalTestsEnabled";
+
+	public static final String PREF_UNIT_RUN_DANGEROUS_TESTS_ENABLED = "unitRunDangerousTestsEnabled";
+
+	public static final String PREF_UNIT_RUN_HARMLESS_TESTS_ENABLED = "unitRunHarmlessTestsEnabled";
+
+	public static final String PREF_UNIT_RUN_DURATION_LONG_TESTS_ENABLED = "unitRunDurationLongTestsEnabled";
+
+	public static final String PREF_UNIT_RUN_DURATION_MEDIUM_TESTS_ENABLED = "unitRunDurationMediumTestsEnabled";
+
+	public static final String PREF_UNIT_RUN_DURATION_SHORT_TESTS_ENABLED = "unitRunDurationShortTestsEnabled";
+
 	private PreferenceConstants() {
 	}
 

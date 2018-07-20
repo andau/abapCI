@@ -1,7 +1,7 @@
 package abapci.views.actions.ci;
 
 import abapci.AbapCiPlugin;
-import abapci.handlers.AbapUnitHandler;
+import abapci.handlers.AbapGitHandler;
 
 public class AbapGitCiAction extends AbstractCiAction {
 
@@ -14,8 +14,7 @@ public class AbapGitCiAction extends AbstractCiAction {
 	}
 
 	public void run() {
-
-		new AbapUnitHandler().executePackage("UNDEFINED");
+		new AbapGitHandler().execute("");
 	}
 
 }

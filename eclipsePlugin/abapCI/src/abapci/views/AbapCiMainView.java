@@ -139,6 +139,7 @@ public class AbapCiMainView extends ViewPart {
 		IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(AbapCiPlugin.PLUGIN_ID);
 
 		prefs.put(PreferenceConstants.PREF_DEV_PROJECT, projectName);
+
 		try {
 			prefs.flush();
 		} catch (BackingStoreException e) {

@@ -7,7 +7,7 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins">
 		<accessrules>
-			<accessrule kind="accessible" pattern="com/sap/adt/tools/abapsource/abapunit/IAbapUnitAlert"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/tools/abapsource/abapunit/AbapUnitTestDuration"/>
 			<accessrule kind="accessible" pattern="com/sap/adt/tools/abapsource/abapunit/AbapUnitTask"/>
 			<accessrule kind="accessible" pattern="com/sap/adt/tools/abapsource/abapunit/IAbapUnitResult"/>
 			<accessrule kind="accessible" pattern="com/sap/adt/tools/abapsource/abapunit/IAbapUnitResultItem"/>
@@ -42,6 +42,7 @@
 			<accessrule kind="accessible" pattern="com/sap/adt/projectexplorer/ui/internal/node/AbapRepositoryPackageNode"/>
 			<accessrule kind="accessible" pattern="com/sap/adt/projectexplorer/ui/node/AbapRepositoryBaseNode"/>
 			<accessrule kind="accessible" pattern="com/sap/adt/sapgui/ui/internal/editors/GuiEditorInput"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/tools/abapsource/abapunit/AbapUnitTestRiskLevel"/>
 		</accessrules>
 	</classpathentry>
 	<classpathentry kind="src" output="target/classes" path="src">
