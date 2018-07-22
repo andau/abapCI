@@ -91,7 +91,7 @@ public class AbapCiMainView extends ViewPart {
 		viewer.getTable().setHeaderVisible(true);
 
 		Button abapGitButton = new Button(entireContainer, SWT.NONE);
-		abapGitButton.setBounds(0, 10, 200, 200);
+		abapGitButton.setBounds(0, 10, 200, 20);
 		abapGitButton.setText("Launch abapGit");
 		Listener listener = e -> {
 			if (e.type == SWT.Selection) {

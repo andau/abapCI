@@ -9,6 +9,7 @@ import org.eclipse.core.runtime.Path;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import abapci.Exception.AbapCiColoredProjectFileParseException;
 import abapci.domain.ColoredProject;
 import abapci.domain.UiColor;
 
@@ -16,7 +17,7 @@ public class ColoredProjectModelXmlTest {
 
 	@Test
 	@Ignore
-	public void StandardColorProjectModelTest() {
+	public void StandardColorProjectModelTest() throws AbapCiColoredProjectFileParseException {
 		ColoredProjectModelXml coloredProjectModelXml = new ColoredProjectModelXml(new Path("C:/temp/"),
 				"coloredProjectTestfile.xml");
 

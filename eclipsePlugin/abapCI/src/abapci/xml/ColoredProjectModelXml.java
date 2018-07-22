@@ -16,6 +16,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import abapci.Exception.AbapCiColoredProjectFileParseException;
 import abapci.domain.ColoredProject;
 import abapci.domain.UiColor;
 
@@ -103,12 +104,11 @@ public class ColoredProjectModelXml {
 		xmlWriter.transformDocument(document);
 	}
 
-	public UiColor getColorForProject(String projectName) {
+	public UiColor getColorForProject(String projectName) throws AbapCiColoredProjectFileParseException {
 
 		UiColor uiColorForProject = UiColor.DEFAULT;
 
-		Document document = xmlWriter.getNormalizedDocument();
-		NodeList nodeList = document.getElementsByTagName(COLORED_PROJECT_XML_TAG);
+		NodeList nodeList = getNodeListOfDocument();
 
 		for (int nodeNumber = 0; nodeNumber < nodeList.getLength(); nodeNumber++) {
 			Element coloredProjectElement = (Element) nodeList.item(nodeNumber);
@@ -119,14 +119,12 @@ public class ColoredProjectModelXml {
 		}
 
 		return uiColorForProject;
-
 	}
 
-	public List<ColoredProject> getColoredProjects() {
+	public List<ColoredProject> getColoredProjects() throws AbapCiColoredProjectFileParseException {
 		List<ColoredProject> coloredProjects = new ArrayList<>();
 
-		Document document = xmlWriter.getNormalizedDocument();
-		NodeList nodeList = document.getElementsByTagName(COLORED_PROJECT_XML_TAG);
+		NodeList nodeList = getNodeListOfDocument();
 
 		for (int nodeNumber = 0; nodeNumber < nodeList.getLength(); nodeNumber++) {
 			Element coloredProjectElement = (Element) nodeList.item(nodeNumber);
@@ -141,10 +139,12 @@ public class ColoredProjectModelXml {
 		return coloredProjects;
 	}
 
-	public void removeColoredProject(ColoredProject coloredProject) {
+	public void removeColoredProject(ColoredProject coloredProject) throws AbapCiColoredProjectFileParseException {
+
+		NodeList nodeList = getNodeListOfDocument();
 
 		Document document = xmlWriter.getNormalizedDocument();
-		NodeList nodeList = document.getElementsByTagName(COLORED_PROJECT_XML_TAG);
+		nodeList = document.getElementsByTagName(COLORED_PROJECT_XML_TAG);
 
 		for (int nodeNumber = 0; nodeNumber < nodeList.getLength(); nodeNumber++) {
 			Element coloredProjectElement = (Element) nodeList.item(nodeNumber);
@@ -156,6 +156,16 @@ public class ColoredProjectModelXml {
 		}
 
 		xmlWriter.transformDocument(document);
+
+	}
+
+	private NodeList getNodeListOfDocument() throws AbapCiColoredProjectFileParseException {
+		try {
+			Document document = xmlWriter.getNormalizedDocument();
+			return document.getElementsByTagName(COLORED_PROJECT_XML_TAG);
+		} catch (Exception ex) {
+			throw new AbapCiColoredProjectFileParseException(ex);
+		}
 
 	}
 

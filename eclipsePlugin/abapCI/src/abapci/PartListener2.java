@@ -15,26 +15,27 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.ViewReference;
 import org.eclipse.ui.texteditor.SourceViewerDecorationSupport;
 import org.eclipse.ui.texteditor.StatusTextEditor;
-import abapci.utils.AnnotationRuleColorChanger;
+
+import abapci.Exception.AbapCiColoredProjectFileParseException;
 import abapci.domain.UiColor;
 import abapci.feature.FeatureFacade;
 import abapci.presenter.GeneralThemePresenter;
-
+import abapci.utils.AnnotationRuleColorChanger;
 
 @SuppressWarnings("restriction")
 public class PartListener2 implements IPartListener2 {
 	private GeneralThemePresenter generalThemePresenter;
-	private AnnotationRuleColorChanger annotationRuleColorChanger; 
+	private AnnotationRuleColorChanger annotationRuleColorChanger;
 
 	public PartListener2(GeneralThemePresenter generalThemePresenter) {
 		this.generalThemePresenter = generalThemePresenter;
-		annotationRuleColorChanger = new AnnotationRuleColorChanger(); 
+		annotationRuleColorChanger = new AnnotationRuleColorChanger();
 
 	}
 
 	@Override
 	public void partActivated(IWorkbenchPartReference arg0) {
-		formatPart(); 
+		formatPart();
 	}
 
 	@Override
@@ -76,10 +77,10 @@ public class PartListener2 implements IPartListener2 {
 	public void partVisible(IWorkbenchPartReference arg0) {
 		// TODO Auto-generated method stub
 	}
-	
+
 	private void formatPart() {
-		
-		FeatureFacade featureFacade = new FeatureFacade(); 
+
+		FeatureFacade featureFacade = new FeatureFacade();
 
 		IProject currentProject = null;
 
@@ -98,38 +99,41 @@ public class PartListener2 implements IPartListener2 {
 			}
 		}
 
-		if (activeEditor != null)
-		{
+		if (activeEditor != null) {
 
-			String currentProjectname = (currentProject == null) ? "UNDEF" : currentProject.getName();
-			UiColor uiColor = generalThemePresenter.getUiColor(currentProjectname); 
-	
-			boolean changeColorOfTabHeader = featureFacade.getColoredProjectsTabHeaderFeature().isActive();
-			boolean changeColorOfLeftRuler = featureFacade.getColoredProjectsLeftRulerFeature().isActive();
-			boolean changeColorOfRightRuler = featureFacade.getColoredProjectsRightRulerFeature().isActive();
-			
-			if (changeColorOfTabHeader)
-			{
-				generalThemePresenter.updateEditorLabel(uiColor);
+			try {
+				String currentProjectname = (currentProject == null) ? "UNDEF" : currentProject.getName();
+				UiColor uiColor = generalThemePresenter.getUiColor(currentProjectname);
+
+				boolean changeColorOfTabHeader = featureFacade.getColoredProjectsTabHeaderFeature().isActive();
+				boolean changeColorOfLeftRuler = featureFacade.getColoredProjectsLeftRulerFeature().isActive();
+				boolean changeColorOfRightRuler = featureFacade.getColoredProjectsRightRulerFeature().isActive();
+
+				if (changeColorOfTabHeader) {
+					generalThemePresenter.updateEditorLabel(uiColor);
+				}
+
+				annotationRuleColorChanger.change(activeEditor, uiColor, changeColorOfLeftRuler,
+						changeColorOfRightRuler);
+
+			} catch (AbapCiColoredProjectFileParseException e) {
+				// if there was an error retrieving the color we skip this feature,
+				// the user should already got an info message in the ABAP Colored Projects view
+				e.printStackTrace();
 			}
-			
-			annotationRuleColorChanger.change(activeEditor, uiColor, changeColorOfLeftRuler, changeColorOfRightRuler);
 		}
 
 	}
 
-	
-	protected SourceViewerDecorationSupport getSourceViewerDecorationSupport(IEditorPart editor, ISourceViewer viewer){
-		
+	protected SourceViewerDecorationSupport getSourceViewerDecorationSupport(IEditorPart editor, ISourceViewer viewer) {
+
 		try {
 			Method getSourceViewerDecorationSupport = StatusTextEditor.class
-					.getDeclaredMethod("getSourceViewerDecorationSupport",
-							ISourceViewer.class);
-			
+					.getDeclaredMethod("getSourceViewerDecorationSupport", ISourceViewer.class);
+
 			getSourceViewerDecorationSupport.setAccessible(true);
-			return (SourceViewerDecorationSupport) getSourceViewerDecorationSupport
-					.invoke(editor, viewer);
-			
+			return (SourceViewerDecorationSupport) getSourceViewerDecorationSupport.invoke(editor, viewer);
+
 		} catch (NoSuchMethodException | SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -143,9 +147,9 @@ public class PartListener2 implements IPartListener2 {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		return null; 
+
+		return null;
 
 	}
-	
+
 }

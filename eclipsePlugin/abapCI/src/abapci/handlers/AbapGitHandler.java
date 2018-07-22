@@ -95,7 +95,7 @@ public class AbapGitHandler extends AbstractHandler {
 	private void showMissingProjectInfo(String projectname) {
 		if (projectname == null || projectname.trim().isEmpty()) {
 			MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Info",
-					"For calling abapGit select an ABAP package or set the ABAP development package in the ABAP CI settings");
+					"For calling abapGit select an ABAP package in the package explorer or set the ABAP development package in the ABAP CI settings");
 		} else {
 			MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Info",
 					String.format("Project %s could not be determined as valid ABAP project", projectname));
