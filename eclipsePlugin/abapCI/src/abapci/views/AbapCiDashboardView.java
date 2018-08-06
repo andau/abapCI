@@ -1,18 +1,18 @@
 package abapci.views;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.part.ViewPart;
 
-import abapci.domain.GlobalTestState;
-import abapci.domain.SourcecodeState;
-import abapci.domain.TestState;
+import abapci.AbapCiPlugin;
+import abapci.presenter.ContinuousIntegrationPresenter;
 
 public class AbapCiDashboardView extends ViewPart {
 
@@ -21,31 +21,51 @@ public class AbapCiDashboardView extends ViewPart {
 	 */
 	public static final String ID = "abapci.views.AbapCiDashboardView";
 
+	private ContinuousIntegrationPresenter presenter;
+
+	public Label lblOverallTestState;
+	public Label infoline;
+
+	private Composite parent;
+
 	public AbapCiDashboardView() {
 		ViewModel.INSTANCE.getOverallTestState();
 		ViewModel.INSTANCE.getOverallInfoline();
 	}
 
+	public void setBackgroundColor(Color color) {
+		parent.setBackground(color);
+	}
+
 	public void createPartControl(Composite parent) {
 
-		FillLayout fillLayout = new FillLayout();
-		fillLayout.type = SWT.VERTICAL;
-		parent.setLayout(fillLayout);
-		Label lblOverallTestState = new Label(parent, SWT.CENTER);
-		ViewModel.INSTANCE.setLblOverallTestState(lblOverallTestState);
+		this.parent = parent;
+		presenter = AbapCiPlugin.getDefault().continuousIntegrationPresenter;
 
+		Composite entireContainer = new Composite(parent, SWT.NONE);
+		entireContainer.setLayout(new GridLayout(1, false));
+
+		lblOverallTestState = new Label(entireContainer, SWT.CENTER);
 		FontData[] fontData = lblOverallTestState.getFont().getFontData();
 		fontData[0].setHeight(16);
+		lblOverallTestState.setText("Status not yet defined");
+
 		lblOverallTestState.setFont(new Font(Display.getCurrent(), fontData[0]));
 		lblOverallTestState.setLayoutData(new GridData(SWT.CENTER, SWT.FILL, true, true));
 
-		GlobalTestState initialGlobalTestState = new GlobalTestState(SourcecodeState.UNDEF);
-		ViewModel.INSTANCE.setUnitState(TestState.UNDEF);
-		lblOverallTestState.setText(initialGlobalTestState.getTestStateOutputForDashboard());
-		lblOverallTestState.setBackground(initialGlobalTestState.getColor());
+		infoline = new Label(entireContainer, SWT.FILL);
+		infoline.setText("Initialized                                                            ");
+		infoline.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, true, true));
 
-		Label infoline = new Label(parent, SWT.LEFT);
-		ViewModel.INSTANCE.setOverallLblInfoline(infoline);
+		parent.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_GRAY));
+		parent.redraw();
+
+		if (presenter != null) {
+			presenter.registerDashboardView(this);
+		} else {
+			lblOverallTestState.setText("Unit testrun deactivated");
+			infoline.setText("Activate 'Run Unit tests after an ABAP object' and restart");
+		}
 
 	}
 

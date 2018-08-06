@@ -9,25 +9,27 @@ import abapci.domain.AbapPackageTestState;
 import abapci.domain.TestResult;
 import abapci.domain.TestState;
 import abapci.handlers.AbapAtcHandler;
+import abapci.presenter.ContinuousIntegrationPresenter;
 import abapci.utils.AtcResultAnalyzer;
-import abapci.views.ViewModel;
 
 public class AtcTestManager extends AbstractTestManager {
 
-	public AtcTestManager(List<String> packageNames) {
-		super(packageNames);
+	public AtcTestManager(ContinuousIntegrationPresenter continuousIntegrationPresenter, String projectName,
+			List<String> packageNames) {
+		super(continuousIntegrationPresenter, projectName, packageNames);
 	}
 
 	public TestState executeAllPackages() {
 
-		List<AbapPackageTestState> packageTestStates = ViewModel.INSTANCE.getPackageTestStates();
+		List<AbapPackageTestState> packageTestStates = continuousIntegrationPresenter
+				.getAbapPackageTestStatesForCurrentProject();
 
 		IAtcWorklist atcWorklist = null;
 
 		packageNames.addAll(packageTestStates.stream().filter(item -> item.getAtcInfo().equals("UNDEF"))
 				.map(item -> item.getPackageName()).collect(Collectors.<String>toList()));
 
-		overallTestState = TestState.UNDEF; 
+		overallTestState = TestState.UNDEF;
 		for (String packageName : packageNames) {
 			try {
 				atcWorklist = new AbapAtcHandler().executePackage(packageName);
@@ -40,12 +42,14 @@ public class AtcTestManager extends AbstractTestManager {
 			mergePackageTestStateIntoGlobalTestState(testResult.getTestState());
 
 			List<AbapPackageTestState> packageTestStatesNew = packageTestStates.stream()
-					.filter(item -> item.getPackageName().equals(packageName)).collect(Collectors.<AbapPackageTestState>toList());
+					.filter(item -> item.getPackageName().equals(packageName))
+					.collect(Collectors.<AbapPackageTestState>toList());
 			packageTestStatesNew.forEach(item -> item.setAtcInfo(testResult));
 
 		}
 
-		setAbapPackagesTestState(packageTestStates, overallTestState, TestStateType.ATC);
+		// setAbapPackagesTestState(packageTestStates, overallTestState,
+		// TestStateType.ATC);
 
 		return overallTestState;
 

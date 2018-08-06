@@ -6,14 +6,13 @@ import java.util.List;
 public class UnitTestResultSummary {
 
 	private final String packageName;
-	private TestResult testResult; 
-	
-    private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(
-            this);
+	private TestResult testResult;
 
-	public UnitTestResultSummary(String packageName, boolean testrunOk, List<InvalidItem> invalidItems) {
+	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+
+	public UnitTestResultSummary(String packageName, boolean testrunOk, int numTests, List<InvalidItem> invalidItems) {
 		this.packageName = packageName;
-		this.testResult = new TestResult(testrunOk, invalidItems); 
+		this.testResult = new TestResult(testrunOk, numTests, invalidItems);
 	}
 
 	public String getPackageName() {
@@ -23,11 +22,10 @@ public class UnitTestResultSummary {
 	public TestResult getTestResult() {
 		return testResult;
 	}
-		
+
 	public void setTestState(TestResult testResult) {
-		this.testResult = testResult; 
+		this.testResult = testResult;
 		propertyChangeSupport.firePropertyChange("testResult", this.testResult, testResult);
 	}
-	
 
 }

@@ -89,4 +89,7 @@ public class FeatureFacade {
 		return featureFactory.createSimpleToggleFeature(FeatureType.UNIT_RUN_DURATION_SHORT_TESTS);
 	}
 
+	public ActiveFeature getShowDialogNewPackageForCiRun() {
+		return featureFactory.createSimpleToggleFeature(FeatureType.SHOW_DIALOG_NEW_PACKAGE_FOR_CI_RUN);
+	}
 }

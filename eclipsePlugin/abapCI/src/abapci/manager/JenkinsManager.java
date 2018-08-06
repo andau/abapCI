@@ -1,45 +1,31 @@
 package abapci.manager;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
-
-import abapci.domain.AbapPackageTestState;
-import abapci.handlers.JenkinsHandler;
-import abapci.views.ViewModel;
+import abapci.presenter.ContinuousIntegrationPresenter;
 
 public class JenkinsManager {
 
-	public JenkinsManager(List<String> packages) {
+	public JenkinsManager(ContinuousIntegrationPresenter presenter, String projectName, List<String> packages) {
 	}
 
-	public void executeAllPackages() 
-	{
-	       List<AbapPackageTestState> packageTestStates = ViewModel.INSTANCE.getPackageTestStates(); 
-	       
-	       	       
-	       for(AbapPackageTestState packageTestState : packageTestStates)
-	       {
-	    	   Map<String, String> packageNames = new HashMap<String, String>(); 
-	    	   packageNames.put("1", packageTestState.getPackageName()); 
-	    	   
-	    	   try {
-				new JenkinsHandler().execute(new ExecutionEvent(null, packageNames, null, null));
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	    	   
-	       	   String currentTime = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
-	       	   
-	       	   packageTestState.setJenkinsInfo("last started: " + currentTime);
-	    	   
-	       }
-	       ViewModel.INSTANCE.setPackageTestStates(packageTestStates);   
+	public void executeAllPackages() {
+
+		/**
+		 * for (AbapPackageTestState packageTestState : packageTestStates) { Map<String,
+		 * String> packageNames = new HashMap<String, String>(); packageNames.put("1",
+		 * packageTestState.getPackageName());
+		 * 
+		 * try { new JenkinsHandler().execute(new ExecutionEvent(null, packageNames,
+		 * null, null)); } catch (ExecutionException e) { // TODO Auto-generated catch
+		 * block e.printStackTrace(); }
+		 * 
+		 * String currentTime = new
+		 * SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
+		 * 
+		 * packageTestState.setJenkinsInfo("last started: " + currentTime);
+		 * 
+		 * }
+		 **/
 	}
 }

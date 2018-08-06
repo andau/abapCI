@@ -4,22 +4,27 @@ import java.util.List;
 
 import abapci.domain.AbapPackageTestState;
 import abapci.domain.TestState;
+import abapci.presenter.ContinuousIntegrationPresenter;
 import abapci.views.ViewModel;
 
 abstract class AbstractTestManager {
 
-	protected List<String> packageNames; 
-	
-	public AbstractTestManager(List<String> packageNames)
-	{
+	String projectName;
+	protected List<String> packageNames;
+	protected ContinuousIntegrationPresenter continuousIntegrationPresenter;
+
+	public AbstractTestManager(ContinuousIntegrationPresenter continuousIntegrationPresenter, String projectName,
+			List<String> packageNames) {
+		this.continuousIntegrationPresenter = continuousIntegrationPresenter;
+		this.projectName = projectName;
 		this.packageNames = packageNames;
 		overallTestState = TestState.UNDEF;
 	}
-	
-	public void setPackages(List<String> packageNames) 
-	{
-		this.packageNames = packageNames; 
+
+	public void setPackages(List<String> packageNames) {
+		this.packageNames = packageNames;
 	}
+
 	protected TestState overallTestState;
 
 	protected void mergePackageTestStateIntoGlobalTestState(TestState packageTestState) {
@@ -30,7 +35,8 @@ abstract class AbstractTestManager {
 		switch (packageTestState) {
 		case UNDEF:
 		case NOK:
-		case OFFL: 	
+		case OFFL:
+		case DEACT:
 			overallTestState = packageTestState;
 			break;
 		case OK:
@@ -39,59 +45,43 @@ abstract class AbstractTestManager {
 		}
 
 	}
-	
-	protected void calculateOverallTestState(List<AbapPackageTestState> packageTestStates, TestStateType teststateType) 
-	{
-		
-		if (teststateType == TestStateType.UNIT) 
-		{
-			if (packageTestStates.stream().anyMatch(item -> item.getAUnitInfo().equals("UNDEF"))) 
-			{
-			 overallTestState = TestState.UNDEF;  		 
-		    }
-			else if (packageTestStates.stream().anyMatch(item -> item.getAUnitInfo().equals("NOK"))) 
-			{
-				 overallTestState = TestState.NOK;  				
-			}
-			else
-			{
-				overallTestState = TestState.OK; 
-			}			
-		}
-		else 
-		{
-			if (packageTestStates.stream().anyMatch(item -> item.getAtcInfo().equals("UNDEF"))) 
-			{
-			 overallTestState = TestState.UNDEF;  		 
-		    }
-			else if (packageTestStates.stream().anyMatch(item -> item.getAtcInfo().equals("NOK"))) 
-			{
-				 overallTestState = TestState.NOK;  				
-			}
-			else
-			{
-				overallTestState = TestState.OK; 
-			}
-		}
-	}
-	
-	protected void setAbapPackagesTestState(List<AbapPackageTestState> packageTestStates, TestState testState, TestStateType teststateType) {
-		ViewModel.INSTANCE.setPackageTestStates(packageTestStates);
+
+	protected void calculateOverallTestState(List<AbapPackageTestState> packageTestStates,
+			TestStateType teststateType) {
 
 		if (teststateType == TestStateType.UNIT) {
-			ViewModel.INSTANCE.setUnitState(testState);					
-		}
-		else 
-		{
-			ViewModel.INSTANCE.setAtcState(testState);								
+			if (packageTestStates.stream().anyMatch(item -> item.getAUnitInfo().equals("UNDEF"))) {
+				overallTestState = TestState.UNDEF;
+			} else if (packageTestStates.stream().anyMatch(item -> item.getAUnitInfo().equals("NOK"))) {
+				overallTestState = TestState.NOK;
+			} else {
+				overallTestState = TestState.OK;
+			}
+		} else {
+			if (packageTestStates.stream().anyMatch(item -> item.getAtcInfo().equals("UNDEF"))) {
+				overallTestState = TestState.UNDEF;
+			} else if (packageTestStates.stream().anyMatch(item -> item.getAtcInfo().equals("NOK"))) {
+				overallTestState = TestState.NOK;
+			} else {
+				overallTestState = TestState.OK;
+			}
 		}
 	}
 
-	
-	public enum TestStateType 
-	{
-		UNIT, 
-		ATC
+	protected void setAbapPackagesTestState(List<AbapPackageTestState> packageTestStates, TestState testState,
+			TestStateType teststateType) {
+
+		// continuousIntegrationPresenter.updatePackageTestStates(packageTestStates);
+
+		if (teststateType == TestStateType.UNIT) {
+			ViewModel.INSTANCE.setUnitState(testState);
+		} else {
+			ViewModel.INSTANCE.setAtcState(testState);
+		}
+	}
+
+	public enum TestStateType {
+		UNIT, ATC
 	}
 
 }

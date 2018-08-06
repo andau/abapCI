@@ -3,6 +3,7 @@ package abapci.handlers;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.sap.adt.communication.exceptions.CommunicationException;
@@ -32,10 +33,10 @@ public class AbapUnitHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		String packageName = event.getParameter("1");
-		return executePackage(packageName);
+		return executePackage(null, packageName);
 	}
 
-	public UnitTestResultSummary executePackage(String packageName) {
+	public UnitTestResultSummary executePackage(IProject project, String packageName) {
 
 		IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore();
 		String destinationId = prefs.getString(PreferenceConstants.PREF_DEV_PROJECT);
@@ -62,7 +63,10 @@ public class AbapUnitHandler extends AbstractHandler {
 
 		try {
 			IAbapUnitResult abapUnitResult = abapUnitService.executeUnitTests(task, false, packageName);
-			return TestResultSummaryFactory.create(packageName, abapUnitResult);
+			unitTestResultSummary = TestResultSummaryFactory.create(packageName, abapUnitResult);
+
+			return unitTestResultSummary;
+
 		} catch (TestRunException e) {
 			if (e.getCause() instanceof CommunicationException) {
 				unitTestResultSummary = TestResultSummaryFactory.createOffline(packageName);
@@ -81,6 +85,7 @@ public class AbapUnitHandler extends AbstractHandler {
 		return unitTestResultSummary;
 	}
 
+	@SuppressWarnings("unused")
 	private int evaluateDurations() {
 		int durations = 0;
 		FeatureFacade featureFacade = new FeatureFacade();
@@ -100,6 +105,7 @@ public class AbapUnitHandler extends AbstractHandler {
 		return durations;
 	}
 
+	@SuppressWarnings("unused")
 	private int evaluateRiskLevels() {
 		int riskLevels = 0;
 		FeatureFacade featureFacade = new FeatureFacade();

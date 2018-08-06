@@ -9,6 +9,7 @@ import abapci.manager.AtcTestManager;
 import abapci.manager.DevelopmentProcessManager;
 import abapci.manager.JenkinsManager;
 import abapci.manager.ThemeUpdateManager;
+import abapci.presenter.ContinuousIntegrationPresenter;
 
 public class FeatureProcessor {
 
@@ -20,12 +21,15 @@ public class FeatureProcessor {
 	private DevelopmentProcessManager developmentProcessManager;
 
 	private FeatureFacade featureFacade;
-	
-	public FeatureProcessor(List<String> initialPackages) {
-		
-		aUnitTestManager = new AUnitTestManager(initialPackages);
-		jenkinsManager = new JenkinsManager(initialPackages);
-		atcTestManager = new AtcTestManager(initialPackages);
+	private ContinuousIntegrationPresenter presenter;
+
+	public FeatureProcessor(ContinuousIntegrationPresenter presenter, String projectName,
+			List<String> initialPackages) {
+
+		this.presenter = presenter;
+		aUnitTestManager = new AUnitTestManager(presenter, projectName, initialPackages);
+		jenkinsManager = new JenkinsManager(presenter, projectName, initialPackages);
+		atcTestManager = new AtcTestManager(presenter, projectName, initialPackages);
 
 		themeUpdateManager = new ThemeUpdateManager();
 		developmentProcessManager = new DevelopmentProcessManager();
@@ -33,34 +37,43 @@ public class FeatureProcessor {
 		featureFacade = new FeatureFacade();
 
 	}
-	
-	public void setPackages(List<String> packageNames) 
-	{
+
+	public void setPackages(List<String> packageNames) {
 		aUnitTestManager.setPackages(packageNames);
 		atcTestManager.setPackages(packageNames);
 	}
 
 	public void processEnabledFeatures() {
 
-		if (featureFacade.getUnitFeature().isActive()) {
-			SourcecodeState oldSourcecodeState = developmentProcessManager.getSourcecodeState();
+		try {
+			if (featureFacade.getUnitFeature().isActive()) {
+				SourcecodeState oldSourcecodeState = developmentProcessManager.getSourcecodeState();
 
-			TestState unitTestState = aUnitTestManager.executeAllPackages();
-			developmentProcessManager.setUnitTeststate(unitTestState);
-			themeUpdateManager.updateTheme(developmentProcessManager.getSourcecodeState());
-
-			if (featureFacade.getAtcFeature().isActive() && unitTestState == TestState.OK
-					&& oldSourcecodeState != SourcecodeState.OK && oldSourcecodeState != SourcecodeState.ATC_FAIL) {
-				TestState atcTestState = atcTestManager.executeAllPackages();
-				developmentProcessManager.setAtcTeststate(atcTestState);
+				TestState unitTestState = aUnitTestManager.executeAllPackages(presenter.getCurrentProject(),
+						presenter.getAbapPackageTestStatesForCurrentProject());
+				developmentProcessManager.setUnitTeststate(unitTestState);
 				themeUpdateManager.updateTheme(developmentProcessManager.getSourcecodeState());
-			}
 
-			if (featureFacade.getJenkinsFeature().isActive() && unitTestState == TestState.OK
-					&& oldSourcecodeState != SourcecodeState.OK && oldSourcecodeState != SourcecodeState.ATC_FAIL) {
-				jenkinsManager.executeAllPackages();
+				presenter.updateViewsAsync(developmentProcessManager.getSourcecodeState());
+
+				if (featureFacade.getAtcFeature().isActive() && unitTestState == TestState.OK
+						&& oldSourcecodeState != SourcecodeState.OK && oldSourcecodeState != SourcecodeState.ATC_FAIL) {
+					TestState atcTestState = atcTestManager.executeAllPackages();
+					developmentProcessManager.setAtcTeststate(atcTestState);
+					themeUpdateManager.updateTheme(developmentProcessManager.getSourcecodeState());
+				}
+
+				if (featureFacade.getJenkinsFeature().isActive() && unitTestState == TestState.OK
+						&& oldSourcecodeState != SourcecodeState.OK && oldSourcecodeState != SourcecodeState.ATC_FAIL) {
+					jenkinsManager.executeAllPackages();
+				}
+
+				presenter.updateViewsAsync(developmentProcessManager.getSourcecodeState());
 			}
+		} catch (Exception ex) {
+			presenter.setStatusMessage("Testrun failed, exception: " + ex.getMessage());
 		}
+
 	}
 
 }

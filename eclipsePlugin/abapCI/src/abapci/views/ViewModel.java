@@ -15,7 +15,6 @@ import abapci.domain.ColoredProject;
 import abapci.domain.GlobalTestState;
 import abapci.domain.SourcecodeState;
 import abapci.domain.Suppression;
-import abapci.domain.TestResult;
 import abapci.domain.TestState;
 import abapci.domain.UiColor;
 
@@ -24,32 +23,19 @@ public enum ViewModel {
 
 	Viewer mainViewer;
 	Viewer suppressionsViewer;
-	Viewer coloredProjectsViewer; 
+	Viewer coloredProjectsViewer;
 	Label lblOverallTestState;
 	Label lblOverallInfoline;
 
-	private List<AbapPackageTestState> abapPackageTestStates;
+	// private List<AbapPackageTestState> abapPackageTestStates;
 	private List<Suppression> suppressions;
 	private List<ColoredProject> coloredProjects;
 
 	private TestState overallTestState;
-	private String overallInfoline; 
+	private String overallInfoline;
 	private GlobalTestState globalTestState;
 
 	private ViewModel() {
-
-		abapPackageTestStates = new ArrayList<>();
-		IEclipsePreferences packageNamePrefs = ConfigurationScope.INSTANCE.getNode("packageNames");
-
-		try {
-			for (String key : packageNamePrefs.keys()) {
-				abapPackageTestStates.add(new AbapPackageTestState(packageNamePrefs.get(key, "default"),
-						TestState.UNDEF.toString(), new TestResult(), new TestResult()));
-			}
-		} catch (BackingStoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 		overallTestState = TestState.UNDEF;
 		globalTestState = new GlobalTestState(SourcecodeState.UNDEF);
@@ -94,50 +80,28 @@ public enum ViewModel {
 		INSTANCE.coloredProjectsViewer = viewer;
 	}
 
-	public List<AbapPackageTestState> getPackageTestStates() {
-		return abapPackageTestStates;
-	}
-
 	public void setPackageTestStates(List<AbapPackageTestState> abapPackageTestStates) {
-		this.abapPackageTestStates = abapPackageTestStates;
+		// this.abapPackageTestStates = abapPackageTestStates;
 		Runnable runnable = () -> mainViewer.setInput(abapPackageTestStates);
 		Display.getDefault().asyncExec(runnable);
 	}
 
 	public void updatePackageTestStates() {
-		Runnable runnable = () -> mainViewer.setInput(abapPackageTestStates);
-		Display.getDefault().asyncExec(runnable);
+		// Runnable runnable = () -> mainViewer.setInput(abapPackageTestStates);
+		// Display.getDefault().asyncExec(runnable);
 	}
 
 	public void setUnitState(TestState testState) {
 		globalTestState.setUnitTeststate(testState);
-		setGlobalTestState();
 	}
 
 	public void setAtcState(TestState testState) {
 		globalTestState.setAtcTeststate(testState);
-		setGlobalTestState();
 	}
 
-	private void setGlobalTestState() {
-		try {
-			Runnable runnable = () -> {
-				lblOverallTestState.setText(globalTestState.getTestStateOutputForDashboard());
-				lblOverallTestState.setBackground(globalTestState.getColor());
-			};
-			Display.getDefault().asyncExec(runnable);
+	public void setGlobalInfoline(String text) {
+		lblOverallInfoline.setText(text);
 
-		} catch (
-
-		Exception e) {
-			// TODO Handling, wenn Ãœbersichts-View nicht angezeigt wird
-		}
-	}
-	
-	public void setGlobalInfoline(String text) 
-	{
-		lblOverallInfoline.setText(text); 
-		
 	}
 
 	public TestState getOverallTestState() {
@@ -149,11 +113,11 @@ public enum ViewModel {
 	}
 
 	public String getOverallInfoline() {
-		return INSTANCE.overallInfoline; 		
+		return INSTANCE.overallInfoline;
 	}
 
 	public void setOverallInfoline(String infoline) {
-		lblOverallInfoline.setText(infoline); 	
+		lblOverallInfoline.setText(infoline);
 	}
 
 	public List<Suppression> getSuppressions() {
@@ -170,11 +134,11 @@ public enum ViewModel {
 
 	public void setOverallLblInfoline(Label infoline) {
 		INSTANCE.lblOverallInfoline = infoline;
-		
+
 	}
 
 	public List<ColoredProject> getColoredProjects() {
-		return coloredProjects; 
+		return coloredProjects;
 	}
 
 	public void setColoredProjects(List<ColoredProject> coloredProjects) {
@@ -182,9 +146,7 @@ public enum ViewModel {
 
 		Runnable runnable = () -> coloredProjectsViewer.setInput(coloredProjects);
 		Display.getDefault().asyncExec(runnable);
-		
+
 	}
-
-
 
 }

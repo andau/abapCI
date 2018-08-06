@@ -30,35 +30,13 @@
       <handler
        class="abapci.handlers.AbapGitHandler"
        commandId="com.abapci.abapgit.open">
-       <activeWhen>
-       <iterate>
-          <and>
-             <or>
-                <instanceof
-                      value="com.sap.adt.tools.core.IAdtObjectReference">
-                </instanceof>
-                <adapt
-                      type="com.sap.adt.tools.core.IAdtObjectReference">
-                </adapt>
-             </or>
-             <or>
-                <instanceof
-                      value="com.sap.adt.project.IProjectProvider">
-                </instanceof>
-                <adapt
-                      type="com.sap.adt.project.IProjectProvider">
-                </adapt>
-             </or>
-          </and>
-       </iterate>
-    </activeWhen>
  </handler>
       
       
    </extension>
    
    <extension
-         point="org.eclipse.ui.bindings">l
+         point="org.eclipse.ui.bindings">
       <key
             commandId="com.abapci.abapgit.open"
             contextId="org.eclipse.ui.contexts.window"
@@ -78,6 +56,61 @@
   
    <extension
          point="org.eclipse.ui.menus">
+
+     <menuContribution
+            locationURI="popup:#EditorContext?after=group.edit">
+         <command
+             commandId="com.abapci.abapgit.open"
+             helpContextId="com.sap.adt.abapdev.guide.doc.user.get_whereused_list_action_context"
+             label="abapGit"
+             icon="icons/git.ico"
+             style="push"
+             tooltip="Open abapGit with SAP Transaction">
+               <visibleWhen
+                  checkEnabled="false">
+             <iterate
+                   ifEmpty="false"
+                   operator="or">
+                <and>
+                      property="com.sap.adt.project.hasNature"
+                         value="com.sap.adt.abapnature">
+                </and>
+             </iterate>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+      
+          <menuContribution
+            locationURI="toolbar:com.sap.adt.tools.core.ui.toolbar">
+         <command
+             commandId="com.abapci.abapgit.open"
+             helpContextId="com.sap.adt.abapdev.guide.doc.user.get_whereused_list_action_context"
+             label="abapGit"
+             icon="icons/git.ico"
+             style="push"
+             tooltip="Open abapGit with SAP Transaction">
+           <visibleWhen checkEnabled="false">
+             <iterate
+                   ifEmpty="false"
+                   operator="or">
+                     <or>
+                        <instanceof
+                              value="com.sap.adt.projectexplorer.ui.node.IAbapRepositoryObjectNode">
+                        </instanceof>
+                        
+					   	<with variable="activeShell">
+					        <test
+					              forcePluginActivation="true"
+					              property="com.sap.adt.tools.core.ui.testers.isAieEditor"
+					              value="true">
+					        </test>
+					   	</with>                     
+	                 </or>
+               </iterate>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+    
       <menuContribution
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
          <toolbar
@@ -128,7 +161,7 @@
           </visibleWhen>
        </command>
     </menuContribution>
-
+    
    </extension>
    
    <extension

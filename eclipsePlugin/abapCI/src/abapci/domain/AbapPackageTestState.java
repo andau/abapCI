@@ -5,6 +5,7 @@ import java.beans.PropertyChangeSupport;
 import java.text.SimpleDateFormat;
 
 public class AbapPackageTestState {
+	private String projectName;
 	private String packageName;
 	private String jenkinsInfo;
 	private TestResult aUnitTestResult;
@@ -15,19 +16,22 @@ public class AbapPackageTestState {
 	public AbapPackageTestState() {
 	}
 
-	public AbapPackageTestState(String packageName, String jenkinsInfo, TestResult aUnitTestResult, TestResult atcTestResult) {
+	public AbapPackageTestState(String projectName, String packageName, String jenkinsInfo, TestResult aUnitTestResult,
+			TestResult atcTestResult) {
 		super();
+		this.projectName = projectName;
 		this.packageName = packageName;
 		this.jenkinsInfo = jenkinsInfo;
 		this.aUnitTestResult = aUnitTestResult;
 		this.atcTestResult = atcTestResult;
 	}
 
-	public AbapPackageTestState(String packageName) {
+	public AbapPackageTestState(String projectName, String packageName) {
 		super();
+		this.projectName = projectName;
 		this.packageName = packageName;
 		this.jenkinsInfo = TestState.UNDEF.toString();
-		this.aUnitTestResult = new TestResult(); 
+		this.aUnitTestResult = new TestResult();
 		this.atcTestResult = new TestResult();
 	}
 
@@ -37,6 +41,10 @@ public class AbapPackageTestState {
 
 	public void removePropertyChangeListener(PropertyChangeListener listener) {
 		propertyChangeSupport.removePropertyChangeListener(listener);
+	}
+
+	public String getProjectName() {
+		return projectName;
 	}
 
 	public String getPackageName() {
@@ -50,17 +58,24 @@ public class AbapPackageTestState {
 	public String getAUnitInfo() {
 		return aUnitTestResult.getTestResultInfo();
 	}
-	
+
+	public String getAUnitNumOk() {
+		return Integer.toString(aUnitTestResult.getNumOk());
+	}
+
+	public String getAUnitNumErr() {
+		return Integer.toString(aUnitTestResult.getActiveErrors().size());
+	}
+
 	public String getAUnitNumSuppressed() {
 		return Integer.toString(aUnitTestResult.getSuppressedErrors().size());
 	}
 
 	public String getAUnitLastRun() {
-		return aUnitTestResult.getTestState() != TestState.UNDEF ? 
-			new SimpleDateFormat("HH:mm").format(aUnitTestResult.getLastRun()) : ""; 	
+		return aUnitTestResult.getTestState() != TestState.UNDEF
+				? new SimpleDateFormat("HH:mm").format(aUnitTestResult.getLastRun())
+				: "";
 	}
-
-
 
 	public void setJenkinsInfo(String jenkinsInfo) {
 		this.jenkinsInfo = jenkinsInfo;
@@ -75,13 +90,27 @@ public class AbapPackageTestState {
 	public String getAtcInfo() {
 		return atcTestResult.getTestResultInfo();
 	}
+
+	public String getAtcNumErr() {
+		return Integer.toString(this.atcTestResult.getActiveErrors().size());
+	}
+
+	public String getAtcNumWarn() {
+		return "n/a";
+	}
+
+	public String getAtcNumInfo() {
+		return "n/a";
+	}
+
 	public String getAtcNumSuppressed() {
-		return Integer.toString(this.atcTestResult.getSuppressedErrors().size()); 
+		return Integer.toString(this.atcTestResult.getSuppressedErrors().size());
 	}
 
 	public String getAtcLastRun() {
-		return atcTestResult.getTestState() != TestState.UNDEF ? 
-				new SimpleDateFormat("HH:mm").format(atcTestResult.getLastRun()) : ""; 
+		return atcTestResult.getTestState() != TestState.UNDEF
+				? new SimpleDateFormat("HH:mm").format(atcTestResult.getLastRun())
+				: "";
 	}
 
 	public void setAtcInfo(TestResult atcTestResult) {
@@ -91,10 +120,8 @@ public class AbapPackageTestState {
 
 	@Override
 	public String toString() {
-		return packageName + " " + jenkinsInfo + " " + aUnitTestResult.getTestState() + " " + atcTestResult.getTestState();
+		return packageName + " " + jenkinsInfo + " " + aUnitTestResult.getTestState() + " "
+				+ atcTestResult.getTestState();
 	}
-
-
-
 
 }

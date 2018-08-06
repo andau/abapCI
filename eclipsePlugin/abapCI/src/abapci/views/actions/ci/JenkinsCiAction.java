@@ -1,26 +1,24 @@
 package abapci.views.actions.ci;
 
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map.Entry;
 
 import abapci.AbapCiPlugin;
-import abapci.domain.AbapPackageTestState;
 import abapci.handlers.JenkinsHandler;
-import abapci.views.ViewModel;
+import abapci.presenter.ContinuousIntegrationPresenter;
 
 public class JenkinsCiAction extends AbstractCiAction {
 
-	public JenkinsCiAction(String label, String tooltip) {
+	public JenkinsCiAction(ContinuousIntegrationPresenter continuousIntegrationPresenter, String label,
+			String tooltip) {
 		this.setText(label);
 		this.setToolTipText(tooltip);
 		this.setImageDescriptor(AbapCiPlugin.getImageDescriptor("icons/jenkins.ico"));
+		this.continuousIntegrationPresenter = continuousIntegrationPresenter;
 	}
 
 	@Override
 	public void run() {
-
-		List<AbapPackageTestState> packageTestStates = ViewModel.INSTANCE.getPackageTestStates();
 
 		for (Iterator<Entry<String, String>> iter = getSelectedPackages().entrySet().iterator(); iter.hasNext();) {
 
@@ -32,13 +30,8 @@ public class JenkinsCiAction extends AbstractCiAction {
 				// TODO
 			}
 
-			for (AbapPackageTestState packageTestState : packageTestStates) {
-				if (packageName == packageTestState.getPackageName()) {
-					packageTestState.setJenkinsInfo("Job triggered");
-				}
+			continuousIntegrationPresenter.updateViewsAsync();
 
-				ViewModel.INSTANCE.updatePackageTestStates();
-			}
 		}
 	}
 }

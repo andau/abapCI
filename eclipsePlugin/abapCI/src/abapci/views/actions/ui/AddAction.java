@@ -1,50 +1,33 @@
 package abapci.views.actions.ui;
 
-import java.util.List;
-
-import org.eclipse.core.runtime.preferences.ConfigurationScope;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
-import org.osgi.service.prefs.BackingStoreException;
 
-import abapci.domain.AbapPackageTestState;
-import abapci.lang.UiTexts;
-import abapci.views.ViewModel;
+import abapci.presenter.ContinuousIntegrationPresenter;
+import abapci.views.wizard.AddContinuousIntegrationConfigPage;
 
 public class AddAction extends Action {
-    
-	
-	public AddAction(String label) {
+
+	private ContinuousIntegrationPresenter presenter;
+
+	public AddAction(ContinuousIntegrationPresenter presenter, String label) {
 		this.setText(label);
 		this.setImageDescriptor(
 				PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
+		this.presenter = presenter;
 
 	}
 
 	public void run() {
 
-		List<AbapPackageTestState> viewerAbapPackageTestStates = ViewModel.INSTANCE.getPackageTestStates();
+		AddContinuousIntegrationConfigPage ciConfigPage = new AddContinuousIntegrationConfigPage(
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), presenter, null);
+		if (ciConfigPage.open() == Window.OK) {
 
-		InputDialog packageNameDialog = new InputDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
-				this.getText(), UiTexts.LABEL_LONG_ACTION_ADD_NEW_PACKAGE, "", null);
-
-		if (packageNameDialog.open() == Window.OK) {
-			viewerAbapPackageTestStates.add(new AbapPackageTestState(packageNameDialog.getValue()));
-			ViewModel.INSTANCE.setPackageTestStates(viewerAbapPackageTestStates);
-
-			IEclipsePreferences preferences = ConfigurationScope.INSTANCE.getNode("packageNames");
-			preferences.put(packageNameDialog.getValue(), packageNameDialog.getValue());
-
-			try {
-				preferences.flush();
-			} catch (BackingStoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			// TODO
 		}
+
 	}
 }

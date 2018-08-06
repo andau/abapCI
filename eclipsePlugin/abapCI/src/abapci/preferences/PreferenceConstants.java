@@ -19,7 +19,7 @@ public class PreferenceConstants {
 
 	public static final String PREF_UNIT_RUN_ON_SAVE = "abapUnitRunOnSavePreference";
 
-	public static final String PREF_ATC_RUN_AFTER_UNIT_TESTS_TURN_GREEN = "atcRunAfterUnitTestsTurnGreenPreference";
+	public static final String PREF_ATC_RUN_AFTER_UT_TURN_GREEN = "atcRunAfterUnitTestsTurnGreenPreference";
 
 	public static final String PREF_ATC_VARIANT = "atcVariantPreference";
 
@@ -50,6 +50,8 @@ public class PreferenceConstants {
 	public static final String PREF_UNIT_RUN_DURATION_MEDIUM_TESTS_ENABLED = "unitRunDurationMediumTestsEnabled";
 
 	public static final String PREF_UNIT_RUN_DURATION_SHORT_TESTS_ENABLED = "unitRunDurationShortTestsEnabled";
+
+	public static final String PREF_DIALOG_NEW_PACKAGE_FOR_CI_RUN_ENABLED = "dialogNewPackageForCiRunEnabled";
 
 	private PreferenceConstants() {
 	}

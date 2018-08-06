@@ -10,7 +10,10 @@ import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import abapci.feature.FeatureFacade;
 import abapci.model.ColoredProjectModel;
+import abapci.model.ContinuousIntegrationModel;
+import abapci.presenter.ContinuousIntegrationPresenter;
 import abapci.presenter.GeneralThemePresenter;
 
 /**
@@ -21,12 +24,15 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 	// The plug-in ID
 	public static final String PLUGIN_ID = "com.abapci.core"; //$NON-NLS-1$
 
+	public ContinuousIntegrationPresenter continuousIntegrationPresenter;
+
 	// The shared instance
 	private static AbapCiPlugin plugin;
 
 	private static IResourceChangeListener resourceChangeListener;
 	private static IPartListener2 partListener;
 
+	private FeatureFacade featureFacade;
 	private GeneralThemePresenter generalThemePresenter;
 
 	/**
@@ -45,14 +51,21 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 
-		generalThemePresenter = new GeneralThemePresenter(new ColoredProjectModel());
+		featureFacade = new FeatureFacade();
+		if (featureFacade.getUnitFeature().isActive() || featureFacade.getAtcFeature().isActive()) {
+			generalThemePresenter = new GeneralThemePresenter(new ColoredProjectModel());
+			continuousIntegrationPresenter = new ContinuousIntegrationPresenter(null, new ContinuousIntegrationModel(),
+					null);
+
+			initializeResourceChangeListener();
+
+		}
 
 		initializePartChangeListener();
 
 		ICommandService service = PlatformUI.getWorkbench().getService(ICommandService.class);
 		service.addExecutionListener(new SaveFormattingListener());
 
-		initializeResourceChangeListener();
 	}
 
 	/*
@@ -89,7 +102,7 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 
 	public void initializeResourceChangeListener() {
 		if (resourceChangeListener == null) {
-			resourceChangeListener = new GeneralResourceChangeListener();
+			resourceChangeListener = new GeneralResourceChangeListener(continuousIntegrationPresenter);
 			ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceChangeListener,
 					IResourceChangeEvent.POST_CHANGE);
 		}

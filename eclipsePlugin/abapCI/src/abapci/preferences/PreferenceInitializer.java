@@ -13,7 +13,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.PREF_DEV_PROJECT, "");
 		store.setDefault(PreferenceConstants.PREF_UNIT_RUN_INTERVAL, 0);
 		store.setDefault(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE, true);
-		store.setDefault(PreferenceConstants.PREF_ATC_RUN_AFTER_UNIT_TESTS_TURN_GREEN, false);
+		store.setDefault(PreferenceConstants.PREF_ATC_RUN_AFTER_UT_TURN_GREEN, false);
 
 		store.setDefault(PreferenceConstants.PREF_JENKINS_URL, "<jenkins_host>:<jenkins_port>");
 		store.setDefault(PreferenceConstants.PREF_JENKINS_USERNAME, "jenkins_username");
@@ -31,6 +31,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.PREF_UNIT_RUN_DURATION_LONG_TESTS_ENABLED, true);
 		store.setDefault(PreferenceConstants.PREF_UNIT_RUN_DURATION_MEDIUM_TESTS_ENABLED, true);
 		store.setDefault(PreferenceConstants.PREF_UNIT_RUN_DURATION_SHORT_TESTS_ENABLED, true);
+		store.setDefault(PreferenceConstants.PREF_DIALOG_NEW_PACKAGE_FOR_CI_RUN_ENABLED, true);
 
 	}
 

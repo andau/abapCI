@@ -8,34 +8,49 @@ import java.util.stream.Collectors;
 
 public class TestResult {
 
+	private boolean activated;
 	private boolean undefined;
 	private boolean testrunOk;
+	private int numTests;
 	private List<InvalidItem> invalidItems;
 	private Date lastRun;
 
-	public TestResult(boolean testrunOk, List<InvalidItem> invalidItems) {
+	public TestResult(boolean testrunOk, int numTests, List<InvalidItem> invalidItems) {
+		this.activated = true;
 		this.testrunOk = testrunOk;
+		this.numTests = numTests;
 		this.invalidItems = invalidItems;
-		this.lastRun = Calendar.getInstance().getTime(); 
+		this.lastRun = Calendar.getInstance().getTime();
+	}
+
+	public TestResult(boolean activated) {
+		this.activated = activated;
+		this.invalidItems = new ArrayList<>();
+		this.lastRun = Calendar.getInstance().getTime();
 	}
 
 	public TestResult() {
+		this.activated = true;
 		undefined = true;
-		this.invalidItems = new ArrayList<>(); 
-		this.lastRun = Calendar.getInstance().getTime(); 
+		this.invalidItems = new ArrayList<>();
+		this.lastRun = Calendar.getInstance().getTime();
 	}
 
 	public TestState getTestState() {
-		
-		if (undefined) {
-			return TestState.UNDEF;
+
+		TestState testState;
+
+		if (!activated) {
+			testState = TestState.DEACT;
+		} else if (undefined) {
+			testState = TestState.UNDEF;
+		} else if (!testrunOk) {
+			testState = TestState.OFFL;
+		} else {
+			testState = getActiveErrors().isEmpty() ? TestState.OK : TestState.NOK;
 		}
 
-		if (!testrunOk) {
-			return TestState.OFFL;
-		} else {
-			return getActiveErrors().isEmpty() ? TestState.OK : TestState.NOK;
-		}
+		return testState;
 	}
 
 	public List<InvalidItem> getActiveErrors() {
@@ -46,19 +61,20 @@ public class TestResult {
 		return invalidItems.stream().filter(item -> item.isSuppressed()).collect(Collectors.toList());
 	}
 
+	public int getNumOk() {
+		return numTests - getActiveErrors().size();
+	}
+
 	public String getTestResultInfo() {
-		if (getTestState() == TestState.NOK) 
-		{
-			return "Errors: " + getActiveErrors().size(); 
-		}
-		else 
-		{
-			return getTestState().toString(); 
-		}
+		return getTestState().toString();
 	}
 
 	public Date getLastRun() {
 		return lastRun;
+	}
+
+	public InvalidItem getFirstInvalidItem() {
+		return invalidItems.isEmpty() ? null : invalidItems.get(0);
 	}
 
 }

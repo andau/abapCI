@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-Vendor: %Bundle-Vendor
 Bundle-SymbolicName: com.abapci.core;singleton:=true
-Bundle-Version: 0.3.13
+Bundle-Version: 0.3.14
 Bundle-Activator: abapci.AbapCiPlugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -52,3 +52,4 @@ Import-Package: com.sap.adt.sapgui.ui.editors,
  com.sap.adt.tools.abapsource.abapunit.services,
  org.eclipse.core.resources,
  org.eclipse.jface.text
+Automatic-Module-Name: com.abapci.core

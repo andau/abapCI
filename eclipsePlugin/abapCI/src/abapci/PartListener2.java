@@ -4,15 +4,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.text.source.ISourceViewer;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.ViewReference;
 import org.eclipse.ui.texteditor.SourceViewerDecorationSupport;
 import org.eclipse.ui.texteditor.StatusTextEditor;
 
@@ -22,14 +19,14 @@ import abapci.feature.FeatureFacade;
 import abapci.presenter.GeneralThemePresenter;
 import abapci.utils.AnnotationRuleColorChanger;
 
-@SuppressWarnings("restriction")
 public class PartListener2 implements IPartListener2 {
+
 	private GeneralThemePresenter generalThemePresenter;
 	private AnnotationRuleColorChanger annotationRuleColorChanger;
 
 	public PartListener2(GeneralThemePresenter generalThemePresenter) {
 		this.generalThemePresenter = generalThemePresenter;
-		annotationRuleColorChanger = new AnnotationRuleColorChanger();
+		this.annotationRuleColorChanger = new AnnotationRuleColorChanger();
 
 	}
 
@@ -80,47 +77,39 @@ public class PartListener2 implements IPartListener2 {
 
 	private void formatPart() {
 
-		FeatureFacade featureFacade = new FeatureFacade();
+		try {
+			FeatureFacade featureFacade = new FeatureFacade();
 
-		IProject currentProject = null;
+			IProject currentProject = ProjectUtil.getCurrentProject();
 
-		IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			IEditorPart activeEditor = activePage.getActiveEditor();
 
-		IEditorPart activeEditor = activePage.getActiveEditor();
-		IWorkbenchPartReference partReference = activePage.getActivePartReference();
-		if (!partReference.getClass().equals(ViewReference.class) && (activeEditor != null)) {
-			IEditorInput input = activeEditor.getEditorInput();
-			currentProject = input.getAdapter(IProject.class);
-			if (currentProject == null) {
-				IResource resource = input.getAdapter(IResource.class);
-				if (resource != null) {
-					currentProject = resource.getProject();
+			if (activeEditor != null) {
+
+				try {
+					String currentProjectname = (currentProject == null) ? "UNDEF" : currentProject.getName();
+					UiColor uiColor = generalThemePresenter.getUiColor(currentProjectname);
+
+					boolean changeColorOfTabHeader = featureFacade.getColoredProjectsTabHeaderFeature().isActive();
+					boolean changeColorOfLeftRuler = featureFacade.getColoredProjectsLeftRulerFeature().isActive();
+					boolean changeColorOfRightRuler = featureFacade.getColoredProjectsRightRulerFeature().isActive();
+
+					if (changeColorOfTabHeader) {
+						generalThemePresenter.updateEditorLabel(uiColor);
+					}
+
+					annotationRuleColorChanger.change(activeEditor, uiColor, changeColorOfLeftRuler,
+							changeColorOfRightRuler);
+
+				} catch (AbapCiColoredProjectFileParseException e) {
+					// if there was an error retrieving the color we skip this feature,
+					// the user should already got an info message in the ABAP Colored Projects view
+					e.printStackTrace();
 				}
 			}
-		}
-
-		if (activeEditor != null) {
-
-			try {
-				String currentProjectname = (currentProject == null) ? "UNDEF" : currentProject.getName();
-				UiColor uiColor = generalThemePresenter.getUiColor(currentProjectname);
-
-				boolean changeColorOfTabHeader = featureFacade.getColoredProjectsTabHeaderFeature().isActive();
-				boolean changeColorOfLeftRuler = featureFacade.getColoredProjectsLeftRulerFeature().isActive();
-				boolean changeColorOfRightRuler = featureFacade.getColoredProjectsRightRulerFeature().isActive();
-
-				if (changeColorOfTabHeader) {
-					generalThemePresenter.updateEditorLabel(uiColor);
-				}
-
-				annotationRuleColorChanger.change(activeEditor, uiColor, changeColorOfLeftRuler,
-						changeColorOfRightRuler);
-
-			} catch (AbapCiColoredProjectFileParseException e) {
-				// if there was an error retrieving the color we skip this feature,
-				// the user should already got an info message in the ABAP Colored Projects view
-				e.printStackTrace();
-			}
+		} catch (Exception ex) {
+			// if there happens any error while formatting the editor, we skip it for now
 		}
 
 	}

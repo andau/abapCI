@@ -31,7 +31,7 @@ public class FeatureFactory {
 	public AtcFeature createAtcFeature() {
 		initPrefs();
 		AtcFeature feature = new AtcFeature();
-		feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_ATC_RUN_AFTER_UNIT_TESTS_TURN_GREEN));
+		feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_ATC_RUN_AFTER_UT_TURN_GREEN));
 		feature.setVariant(prefs.getString(PreferenceConstants.PREF_ATC_VARIANT));
 		return feature;
 	}
@@ -109,6 +109,10 @@ public class FeatureFactory {
 		case UNIT_RUN_DURATION_SHORT_TESTS:
 			feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_UNIT_RUN_DURATION_SHORT_TESTS_ENABLED));
 			break;
+		case SHOW_DIALOG_NEW_PACKAGE_FOR_CI_RUN:
+			feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_DIALOG_NEW_PACKAGE_FOR_CI_RUN_ENABLED));
+			break;
+
 		default:
 			throw new UnsupportedOperationException();
 		}

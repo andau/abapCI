@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.sap.adt.activation.AdtActivationPlugin;
 import com.sap.adt.activation.IActivationService;
@@ -15,9 +14,8 @@ import com.sap.adt.activation.model.inactiveObjects.IInactiveCtsObjectList;
 import com.sap.adt.destinations.logon.AdtLogonServiceFactory;
 import com.sap.adt.tools.core.model.adtcore.IAdtObjectReference;
 
-import abapci.AbapCiPlugin;
+import abapci.Exception.InactivatedObjectEvaluationException;
 import abapci.domain.ActivationObject;
-import abapci.preferences.PreferenceConstants;
 
 public class SapConnection {
 
@@ -27,30 +25,33 @@ public class SapConnection {
 		currentInactiveObjects = new ArrayList<>();
 	}
 
-	public boolean isConnected() {
-		IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore();
-		String projectName = prefs.getString(PreferenceConstants.PREF_DEV_PROJECT);
+	public boolean isConnected(String projectName) {
 		return AdtLogonServiceFactory.createLogonService().isLoggedOn(projectName);
 	}
 
-	public List<ActivationObject> unprocessedActivatedObjects() {
-		List<ActivationObject> activatedObjects = new ArrayList<>();
+	public List<ActivationObject> unprocessedActivatedObjects(String projectName)
+			throws InactivatedObjectEvaluationException {
+		try {
 
-		IActivationServiceFactory activationServiceFactory = AdtActivationPlugin.getDefault()
-				.getActivationServiceFactory();
-		IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore();
-		String destinationId = prefs.getString(PreferenceConstants.PREF_DEV_PROJECT);
-		IActivationService activationService = activationServiceFactory.createActivationService(destinationId);
-		IInactiveCtsObjectList newInactiveCtsObjectList = activationService
-				.getInactiveCtsObjects(new NullProgressMonitor());
-		List<ActivationObject> newInactiveObjects = convertToStringList(newInactiveCtsObjectList);
+			List<ActivationObject> activatedObjects = new ArrayList<>();
 
-		if (checkForNewInactiveItems(newInactiveObjects, currentInactiveObjects)) {
-			activatedObjects = currentInactiveObjects;
+			IActivationServiceFactory activationServiceFactory = AdtActivationPlugin.getDefault()
+					.getActivationServiceFactory();
+			IActivationService activationService = activationServiceFactory.createActivationService(projectName);
+			IInactiveCtsObjectList newInactiveCtsObjectList = activationService
+					.getInactiveCtsObjects(new NullProgressMonitor());
+			List<ActivationObject> newInactiveObjects = convertToStringList(newInactiveCtsObjectList);
+
+			if (checkForNewInactiveItems(newInactiveObjects, currentInactiveObjects)) {
+				activatedObjects = currentInactiveObjects;
+			}
+			currentInactiveObjects = newInactiveObjects;
+
+			return activatedObjects;
+
+		} catch (Exception ex) {
+			throw new InactivatedObjectEvaluationException(ex);
 		}
-		currentInactiveObjects = newInactiveObjects;
-
-		return activatedObjects;
 
 	}
 
@@ -61,13 +62,11 @@ public class SapConnection {
 
 	private List<ActivationObject> convertToStringList(IInactiveCtsObjectList inactiveCtsObjectList) {
 		List<ActivationObject> activationObjects = new ArrayList<>();
-		for (Iterator<IInactiveCtsObject> iterator = inactiveCtsObjectList.getEntry().iterator(); iterator
-				.hasNext();) {
+		for (Iterator<IInactiveCtsObject> iterator = inactiveCtsObjectList.getEntry().iterator(); iterator.hasNext();) {
 			IInactiveCtsObject ctsObject = iterator.next();
 			if (ctsObject.hasObjectRef()) {
 				IAdtObjectReference ref = ctsObject.getObject().getRef();
-				if (!ref.getName().equals("Z_BAPI_HE_VARIANT_CALC"))
-				{				   
+				if (!ref.getName().equals("Z_BAPI_HE_VARIANT_CALC")) {
 					activationObjects.add(new ActivationObject(ref.getPackageName(), ref.getName()));
 				}
 			}

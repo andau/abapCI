@@ -24,15 +24,15 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 		emptyLabel0.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE,
-				"&Run ABAP Unit tests when object activated", getFieldEditorParent()));
+				"&Run Unit tests after an ABAP object is activated", getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.PREF_DEV_PROJECT, "&ABAP Development Project:",
 				getFieldEditorParent()));
 
 		addField(new IntegerFieldEditor(PreferenceConstants.PREF_UNIT_RUN_INTERVAL,
 				"&ABAP Unit test interval (minutes):", getFieldEditorParent()));
 
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ATC_RUN_AFTER_UNIT_TESTS_TURN_GREEN,
-				"&Run ATC when after successful Unit testrun", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ATC_RUN_AFTER_UT_TURN_GREEN,
+				"&Run ATC when after successful Unit testrun (experimental)", getFieldEditorParent()));
 
 		addField(new StringFieldEditor(PreferenceConstants.PREF_ATC_VARIANT, "&Run ATC with variant:",
 				getFieldEditorParent()));
@@ -40,6 +40,8 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 		createSourceCodeFormattingChapter();
 
 		createColorChangeChapter();
+
+		createHelperDialogsChapter();
 
 		createJenkinsChapter();
 
@@ -105,6 +107,15 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 
 	}
 
+	private void createHelperDialogsChapter() {
+		Label emptyLabel1 = new Label(getFieldEditorParent(), SWT.NONE);
+		emptyLabel1.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
+
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_DIALOG_NEW_PACKAGE_FOR_CI_RUN_ENABLED,
+				"&Show a dialog when a new package for the CI Run is detected", getFieldEditorParent()));
+	}
+
+	@SuppressWarnings("unused")
 	private void createAbapUnitDetailsChapter() {
 
 		Label emptyLabelAbapUnitDetails = new Label(getFieldEditorParent(), SWT.NONE);

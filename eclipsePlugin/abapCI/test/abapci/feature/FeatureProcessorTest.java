@@ -22,6 +22,7 @@ import abapci.manager.AUnitTestManager;
 import abapci.manager.AtcTestManager;
 import abapci.manager.ThemeUpdateManager;
 import abapci.preferences.PreferenceConstants;
+import abapci.presenter.ContinuousIntegrationPresenter;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(AbapCiPlugin.class)
@@ -43,6 +44,8 @@ public class FeatureProcessorTest {
 	AbapCiPlugin abapCiPlugin;
 	@Mock
 	ThemeUpdateManager themeUpdateManager;
+	@Mock
+	ContinuousIntegrationPresenter continuousIntegrationPresenter;
 
 	@Before
 	public void setUp() throws Exception {
@@ -52,11 +55,16 @@ public class FeatureProcessorTest {
 		Whitebox.setInternalState(featureFactory, "prefs", preferenceStore);
 		Whitebox.setInternalState(featureFacade, "featureFactory", featureFactory);
 
-		featureProcessor = new FeatureProcessor(new ArrayList<String>());
+		ContinuousIntegrationPresenter presenter = new ContinuousIntegrationPresenter(null,
+				new ContinuousIntegrationTestModel(), null);
+		String projectName = "";
+		featureProcessor = new FeatureProcessor(presenter, projectName, new ArrayList<String>());
 		Whitebox.setInternalState(featureProcessor, "featureFacade", featureFacade);
 		Whitebox.setInternalState(featureProcessor, "aUnitTestManager", aUnitTestManager);
 		Whitebox.setInternalState(featureProcessor, "atcTestManager", atcTestManager);
 		Whitebox.setInternalState(featureProcessor, "themeUpdateManager", themeUpdateManager);
+		Whitebox.setInternalState(continuousIntegrationPresenter, "continuousIntegrationPresenter",
+				continuousIntegrationPresenter);
 
 	}
 
@@ -64,7 +72,7 @@ public class FeatureProcessorTest {
 	public void unitOkTest() throws Exception {
 
 		setMockedPreferences(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE, true);
-		setMockedPreferences(PreferenceConstants.PREF_ATC_RUN_AFTER_UNIT_TESTS_TURN_GREEN, false);
+		setMockedPreferences(PreferenceConstants.PREF_ATC_RUN_AFTER_UT_TURN_GREEN, false);
 
 		verifyUpdateThemeCallAfterUnitRun(TestState.OK, SourcecodeState.OK);
 	}
@@ -73,7 +81,7 @@ public class FeatureProcessorTest {
 	public void unitNokTest() throws Exception {
 
 		setMockedPreferences(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE, true);
-		setMockedPreferences(PreferenceConstants.PREF_ATC_RUN_AFTER_UNIT_TESTS_TURN_GREEN, false);
+		setMockedPreferences(PreferenceConstants.PREF_ATC_RUN_AFTER_UT_TURN_GREEN, false);
 
 		verifyUpdateThemeCallAfterUnitRun(TestState.NOK, SourcecodeState.UT_FAIL);
 	}
@@ -82,7 +90,7 @@ public class FeatureProcessorTest {
 	public void unitUndefTest() throws Exception {
 
 		setMockedPreferences(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE, true);
-		setMockedPreferences(PreferenceConstants.PREF_ATC_RUN_AFTER_UNIT_TESTS_TURN_GREEN, false);
+		setMockedPreferences(PreferenceConstants.PREF_ATC_RUN_AFTER_UT_TURN_GREEN, false);
 
 		verifyUpdateThemeCallAfterUnitRun(TestState.UNDEF, SourcecodeState.UNDEF);
 
@@ -92,7 +100,7 @@ public class FeatureProcessorTest {
 	public void unitOfflTest() throws Exception {
 
 		setMockedPreferences(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE, true);
-		setMockedPreferences(PreferenceConstants.PREF_ATC_RUN_AFTER_UNIT_TESTS_TURN_GREEN, false);
+		setMockedPreferences(PreferenceConstants.PREF_ATC_RUN_AFTER_UT_TURN_GREEN, false);
 
 		verifyUpdateThemeCallAfterUnitRun(TestState.OFFL, SourcecodeState.OFFL);
 	}
@@ -100,7 +108,7 @@ public class FeatureProcessorTest {
 	@Test
 	public void unitOkAndAtcNokTest() throws Exception {
 		setMockedPreferences(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE, true);
-		setMockedPreferences(PreferenceConstants.PREF_ATC_RUN_AFTER_UNIT_TESTS_TURN_GREEN, true);
+		setMockedPreferences(PreferenceConstants.PREF_ATC_RUN_AFTER_UT_TURN_GREEN, true);
 
 		verfifyUpdateThemeCallAfterUnitAndAtcRun(TestState.OK, TestState.NOK, SourcecodeState.OK,
 				SourcecodeState.ATC_FAIL);
@@ -109,7 +117,7 @@ public class FeatureProcessorTest {
 	@Test
 	public void unitOkAndAtcOkTest() throws Exception {
 		setMockedPreferences(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE, true);
-		setMockedPreferences(PreferenceConstants.PREF_ATC_RUN_AFTER_UNIT_TESTS_TURN_GREEN, true);
+		setMockedPreferences(PreferenceConstants.PREF_ATC_RUN_AFTER_UT_TURN_GREEN, true);
 
 		verfifyUpdateThemeCallAfterUnitAndAtcRun(TestState.OK, TestState.OK, SourcecodeState.OK, SourcecodeState.OK);
 
@@ -118,7 +126,7 @@ public class FeatureProcessorTest {
 	@Test
 	public void unitNokAndAtcOkTest() throws Exception {
 		setMockedPreferences(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE, true);
-		setMockedPreferences(PreferenceConstants.PREF_ATC_RUN_AFTER_UNIT_TESTS_TURN_GREEN, true);
+		setMockedPreferences(PreferenceConstants.PREF_ATC_RUN_AFTER_UT_TURN_GREEN, true);
 
 		verfifyUpdateThemeCallAfterUnitAndAtcRun(TestState.NOK, TestState.OK, SourcecodeState.UT_FAIL, null);
 
@@ -127,14 +135,14 @@ public class FeatureProcessorTest {
 	@Test
 	public void unitNokAndAtcNokTest() throws Exception {
 		setMockedPreferences(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE, true);
-		setMockedPreferences(PreferenceConstants.PREF_ATC_RUN_AFTER_UNIT_TESTS_TURN_GREEN, true);
+		setMockedPreferences(PreferenceConstants.PREF_ATC_RUN_AFTER_UT_TURN_GREEN, true);
 
 		verfifyUpdateThemeCallAfterUnitAndAtcRun(TestState.NOK, TestState.NOK, SourcecodeState.UT_FAIL, null);
 
 	}
 
 	private void verifyUpdateThemeCallAfterUnitRun(TestState testState, SourcecodeState sourcecodeState) {
-		PowerMockito.when(aUnitTestManager.executeAllPackages()).thenReturn(testState);
+		PowerMockito.when(aUnitTestManager.executeAllPackages(null, null)).thenReturn(testState);
 		featureProcessor.processEnabledFeatures();
 
 		Mockito.verify(themeUpdateManager, Mockito.times(1)).updateTheme(sourcecodeState);
@@ -143,7 +151,7 @@ public class FeatureProcessorTest {
 
 	private void verfifyUpdateThemeCallAfterUnitAndAtcRun(TestState unitTestState, TestState atcTestState,
 			SourcecodeState stateAfterUnit, SourcecodeState stateAfterAtc) {
-		PowerMockito.when(aUnitTestManager.executeAllPackages()).thenReturn(unitTestState);
+		PowerMockito.when(aUnitTestManager.executeAllPackages(null, null)).thenReturn(unitTestState);
 		PowerMockito.when(atcTestManager.executeAllPackages()).thenReturn(atcTestState);
 		featureProcessor.processEnabledFeatures();
 

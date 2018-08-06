@@ -21,7 +21,7 @@ public class AtcResultAnalyzer {
 		if (atcWorklist == null) {
 			testResult = new TestResult();
 		} else {
-			testResult = new TestResult(true, getInvalidItems(atcWorklist));
+			testResult = new TestResult(true, 0, getInvalidItems(atcWorklist));
 		}
 
 		return testResult;
@@ -37,7 +37,7 @@ public class AtcResultAnalyzer {
 					String location = finding.getLocation().toLowerCase();
 					boolean isSuppressed = ViewModel.INSTANCE.getSuppressions().stream()
 							.anyMatch(item -> location.contains("/" + item.getClassName().toLowerCase() + "/"));
-					
+
 					invalidItems.add(new InvalidItem(finding.getName(), finding.getDescription(), isSuppressed));
 				}
 			}
@@ -79,11 +79,12 @@ public class AtcResultAnalyzer {
 		if (atcWorklist == null) {
 			outputLabel = TestState.UNDEF.toString();
 		} else {
-			long numUnsuppressedItems = getInvalidItems(atcWorklist).stream().filter(item -> !item.isSuppressed()).count();
+			long numUnsuppressedItems = getInvalidItems(atcWorklist).stream().filter(item -> !item.isSuppressed())
+					.count();
 			if (numUnsuppressedItems > 0) {
 				outputLabel = "Findings: " + numUnsuppressedItems;
 			} else {
-				outputLabel = TestState.OK.toString(); 
+				outputLabel = TestState.OK.toString();
 			}
 		}
 		return outputLabel;
