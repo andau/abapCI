@@ -19,23 +19,30 @@ import com.sap.adt.project.AdtCoreProjectServiceFactory;
 import com.sap.adt.tools.core.internal.AbapProjectService;
 
 import abapci.domain.ContinuousIntegrationConfig;
+import abapci.feature.FeatureFacade;
 import abapci.presenter.ContinuousIntegrationPresenter;
 
 public class AddContinuousIntegrationConfigPage extends Dialog {
 
 	ContinuousIntegrationPresenter presenter;
+	FeatureFacade featureFacade;
 	Combo cbProjectContent;
 	Text packageText;
 	ContinuousIntegrationConfig ciConfig;
 
 	Button activated;
+	Button showPopUpYes;
+	boolean showPopUpButton;
 
 	public AddContinuousIntegrationConfigPage(Shell parentShell, ContinuousIntegrationPresenter presenter,
-			ContinuousIntegrationConfig ciConfig) {
+			ContinuousIntegrationConfig ciConfig, boolean showPopUpButton) {
 		super(parentShell);
 		this.presenter = presenter;
 		this.ciConfig = ciConfig;
+		this.showPopUpButton = showPopUpButton;
 		parentShell.setText("Add a package to the CI Job");
+
+		featureFacade = new FeatureFacade();
 	}
 
 	@Override
@@ -85,20 +92,15 @@ public class AddContinuousIntegrationConfigPage extends Dialog {
 
 		Composite compShowPopUp = new Composite(container, SWT.NULL);
 		compShowPopUp.setLayout(new RowLayout());
-		Button showPopUpYes = new Button(compShowPopUp, SWT.RADIO);
+		showPopUpYes = new Button(compShowPopUp, SWT.RADIO);
 		showPopUpYes.setSelection(true);
 		showPopUpYes.setText("Yes");
 		Button showPopUpNo = new Button(compShowPopUp, SWT.RADIO);
 		showPopUpNo.setSelection(false);
 		showPopUpNo.setText("No");
 
-		if (ciConfig != null) {
-			lblShowPopUpAgain.setVisible(true);
-			compShowPopUp.setVisible(true);
-		} else {
-			lblShowPopUpAgain.setVisible(false);
-			compShowPopUp.setVisible(false);
-		}
+		lblShowPopUpAgain.setVisible(showPopUpButton);
+		compShowPopUp.setVisible(showPopUpButton);
 
 		container.pack();
 
@@ -125,6 +127,10 @@ public class AddContinuousIntegrationConfigPage extends Dialog {
 
 	@Override
 	protected void okPressed() {
+		if (!showPopUpYes.getSelection()) {
+			featureFacade = new FeatureFacade();
+			featureFacade.setShowDialogNewPackageForCiRun(showPopUpYes.getSelection());
+		}
 		presenter.addContinousIntegrationConfig(new ContinuousIntegrationConfig(cbProjectContent.getText(),
 				packageText.getText(), activated.getSelection(), activated.getSelection()));
 		presenter.setViewerInput();

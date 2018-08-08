@@ -32,10 +32,6 @@ public class FeatureFacade {
 		return featureFactory.createColorChangerFeature();
 	}
 
-	public void setAtcFeatureVariant(String variant) {
-		getPrefs().setValue(PreferenceConstants.PREF_ATC_VARIANT, variant);
-	}
-
 	public JenkinsFeature getJenkinsFeature() {
 		return featureFactory.createJenkinsFeature();
 	}
@@ -92,4 +88,16 @@ public class FeatureFacade {
 	public ActiveFeature getShowDialogNewPackageForCiRun() {
 		return featureFactory.createSimpleToggleFeature(FeatureType.SHOW_DIALOG_NEW_PACKAGE_FOR_CI_RUN);
 	}
+
+	public void setShowDialogNewPackageForCiRun(boolean active) {
+		SimpleToggleFeature simpleToggleFeature = featureFactory
+				.createSimpleToggleFeature(FeatureType.SHOW_DIALOG_NEW_PACKAGE_FOR_CI_RUN);
+		simpleToggleFeature.setActive(active);
+		simpleToggleFeature.writePreference();
+	}
+
+	public void setAtcFeatureVariant(String variant) {
+		getPrefs().setValue(PreferenceConstants.PREF_ATC_VARIANT, variant);
+	}
+
 }

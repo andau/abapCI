@@ -92,6 +92,7 @@ public class FeatureFactory {
 
 		switch (featureType) {
 		case UNIT_RUN_CRITICAL_TESTS:
+			feature.setPreferenceConstant(PreferenceConstants.PREF_UNIT_RUN_CRITICAL_TESTS_ENABLED);
 			feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_UNIT_RUN_CRITICAL_TESTS_ENABLED));
 			break;
 		case UNIT_RUN_DANGEROUS_TESTS:
@@ -110,6 +111,7 @@ public class FeatureFactory {
 			feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_UNIT_RUN_DURATION_SHORT_TESTS_ENABLED));
 			break;
 		case SHOW_DIALOG_NEW_PACKAGE_FOR_CI_RUN:
+			feature.setPreferenceConstant(PreferenceConstants.PREF_DIALOG_NEW_PACKAGE_FOR_CI_RUN_ENABLED);
 			feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_DIALOG_NEW_PACKAGE_FOR_CI_RUN_ENABLED));
 			break;
 

@@ -19,6 +19,12 @@
             categoryId="abapci.commands.category"
             id="com.abapci.abapgit.open">
       </command>
+      <command
+            name="abapCI add package command"
+            categoryId="abapci.commands.category"
+            id="com.abapci.ciRun.add">
+      </command>
+
    </extension>
    
    <extension
@@ -30,7 +36,11 @@
       <handler
        class="abapci.handlers.AbapGitHandler"
        commandId="com.abapci.abapgit.open">
- </handler>
+	 </handler>
+      <handler
+       class="abapci.handlers.AbapCiRunAddHandler"
+       commandId="com.abapci.ciRun.add">
+	 </handler>
       
       
    </extension>
@@ -61,7 +71,6 @@
             locationURI="popup:#EditorContext?after=group.edit">
          <command
              commandId="com.abapci.abapgit.open"
-             helpContextId="com.sap.adt.abapdev.guide.doc.user.get_whereused_list_action_context"
              label="abapGit"
              icon="icons/git.ico"
              style="push"
@@ -84,7 +93,6 @@
             locationURI="toolbar:com.sap.adt.tools.core.ui.toolbar">
          <command
              commandId="com.abapci.abapgit.open"
-             helpContextId="com.sap.adt.abapdev.guide.doc.user.get_whereused_list_action_context"
              label="abapGit"
              icon="icons/git.ico"
              style="push"
@@ -110,6 +118,7 @@
             </visibleWhen>
          </command>
       </menuContribution>
+
     
       <menuContribution
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
@@ -161,6 +170,50 @@
           </visibleWhen>
        </command>
     </menuContribution>
+
+      <menuContribution
+            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+         <toolbar
+               id="abapci.toolbars.abapCiToolbar">
+            <command
+                  commandId="abapci.commands.abapCiViewCommand"
+                  icon="icons/abapci_logo.ico"
+                  tooltip="Open View for Continuous integration"
+                  id="abapci.toolbars.abapCiViewCommand">
+            </command>
+         </toolbar>
+      </menuContribution>
+
+      <menuContribution          
+          locationURI="popup:org.eclipse.ui.navigator.ProjectExplorer#PopupMenu?before=additions">
+       <command
+             commandId="com.abapci.ciRun.add"
+             id="com.abapci.ciRun.add"
+             label="add to CI Run"
+             style="push"
+             tooltip="Add package to CI Run">
+          <visibleWhen
+                checkEnabled="false">
+             <iterate
+                   ifEmpty="false"
+                   operator="or">
+                <and>
+                      property="com.sap.adt.project.hasNature"
+                         value="com.sap.adt.abapnature">
+                   <or>
+                      <instanceof
+                            value="com.sap.adt.tools.core.IAdtObjectReference">
+                      </instanceof>
+                      <adapt
+                            type="com.sap.adt.tools.core.IAdtObjectReference">
+                      </adapt>
+                   </or>
+                </and>
+             </iterate>
+          </visibleWhen>
+       </command>
+    </menuContribution>
+
     
    </extension>
    

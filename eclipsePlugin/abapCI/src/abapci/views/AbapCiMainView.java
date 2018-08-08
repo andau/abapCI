@@ -2,6 +2,7 @@ package abapci.views;
 
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -12,14 +13,21 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IActionBars;
@@ -27,12 +35,18 @@ import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.part.ViewPart;
+
+import com.sap.adt.project.AdtCoreProjectServiceFactory;
+import com.sap.adt.tools.abapsource.abapunit.IAbapUnitAlertStackEntry;
 
 import abapci.AbapCiPlugin;
 import abapci.domain.AbapPackageTestState;
+import abapci.feature.FeatureFacade;
 import abapci.lang.UiTexts;
 import abapci.presenter.ContinuousIntegrationPresenter;
+import abapci.utils.EditorHandler;
 import abapci.views.actions.ci.AbapGitCiAction;
 import abapci.views.actions.ci.AbapUnitCiAction;
 import abapci.views.actions.ci.AbapUnitCiActionOpenFirstError;
@@ -62,6 +76,7 @@ public class AbapCiMainView extends ViewPart {
 	public CLabel statusLabel;
 
 	ContinuousIntegrationPresenter continuousIntegrationPresenter;
+	FeatureFacade featureFacade;
 
 	class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
 		public String getColumnText(Object obj, int index) {
@@ -79,6 +94,7 @@ public class AbapCiMainView extends ViewPart {
 	}
 
 	public void createPartControl(Composite parent) {
+		featureFacade = new FeatureFacade();
 
 		Composite entireContainer = new Composite(parent, SWT.NONE);
 		entireContainer.setLayout(new GridLayout(1, false));
@@ -257,75 +273,86 @@ public class AbapCiMainView extends ViewPart {
 			}
 		});
 
-		colNumber++;
-		col = createTableViewerColumn("ATC state", 90, colNumber);
-		col.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				AbapPackageTestState p = (AbapPackageTestState) element;
-				return p.getAtcInfo();
-			}
-		});
+		if (featureFacade.getAtcFeature().isActive()) {
+			colNumber++;
+			col = createTableViewerColumn("ATC state", 90, colNumber);
+			col.setLabelProvider(new ColumnLabelProvider() {
+				@Override
+				public String getText(Object element) {
+					AbapPackageTestState p = (AbapPackageTestState) element;
+					return p.getAtcInfo();
+				}
+			});
 
-		colNumber++;
-		col = createTableViewerColumn("Err", 40, colNumber);
-		col.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				AbapPackageTestState p = (AbapPackageTestState) element;
-				return p.getAtcNumErr();
-			}
-		});
+			colNumber++;
+			col = createTableViewerColumn("Err", 40, colNumber);
+			col.setLabelProvider(new ColumnLabelProvider() {
+				@Override
+				public String getText(Object element) {
+					AbapPackageTestState p = (AbapPackageTestState) element;
+					return p.getAtcNumErr();
+				}
+			});
 
-		colNumber++;
-		col = createTableViewerColumn("Warn", 40, colNumber);
-		col.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				AbapPackageTestState p = (AbapPackageTestState) element;
-				return p.getAtcNumWarn();
-			}
-		});
+			colNumber++;
+			col = createTableViewerColumn("Warn", 40, colNumber);
+			col.setLabelProvider(new ColumnLabelProvider() {
+				@Override
+				public String getText(Object element) {
+					AbapPackageTestState p = (AbapPackageTestState) element;
+					return p.getAtcNumWarn();
+				}
+			});
 
-		colNumber++;
-		col = createTableViewerColumn("Info", 40, colNumber);
-		col.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				AbapPackageTestState p = (AbapPackageTestState) element;
-				return p.getAtcNumInfo();
-			}
-		});
+			colNumber++;
+			col = createTableViewerColumn("Info", 40, colNumber);
+			col.setLabelProvider(new ColumnLabelProvider() {
+				@Override
+				public String getText(Object element) {
+					AbapPackageTestState p = (AbapPackageTestState) element;
+					return p.getAtcNumInfo();
+				}
+			});
 
-		colNumber++;
-		col = createTableViewerColumn("Sup", 40, colNumber);
-		col.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				AbapPackageTestState p = (AbapPackageTestState) element;
-				return p.getAtcNumSuppressed();
-			}
-		});
+			colNumber++;
+			col = createTableViewerColumn("Sup", 40, colNumber);
+			col.setLabelProvider(new ColumnLabelProvider() {
+				@Override
+				public String getText(Object element) {
+					AbapPackageTestState p = (AbapPackageTestState) element;
+					return p.getAtcNumSuppressed();
+				}
+			});
 
-		colNumber++;
-		col = createTableViewerColumn("Last run", 70, colNumber);
-		col.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				AbapPackageTestState p = (AbapPackageTestState) element;
-				return p.getAtcLastRun();
-			}
-		});
+			colNumber++;
+			col = createTableViewerColumn("Last run", 70, colNumber);
+			col.setLabelProvider(new ColumnLabelProvider() {
+				@Override
+				public String getText(Object element) {
+					AbapPackageTestState p = (AbapPackageTestState) element;
+					return p.getAtcLastRun();
+				}
+			});
 
-		colNumber++;
-		col = createTableViewerColumn("Jenkins state", 100, colNumber);
-		col.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				AbapPackageTestState p = (AbapPackageTestState) element;
-				return p.getJenkinsInfo();
-			}
-		});
+			colNumber++;
+			col = createTableViewerColumn("Jenkins state", 100, colNumber);
+			col.setLabelProvider(new ColumnLabelProvider() {
+				@Override
+				public String getText(Object element) {
+					AbapPackageTestState p = (AbapPackageTestState) element;
+					return p.getJenkinsInfo();
+				}
+			});
+		}
+
+		try {
+			colNumber++;
+			col = createTableViewerColumn("First error", 300, colNumber);
+			col.setLabelProvider(new MyHyperlinkLabelProvider(col.getColumn().getParent()));
+		} catch (Exception ex) {
+			continuousIntegrationPresenter.setStatusMessage("First error column could not be initialised",
+					new Color(Display.getCurrent(), new RGB(0, 0, 0)));
+		}
 	}
 
 	private TableViewerColumn createTableViewerColumn(String title, int bound, final int colNumber) {
@@ -345,4 +372,52 @@ public class AbapCiMainView extends ViewPart {
 	public void setViewerInput(List<AbapPackageTestState> allForProject) {
 		viewer.setInput(allForProject);
 	}
+
+	private final class MyHyperlinkLabelProvider extends StyledCellLabelProvider {
+		MyHyperlink m_control;
+		IProject project;
+		IAbapUnitAlertStackEntry firstStackEntry;
+
+		private MyHyperlinkLabelProvider(Composite parent) {
+			m_control = new MyHyperlink(parent, SWT.WRAP);
+		}
+
+		@Override
+		protected void paint(Event event, Object element) {
+			AbapPackageTestState p = (AbapPackageTestState) element;
+			IProject[] availableProjects = AdtCoreProjectServiceFactory.createCoreProjectService()
+					.getAvailableAdtCoreProjects();
+
+			for (int position = 0; position < availableProjects.length; position++) {
+				if (availableProjects[position].getName() == p.getProjectName()) {
+					project = availableProjects[position];
+				}
+			}
+
+			firstStackEntry = p.getFirstFailedUnitTest() != null ? p.getFirstFailedUnitTest().getFirstStackEntry()
+					: null;
+			m_control.setText(firstStackEntry != null ? firstStackEntry.getDescription() : "");
+
+			m_control.addListener(SWT.MouseDown,
+					e -> EditorHandler.Open(project, firstStackEntry != null ? firstStackEntry.getUri() : null));
+
+			GC gc = event.gc;
+			Rectangle cellRect = new Rectangle(event.x, event.y, event.width, event.height);
+			cellRect.width = 4000;
+
+			m_control.paintText(gc, cellRect);
+		}
+	}
+
+	private class MyHyperlink extends Hyperlink {
+		public MyHyperlink(Composite parent, int style) {
+			super(parent, style);
+			this.setUnderlined(true);
+		}
+
+		public void paintText(GC gc, Rectangle bounds) {
+			super.paintText(gc, bounds);
+		}
+	}
+
 }

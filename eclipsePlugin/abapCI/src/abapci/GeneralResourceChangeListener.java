@@ -1,5 +1,6 @@
 package abapci;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,7 +12,6 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 
-import abapci.Exception.InactivatedObjectEvaluationException;
 import abapci.activation.Activation;
 import abapci.activation.ActivationPool;
 import abapci.connections.SapConnection;
@@ -62,59 +62,31 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 
 					if (currentProject != null && sapConnection.isConnected(currentProject.getName())) {
 
-						// String uriString =
-						// unitTestResultSummary.getTestResult().getFirstInvalidItem().getFirstStackEntry().getUri()
-						// .toString();
-						// String uriString =
-						// "/sap/bc/adt/oo/classes/zcl_autoformatted_class/includes/testclasses#start=15,0";
-						// IAdtObjectReference objRef =
-						// AdtObjectReferenceAdapterFactory.create(uriString);
-						// AdtNavigationServiceFactory.createNavigationService().navigate(currentProject,
-						// objRef, true);
-
-						List<ActivationObject> activatedObjects = sapConnection
-								.unprocessedActivatedObjects(currentProject.getName());
-
+						List<ActivationObject> inactiveObjects = sapConnection
+								.getInactiveObjects(currentProject.getName());
 						List<Activation> activations = activationPool.getActiveActivations();
+
+						List<String> selectedPackages = new ArrayList<String>();
+						if (activations != null && !activations.isEmpty())
+							for (ActivationObject inactiveObject : inactiveObjects) {
+								if (activations.stream().anyMatch(
+										item -> item.getObjectName().contains(inactiveObject.getClassname()))) {
+									selectedPackages.add(inactiveObject.packagename);
+								}
+							}
+
 						continuousIntegrationPresenter.setCurrentProject(currentProject);
 
 						if (!initialRun) {
-
 							initialRun = true;
 							continuousIntegrationPresenter.setCurrentProject(currentProject);
 							// continuousIntegrationPresenter.updateViewsAsync();
 							job.start();
-
-						} else if (!activatedObjects.isEmpty()) {
-
-							List<String> packages = activatedObjects.stream().map(item -> item.getPackagename())
-									.filter(item -> item != null).distinct().collect(Collectors.<String>toList());
-							if (!packages.isEmpty()) {
-								List<String> triggerPackages = continuousIntegrationPresenter
-										.getAbapPackageTestStatesForCurrentProject().stream()
-										.filter(item -> item.getPackageName() != null)
-										.map(item -> item.getPackageName()).collect(Collectors.<String>toList());
-
-								for (String triggerPackage : packages) {
-									if (!continuousIntegrationPresenter.containsPackage(currentProject.getName(),
-											triggerPackage)) {
-										ContinuousIntegrationConfig ciConfig = new ContinuousIntegrationConfig(
-												currentProject.getName(), triggerPackage, true, true);
-
-										if (featureFacade.getShowDialogNewPackageForCiRun().isActive()) {
-											Runnable runnable = () -> handleNewConfig(ciConfig);
-											Display.getDefault().asyncExec(runnable);
-										}
-									}
-								}
-								job.setTriggerPackages(continuousIntegrationPresenter.getCurrentProject(),
-										triggerPackages);
-							} else {
-								job.setTriggerPackages(continuousIntegrationPresenter.getCurrentProject(),
-										activatedObjects.stream().map(item -> item.getPackagename()).distinct()
-												.collect(Collectors.<String>toList()));
-							}
+						} else if (!selectedPackages.isEmpty()) {
+							job.setTriggerPackages(continuousIntegrationPresenter.getCurrentProject(),
+									selectedPackages);
 							job.start();
+							activationPool.unregisterAllActivated();
 						} else if (!activations.isEmpty()) {
 							job.setTriggerPackages(continuousIntegrationPresenter.getCurrentProject(),
 									continuousIntegrationPresenter.getAbapPackageTestStatesForCurrentProject().stream()
@@ -126,10 +98,6 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 					}
 				}
 
-			} catch (InactivatedObjectEvaluationException ex) {
-				Runnable runnable = () -> continuousIntegrationPresenter.setStatusMessage(
-						String.format("Evaluation of inactiveObjects failed, errormessage %s", ex.getMessage()));
-				Display.getDefault().asyncExec(runnable);
 			} catch (Exception ex) {
 				Runnable runnable = () -> continuousIntegrationPresenter
 						.setStatusMessage(String.format("CI Run failed, errormessage %s", ex.getMessage()));
@@ -140,11 +108,23 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 
+	private void ShowDialogForPackages(IProject currentProject, List<String> packages) {
+		for (String triggerPackage : packages) {
+			if (!continuousIntegrationPresenter.containsPackage(currentProject.getName(), triggerPackage)) {
+				ContinuousIntegrationConfig ciConfig = new ContinuousIntegrationConfig(currentProject.getName(),
+						triggerPackage, true, true);
+
+				Runnable runnable = () -> handleNewConfig(ciConfig);
+				Display.getDefault().asyncExec(runnable);
+			}
+		}
+	}
+
 	private void handleNewConfig(ContinuousIntegrationConfig ciConfig) {
 
 		AddContinuousIntegrationConfigPage addContinuousIntegrationConfigPage = new AddContinuousIntegrationConfigPage(
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), continuousIntegrationPresenter,
-				ciConfig);
+				ciConfig, true);
 		if (addContinuousIntegrationConfigPage.open() == Window.OK) {
 			// TODO
 		}

@@ -23,7 +23,7 @@ public class AddAction extends Action {
 	public void run() {
 
 		AddContinuousIntegrationConfigPage ciConfigPage = new AddContinuousIntegrationConfigPage(
-				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), presenter, null);
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), presenter, null, false);
 		if (ciConfigPage.open() == Window.OK) {
 
 			// TODO

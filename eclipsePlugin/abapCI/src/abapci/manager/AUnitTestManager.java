@@ -22,26 +22,29 @@ public class AUnitTestManager extends AbstractTestManager {
 	public TestState executeAllPackages(IProject project, List<AbapPackageTestState> activeAbapPackageTestStates) {
 
 		List<AbapPackageTestState> packageTestStates = activeAbapPackageTestStates.stream()
-				.filter(item -> item.getAUnitInfo() != "DEACT").collect(Collectors.<AbapPackageTestState>toList());
+				.filter(item -> !item.getUnitTestState().equals(TestState.DEACT))
+				.collect(Collectors.<AbapPackageTestState>toList());
 
 		UnitTestResultSummary unitTestResultSummary;
 
-		packageNames.addAll(packageTestStates.stream().filter(item -> item.getAUnitInfo().equals("UNDEF"))
-				.map(item -> item.getPackageName()).collect(Collectors.<String>toList()));
-
 		overallTestState = TestState.UNDEF;
-		for (String packageName : packageNames) {
+		for (AbapPackageTestState abapPackageTestState : activeAbapPackageTestStates) {
 
-			unitTestResultSummary = new AbapUnitHandler().executePackage(project, packageName);
+			if (!abapPackageTestState.getUnitTestState().equals(TestState.DEACT)
+					&& packageNames.stream().anyMatch(item -> item.equals(abapPackageTestState.getPackageName()))) {
+				unitTestResultSummary = new AbapUnitHandler().executePackage(project,
+						abapPackageTestState.getPackageName());
+				abapPackageTestState.setUnitTestResult(unitTestResultSummary.getTestResult());
 
-			TestResult testResult = unitTestResultSummary.getTestResult();
+				TestResult testResult = unitTestResultSummary.getTestResult();
 
-			mergePackageTestStateIntoGlobalTestState(testResult.getTestState());
+				mergePackageTestStateIntoGlobalTestState(testResult.getTestState());
 
-			List<AbapPackageTestState> packageTestStatesNew = packageTestStates.stream()
-					.filter(item -> item.getPackageName().equals(packageName))
-					.collect(Collectors.<AbapPackageTestState>toList());
-			packageTestStatesNew.forEach(item -> item.setAUnitInfo(testResult));
+				// List<AbapPackageTestState> packageTestStatesNew = packageTestStates.stream()
+				// .filter(item -> item.getPackageName().equals(packageName))
+				// .collect(Collectors.<AbapPackageTestState>toList());
+				// packageTestStatesNew.forEach(item -> item.setUnitTestResult(testResult));
+			}
 
 		}
 

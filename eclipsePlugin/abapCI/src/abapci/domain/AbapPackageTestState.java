@@ -55,6 +55,11 @@ public class AbapPackageTestState {
 		return jenkinsInfo;
 	}
 
+	public TestState getUnitTestState() {
+		return aUnitTestResult.getTestState();
+	}
+
+	@Deprecated
 	public String getAUnitInfo() {
 		return aUnitTestResult.getTestResultInfo();
 	}
@@ -82,7 +87,7 @@ public class AbapPackageTestState {
 		propertyChangeSupport.firePropertyChange("jenkinsInfo", this.jenkinsInfo, jenkinsInfo);
 	}
 
-	public void setAUnitInfo(TestResult aUnitTestResult) {
+	public void setUnitTestResult(TestResult aUnitTestResult) {
 		this.aUnitTestResult = aUnitTestResult;
 		propertyChangeSupport.firePropertyChange("aUnitTestResult", this.aUnitTestResult, aUnitTestResult);
 	}
@@ -122,6 +127,10 @@ public class AbapPackageTestState {
 	public String toString() {
 		return packageName + " " + jenkinsInfo + " " + aUnitTestResult.getTestState() + " "
 				+ atcTestResult.getTestState();
+	}
+
+	public InvalidItem getFirstFailedUnitTest() {
+		return aUnitTestResult.getActiveErrors().size() > 0 ? aUnitTestResult.getActiveErrors().get(0) : null;
 	}
 
 }

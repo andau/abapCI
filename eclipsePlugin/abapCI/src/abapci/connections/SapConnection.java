@@ -31,8 +31,25 @@ public class SapConnection {
 
 	public List<ActivationObject> unprocessedActivatedObjects(String projectName)
 			throws InactivatedObjectEvaluationException {
-		try {
+		return getInactiveObjects(projectName);
 
+		/**
+		 * if (checkForNewInactiveItems(newInactiveObjects, currentInactiveObjects)) {
+		 * activatedObjects = currentInactiveObjects; } currentInactiveObjects =
+		 * newInactiveObjects;
+		 * 
+		 * return activatedObjects;
+		 **/
+	}
+
+	private boolean checkForNewInactiveItems(List<ActivationObject> newInactiveObjects,
+			List<ActivationObject> currentInactiveObjects) {
+		return newInactiveObjects.size() < currentInactiveObjects.size();
+	}
+
+	public List<ActivationObject> getInactiveObjects(String projectName) throws InactivatedObjectEvaluationException {
+
+		try {
 			List<ActivationObject> activatedObjects = new ArrayList<>();
 
 			IActivationServiceFactory activationServiceFactory = AdtActivationPlugin.getDefault()
@@ -40,24 +57,11 @@ public class SapConnection {
 			IActivationService activationService = activationServiceFactory.createActivationService(projectName);
 			IInactiveCtsObjectList newInactiveCtsObjectList = activationService
 					.getInactiveCtsObjects(new NullProgressMonitor());
-			List<ActivationObject> newInactiveObjects = convertToStringList(newInactiveCtsObjectList);
-
-			if (checkForNewInactiveItems(newInactiveObjects, currentInactiveObjects)) {
-				activatedObjects = currentInactiveObjects;
-			}
-			currentInactiveObjects = newInactiveObjects;
-
-			return activatedObjects;
-
+			return convertToStringList(newInactiveCtsObjectList);
 		} catch (Exception ex) {
 			throw new InactivatedObjectEvaluationException(ex);
 		}
 
-	}
-
-	private boolean checkForNewInactiveItems(List<ActivationObject> newInactiveObjects,
-			List<ActivationObject> currentInactiveObjects) {
-		return newInactiveObjects.size() < currentInactiveObjects.size();
 	}
 
 	private List<ActivationObject> convertToStringList(IInactiveCtsObjectList inactiveCtsObjectList) {

@@ -1,5 +1,6 @@
 package abapci.jobs;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,6 +11,9 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
+import abapci.Exception.InactivatedObjectEvaluationException;
+import abapci.connections.SapConnection;
+import abapci.domain.ActivationObject;
 import abapci.feature.FeatureProcessor;
 import abapci.presenter.ContinuousIntegrationPresenter;
 
@@ -61,7 +65,8 @@ public class CiJob extends Job {
 			return Status.CANCEL_STATUS;
 		}
 
-		if (evaluateAndResetProcessingFlags()) {
+		int processingStep = evaluateAndResetProcessingFlags();
+		if (processingStep > 0) {
 			featureProcessor.setPackages(triggerPackages);
 			featureProcessor.processEnabledFeatures();
 		}
@@ -73,26 +78,46 @@ public class CiJob extends Job {
 		return Status.OK_STATUS;
 	}
 
-	private boolean evaluateAndResetProcessingFlags() {
-		boolean startProcessor = false;
+	private List<String> getActivatedPackages() {
+		List<String> activatedPackages = new ArrayList<>();
+
+		final SapConnection sapConnection = new SapConnection();
+
+		try {
+			List<ActivationObject> activatedObjects = sapConnection.getInactiveObjects(projectName);
+
+			if (activatedObjects != null && activatedObjects.size() > 0) {
+				activatedPackages = activatedObjects.stream().map(item -> item.packagename)
+						.collect(Collectors.<String>toList());
+			}
+		} catch (InactivatedObjectEvaluationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return activatedPackages;
+	}
+
+	private int evaluateAndResetProcessingFlags() {
+		int processingStep = -1;
 		if (immediateProcessing) {
 			immediateProcessing = false;
-			startProcessor = true;
+			processingStep = 1;
 		}
 
 		long timeSinceLastTrigger = new Date().getTime() - triggerDate.getTime();
 
 		if (shortDelayProcessing && timeSinceLastTrigger > SHORT_DELAY_PROCESSING_DELAY) {
 			shortDelayProcessing = false;
-			startProcessor = true;
+			processingStep = 2;
 		}
 
 		if (longDelayProcessing && timeSinceLastTrigger > LONG_DELAY_PROCESSING_DELAY) {
 			longDelayProcessing = false;
-			startProcessor = true;
+			processingStep = 3;
 		}
 
-		return startProcessor;
+		return processingStep;
 	}
 
 	public void stop() {

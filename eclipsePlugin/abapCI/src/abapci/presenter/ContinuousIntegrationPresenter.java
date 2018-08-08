@@ -5,10 +5,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
 import abapci.Exception.ContinuousIntegrationConfigFileParseException;
@@ -17,6 +17,8 @@ import abapci.domain.ContinuousIntegrationConfig;
 import abapci.domain.GlobalTestState;
 import abapci.domain.SourcecodeState;
 import abapci.domain.TestResult;
+import abapci.domain.TestState;
+import abapci.manager.DevelopmentProcessManager;
 import abapci.model.IContinuousIntegrationModel;
 import abapci.views.AbapCiDashboardView;
 import abapci.views.AbapCiMainView;
@@ -29,6 +31,7 @@ public class ContinuousIntegrationPresenter {
 	private List<AbapPackageTestState> abapPackageTestStates;
 	private AbapCiDashboardView abapCiDashboardView;
 	private SourcecodeState sourcecodeState;
+	private DevelopmentProcessManager developmentProcessManager;
 
 	public ContinuousIntegrationPresenter(AbapCiMainView abapCiMainView,
 			IContinuousIntegrationModel continuousIntegrationModel, IProject currentProject) {
@@ -37,6 +40,7 @@ public class ContinuousIntegrationPresenter {
 		this.currentProject = currentProject;
 		this.abapPackageTestStates = new ArrayList<AbapPackageTestState>();
 		this.sourcecodeState = SourcecodeState.UNDEF;
+		developmentProcessManager = new DevelopmentProcessManager();
 
 		loadPackages();
 		setViewerInput();
@@ -58,9 +62,24 @@ public class ContinuousIntegrationPresenter {
 	}
 
 	public void addContinousIntegrationConfig(ContinuousIntegrationConfig ciConfig) {
-		model.add(ciConfig);
-		loadPackages();
-		setViewerInput();
+		try {
+			if (ciConfig != null
+					&& model.getAll().stream().anyMatch(item -> item.getPackageName().equals(ciConfig.getPackageName())
+							&& item.getProjectName().equals(ciConfig.getProjectName()))) {
+				model.remove(ciConfig);
+			}
+
+			model.add(ciConfig);
+			loadPackages();
+			setViewerInput();
+		} catch (ContinuousIntegrationConfigFileParseException e) {
+			setStatusMessage("Parsing error when updating project",
+					new Color(Display.getCurrent(), new RGB(255, 0, 0)));
+		} catch (Exception ex) {
+			setStatusMessage(String.format("General error when updating project, errormessage %s", ex.getMessage()),
+					new Color(Display.getCurrent(), new RGB(255, 0, 0)));
+		}
+
 	}
 
 	public void setViewerInput() {
@@ -120,12 +139,13 @@ public class ContinuousIntegrationPresenter {
 	}
 
 	public List<AbapPackageTestState> getAbapPackageTestStatesForCurrentProject() {
-		if (currentProject != null) {
-			return abapPackageTestStates.stream().filter(
-					item -> item.getProjectName() != null && item.getProjectName().equals(currentProject.getName()))
-					.collect(Collectors.<AbapPackageTestState>toList());
-		} else
-			return new ArrayList<AbapPackageTestState>();
+		List<AbapPackageTestState> abapPackageTestStatesForCurrentProject = new ArrayList<>();
+		for (AbapPackageTestState abapPackageTestState : abapPackageTestStates) {
+			if (currentProject == null || currentProject.getName().equals(abapPackageTestState.getProjectName())) {
+				abapPackageTestStatesForCurrentProject.add(abapPackageTestState);
+			}
+		}
+		return abapPackageTestStatesForCurrentProject;
 	}
 
 	public void updateViewsAsync() {
@@ -141,14 +161,15 @@ public class ContinuousIntegrationPresenter {
 	private void updateViews() {
 		if (abapCiDashboardView != null) {
 
-			GlobalTestState globalTestState = new GlobalTestState(sourcecodeState);
+			SourcecodeState currentSourceCodeState = evalSourceCodeTestState();
+			GlobalTestState globalTestState = new GlobalTestState(currentSourceCodeState);
 
 			abapCiDashboardView.lblOverallTestState.setText(globalTestState.getTestStateOutputForDashboard());
 			abapCiDashboardView.lblOverallTestState.redraw();
 
 			DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 			Date date = new Date();
-			abapCiDashboardView.infoline.setText("Last test run at:" + dateFormat.format(date));
+			abapCiDashboardView.infoline.setText("Last test run at: " + dateFormat.format(date));
 			abapCiDashboardView.infoline.redraw();
 
 			abapCiDashboardView.setBackgroundColor(globalTestState.getColor());
@@ -160,6 +181,29 @@ public class ContinuousIntegrationPresenter {
 		}
 	}
 
+	private SourcecodeState evalSourceCodeTestState() {
+
+		TestState currentUnitTestState = TestState.UNDEF;
+
+		for (AbapPackageTestState testState : getAbapPackageTestStatesForCurrentProject()) {
+			switch (currentUnitTestState) {
+			case OFFL:
+			case NOK:
+				// no change as this is the highest state
+				break;
+			case UNDEF:
+			case OK:
+			case DEACT:
+				currentUnitTestState = testState.getUnitTestState() != TestState.DEACT ? testState.getUnitTestState()
+						: currentUnitTestState;
+				break;
+			}
+		}
+
+		developmentProcessManager.setUnitTeststate(currentUnitTestState);
+		return developmentProcessManager.getSourcecodeState();
+	}
+
 	public IProject getCurrentProject() {
 		return currentProject;
 	}
@@ -169,17 +213,20 @@ public class ContinuousIntegrationPresenter {
 	}
 
 	public void setStatusMessage(String message) {
-		Runnable task = () -> setStatusMessageInternal(message);
+		setStatusMessage(message, new Color(Display.getCurrent(), new RGB(0, 0, 0)));
+	}
+
+	public void setStatusMessage(String message, Color color) {
+		Runnable task = () -> setStatusMessageInternal(message, color);
 		Display.getDefault().asyncExec(task);
 	}
 
-	private void setStatusMessageInternal(String message) {
+	private void setStatusMessageInternal(String message, Color color) {
 
 		// TODO call async
 		try {
 			view.statusLabel.setText(message);
-			org.eclipse.swt.graphics.Color red = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
-			view.statusLabel.setForeground(red);
+			view.statusLabel.setForeground(color);
 		} catch (Exception ex) {
 			// if the status message can not be set we will ignore this
 			ex.printStackTrace();
