@@ -169,6 +169,7 @@ public class ContinuousIntegrationPresenter {
 
 			DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 			Date date = new Date();
+			abapCiDashboardView.projectline.setText(currentProject.getName());
 			abapCiDashboardView.infoline.setText("Last test run at: " + dateFormat.format(date));
 			abapCiDashboardView.infoline.redraw();
 

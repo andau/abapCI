@@ -1,8 +1,8 @@
 package abapci.views.actions.ci;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelection;
@@ -18,20 +18,18 @@ abstract class AbstractCiAction extends Action {
 	private static final String NOT_YET_CALLED = "not yet called";
 	private String lastResult = NOT_YET_CALLED;
 
-	protected Map<String, String> getSelectedPackages() {
+	protected List<AbapPackageTestState> getSelectedAbapPackageTestStates() {
+
+		List<AbapPackageTestState> abapPackageTestStates = new ArrayList<AbapPackageTestState>();
 
 		ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getSelection();
 
-		Map<String, String> packageNames = new HashMap<>();
-
 		for (Iterator<?> iter = ((IStructuredSelection) selection).iterator(); iter.hasNext();) {
 
-			String abapPackageName = ((AbapPackageTestState) iter.next()).getPackageName();
-
-			packageNames.put(abapPackageName, abapPackageName);
+			abapPackageTestStates.add((AbapPackageTestState) iter.next());
 		}
 
-		return packageNames;
+		return abapPackageTestStates;
 	}
 
 	public String getLastResult() {

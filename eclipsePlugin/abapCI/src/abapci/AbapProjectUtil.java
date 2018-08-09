@@ -9,9 +9,11 @@ import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.ViewReference;
 
-public class ProjectUtil {
+import com.sap.adt.project.AdtCoreProjectServiceFactory;
 
-	private ProjectUtil() {
+public class AbapProjectUtil {
+
+	private AbapProjectUtil() {
 	}
 
 	public static IProject getCurrentProject() {
@@ -51,4 +53,21 @@ public class ProjectUtil {
 		return currentProject;
 
 	}
+
+	public static IProject getProjectByProjectName(String projectname) {
+
+		IProject[] availableProjects = AdtCoreProjectServiceFactory.createCoreProjectService()
+				.getAvailableAdtCoreProjects();
+
+		for (IProject project : availableProjects) {
+			if (project.getName().equals(projectname)) {
+				return project;
+			}
+
+		}
+
+		return null;
+
+	}
+
 }

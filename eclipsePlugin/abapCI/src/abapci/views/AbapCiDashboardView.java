@@ -23,6 +23,7 @@ public class AbapCiDashboardView extends ViewPart {
 
 	private ContinuousIntegrationPresenter presenter;
 
+	public Label projectline;
 	public Label lblOverallTestState;
 	public Label infoline;
 
@@ -44,6 +45,10 @@ public class AbapCiDashboardView extends ViewPart {
 
 		Composite entireContainer = new Composite(parent, SWT.NONE);
 		entireContainer.setLayout(new GridLayout(1, false));
+
+		projectline = new Label(entireContainer, SWT.FILL);
+		projectline.setText("project not set                    ");
+		projectline.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, true, true));
 
 		lblOverallTestState = new Label(entireContainer, SWT.CENTER);
 		FontData[] fontData = lblOverallTestState.getFont().getFontData();

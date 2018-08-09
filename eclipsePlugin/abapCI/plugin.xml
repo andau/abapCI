@@ -24,6 +24,13 @@
             categoryId="abapci.commands.category"
             id="com.abapci.ciRun.add">
       </command>
+      <command
+            name="abapCI color project command"
+            categoryId="abapci.commands.category"
+            id="com.abapci.coloredProject">
+      </command>
+      
+      
 
    </extension>
    
@@ -40,6 +47,10 @@
       <handler
        class="abapci.handlers.AbapCiRunAddHandler"
        commandId="com.abapci.ciRun.add">
+	 </handler>
+      <handler
+       class="abapci.handlers.AbapColoredProjectHandler"
+       commandId="com.abapci.coloredProject">
 	 </handler>
       
       
@@ -132,6 +143,7 @@
             </command>
          </toolbar>
       </menuContribution>
+      
         <menuContribution          
           locationURI="popup:org.eclipse.ui.navigator.ProjectExplorer#PopupMenu?before=additions">
        <command
@@ -149,20 +161,18 @@
                 <and>
                       property="com.sap.adt.project.hasNature"
                          value="com.sap.adt.abapnature">
-                   <or>
+                  <or>
                       <instanceof
                             value="com.sap.adt.tools.core.IAdtObjectReference">
                       </instanceof>
                       <adapt
                             type="com.sap.adt.tools.core.IAdtObjectReference">
                       </adapt>
-                   </or>
-                   <or>
                       <instanceof
-                            value="com.sap.adt.project.IProjectProvider">
+                         value="com.sap.adt.tools.core.project.IAbapProject">
                       </instanceof>
                       <adapt
-                            type="com.sap.adt.project.IProjectProvider">
+                            type="com.sap.adt.tools.core.project.IAbapProject">
                       </adapt>
                    </or>
                 </and>
@@ -171,18 +181,35 @@
        </command>
     </menuContribution>
 
-      <menuContribution
-            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
-         <toolbar
-               id="abapci.toolbars.abapCiToolbar">
-            <command
-                  commandId="abapci.commands.abapCiViewCommand"
-                  icon="icons/abapci_logo.ico"
-                  tooltip="Open View for Continuous integration"
-                  id="abapci.toolbars.abapCiViewCommand">
-            </command>
-         </toolbar>
-      </menuContribution>
+       <menuContribution          
+          locationURI="popup:org.eclipse.ui.navigator.ProjectExplorer#PopupMenu?before=additions">
+       <command
+             commandId="com.abapci.coloredProject"
+             id="com.abapci.coloredProject"
+             label="Set coloring for project"
+             style="push"
+             tooltip="Set background color for objects of this ABAP project">
+          <visibleWhen
+                checkEnabled="false">
+             <iterate
+                   ifEmpty="false"
+                   operator="or">
+                <and>
+                      property="com.sap.adt.project.hasNature"
+                         value="com.sap.adt.abapnature">
+                  <or>
+                      <instanceof
+                         value="com.sap.adt.tools.core.project.IAbapProject">
+                      </instanceof>
+                      <adapt
+                            type="com.sap.adt.tools.core.project.IAbapProject">
+                      </adapt>
+                   </or>
+                </and>
+             </iterate>
+          </visibleWhen>
+       </command>
+    </menuContribution>
 
       <menuContribution          
           locationURI="popup:org.eclipse.ui.navigator.ProjectExplorer#PopupMenu?before=additions">

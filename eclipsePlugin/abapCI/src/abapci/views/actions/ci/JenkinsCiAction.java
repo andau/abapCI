@@ -1,9 +1,7 @@
 package abapci.views.actions.ci;
 
-import java.util.Iterator;
-import java.util.Map.Entry;
-
 import abapci.AbapCiPlugin;
+import abapci.domain.AbapPackageTestState;
 import abapci.handlers.JenkinsHandler;
 import abapci.presenter.ContinuousIntegrationPresenter;
 
@@ -20,12 +18,10 @@ public class JenkinsCiAction extends AbstractCiAction {
 	@Override
 	public void run() {
 
-		for (Iterator<Entry<String, String>> iter = getSelectedPackages().entrySet().iterator(); iter.hasNext();) {
-
-			String packageName = iter.next().getValue();
+		for (AbapPackageTestState abapPackageTestState : getSelectedAbapPackageTestStates()) {
 
 			try {
-				new JenkinsHandler().execute(packageName);
+				new JenkinsHandler().execute(abapPackageTestState.getPackageName());
 			} catch (Exception ex) {
 				// TODO
 			}

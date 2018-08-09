@@ -1,9 +1,10 @@
 package abapci.views.actions.ci;
 
-import java.util.Iterator;
-import java.util.Map.Entry;
+import org.eclipse.core.resources.IProject;
 
 import abapci.AbapCiPlugin;
+import abapci.AbapProjectUtil;
+import abapci.domain.AbapPackageTestState;
 import abapci.handlers.AbapUnitHandler;
 import abapci.presenter.ContinuousIntegrationPresenter;
 import abapci.result.TestResultSummaryFactory;
@@ -21,15 +22,14 @@ public class AbapUnitCiAction extends AbstractCiAction {
 	@Override
 	public void run() {
 
-		for (Iterator<Entry<String, String>> iter = getSelectedPackages().entrySet().iterator(); iter.hasNext();) {
-
-			String packageName = iter.next().getValue();
+		for (AbapPackageTestState abapPackageTestState : getSelectedAbapPackageTestStates()) {
 
 			try {
-				new AbapUnitHandler().executePackage(continuousIntegrationPresenter.getCurrentProject(), packageName);
+				IProject project = AbapProjectUtil.getProjectByProjectName(abapPackageTestState.getProjectName());
+				new AbapUnitHandler().executePackage(project, abapPackageTestState.getPackageName());
 
 			} catch (Exception ex) {
-				TestResultSummaryFactory.createOffline(packageName);
+				TestResultSummaryFactory.createOffline(abapPackageTestState.getPackageName());
 			}
 
 		}

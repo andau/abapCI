@@ -61,7 +61,7 @@ public class SaveFormattingListener implements IExecutionListener {
 						sourcecodeFormatHandler.formatEditor(editorReference.getEditor(true));
 					}
 
-					String projectName = ProjectUtil.getCurrentProject(editorReference.getEditor(false)).getName();
+					String projectName = AbapProjectUtil.getCurrentProject(editorReference.getEditor(false)).getName();
 					String packageName = ""; // would be awesome to get the package info here too, e.g. with ADT
 
 					if ("org.eclipse.ui.file.save".equals(arg0)
@@ -74,7 +74,7 @@ public class SaveFormattingListener implements IExecutionListener {
 				}
 
 				if ("com.sap.adt.activation.ui.command.multiActivation".equals(arg0)) {
-					activationPool.setActivatedEntireProject(ProjectUtil.getCurrentProject().getName());
+					activationPool.setActivatedEntireProject(AbapProjectUtil.getCurrentProject().getName());
 				}
 			}
 
@@ -82,7 +82,7 @@ public class SaveFormattingListener implements IExecutionListener {
 				IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 				IEditorPart activeEditor = activePage.getActiveEditor();
 				Activation activation = new Activation(activeEditor.getTitle(), "",
-						ProjectUtil.getCurrentProject().getName());
+						AbapProjectUtil.getCurrentProject().getName());
 				activationPool.registerModified(activation);
 				activationPool.setActivated(activeEditor.getTitle());
 

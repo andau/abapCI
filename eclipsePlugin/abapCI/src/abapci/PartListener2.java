@@ -80,7 +80,7 @@ public class PartListener2 implements IPartListener2 {
 		try {
 			FeatureFacade featureFacade = new FeatureFacade();
 
-			IProject currentProject = ProjectUtil.getCurrentProject();
+			IProject currentProject = AbapProjectUtil.getCurrentProject();
 
 			IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 			IEditorPart activeEditor = activePage.getActiveEditor();

@@ -24,11 +24,13 @@ public class AddColoredProjectPage extends Dialog {
 	ColoredProjectsPresenter presenter;
 	Combo comboColoredProject;
 	Combo comboColor;
+	IProject project;
 
-	public AddColoredProjectPage(Shell parentShell, ColoredProjectsPresenter presenter) {
+	public AddColoredProjectPage(Shell parentShell, ColoredProjectsPresenter presenter, IProject project) {
 		super(parentShell);
 		this.presenter = presenter;
-		parentShell.setText("Add a colored ABAP project");
+		this.project = project;
+		parentShell.setText("Set  the coloring for the ABAP project");
 	}
 
 	@Override
@@ -42,6 +44,11 @@ public class AddColoredProjectPage extends Dialog {
 		comboColoredProject = new Combo(container, SWT.READ_ONLY);
 		comboColoredProject.pack();
 		comboColoredProject.setItems(getAbapProjectsArray());
+
+		if (project != null) {
+			comboColoredProject.setText(project.getName());
+			comboColoredProject.setEnabled(false);
+		}
 
 		Label colorLabel = new Label(container, SWT.READ_ONLY);
 		colorLabel.setToolTipText("Select a predefined color");

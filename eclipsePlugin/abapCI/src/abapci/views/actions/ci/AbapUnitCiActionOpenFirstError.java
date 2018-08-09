@@ -1,14 +1,16 @@
 package abapci.views.actions.ci;
 
 import java.net.URI;
-import java.util.Iterator;
-import java.util.Map.Entry;
+
+import org.eclipse.core.resources.IProject;
 
 import com.sap.adt.tools.core.model.adtcore.IAdtObjectReference;
 import com.sap.adt.tools.core.model.util.AdtObjectReferenceAdapterFactory;
 import com.sap.adt.tools.core.ui.navigation.AdtNavigationServiceFactory;
 
 import abapci.AbapCiPlugin;
+import abapci.AbapProjectUtil;
+import abapci.domain.AbapPackageTestState;
 import abapci.domain.UnitTestResultSummary;
 import abapci.handlers.AbapUnitHandler;
 import abapci.presenter.ContinuousIntegrationPresenter;
@@ -27,17 +29,13 @@ public class AbapUnitCiActionOpenFirstError extends AbstractCiAction {
 	@Override
 	public void run() {
 
-		// String uriString =
-		// unitTestResultSummary.getTestResult().getFirstInvalidItem().getFirstStackEntry().getUri()
-		// .toString();
-
-		for (Iterator<Entry<String, String>> iter = getSelectedPackages().entrySet().iterator(); iter.hasNext();) {
-
-			String packageName = iter.next().getValue();
+		for (AbapPackageTestState abapPackageTestState : getSelectedAbapPackageTestStates()) {
 
 			try {
-				UnitTestResultSummary unitTestResultSummary = new AbapUnitHandler()
-						.executePackage(continuousIntegrationPresenter.getCurrentProject(), packageName);
+				IProject project = AbapProjectUtil.getProjectByProjectName(abapPackageTestState.getProjectName());
+
+				UnitTestResultSummary unitTestResultSummary = new AbapUnitHandler().executePackage(project,
+						abapPackageTestState.getPackageName());
 				if (unitTestResultSummary.getTestResult().getFirstInvalidItem() != null) {
 					URI uri = unitTestResultSummary.getTestResult().getFirstInvalidItem().getFirstStackEntry().getUri();
 					IAdtObjectReference objRef = AdtObjectReferenceAdapterFactory.create(uri.toString());
@@ -51,7 +49,7 @@ public class AbapUnitCiActionOpenFirstError extends AbstractCiAction {
 				}
 
 			} catch (Exception ex) {
-				TestResultSummaryFactory.createOffline(packageName);
+				TestResultSummaryFactory.createOffline(abapPackageTestState.getPackageName());
 			}
 
 		}

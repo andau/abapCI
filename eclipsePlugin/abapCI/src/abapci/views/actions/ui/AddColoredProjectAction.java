@@ -9,22 +9,23 @@ import abapci.presenter.ColoredProjectsPresenter;
 import abapci.views.wizard.AddColoredProjectPage;
 
 public class AddColoredProjectAction extends Action {
-    ColoredProjectsPresenter presenter; 
-	
+	ColoredProjectsPresenter presenter;
+
 	public AddColoredProjectAction(ColoredProjectsPresenter presenter, String label) {
 		this.setText(label);
 		this.setImageDescriptor(
 				PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
-        this.presenter = presenter; 
+		this.presenter = presenter;
 	}
 
 	@Override
 	public void run() {
 
-		AddColoredProjectPage coloredProjectDialog = new AddColoredProjectPage(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), presenter); 
+		AddColoredProjectPage coloredProjectDialog = new AddColoredProjectPage(
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), presenter, null);
 		if (coloredProjectDialog.open() == Window.OK) {
-			
-			//TODO 
+
+			// TODO
 		}
 	}
 }
