@@ -41,7 +41,7 @@ public class AbapColoredProjectHandler extends AbstractHandler {
 
 					if (addColoredProjectPage.open() == Window.OK) {
 						coloredProjectPresenter.setStatusMessage(
-								String.format("The coloring for the packate %s was set", project.getName()));
+								String.format("The coloring for the package '%s' was set", project.getName()));
 					}
 
 				}

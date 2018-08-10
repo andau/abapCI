@@ -29,7 +29,6 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 	private CiJob job;
 	private ContinuousIntegrationPresenter continuousIntegrationPresenter;
 	private ActivationPool activationPool;
-	private FeatureFacade featureFacade;
 
 	public GeneralResourceChangeListener(ContinuousIntegrationPresenter continuousIntegrationPresenter) {
 		sapConnection = new SapConnection();
@@ -37,7 +36,7 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 		this.continuousIntegrationPresenter = continuousIntegrationPresenter;
 		job = CiJob.getInstance(continuousIntegrationPresenter);
 		activationPool = ActivationPool.getInstance();
-		featureFacade = new FeatureFacade();
+		new FeatureFacade();
 	}
 
 	public void resourceChanged(IResourceChangeEvent event) {
@@ -67,22 +66,31 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 						List<Activation> activations = activationPool.getActiveActivations();
 
 						List<String> selectedPackages = new ArrayList<String>();
+
 						if (activations != null && !activations.isEmpty())
 							for (ActivationObject inactiveObject : inactiveObjects) {
-								if (activations.stream().anyMatch(
-										item -> item.getObjectName().contains(inactiveObject.getClassname()))) {
+								if (inactiveObject.packagename != null
+										&& !selectedPackages.contains(inactiveObject.packagename)
+										&& activations.stream().anyMatch(item -> item.getObjectName().toLowerCase()
+												.contains(inactiveObject.getClassname().toLowerCase()))) {
 									selectedPackages.add(inactiveObject.packagename);
 								}
 							}
 
+						showDialogForPackages(currentProject, selectedPackages);
+
 						continuousIntegrationPresenter.setCurrentProject(currentProject);
 
-						if (!initialRun) {
+						if (!initialRun || continuousIntegrationPresenter.runNecessary()) {
 							initialRun = true;
 							continuousIntegrationPresenter.setCurrentProject(currentProject);
-							// continuousIntegrationPresenter.updateViewsAsync();
+							job.setTriggerPackages(continuousIntegrationPresenter.getCurrentProject(),
+									continuousIntegrationPresenter.getAbapPackageTestStatesForCurrentProject().stream()
+											.map(item -> item.getPackageName()).distinct()
+											.collect(Collectors.<String>toList()));
 							job.start();
 						} else if (!selectedPackages.isEmpty()) {
+
 							job.setTriggerPackages(continuousIntegrationPresenter.getCurrentProject(),
 									selectedPackages);
 							job.start();
@@ -108,7 +116,7 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 
-	private void ShowDialogForPackages(IProject currentProject, List<String> packages) {
+	private void showDialogForPackages(IProject currentProject, List<String> packages) {
 		for (String triggerPackage : packages) {
 			if (!continuousIntegrationPresenter.containsPackage(currentProject.getName(), triggerPackage)) {
 				ContinuousIntegrationConfig ciConfig = new ContinuousIntegrationConfig(currentProject.getName(),
@@ -126,7 +134,7 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), continuousIntegrationPresenter,
 				ciConfig, true);
 		if (addContinuousIntegrationConfigPage.open() == Window.OK) {
-			// TODO
+			continuousIntegrationPresenter.loadPackages();
 		}
 
 	}

@@ -9,6 +9,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.part.ViewPart;
 
 import abapci.AbapCiPlugin;
@@ -26,6 +27,7 @@ public class AbapCiDashboardView extends ViewPart {
 	public Label projectline;
 	public Label lblOverallTestState;
 	public Label infoline;
+	public Hyperlink openErrorHyperlink;
 
 	private Composite parent;
 
@@ -46,9 +48,9 @@ public class AbapCiDashboardView extends ViewPart {
 		Composite entireContainer = new Composite(parent, SWT.NONE);
 		entireContainer.setLayout(new GridLayout(1, false));
 
-		projectline = new Label(entireContainer, SWT.FILL);
-		projectline.setText("project not set                    ");
-		projectline.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, true, true));
+		// projectline = new Label(entireContainer, SWT.FILL);
+		// projectline.setText("");
+		// projectline.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, true, true));
 
 		lblOverallTestState = new Label(entireContainer, SWT.CENTER);
 		FontData[] fontData = lblOverallTestState.getFont().getFontData();
@@ -61,6 +63,10 @@ public class AbapCiDashboardView extends ViewPart {
 		infoline = new Label(entireContainer, SWT.FILL);
 		infoline.setText("Initialized                                                            ");
 		infoline.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, true, true));
+
+		openErrorHyperlink = new Hyperlink(entireContainer, SWT.FILL);
+		openErrorHyperlink.setText("                  ");
+		openErrorHyperlink.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, true, true));
 
 		parent.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_GRAY));
 		parent.redraw();

@@ -35,6 +35,8 @@ import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.forms.events.HyperlinkAdapter;
+import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.part.ViewPart;
 
@@ -229,7 +231,7 @@ public class AbapCiMainView extends ViewPart {
 			@Override
 			public String getText(Object element) {
 				AbapPackageTestState p = (AbapPackageTestState) element;
-				return p.getAUnitInfo();
+				return p.getUnitTestState().toString();
 			}
 		});
 
@@ -239,7 +241,7 @@ public class AbapCiMainView extends ViewPart {
 			@Override
 			public String getText(Object element) {
 				AbapPackageTestState p = (AbapPackageTestState) element;
-				return p.getAUnitNumOk();
+				return Integer.toString(p.getAUnitNumOk());
 			}
 		});
 
@@ -249,7 +251,7 @@ public class AbapCiMainView extends ViewPart {
 			@Override
 			public String getText(Object element) {
 				AbapPackageTestState p = (AbapPackageTestState) element;
-				return p.getAUnitNumErr();
+				return Integer.toString(p.getAUnitNumErr());
 			}
 		});
 
@@ -259,7 +261,7 @@ public class AbapCiMainView extends ViewPart {
 			@Override
 			public String getText(Object element) {
 				AbapPackageTestState p = (AbapPackageTestState) element;
-				return p.getAUnitNumSuppressed();
+				return Integer.toString(p.getAUnitNumSuppressed());
 			}
 		});
 
@@ -398,8 +400,11 @@ public class AbapCiMainView extends ViewPart {
 					: null;
 			m_control.setText(firstStackEntry != null ? firstStackEntry.getDescription() : "");
 
-			m_control.addListener(SWT.MouseDown,
-					e -> EditorHandler.Open(project, firstStackEntry != null ? firstStackEntry.getUri() : null));
+			m_control.addHyperlinkListener(new HyperlinkAdapter() {
+				public void linkActivated(HyperlinkEvent e) {
+					EditorHandler.open(project, firstStackEntry != null ? firstStackEntry.getUri() : null);
+				}
+			});
 
 			GC gc = event.gc;
 			Rectangle cellRect = new Rectangle(event.x, event.y, event.width, event.height);

@@ -13,8 +13,8 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.sap.adt.projectexplorer.ui.node.AbapRepositoryBaseNode;
 
+import abapci.AbapCiPlugin;
 import abapci.domain.ContinuousIntegrationConfig;
-import abapci.model.ContinuousIntegrationModel;
 import abapci.presenter.ContinuousIntegrationPresenter;
 import abapci.views.AbapCiMainView;
 import abapci.views.wizard.AddContinuousIntegrationConfigPage;
@@ -40,8 +40,8 @@ public class AbapCiRunAddHandler extends AbstractHandler {
 					IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 
 					AbapCiMainView ciMainView = (AbapCiMainView) page.findView(AbapCiMainView.ID);
-					ContinuousIntegrationPresenter continuousIntegrationPresenter = new ContinuousIntegrationPresenter(
-							ciMainView, new ContinuousIntegrationModel(), project);
+					ContinuousIntegrationPresenter continuousIntegrationPresenter = AbapCiPlugin
+							.getDefault().continuousIntegrationPresenter;
 					AddContinuousIntegrationConfigPage addContinuousIntegrationConfigPage = new AddContinuousIntegrationConfigPage(
 							PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
 							continuousIntegrationPresenter, ciConfig, false);

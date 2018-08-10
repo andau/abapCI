@@ -5,11 +5,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.forms.events.HyperlinkAdapter;
+import org.eclipse.ui.forms.events.HyperlinkEvent;
+import org.eclipse.ui.forms.widgets.Hyperlink;
 
 import abapci.Exception.ContinuousIntegrationConfigFileParseException;
 import abapci.domain.AbapPackageTestState;
@@ -20,6 +24,8 @@ import abapci.domain.TestResult;
 import abapci.domain.TestState;
 import abapci.manager.DevelopmentProcessManager;
 import abapci.model.IContinuousIntegrationModel;
+import abapci.utils.EditorHandler;
+import abapci.utils.InvalidItemUtil;
 import abapci.views.AbapCiDashboardView;
 import abapci.views.AbapCiMainView;
 
@@ -97,7 +103,7 @@ public class ContinuousIntegrationPresenter {
 
 	}
 
-	private void loadPackages() {
+	public void loadPackages() {
 		try {
 			abapPackageTestStates.clear();
 			List<ContinuousIntegrationConfig> ciConfigs;
@@ -159,6 +165,9 @@ public class ContinuousIntegrationPresenter {
 	}
 
 	private void updateViews() {
+
+		List<AbapPackageTestState> abapPackageTestStatesForCurrentProject = getAbapPackageTestStatesForCurrentProject();
+
 		if (abapCiDashboardView != null) {
 
 			SourcecodeState currentSourceCodeState = evalSourceCodeTestState();
@@ -167,19 +176,62 @@ public class ContinuousIntegrationPresenter {
 			abapCiDashboardView.lblOverallTestState.setText(globalTestState.getTestStateOutputForDashboard());
 			abapCiDashboardView.lblOverallTestState.redraw();
 
-			DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-			Date date = new Date();
-			abapCiDashboardView.projectline.setText(currentProject.getName());
-			abapCiDashboardView.infoline.setText("Last test run at: " + dateFormat.format(date));
+			// abapCiDashboardView.projectline.setText(TODO reserved for projectinfo when
+			// infoline is used for all infos);
+
+			abapCiDashboardView.infoline.setText(buildInfoLine(abapPackageTestStatesForCurrentProject));
+
+			rebuildHyperlink(abapCiDashboardView.openErrorHyperlink, abapPackageTestStatesForCurrentProject);
+
 			abapCiDashboardView.infoline.redraw();
 
 			abapCiDashboardView.setBackgroundColor(globalTestState.getColor());
 		}
 
-		if (view != null && getAbapPackageTestStatesForCurrentProject() != null) {
-			view.setViewerInput(getAbapPackageTestStatesForCurrentProject());
+		if (view != null && abapPackageTestStatesForCurrentProject != null) {
+			view.setViewerInput(abapPackageTestStatesForCurrentProject);
 			view.statusLabel.setText("Package information updated");
 		}
+	}
+
+	private void rebuildHyperlink(Hyperlink link, List<AbapPackageTestState> abapPackageTestStatesForCurrentProject) {
+		List<AbapPackageTestState> packagesWithFailedTests = abapPackageTestStatesForCurrentProject.stream()
+				.filter(item -> item.getFirstFailedUnitTest() != null)
+				.collect(Collectors.<AbapPackageTestState>toList());
+		Hyperlink newLink = new Hyperlink(link.getParent(), link.getStyle());
+		newLink.setLayoutData(link.getLayoutData());
+		if (packagesWithFailedTests.isEmpty()) {
+			newLink.setText("");
+		} else {
+			link.addHyperlinkListener(new HyperlinkAdapter() {
+				public void linkActivated(HyperlinkEvent e) {
+					EditorHandler.open(currentProject, packagesWithFailedTests);
+				}
+			});
+			if (packagesWithFailedTests.size() == 1) {
+				link.setText(
+						InvalidItemUtil.getOutputForUnitTest(packagesWithFailedTests.get(0).getFirstFailedUnitTest()));
+			} else {
+				link.setText(String.format("Open %s failed tests", packagesWithFailedTests.size()));
+			}
+		}
+
+		link = newLink;
+	}
+
+	private String buildInfoLine(List<AbapPackageTestState> abapPackageTestStatesForCurrentProject) {
+		int overallOk = abapPackageTestStatesForCurrentProject.stream().mapToInt(item -> item.getAUnitNumOk()).sum();
+		int overallErrors = abapPackageTestStatesForCurrentProject.stream().mapToInt(item -> item.getAUnitNumErr())
+				.sum();
+		int overallSuppressed = abapPackageTestStatesForCurrentProject.stream()
+				.mapToInt(item -> item.getAUnitNumSuppressed()).sum();
+
+		String unitTestInfoString = String.format("(%s,%s,%s)", overallOk, overallErrors, overallSuppressed);
+
+		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+		Date date = new Date();
+
+		return dateFormat.format(date) + ": " + currentProject.getName() + " " + unitTestInfoString;
 	}
 
 	private SourcecodeState evalSourceCodeTestState() {
@@ -242,6 +294,11 @@ public class ContinuousIntegrationPresenter {
 	public boolean containsPackage(String currentProjectName, String triggerPackage) {
 		return abapPackageTestStates.stream().anyMatch(item -> item.getProjectName() != null
 				&& item.getProjectName().equals(currentProjectName) && item.getPackageName().equals(triggerPackage));
+	}
+
+	public boolean runNecessary() {
+		return getAbapPackageTestStatesForCurrentProject().stream().anyMatch(
+				item -> item.getUnitTestState() == TestState.UNDEF || item.getUnitTestState() == TestState.OFFL);
 	}
 
 }

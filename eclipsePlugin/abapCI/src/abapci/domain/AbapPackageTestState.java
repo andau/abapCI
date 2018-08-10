@@ -64,16 +64,16 @@ public class AbapPackageTestState {
 		return aUnitTestResult.getTestResultInfo();
 	}
 
-	public String getAUnitNumOk() {
-		return Integer.toString(aUnitTestResult.getNumOk());
+	public int getAUnitNumOk() {
+		return aUnitTestResult.getNumOk();
 	}
 
-	public String getAUnitNumErr() {
-		return Integer.toString(aUnitTestResult.getActiveErrors().size());
+	public int getAUnitNumErr() {
+		return aUnitTestResult.getActiveErrors().size();
 	}
 
-	public String getAUnitNumSuppressed() {
-		return Integer.toString(aUnitTestResult.getSuppressedErrors().size());
+	public int getAUnitNumSuppressed() {
+		return aUnitTestResult.getSuppressedErrors().size();
 	}
 
 	public String getAUnitLastRun() {
