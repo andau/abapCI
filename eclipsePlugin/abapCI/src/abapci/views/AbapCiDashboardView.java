@@ -61,12 +61,14 @@ public class AbapCiDashboardView extends ViewPart {
 		lblOverallTestState.setLayoutData(new GridData(SWT.CENTER, SWT.FILL, true, true));
 
 		infoline = new Label(entireContainer, SWT.FILL);
-		infoline.setText("Initialized                                                            ");
-		infoline.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, true, true));
+		infoline.setText(
+				"Initialized                                                                                        ");
+		infoline.setLayoutData(new GridData(SWT.LEFT, SWT.WRAP, true, true));
 
 		openErrorHyperlink = new Hyperlink(entireContainer, SWT.FILL);
-		openErrorHyperlink.setText("                  ");
-		openErrorHyperlink.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, true, true));
+		openErrorHyperlink
+				.setText("                                                                                         ");
+		openErrorHyperlink.setLayoutData(new GridData(SWT.LEFT, SWT.WRAP, true, true));
 
 		parent.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_GRAY));
 		parent.redraw();

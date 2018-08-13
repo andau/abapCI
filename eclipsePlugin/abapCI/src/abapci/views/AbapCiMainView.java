@@ -49,6 +49,7 @@ import abapci.feature.FeatureFacade;
 import abapci.lang.UiTexts;
 import abapci.presenter.ContinuousIntegrationPresenter;
 import abapci.utils.EditorHandler;
+import abapci.utils.InvalidItemUtil;
 import abapci.views.actions.ci.AbapGitCiAction;
 import abapci.views.actions.ci.AbapUnitCiAction;
 import abapci.views.actions.ci.AbapUnitCiActionOpenFirstError;
@@ -398,7 +399,8 @@ public class AbapCiMainView extends ViewPart {
 
 			firstStackEntry = p.getFirstFailedUnitTest() != null ? p.getFirstFailedUnitTest().getFirstStackEntry()
 					: null;
-			m_control.setText(firstStackEntry != null ? firstStackEntry.getDescription() : "");
+			m_control.setText(
+					firstStackEntry != null ? InvalidItemUtil.getOutputForUnitTest(p.getFirstFailedUnitTest()) : "");
 
 			m_control.addHyperlinkListener(new HyperlinkAdapter() {
 				public void linkActivated(HyperlinkEvent e) {

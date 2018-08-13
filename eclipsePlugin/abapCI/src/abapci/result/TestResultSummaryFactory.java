@@ -37,7 +37,7 @@ public class TestResultSummaryFactory {
 			if (criticalAlert.getStackEntries() != null && !criticalAlert.getStackEntries().isEmpty()) {
 				firstStackEntry = criticalAlert.getStackEntries().get(0);
 			}
-			invalidItems.add(new InvalidItem(criticalAlert.getTitle(), "", false, firstStackEntry));
+			invalidItems.add(new InvalidItem("", criticalAlert.getTitle(), false, firstStackEntry));
 
 		}
 

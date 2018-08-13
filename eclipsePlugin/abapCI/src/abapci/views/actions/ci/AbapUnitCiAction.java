@@ -5,6 +5,7 @@ import org.eclipse.core.resources.IProject;
 import abapci.AbapCiPlugin;
 import abapci.AbapProjectUtil;
 import abapci.domain.AbapPackageTestState;
+import abapci.domain.UnitTestResultSummary;
 import abapci.handlers.AbapUnitHandler;
 import abapci.presenter.ContinuousIntegrationPresenter;
 import abapci.result.TestResultSummaryFactory;
@@ -26,7 +27,9 @@ public class AbapUnitCiAction extends AbstractCiAction {
 
 			try {
 				IProject project = AbapProjectUtil.getProjectByProjectName(abapPackageTestState.getProjectName());
-				new AbapUnitHandler().executePackage(project, abapPackageTestState.getPackageName());
+				UnitTestResultSummary unitTestResultSummary = new AbapUnitHandler().executePackage(project,
+						abapPackageTestState.getPackageName());
+				continuousIntegrationPresenter.mergeUnitTestResultSummary(unitTestResultSummary);
 
 			} catch (Exception ex) {
 				TestResultSummaryFactory.createOffline(abapPackageTestState.getPackageName());

@@ -22,6 +22,7 @@ import abapci.domain.GlobalTestState;
 import abapci.domain.SourcecodeState;
 import abapci.domain.TestResult;
 import abapci.domain.TestState;
+import abapci.domain.UnitTestResultSummary;
 import abapci.manager.DevelopmentProcessManager;
 import abapci.model.IContinuousIntegrationModel;
 import abapci.utils.EditorHandler;
@@ -180,10 +181,9 @@ public class ContinuousIntegrationPresenter {
 			// infoline is used for all infos);
 
 			abapCiDashboardView.infoline.setText(buildInfoLine(abapPackageTestStatesForCurrentProject));
+			abapCiDashboardView.infoline.setLayoutData(abapCiDashboardView.infoline.getLayoutData());
 
 			rebuildHyperlink(abapCiDashboardView.openErrorHyperlink, abapPackageTestStatesForCurrentProject);
-
-			abapCiDashboardView.infoline.redraw();
 
 			abapCiDashboardView.setBackgroundColor(globalTestState.getColor());
 		}
@@ -198,11 +198,10 @@ public class ContinuousIntegrationPresenter {
 		List<AbapPackageTestState> packagesWithFailedTests = abapPackageTestStatesForCurrentProject.stream()
 				.filter(item -> item.getFirstFailedUnitTest() != null)
 				.collect(Collectors.<AbapPackageTestState>toList());
-		Hyperlink newLink = new Hyperlink(link.getParent(), link.getStyle());
-		newLink.setLayoutData(link.getLayoutData());
 		if (packagesWithFailedTests.isEmpty()) {
-			newLink.setText("");
+			link.setVisible(false);
 		} else {
+			link.setVisible(true);
 			link.addHyperlinkListener(new HyperlinkAdapter() {
 				public void linkActivated(HyperlinkEvent e) {
 					EditorHandler.open(currentProject, packagesWithFailedTests);
@@ -216,7 +215,6 @@ public class ContinuousIntegrationPresenter {
 			}
 		}
 
-		link = newLink;
 	}
 
 	private String buildInfoLine(List<AbapPackageTestState> abapPackageTestStatesForCurrentProject) {
@@ -301,4 +299,14 @@ public class ContinuousIntegrationPresenter {
 				item -> item.getUnitTestState() == TestState.UNDEF || item.getUnitTestState() == TestState.OFFL);
 	}
 
+	public void mergeUnitTestResultSummary(UnitTestResultSummary unitTestResultSummary) {
+
+		for (AbapPackageTestState testState : getAbapPackageTestStatesForCurrentProject()) {
+			if (testState.getPackageName().equals(unitTestResultSummary.getPackageName())) {
+				testState.setUnitTestResult(unitTestResultSummary.getTestResult());
+			}
+		}
+
+		updateViewsAsync();
+	}
 }
