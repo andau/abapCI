@@ -10,7 +10,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = AbapCiPlugin.getDefault().getPreferenceStore();
 
-		store.setDefault(PreferenceConstants.PREF_DEV_PROJECT, "");
 		store.setDefault(PreferenceConstants.PREF_UNIT_RUN_INTERVAL, 0);
 		store.setDefault(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE, true);
 		store.setDefault(PreferenceConstants.PREF_ATC_RUN_AFTER_UT_TURN_GREEN, false);

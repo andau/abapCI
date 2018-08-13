@@ -4,7 +4,6 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.jface.preference.IPreferenceStore;
 
 import com.sap.adt.communication.exceptions.CommunicationException;
 import com.sap.adt.tools.abapsource.abapunit.AbapUnitTask;
@@ -17,10 +16,8 @@ import com.sap.adt.tools.abapsource.abapunit.TestRunException;
 import com.sap.adt.tools.abapsource.abapunit.services.AdtServicesPlugin;
 import com.sap.adt.tools.abapsource.abapunit.services.IAdtServicesFactory;
 
-import abapci.AbapCiPlugin;
 import abapci.domain.UnitTestResultSummary;
 import abapci.feature.FeatureFacade;
-import abapci.preferences.PreferenceConstants;
 import abapci.result.TestResultSummaryFactory;
 
 /**
@@ -38,11 +35,9 @@ public class AbapUnitHandler extends AbstractHandler {
 
 	public UnitTestResultSummary executePackage(IProject project, String packageName) {
 
-		IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore();
-		String destinationId = prefs.getString(PreferenceConstants.PREF_DEV_PROJECT);
 		boolean flag = false;
 		IAdtServicesFactory servicesFactory = AdtServicesPlugin.getDefault().getFactory();
-		IAbapUnitService abapUnitService = servicesFactory.createAbapUnitService(destinationId, flag);
+		IAbapUnitService abapUnitService = servicesFactory.createAbapUnitService(project.getName(), flag);
 		AbapUnitTask task = new AbapUnitTask(packageName);
 
 		String testobjectUrl = "/sap/bc/adt/vit/wb/object_type/devck/object_name/" + packageName;

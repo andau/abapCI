@@ -5,8 +5,6 @@ package abapci.preferences;
  */
 public class PreferenceConstants {
 
-	public static final String PREF_DEV_PROJECT = "abapUnitDestinationPreference";
-
 	public static final String PREF_JENKINS_URL = "jenkinsUrlPreference";
 
 	public static final String PREF_JENKINS_USERNAME = "jenkinsUsernamePreference";

@@ -24,7 +24,6 @@ import com.sap.adt.sapgui.ui.internal.editors.GuiEditorInput;
 import abapci.AbapCiPlugin;
 import abapci.abapgit.AbapGitPackageChanger;
 import abapci.feature.FeatureFacade;
-import abapci.preferences.PreferenceConstants;
 
 public class AbapGitHandler extends AbstractHandler {
 
@@ -67,7 +66,6 @@ public class AbapGitHandler extends AbstractHandler {
 
 		if (projectname == null || projectname.equals("")) {
 			IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore();
-			projectname = prefs.getString(PreferenceConstants.PREF_DEV_PROJECT);
 		}
 
 		IProject project = AdtCoreProjectServiceFactory.createCoreProjectService().findProject(projectname);
@@ -95,7 +93,7 @@ public class AbapGitHandler extends AbstractHandler {
 	private void showMissingProjectInfo(String projectname) {
 		if (projectname == null || projectname.trim().isEmpty()) {
 			MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Info",
-					"For calling abapGit select an ABAP package in the package explorer or set the ABAP development package in the ABAP CI settings");
+					"For calling abapGit select an ABAP package in the package explorer");
 		} else {
 			MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Info",
 					String.format("Project %s could not be determined as valid ABAP project", projectname));

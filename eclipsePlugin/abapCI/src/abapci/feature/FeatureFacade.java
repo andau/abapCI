@@ -36,11 +36,6 @@ public class FeatureFacade {
 		return featureFactory.createJenkinsFeature();
 	}
 
-	public GeneralFeature getGeneralFeature() {
-		// TODO Auto-generated method stub
-		return featureFactory.createGeneralFeature();
-	}
-
 	public ColoredProjectsTabHeaderFeature getColoredProjectsTabHeaderFeature() {
 		return featureFactory.createColoredProjectsTabHeaderFeature();
 	}

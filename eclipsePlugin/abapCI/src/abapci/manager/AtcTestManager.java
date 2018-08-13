@@ -32,7 +32,8 @@ public class AtcTestManager extends AbstractTestManager {
 		overallTestState = TestState.UNDEF;
 		for (String packageName : packageNames) {
 			try {
-				atcWorklist = new AbapAtcHandler().executePackage(packageName);
+				// TODO Extract Project
+				atcWorklist = new AbapAtcHandler().executePackage(null, packageName);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

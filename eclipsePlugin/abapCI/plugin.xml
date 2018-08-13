@@ -187,6 +187,7 @@
              commandId="com.abapci.coloredProject"
              id="com.abapci.coloredProject"
              label="Set coloring for project"
+             icon="icons/abapci_logo.ico"
              style="push"
              tooltip="Set background color for objects of this ABAP project">
           <visibleWhen
@@ -216,9 +217,10 @@
        <command
              commandId="com.abapci.ciRun.add"
              id="com.abapci.ciRun.add"
-             label="add to CI Run"
+             label="Add to CI Run"
+             icon="icons/abapci_logo.ico"
              style="push"
-             tooltip="Add package to CI Run">
+             tooltip="Add ABAP package to CI Run">
           <visibleWhen
                 checkEnabled="false">
              <iterate

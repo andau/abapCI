@@ -13,13 +13,6 @@ public class FeatureFactory {
 		prefs = (prefs == null) ? AbapCiPlugin.getDefault().getPreferenceStore() : prefs;
 	}
 
-	public GeneralFeature createGeneralFeature() {
-		initPrefs();
-		GeneralFeature feature = new GeneralFeature();
-		feature.setDevelopmentProject(prefs.getString(PreferenceConstants.PREF_DEV_PROJECT));
-		return feature;
-	}
-
 	public UnitFeature createAbapUnitFeature() {
 		initPrefs();
 		UnitFeature feature = new UnitFeature();
