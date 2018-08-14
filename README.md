@@ -2,7 +2,7 @@
 
 AbapCi is an Eclipse plugin which provides various Continuous Integration tools for the ABAP development. The plugin is based on the ABAP Development Tool SDK from SAP and can be installed over the [Eclipse marketplace](https://marketplace.eclipse.org/content/abap-continuous-integration). 
 
-The only prerequisite to use this plugin for developing ABAP is an ![ABAP Development Tool (ADT) on Eclipse](https://tools.hana.ondemand.com/#abap) installation. 
+The only prerequisite to use this plugin for developing ABAP is an [ABAP Development Tool (ADT) on Eclipse](https://tools.hana.ondemand.com/#abap) installation. 
 
 ## Main Features: 
 1. Automatic unit test runs 
@@ -24,7 +24,7 @@ The feature can be enabled and disabled in the Eclipse preferences (Window -> Pr
 
 The views can be found after installation of the plugin under the menu entry Window -> Show View -> Other... in the section ABAP Continuous Integration. 
 
-[abapCi Screenshot](https://github.com/andau/abapCI/blob/master/docu/unit_test_standard_ui.png)
+![abapCi Screenshot](https://github.com/andau/abapCI/blob/master/docu/unit_test_standard_ui.png)
 
 Development packages can be added to the automatic unit test run by placing the mouse on a development package and selecting the menu entry "Add to CI Run". 
 The CI Run executes all unit tests over an ADT functionality for all packages of the current selected ABAP development project. 
