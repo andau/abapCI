@@ -48,6 +48,7 @@ To activate the feature for a specific development object in the first three lin
 
 For example, with the default value the source code of the following class will be autoformatted when saved or activated: 
 
+```
 "#autoformat 
 CLASS zcl_dummy_class DEFINITION
   PUBLIC
@@ -55,6 +56,7 @@ PUBLIC
   FINAL
   CREATE PUBLIC .
 ... 
+```
 
 ## ad 4. Shortcut for abapGit 
 This feature provides a rudimentary integration of abapGit into Eclipse. 
