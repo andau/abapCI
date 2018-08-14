@@ -22,6 +22,7 @@ import com.sap.adt.sapgui.ui.editors.AdtSapGuiEditorUtilityFactory;
 import com.sap.adt.sapgui.ui.internal.editors.GuiEditorInput;
 
 import abapci.AbapCiPlugin;
+import abapci.AbapProjectUtil;
 import abapci.abapgit.AbapGitPackageChanger;
 import abapci.feature.FeatureFacade;
 
@@ -54,9 +55,21 @@ public class AbapGitHandler extends AbstractHandler {
 						AbapGitPackageChanger packageChanger = new AbapGitPackageChanger();
 						packageChanger.changePackage(projectname, packagename);
 					}
+				} else if (!((TreeSelection) selection).isEmpty()
+						&& ((TreeSelection) selection).getFirstElement() instanceof IProject) {
+					IProject project = (IProject) ((TreeSelection) selection).getFirstElement();
+
+					projectname = project.getName();
 				}
 			}
 		}
+
+		if (projectname == null && AbapProjectUtil.getCurrentProject() != null)
+
+		{
+			projectname = AbapProjectUtil.getCurrentProject().getName();
+		}
+
 		execute(projectname);
 
 		return null;

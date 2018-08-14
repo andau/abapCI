@@ -10,9 +10,8 @@ import java.util.stream.Collectors;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.forms.events.HyperlinkAdapter;
-import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 
 import abapci.Exception.ContinuousIntegrationConfigFileParseException;
@@ -180,10 +179,10 @@ public class ContinuousIntegrationPresenter {
 			// abapCiDashboardView.projectline.setText(TODO reserved for projectinfo when
 			// infoline is used for all infos);
 
-			abapCiDashboardView.infoline.setText(buildInfoLine(abapPackageTestStatesForCurrentProject));
+			abapCiDashboardView.infoline.setText(buildInfoLine(abapPackageTestStatesForCurrentProject) + "     ");
 			abapCiDashboardView.infoline.setLayoutData(abapCiDashboardView.infoline.getLayoutData());
 
-			rebuildHyperlink(abapCiDashboardView.openErrorHyperlink, abapPackageTestStatesForCurrentProject);
+			rebuildHyperlink(abapCiDashboardView.getEntireContainer(), abapCiDashboardView.openErrorHyperlink);
 
 			abapCiDashboardView.setBackgroundColor(globalTestState.getColor());
 		}
@@ -194,27 +193,34 @@ public class ContinuousIntegrationPresenter {
 		}
 	}
 
-	private void rebuildHyperlink(Hyperlink link, List<AbapPackageTestState> abapPackageTestStatesForCurrentProject) {
-		List<AbapPackageTestState> packagesWithFailedTests = abapPackageTestStatesForCurrentProject.stream()
+	private void rebuildHyperlink(Composite container, Hyperlink link) {
+
+		List<AbapPackageTestState> packagesWithFailedTests = getAbapPackageTestStatesForCurrentProject().stream()
 				.filter(item -> item.getFirstFailedUnitTest() != null)
 				.collect(Collectors.<AbapPackageTestState>toList());
+
 		if (packagesWithFailedTests.isEmpty()) {
 			link.setVisible(false);
 		} else {
 			link.setVisible(true);
-			link.addHyperlinkListener(new HyperlinkAdapter() {
-				public void linkActivated(HyperlinkEvent e) {
-					EditorHandler.open(currentProject, packagesWithFailedTests);
-				}
-			});
 			if (packagesWithFailedTests.size() == 1) {
 				link.setText(
-						InvalidItemUtil.getOutputForUnitTest(packagesWithFailedTests.get(0).getFirstFailedUnitTest()));
+						InvalidItemUtil.getOutputForUnitTest(packagesWithFailedTests.get(0).getFirstFailedUnitTest())
+								+ "     ");
 			} else {
-				link.setText(String.format("Open %s failed tests", packagesWithFailedTests.size()));
+				link.setText(String.format("Open first failed tests for  %s packages", packagesWithFailedTests.size()));
 			}
 		}
 
+	}
+
+	public void openEditorsForFailedTests() {
+
+		List<AbapPackageTestState> packagesWithFailedTests = getAbapPackageTestStatesForCurrentProject().stream()
+				.filter(item -> item.getFirstFailedUnitTest() != null)
+				.collect(Collectors.<AbapPackageTestState>toList());
+
+		EditorHandler.open(currentProject, packagesWithFailedTests);
 	}
 
 	private String buildInfoLine(List<AbapPackageTestState> abapPackageTestStatesForCurrentProject) {

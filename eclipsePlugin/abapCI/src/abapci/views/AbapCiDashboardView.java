@@ -9,6 +9,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.forms.events.HyperlinkAdapter;
+import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.part.ViewPart;
 
@@ -30,6 +32,7 @@ public class AbapCiDashboardView extends ViewPart {
 	public Hyperlink openErrorHyperlink;
 
 	private Composite parent;
+	private Composite entireContainer;
 
 	public AbapCiDashboardView() {
 		ViewModel.INSTANCE.getOverallTestState();
@@ -45,7 +48,7 @@ public class AbapCiDashboardView extends ViewPart {
 		this.parent = parent;
 		presenter = AbapCiPlugin.getDefault().continuousIntegrationPresenter;
 
-		Composite entireContainer = new Composite(parent, SWT.NONE);
+		entireContainer = new Composite(parent, SWT.NONE);
 		entireContainer.setLayout(new GridLayout(1, false));
 
 		// projectline = new Label(entireContainer, SWT.FILL);
@@ -66,9 +69,15 @@ public class AbapCiDashboardView extends ViewPart {
 		infoline.setLayoutData(new GridData(SWT.LEFT, SWT.WRAP, true, true));
 
 		openErrorHyperlink = new Hyperlink(entireContainer, SWT.FILL);
-		openErrorHyperlink
-				.setText("                                                                                         ");
+		openErrorHyperlink.setText(
+				"                                                                                                                ");
 		openErrorHyperlink.setLayoutData(new GridData(SWT.LEFT, SWT.WRAP, true, true));
+		openErrorHyperlink.addHyperlinkListener(new HyperlinkAdapter() {
+			public void linkActivated(HyperlinkEvent e) {
+				presenter.openEditorsForFailedTests();
+			}
+
+		});
 
 		parent.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_GRAY));
 		parent.redraw();
@@ -80,6 +89,10 @@ public class AbapCiDashboardView extends ViewPart {
 			infoline.setText("Activate 'Run Unit tests after an ABAP object' and restart");
 		}
 
+	}
+
+	public Composite getEntireContainer() {
+		return entireContainer;
 	}
 
 	@Override
