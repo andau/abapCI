@@ -7,11 +7,11 @@ The purpose of the plugin is to save development time by automating repetitive t
 The only prerequisite to use this plugin for developing ABAP is an [ABAP Development Tool (ADT) on Eclipse](https://tools.hana.ondemand.com/#abap) installation. 
 
 ## Main Features: 
-[1. Automatic unit test runs](#1.-automatic-unit-test-runs)<br>
-[2. Different coloring for each ABAP project](#2.-different-coloring-for-each-abap-project)<br>
-[3. Automatic source code formatting](#3.-automatic-source-code-formatting)<br>
-[4. Shortcut for abapGit](#4.-shortcut-for-abapgit)<br>
-[5. Automatic ATC runs (experimental)](#5.-automatic-ATC-runs-(experimental))<br> 
+[1. Automatic unit test runs](#1-automatic-unit-test-runs)<br>
+[2. Different coloring for each ABAP project](#2-different-coloring-for-each-abap-project)<br>
+[3. Automatic source code formatting](#3-automatic-source-code-formatting)<br>
+[4. Shortcut for abapGit](#4-shortcut-for-abapgit)<br>
+[5. Automatic ATC runs (experimental)](#5-automatic-ATC-runs-(experimental))<br> 
 
 
 ## 1. Automatic unit test runs 
