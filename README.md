@@ -104,17 +104,17 @@ For coloring the source code editors there are three options.
         `Change color of tab header for colored projects (do not use with dark theme)`<br>
         `Change color of left ruler for colored projects`<br>
         `Change color of right ruler for colored projects`<br>
-<br>
+
 3. Automatic source code formatting<br>
 The feature can be enabled or disabled with the first checkbox in this section `Automatic sourcecode formatting enabled`</br>
-The configuration setting `Mandatory prefix in source code to enable formatter`contains the prefix with the starting string that one of the first three lines of the source code has to match to trigger the automatic source code formatting. The default value is #autoformat.</br>
-</br>
+The configuration setting `Mandatory prefix in source code to enable formatter`contains the prefix with the starting string that one of the first three lines of the source code has to match to trigger the automatic source code formatting. The default value is #autoformat.
+
 4. Shortcut for abapGit<br>
-<i>This feature is currently enabled by default. The icons and menu items can currently not be suppressed</i><br> 
+This feature is currently enabled by default. The icons and menu items can currently not be suppressed<br> 
 The checkbox `Package changer for abapGit (not yet implemented on the ABAP backend)` should currently stay disabled as it leads to a error message because of the missing functionality in the ABAP backend. The only situation where it can be used at the moment is for testing purposes while developing the backend part of this feature <br>
-<br>
+
 5. Automatic ATC runs (experimental)<br>
-<br>
+
 6. Trigger Jenkins from Eclipse (experimental)</i><br>
 The 4 settings `Jenkins BaseUrl (eg. localhost:8080)`, `Jenkins Username`, `Jenkins Password`, `Jenkins Build Token<` can be used to configure a connection to a Jenkins server.<br>
 
