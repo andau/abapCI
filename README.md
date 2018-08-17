@@ -2,7 +2,9 @@
 
 AbapCi is an Eclipse plugin which provides various Continuous Integration tools for the ABAP development. The plugin is based on the ABAP Development Tool SDK from SAP (ADT) and can be installed over the [Eclipse marketplace](https://marketplace.eclipse.org/content/abap-continuous-integration) and heavily uses the already implemented code quality features of this ADT SDK. 
 
-The purpose of the plugin is to save development time by automating repetitive tasks and to give an immediate feedback if an unit test unexpectedly fails.    
+The main purposes of the plugin are<br>
+         * **to save development time by automating repetitive tasks and**<br>
+         * **to give immediate feedback, for example if an unit test unexpectedly fails.**<br> 
 
 The only prerequisite to use this plugin for developing ABAP is an [ABAP Development Tool (ADT) on Eclipse](https://tools.hana.ondemand.com/#abap) installation. 
 
