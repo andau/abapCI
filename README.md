@@ -11,7 +11,13 @@ The only prerequisite to use this plugin for developing ABAP is an [ABAP Develop
 [2. Different coloring for each ABAP project](#2-different-coloring-for-each-abap-project)<br>
 [3. Automatic source code formatting](#3-automatic-source-code-formatting)<br>
 [4. Shortcut for abapGit](#4-shortcut-for-abapgit)<br>
-[5. Automatic ATC runs (experimental)](#5-automatic-ATC-runs-(experimental))<br> 
+[5. Automatic ATC runs (experimental)](#5-automatic-atc-runs-experimental)<br> 
+[6. Trigger Jenkins from Eclipse (experimental)](#6-trigger-jenkins-from-eclipse-experimental-)<br> 
+
+## Views, Dialogs and Settings 
+[View ABAP Continuous Integration](#view-abap-Continuous-integration)
+[View ABAP CI Dashboard](#view-abap-ci-dashboard)
+[Eclipse Preferences for ABAP CI](#eclipse-preferences-for-abap-ci) 
 
 
 ## 1. Automatic unit test runs 
@@ -74,3 +80,38 @@ There is currently an project ongoing where a native integration of abapGit into
 
 ## 5. Automatic ATC runs (experimental) 
 <description will be available soon>
+       
+## 6. Trigger Jenkins from Eclipse(experimental)
+<description will be available soon>
+
+## Views, Dialogs and Settings 
+
+# View ABAP Continuous Integration 
+
+# View ABAP CI Dashboard 
+
+# Eclipse Preferences for ABAP CI 
+![abapCi Preferences Screenshot](https://github.com/andau/abapCI/blob/master/docu/abap_ci_preferences.png)
+1. Automatic unit test runs:<br>
+<i>Run Unit tests after an ABAP object is activated</i><br>
+<i>Change Theme layout on failed tests (do not use with dark theme)</i><br> 
+<i>Show a dialog when a new package for the CI run is detected.</i><br>
+<br>
+2. Different coloring for each ABAP project<br>
+<i>Change color of tab header for colored projects (do not use with dark theme)</i><br>
+<i>Change color of left ruler for colored projects</i><br>
+<i>Change color of right ruler for colored projects</i><br>
+<br>
+3. Automatic source code formatting<br>
+<i>Automatic sourcecode formatting enabled</i></br>
+<i>Mandatory prefix in source code to enable formatter</i></br>
+<br>
+4. Shortcut for abapGit<br>
+<i>This feature is currently enabled by default. The icons and menu items can currently not be suppressed</i><br> 
+<i>Package changer for abapGit (not yet implemented on the ABAP backend)</i><br>
+<br>
+5. Automatic ATC runs (experimental)<br>
+<br>
+6. Trigger Jenkins from Eclipse (experimental)</i><br>
+The 4 settings <i>Jenkins BaseUrl (eg. localhost:8080), Jenkins Username, Jenkins Password, Jenkins Build Token</i> can be used to configure a connection to a Jenkins server.<br>
+
