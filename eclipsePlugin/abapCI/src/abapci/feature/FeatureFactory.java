@@ -13,11 +13,10 @@ public class FeatureFactory {
 		prefs = (prefs == null) ? AbapCiPlugin.getDefault().getPreferenceStore() : prefs;
 	}
 
-	public UnitFeature createAbapUnitFeature() {
+	public UnitFeature createUnitFeature() {
 		initPrefs();
 		UnitFeature feature = new UnitFeature();
 		feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE));
-		feature.setInterval(prefs.getInt(PreferenceConstants.PREF_UNIT_RUN_INTERVAL));
 		return feature;
 	}
 

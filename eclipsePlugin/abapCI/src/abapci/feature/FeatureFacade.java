@@ -21,7 +21,7 @@ public class FeatureFacade {
 	}
 
 	public UnitFeature getUnitFeature() {
-		return featureFactory.createAbapUnitFeature();
+		return featureFactory.createUnitFeature();
 	}
 
 	public AtcFeature getAtcFeature() {

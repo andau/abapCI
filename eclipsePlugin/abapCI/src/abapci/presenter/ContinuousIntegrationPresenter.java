@@ -12,6 +12,9 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 
 import abapci.Exception.ContinuousIntegrationConfigFileParseException;
@@ -21,9 +24,11 @@ import abapci.domain.GlobalTestState;
 import abapci.domain.SourcecodeState;
 import abapci.domain.TestResult;
 import abapci.domain.TestState;
+import abapci.domain.UiColor;
 import abapci.domain.UnitTestResultSummary;
 import abapci.manager.DevelopmentProcessManager;
 import abapci.model.IContinuousIntegrationModel;
+import abapci.utils.AnnotationRuleColorChanger;
 import abapci.utils.EditorHandler;
 import abapci.utils.InvalidItemUtil;
 import abapci.views.AbapCiDashboardView;
@@ -190,6 +195,27 @@ public class ContinuousIntegrationPresenter {
 		if (view != null && abapPackageTestStatesForCurrentProject != null) {
 			view.setViewerInput(abapPackageTestStatesForCurrentProject);
 			view.statusLabel.setText("Package information updated");
+		}
+
+		// changeColoringForRightAnnotationRuler();
+
+	}
+
+	private void changeColoringForRightAnnotationRuler() {
+		IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		IEditorPart activeEditor = activePage.getActiveEditor();
+
+		if (true) // check preferences
+		{
+			UiColor currentColor;
+			SourcecodeState currentSourceCodeState = evalSourceCodeTestState();
+			if (currentSourceCodeState == SourcecodeState.UT_FAIL) {
+				currentColor = UiColor.RED;
+			} else {
+				currentColor = UiColor.WHITE;
+			}
+			AnnotationRuleColorChanger annotationRuleColorChanger = new AnnotationRuleColorChanger();
+			annotationRuleColorChanger.change(activeEditor, currentColor, false, true);
 		}
 	}
 

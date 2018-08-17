@@ -10,7 +10,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = AbapCiPlugin.getDefault().getPreferenceStore();
 
-		store.setDefault(PreferenceConstants.PREF_UNIT_RUN_INTERVAL, 0);
 		store.setDefault(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE, true);
 		store.setDefault(PreferenceConstants.PREF_ATC_RUN_AFTER_UT_TURN_GREEN, false);
 
@@ -21,7 +20,11 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.PREF_JENKINS_RUN_AFTER_UNIT_TESTS_TURN_GREEN, false);
 		store.setDefault(PreferenceConstants.PREF_CHANGE_COLOR_ON_FAILED_TESTS, false);
 
+		store.setDefault(PreferenceConstants.PREF_SOURCE_CODE_FORMATTING_ENABLED, true);
 		store.setDefault(PreferenceConstants.PREF_SOURCE_CODE_FORMATTING_PREFIX, "#autoformat");
+
+		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_LEFT_RULER_ENABLED, true);
+		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_RIGHT_RULER_ENABLED, true);
 
 		store.setDefault(PreferenceConstants.PREF_UNIT_RUN_CRITICAL_TESTS_ENABLED, true);
 		store.setDefault(PreferenceConstants.PREF_UNIT_RUN_DANGEROUS_TESTS_ENABLED, true);

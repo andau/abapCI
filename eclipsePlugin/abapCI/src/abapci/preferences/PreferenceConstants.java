@@ -13,8 +13,6 @@ public class PreferenceConstants {
 
 	public static final String PREF_JENKINS_BUILD_TOKEN = "jenkinsBuildTokenPreference";
 
-	public static final String PREF_UNIT_RUN_INTERVAL = "abapUnitIntervalPreference";
-
 	public static final String PREF_UNIT_RUN_ON_SAVE = "abapUnitRunOnSavePreference";
 
 	public static final String PREF_ATC_RUN_AFTER_UT_TURN_GREEN = "atcRunAfterUnitTestsTurnGreenPreference";
