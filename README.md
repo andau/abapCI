@@ -19,7 +19,6 @@ The only prerequisite to use this plugin for developing ABAP is an [ABAP Develop
 [View ABAP CI Dashboard](#view-abap-ci-dashboard)
 [Eclipse Preferences for ABAP CI](#eclipse-preferences-for-abap-ci) 
 
-
 ## 1. Automatic unit test runs 
 The  target of this feature is to automatically run the relevant unit tests after the activation of an ABAP development object. 
 The result of the unit test run is visualised in two views:
@@ -86,32 +85,36 @@ There is currently an project ongoing where a native integration of abapGit into
 
 ## Views, Dialogs and Settings 
 
-# View ABAP Continuous Integration 
+### View ABAP Continuous Integration
+Explaination of this view to be followed 
 
-# View ABAP CI Dashboard 
+### View ABAP CI Dashboard 
+Explaination of this view to be followed 
 
-# Eclipse Preferences for ABAP CI 
+### Eclipse Preferences for ABAP CI 
 ![abapCi Preferences Screenshot](https://github.com/andau/abapCI/blob/master/docu/abap_ci_preferences.png)
+
 1. Automatic unit test runs:<br>
-<i>Run Unit tests after an ABAP object is activated</i><br>
-<i>Change Theme layout on failed tests (do not use with dark theme)</i><br> 
-<i>Show a dialog when a new package for the CI run is detected.</i><br>
-<br>
+With the first checkbox `Run Unit tests after an ABAP object is activated` the feature can be activated.<br>
+The second setting `Change Theme layout on failed tests (do not use with dark theme)` can be used to trigger a change of the Eclipse editor color settings to indicate failed tests.<br> 
+The last setting `Show a dialog when a new package for the CI run is detected.` is a helper function to add the ABAP packages  to the CI run. Each time an object is activated which belongs to a package not yet configured for the CI run, this dialog is shown. The dialog is shown for each package only onces, as there are two options (activate or deactivate) in the dialog and in any case a configuration for the package will be set.   
+
 2. Different coloring for each ABAP project<br>
-<i>Change color of tab header for colored projects (do not use with dark theme)</i><br>
-<i>Change color of left ruler for colored projects</i><br>
-<i>Change color of right ruler for colored projects</i><br>
+For coloring the source code editors there are three options.  
+        `Change color of tab header for colored projects (do not use with dark theme)`<br>
+        `Change color of left ruler for colored projects`<br>
+        `Change color of right ruler for colored projects`<br>
 <br>
 3. Automatic source code formatting<br>
-<i>Automatic sourcecode formatting enabled</i></br>
-<i>Mandatory prefix in source code to enable formatter</i></br>
-<br>
+The feature can be enabled or disabled with the first checkbox in this section `Automatic sourcecode formatting enabled`</br>
+The configuration setting `Mandatory prefix in source code to enable formatter`contains the prefix with the starting string that one of the first three lines of the source code has to match to trigger the automatic source code formatting. The default value is #autoformat.</br>
+</br>
 4. Shortcut for abapGit<br>
 <i>This feature is currently enabled by default. The icons and menu items can currently not be suppressed</i><br> 
-<i>Package changer for abapGit (not yet implemented on the ABAP backend)</i><br>
+The checkbox `Package changer for abapGit (not yet implemented on the ABAP backend)` should currently stay disabled as it leads to a error message because of the missing functionality in the ABAP backend. The only situation where it can be used at the moment is for testing purposes while developing the backend part of this feature <br>
 <br>
 5. Automatic ATC runs (experimental)<br>
 <br>
 6. Trigger Jenkins from Eclipse (experimental)</i><br>
-The 4 settings <i>Jenkins BaseUrl (eg. localhost:8080), Jenkins Username, Jenkins Password, Jenkins Build Token</i> can be used to configure a connection to a Jenkins server.<br>
+The 4 settings `Jenkins BaseUrl (eg. localhost:8080)`, `Jenkins Username`, `Jenkins Password`, `Jenkins Build Token<` can be used to configure a connection to a Jenkins server.<br>
 
