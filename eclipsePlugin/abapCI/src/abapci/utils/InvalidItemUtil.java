@@ -9,8 +9,10 @@ public class InvalidItemUtil {
 
 	public static String getOutputForUnitTest(InvalidItem invalidItem) {
 		String className = extractClassName(invalidItem.getFirstStackEntry().getDescription());
-
-		return String.format("%s: %s", className, invalidItem.getDescription());
+		String description = invalidItem.getDescription();
+		description = description.replaceAll("Critical Assertion Error:", "");
+		description = description.replaceAll("Kritischer Assertion-Fehler:", "");
+		return String.format("%s: %s", className, description);
 	}
 
 	private static String extractClassName(String description) {

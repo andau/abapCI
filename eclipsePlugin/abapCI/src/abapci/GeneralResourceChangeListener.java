@@ -79,8 +79,6 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 
 						showDialogForPackages(currentProject, selectedPackages);
 
-						continuousIntegrationPresenter.setCurrentProject(currentProject);
-
 						if (!initialRun || continuousIntegrationPresenter.runNecessary()) {
 							initialRun = true;
 							continuousIntegrationPresenter.setCurrentProject(currentProject);
@@ -90,12 +88,13 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 											.collect(Collectors.<String>toList()));
 							job.start();
 						} else if (!selectedPackages.isEmpty()) {
-
+							continuousIntegrationPresenter.setCurrentProject(currentProject);
 							job.setTriggerPackages(continuousIntegrationPresenter.getCurrentProject(),
 									selectedPackages);
 							job.start();
 							activationPool.unregisterAllActivated();
 						} else if (!activations.isEmpty()) {
+							continuousIntegrationPresenter.setCurrentProject(currentProject);
 							job.setTriggerPackages(continuousIntegrationPresenter.getCurrentProject(),
 									continuousIntegrationPresenter.getAbapPackageTestStatesForCurrentProject().stream()
 											.map(item -> item.getPackageName()).distinct()
