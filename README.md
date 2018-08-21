@@ -74,6 +74,7 @@ PUBLIC
   CREATE PUBLIC .
 ... 
 ```
+If every ABAP development object (which is edited in text mode) should be autoformatted regardless any prefixes in the comments, the special filter value '<NO_FILTER>' can be used. 
 
 ## 4. Shortcut for abapGit 
 This feature provides a rudimentary integration of abapGit into Eclipse. The necessary steps to open abapGit from Eclipse (Open SAP GUI, selecting project, insert transaction code ZABAPGIT) are summarized into one menu entry, icon or shortcut (Ctrl+Shift+K)      
