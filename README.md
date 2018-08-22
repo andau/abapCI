@@ -4,7 +4,7 @@ AbapCI is an Open Source Eclipse plugin which provides various Continuous Integ
 
 The main purposes of the plugin are<br>
          * **to save development time** - by automating repetitive tasks and<br>
-         * **to give immediate feedback**  -  for example if an unit test unexpectedly fails.<br> 
+         * **to get immediate feedback**  -  for example if an unit test unexpectedly fails.<br> 
 
 The only prerequisite to use this plugin for developing ABAP is an [ABAP Development Tool (ADT) on Eclipse](https://tools.hana.ondemand.com/#abap) installation. 
 
