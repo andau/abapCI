@@ -1,6 +1,7 @@
 package abapci.preferences;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
+import org.eclipse.jface.preference.ColorFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swt.SWT;
@@ -33,6 +34,12 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 				"&Change Theme layout on failed tests (do not use with dark theme)", getFieldEditorParent()));
 
 		createHelperDialogsChapter();
+
+		addField(new ColorFieldEditor(PreferenceConstants.PREF_UNIT_TEST_OK_BACKGROUND_COLOR,
+				"Backgroundcolor for OK Unit Test State used in ABAP CI dashboard", getFieldEditorParent()));
+
+		addField(new ColorFieldEditor(PreferenceConstants.PREF_UNIT_TEST_FAIL_BACKGROUND_COLOR,
+				"Backgroundcolor for FAIL Unit Test State used in ABAP CI dashboard", getFieldEditorParent()));
 
 		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "2. Different coloring for each ABAP project");
 		createColorChangeChapter();

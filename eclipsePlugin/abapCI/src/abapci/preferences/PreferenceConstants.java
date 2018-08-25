@@ -49,6 +49,10 @@ public class PreferenceConstants {
 
 	public static final String PREF_DIALOG_NEW_PACKAGE_FOR_CI_RUN_ENABLED = "dialogNewPackageForCiRunEnabled";
 
+	public static final String PREF_UNIT_TEST_OK_BACKGROUND_COLOR = "unitTestOkBackgroundColor";
+
+	public static final String PREF_UNIT_TEST_FAIL_BACKGROUND_COLOR = "unitTestFailBackgroundColor";
+
 	private PreferenceConstants() {
 	}
 

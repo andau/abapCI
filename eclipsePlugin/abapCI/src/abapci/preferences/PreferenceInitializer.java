@@ -2,6 +2,8 @@ package abapci.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.preference.PreferenceConverter;
+import org.eclipse.swt.graphics.RGB;
 
 import abapci.AbapCiPlugin;
 
@@ -34,6 +36,10 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.PREF_UNIT_RUN_DURATION_MEDIUM_TESTS_ENABLED, true);
 		store.setDefault(PreferenceConstants.PREF_UNIT_RUN_DURATION_SHORT_TESTS_ENABLED, true);
 		store.setDefault(PreferenceConstants.PREF_DIALOG_NEW_PACKAGE_FOR_CI_RUN_ENABLED, true);
+		PreferenceConverter.setDefault(store, PreferenceConstants.PREF_UNIT_TEST_OK_BACKGROUND_COLOR,
+				new RGB(0, 255, 0));
+		PreferenceConverter.setDefault(store, PreferenceConstants.PREF_UNIT_TEST_FAIL_BACKGROUND_COLOR,
+				new RGB(255, 0, 0));
 
 	}
 

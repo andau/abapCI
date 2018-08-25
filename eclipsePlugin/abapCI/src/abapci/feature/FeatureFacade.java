@@ -95,4 +95,11 @@ public class FeatureFacade {
 		getPrefs().setValue(PreferenceConstants.PREF_ATC_VARIANT, variant);
 	}
 
+	public ColorFeature getTestRunOkColorFeature() {
+		return featureFactory.createSimpleColorFeature(ColorFeatureType.PREF_UNIT_TEST_OK_BACKGROUND_COLOR);
+	}
+
+	public ColorFeature getTestRunFailColorFeature() {
+		return featureFactory.createSimpleColorFeature(ColorFeatureType.PREF_UNIT_TEST_FAIL_BACKGROUND_COLOR);
+	}
 }

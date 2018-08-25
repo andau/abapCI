@@ -1,18 +1,22 @@
 package abapci.domain;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
+
+import abapci.feature.FeatureFacade;
 
 public class GlobalTestState {
 
 	private SourcecodeState sourcecodeState;
+	private FeatureFacade featureFacade;
 
 	public GlobalTestState() {
 	}
 
 	public GlobalTestState(SourcecodeState sourcecodeState) {
 		this.sourcecodeState = sourcecodeState;
+		featureFacade = new FeatureFacade();
 	}
 
 	public String getTestStateOutputForDashboard() {
@@ -40,26 +44,26 @@ public class GlobalTestState {
 	}
 
 	public Color getColor() {
-		Color colorForTestState;
+		RGB rgbColor = new RGB(211, 211, 211);
 
 		switch (this.sourcecodeState) {
 		case UT_FAIL:
-			colorForTestState = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
+			rgbColor = featureFacade.getTestRunFailColorFeature().getColor();
 			break;
 		case ATC_FAIL:
-			colorForTestState = Display.getCurrent().getSystemColor(SWT.COLOR_YELLOW);
+			rgbColor = new RGB(0, 0, 255);
 			break;
 		case OK:
-			colorForTestState = Display.getCurrent().getSystemColor(SWT.COLOR_GREEN);
+			rgbColor = featureFacade.getTestRunOkColorFeature().getColor();
 			break;
 		case UNDEF:
 		case OFFL:
 		default:
-			colorForTestState = Display.getCurrent().getSystemColor(SWT.COLOR_GRAY);
+			rgbColor = new RGB(211, 211, 211);
 			break;
 		}
 
-		return colorForTestState;
+		return new Color(Display.getCurrent(), rgbColor);
 	}
 
 	public void setSourcecodeState(SourcecodeState testState) {
@@ -70,7 +74,8 @@ public class GlobalTestState {
 	public void setUnitTeststate(TestState unittestState) {
 		switch (unittestState) {
 		case OK:
-			sourcecodeState = (sourcecodeState == SourcecodeState.ATC_FAIL) ? SourcecodeState.ATC_FAIL : SourcecodeState.OK;    
+			sourcecodeState = (sourcecodeState == SourcecodeState.ATC_FAIL) ? SourcecodeState.ATC_FAIL
+					: SourcecodeState.OK;
 			break;
 		case NOK:
 			sourcecodeState = SourcecodeState.UT_FAIL;
@@ -80,24 +85,25 @@ public class GlobalTestState {
 			break;
 		default:
 			sourcecodeState = SourcecodeState.UNDEF;
-		}		
+		}
 	}
 
 	public void setAtcTeststate(TestState unittestState) {
 		switch (unittestState) {
 		case OK:
-			sourcecodeState = (sourcecodeState == SourcecodeState.UT_FAIL) ? SourcecodeState.UT_FAIL : SourcecodeState.OK;    
+			sourcecodeState = (sourcecodeState == SourcecodeState.UT_FAIL) ? SourcecodeState.UT_FAIL
+					: SourcecodeState.OK;
 			break;
 		case NOK:
-			sourcecodeState = (sourcecodeState == SourcecodeState.UT_FAIL) ? SourcecodeState.UT_FAIL : SourcecodeState.ATC_FAIL;    
+			sourcecodeState = (sourcecodeState == SourcecodeState.UT_FAIL) ? SourcecodeState.UT_FAIL
+					: SourcecodeState.ATC_FAIL;
 			break;
 		case OFFL:
 			sourcecodeState = SourcecodeState.OFFL;
 			break;
 		default:
 			sourcecodeState = SourcecodeState.UNDEF;
-		}		
+		}
 	}
-
 
 }

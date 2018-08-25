@@ -114,4 +114,24 @@ public class FeatureFactory {
 		return feature;
 	}
 
+	public ColorFeature createSimpleColorFeature(ColorFeatureType colorFeatureType) {
+		initPrefs();
+
+		ColorFeature colorFeature = new ColorFeature();
+
+		switch (colorFeatureType) {
+		case PREF_UNIT_TEST_OK_BACKGROUND_COLOR:
+			colorFeature.setPreferenceConstant(PreferenceConstants.PREF_UNIT_TEST_OK_BACKGROUND_COLOR);
+			break;
+		case PREF_UNIT_TEST_FAIL_BACKGROUND_COLOR:
+			colorFeature.setPreferenceConstant(PreferenceConstants.PREF_UNIT_TEST_FAIL_BACKGROUND_COLOR);
+			break;
+
+		default:
+			throw new UnsupportedOperationException();
+		}
+
+		return colorFeature;
+	}
+
 }
