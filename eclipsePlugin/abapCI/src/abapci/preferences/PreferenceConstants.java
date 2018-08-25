@@ -53,6 +53,8 @@ public class PreferenceConstants {
 
 	public static final String PREF_UNIT_TEST_FAIL_BACKGROUND_COLOR = "unitTestFailBackgroundColor";
 
+	public static final String PREF_ATC_TEST_FAIL_BACKGROUND_COLOR = "atcTestFailBackgroundColor";
+
 	private PreferenceConstants() {
 	}
 

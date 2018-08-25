@@ -15,6 +15,11 @@ public class UnitTestResultSummary {
 		this.testResult = new TestResult(testrunOk, numTests, invalidItems);
 	}
 
+	public UnitTestResultSummary(String packageName, TestResult testResult) {
+		this.packageName = packageName;
+		this.testResult = testResult;
+	}
+
 	public String getPackageName() {
 		return packageName;
 	}

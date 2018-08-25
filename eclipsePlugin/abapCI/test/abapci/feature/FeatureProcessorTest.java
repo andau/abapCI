@@ -152,7 +152,7 @@ public class FeatureProcessorTest {
 	private void verfifyUpdateThemeCallAfterUnitAndAtcRun(TestState unitTestState, TestState atcTestState,
 			SourcecodeState stateAfterUnit, SourcecodeState stateAfterAtc) {
 		PowerMockito.when(aUnitTestManager.executeAllPackages(null, null)).thenReturn(unitTestState);
-		PowerMockito.when(atcTestManager.executeAllPackages()).thenReturn(atcTestState);
+		PowerMockito.when(atcTestManager.executeAllPackages(null, null)).thenReturn(atcTestState);
 		featureProcessor.processEnabledFeatures();
 
 		int expectedUpdateThemeCalls = stateAfterAtc == null ? 1 : 2;

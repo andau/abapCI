@@ -102,4 +102,9 @@ public class FeatureFacade {
 	public ColorFeature getTestRunFailColorFeature() {
 		return featureFactory.createSimpleColorFeature(ColorFeatureType.PREF_UNIT_TEST_FAIL_BACKGROUND_COLOR);
 	}
+
+	public ColorFeature getAtcRunFailColorFeature() {
+		return featureFactory.createSimpleColorFeature(ColorFeatureType.PREF_ATC_TEST_FAIL_BACKGROUND_COLOR);
+	}
+
 }

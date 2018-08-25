@@ -51,7 +51,7 @@ public class GlobalTestState {
 			rgbColor = featureFacade.getTestRunFailColorFeature().getColor();
 			break;
 		case ATC_FAIL:
-			rgbColor = new RGB(0, 0, 255);
+			rgbColor = featureFacade.getAtcRunFailColorFeature().getColor();
 			break;
 		case OK:
 			rgbColor = featureFacade.getTestRunOkColorFeature().getColor();

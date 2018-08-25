@@ -160,7 +160,7 @@ public class ContinuousIntegrationPresenter {
 	}
 
 	public void updateViewsAsync() {
-		updateViewsAsync(this.sourcecodeState);
+		updateViewsAsync(evalSourceCodeTestState());
 	}
 
 	public void updateViewsAsync(SourcecodeState sourcecodeState) {
@@ -284,6 +284,26 @@ public class ContinuousIntegrationPresenter {
 		}
 
 		developmentProcessManager.setUnitTeststate(currentUnitTestState);
+
+		TestState currentAtcState = TestState.UNDEF;
+
+		for (AbapPackageTestState testState : getAbapPackageTestStatesForCurrentProject()) {
+			switch (currentAtcState) {
+			case OFFL:
+			case NOK:
+				// no change as this is the highest state
+				break;
+			case UNDEF:
+			case OK:
+			case DEACT:
+				currentAtcState = testState.getAtcTestState() != TestState.DEACT ? testState.getAtcTestState()
+						: currentAtcState;
+				break;
+			}
+		}
+
+		developmentProcessManager.setAtcTeststate(currentAtcState);
+
 		return developmentProcessManager.getSourcecodeState();
 	}
 
@@ -336,6 +356,16 @@ public class ContinuousIntegrationPresenter {
 		for (AbapPackageTestState testState : getAbapPackageTestStatesForCurrentProject()) {
 			if (testState.getPackageName().equals(unitTestResultSummary.getPackageName())) {
 				testState.setUnitTestResult(unitTestResultSummary.getTestResult());
+			}
+		}
+
+		updateViewsAsync();
+	}
+
+	public void mergeAtcWorklist(UnitTestResultSummary atcTestResultSummary) {
+		for (AbapPackageTestState testState : getAbapPackageTestStatesForCurrentProject()) {
+			if (testState.getPackageName().equals(atcTestResultSummary.getPackageName())) {
+				testState.setAtcTestResult(atcTestResultSummary.getTestResult());
 			}
 		}
 

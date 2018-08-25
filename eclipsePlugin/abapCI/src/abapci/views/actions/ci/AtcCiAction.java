@@ -7,8 +7,11 @@ import com.sap.adt.atc.model.atcworklist.IAtcWorklist;
 import abapci.AbapCiPlugin;
 import abapci.AbapProjectUtil;
 import abapci.domain.AbapPackageTestState;
+import abapci.domain.UnitTestResultSummary;
 import abapci.handlers.AbapAtcHandler;
 import abapci.presenter.ContinuousIntegrationPresenter;
+import abapci.result.TestResultSummaryFactory;
+import abapci.utils.AtcResultAnalyzer;
 
 public class AtcCiAction extends AbstractCiAction {
 
@@ -28,9 +31,12 @@ public class AtcCiAction extends AbstractCiAction {
 				IProject project = AbapProjectUtil.getProjectByProjectName(abapPackageTestState.getProjectName());
 				IAtcWorklist atcWorklist = new AbapAtcHandler().executePackage(project,
 						abapPackageTestState.getPackageName());
+				UnitTestResultSummary atcTestResultSummary = new UnitTestResultSummary(
+						abapPackageTestState.getPackageName(), AtcResultAnalyzer.getTestResult(atcWorklist));
+				continuousIntegrationPresenter.mergeAtcWorklist(atcTestResultSummary);
 
 			} catch (Exception ex) {
-				// TODO
+				TestResultSummaryFactory.createOffline(abapPackageTestState.getPackageName());
 			}
 
 		}

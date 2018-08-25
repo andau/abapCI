@@ -41,6 +41,9 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		PreferenceConverter.setDefault(store, PreferenceConstants.PREF_UNIT_TEST_FAIL_BACKGROUND_COLOR,
 				new RGB(255, 0, 0));
 
+		PreferenceConverter.setDefault(store, PreferenceConstants.PREF_ATC_TEST_FAIL_BACKGROUND_COLOR,
+				new RGB(0, 0, 255));
+
 	}
 
 }

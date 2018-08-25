@@ -50,17 +50,17 @@ abstract class AbstractTestManager {
 			TestStateType teststateType) {
 
 		if (teststateType == TestStateType.UNIT) {
-			if (packageTestStates.stream().anyMatch(item -> item.getAUnitInfo().equals("UNDEF"))) {
+			if (packageTestStates.stream().anyMatch(item -> item.getUnitTestState().equals(TestState.UNDEF))) {
 				overallTestState = TestState.UNDEF;
-			} else if (packageTestStates.stream().anyMatch(item -> item.getAUnitInfo().equals("NOK"))) {
+			} else if (packageTestStates.stream().anyMatch(item -> item.getUnitTestState().equals(TestState.NOK))) {
 				overallTestState = TestState.NOK;
 			} else {
 				overallTestState = TestState.OK;
 			}
 		} else {
-			if (packageTestStates.stream().anyMatch(item -> item.getAtcInfo().equals("UNDEF"))) {
+			if (packageTestStates.stream().anyMatch(item -> item.getAtcTestState().equals(TestState.UNDEF))) {
 				overallTestState = TestState.UNDEF;
-			} else if (packageTestStates.stream().anyMatch(item -> item.getAtcInfo().equals("NOK"))) {
+			} else if (packageTestStates.stream().anyMatch(item -> item.getAtcTestState().equals(TestState.NOK))) {
 				overallTestState = TestState.NOK;
 			} else {
 				overallTestState = TestState.OK;

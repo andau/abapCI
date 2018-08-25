@@ -66,10 +66,14 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 
 	private void createAtcChapter() {
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ATC_RUN_AFTER_UT_TURN_GREEN,
-				"&Run ATC when after successful Unit testrun (experimental)", getFieldEditorParent()));
+				"&Run ATC after Unit Teststate changes state to OK (experimental)", getFieldEditorParent()));
 
 		addField(new StringFieldEditor(PreferenceConstants.PREF_ATC_VARIANT, "&Run ATC with variant:",
 				getFieldEditorParent()));
+
+		addField(new ColorFieldEditor(PreferenceConstants.PREF_ATC_TEST_FAIL_BACKGROUND_COLOR,
+				"Backgroundcolor for FAIL ATC State used in ABAP CI dashboard", getFieldEditorParent()));
+
 	}
 
 	private void addHeaderLabelWithSpaceBefore(Composite fieldEditorParent, String headerText) {

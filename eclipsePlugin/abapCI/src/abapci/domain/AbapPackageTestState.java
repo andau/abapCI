@@ -92,8 +92,13 @@ public class AbapPackageTestState {
 		propertyChangeSupport.firePropertyChange("aUnitTestResult", this.aUnitTestResult, aUnitTestResult);
 	}
 
+	@Deprecated
 	public String getAtcInfo() {
 		return atcTestResult.getTestResultInfo();
+	}
+
+	public TestState getAtcTestState() {
+		return atcTestResult.getTestState();
 	}
 
 	public String getAtcNumErr() {
@@ -118,7 +123,7 @@ public class AbapPackageTestState {
 				: "";
 	}
 
-	public void setAtcInfo(TestResult atcTestResult) {
+	public void setAtcTestResult(TestResult atcTestResult) {
 		this.atcTestResult = atcTestResult;
 		propertyChangeSupport.firePropertyChange("atcTestResult", this.atcTestResult, atcTestResult);
 	}

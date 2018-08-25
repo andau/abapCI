@@ -126,6 +126,9 @@ public class FeatureFactory {
 		case PREF_UNIT_TEST_FAIL_BACKGROUND_COLOR:
 			colorFeature.setPreferenceConstant(PreferenceConstants.PREF_UNIT_TEST_FAIL_BACKGROUND_COLOR);
 			break;
+		case PREF_ATC_TEST_FAIL_BACKGROUND_COLOR:
+			colorFeature.setPreferenceConstant(PreferenceConstants.PREF_ATC_TEST_FAIL_BACKGROUND_COLOR);
+			break;
 
 		default:
 			throw new UnsupportedOperationException();

@@ -3,6 +3,8 @@ package abapci.manager;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.eclipse.core.resources.IProject;
+
 import com.sap.adt.atc.model.atcworklist.IAtcWorklist;
 
 import abapci.domain.AbapPackageTestState;
@@ -19,21 +21,22 @@ public class AtcTestManager extends AbstractTestManager {
 		super(continuousIntegrationPresenter, projectName, packageNames);
 	}
 
-	public TestState executeAllPackages() {
+	public TestState executeAllPackages(IProject project, List<AbapPackageTestState> activeAbapPackageTestStates) {
 
-		List<AbapPackageTestState> packageTestStates = continuousIntegrationPresenter
-				.getAbapPackageTestStatesForCurrentProject();
+		List<AbapPackageTestState> packageTestStates = activeAbapPackageTestStates.stream()
+				.filter(item -> !item.getUnitTestState().equals(TestState.DEACT))
+				.collect(Collectors.<AbapPackageTestState>toList());
 
 		IAtcWorklist atcWorklist = null;
 
-		packageNames.addAll(packageTestStates.stream().filter(item -> item.getAtcInfo().equals("UNDEF"))
+		packageNames.addAll(packageTestStates.stream().filter(item -> !item.getAtcTestState().equals(TestState.UNDEF))
 				.map(item -> item.getPackageName()).collect(Collectors.<String>toList()));
 
 		overallTestState = TestState.UNDEF;
 		for (String packageName : packageNames) {
 			try {
 				// TODO Extract Project
-				atcWorklist = new AbapAtcHandler().executePackage(null, packageName);
+				atcWorklist = new AbapAtcHandler().executePackage(project, packageName);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -45,7 +48,7 @@ public class AtcTestManager extends AbstractTestManager {
 			List<AbapPackageTestState> packageTestStatesNew = packageTestStates.stream()
 					.filter(item -> item.getPackageName().equals(packageName))
 					.collect(Collectors.<AbapPackageTestState>toList());
-			packageTestStatesNew.forEach(item -> item.setAtcInfo(testResult));
+			packageTestStatesNew.forEach(item -> item.setAtcTestResult(testResult));
 
 		}
 

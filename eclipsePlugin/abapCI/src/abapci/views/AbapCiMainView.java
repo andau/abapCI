@@ -283,7 +283,7 @@ public class AbapCiMainView extends ViewPart {
 				@Override
 				public String getText(Object element) {
 					AbapPackageTestState p = (AbapPackageTestState) element;
-					return p.getAtcInfo();
+					return p.getAtcTestState().toString();
 				}
 			});
 

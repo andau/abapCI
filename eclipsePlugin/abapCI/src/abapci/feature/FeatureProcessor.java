@@ -58,7 +58,8 @@ public class FeatureProcessor {
 
 				if (featureFacade.getAtcFeature().isActive() && unitTestState == TestState.OK
 						&& oldSourcecodeState != SourcecodeState.OK && oldSourcecodeState != SourcecodeState.ATC_FAIL) {
-					TestState atcTestState = atcTestManager.executeAllPackages();
+					TestState atcTestState = atcTestManager.executeAllPackages(presenter.getCurrentProject(),
+							presenter.getAbapPackageTestStatesForCurrentProject());
 					developmentProcessManager.setAtcTeststate(atcTestState);
 					themeUpdateManager.updateTheme(developmentProcessManager.getSourcecodeState());
 				}
