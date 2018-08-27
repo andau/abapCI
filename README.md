@@ -42,6 +42,7 @@ Development packages can be added to the automatic unit test run by three ways:
  - manually in the Eclipse view ABAP Continuous Integration with the + icon 
  - or if a ABAP class depending to a unmanaged package is activated, a dialog for configuration is shown (only once per package)
  
+ If the ABAP development package hierarchy is used, its currently recommended to add each subpackage (and if possible not the main package). See [Issue 5](https://github.com/andau/abapCI/issues/5)
 
 ## 2. Different coloring for each ABAP project 
 This feature tries to get the well known SAP GUI coloring for different system/client combinations into Eclipse.
