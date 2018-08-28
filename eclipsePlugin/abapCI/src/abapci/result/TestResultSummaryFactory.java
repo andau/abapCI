@@ -11,7 +11,7 @@ import com.sap.adt.tools.abapsource.abapunit.IAbapUnitResult;
 import com.sap.adt.tools.abapsource.abapunit.IAbapUnitResultItem;
 
 import abapci.domain.InvalidItem;
-import abapci.domain.UnitTestResultSummary;
+import abapci.domain.TestResultSummary;
 import abapci.views.ViewModel;
 
 public class TestResultSummaryFactory {
@@ -20,7 +20,7 @@ public class TestResultSummaryFactory {
 	private TestResultSummaryFactory() {
 	}
 
-	public static UnitTestResultSummary create(String packageName, IAbapUnitResult abapUnitResult) {
+	public static TestResultSummary create(String packageName, IAbapUnitResult abapUnitResult) {
 		List<IAbapUnitAlert> criticalAlerts = getCriticalAlerts(abapUnitResult.getAlerts(), false);
 
 		for (IAbapUnitResultItem abapUnitResultItem : abapUnitResult.getItems()) {
@@ -52,7 +52,7 @@ public class TestResultSummaryFactory {
 
 		}
 
-		return new UnitTestResultSummary(packageName, true, numTests, invalidItems);
+		return new TestResultSummary(packageName, true, numTests, invalidItems);
 	}
 
 	private static int getNumTests(IAbapUnitResultItem item) {
@@ -92,15 +92,15 @@ public class TestResultSummaryFactory {
 		return criticalAlerts;
 	}
 
-	public static UnitTestResultSummary createUndefined(String packageName) {
-		return new UnitTestResultSummary(packageName, false, 0, new ArrayList<InvalidItem>());
+	public static TestResultSummary createUndefined(String packageName) {
+		return new TestResultSummary(packageName, false, 0, new ArrayList<InvalidItem>());
 	}
 
-	public static UnitTestResultSummary createOffline(String packageName) {
-		return new UnitTestResultSummary(packageName, false, 0, new ArrayList<InvalidItem>());
+	public static TestResultSummary createOffline(String packageName) {
+		return new TestResultSummary(packageName, false, 0, new ArrayList<InvalidItem>());
 	}
 
-	public static UnitTestResultSummary createUndefined() {
+	public static TestResultSummary createUndefined() {
 		return createUndefined(UNDEFINED_PACKAGE_NAME);
 	}
 }

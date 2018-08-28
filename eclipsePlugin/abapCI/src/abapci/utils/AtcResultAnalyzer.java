@@ -38,7 +38,7 @@ public class AtcResultAnalyzer {
 					boolean isSuppressed = ViewModel.INSTANCE.getSuppressions().stream()
 							.anyMatch(item -> location.contains("/" + item.getClassName().toLowerCase() + "/"));
 
-					invalidItems.add(new InvalidItem(finding.getName(), finding.getDescription(), isSuppressed));
+					invalidItems.add(new InvalidItem(finding.getCheckTitle(), finding.getLocation(), isSuppressed));
 				}
 			}
 		}

@@ -23,9 +23,9 @@ import abapci.domain.ContinuousIntegrationConfig;
 import abapci.domain.GlobalTestState;
 import abapci.domain.SourcecodeState;
 import abapci.domain.TestResult;
+import abapci.domain.TestResultSummary;
 import abapci.domain.TestState;
 import abapci.domain.UiColor;
-import abapci.domain.UnitTestResultSummary;
 import abapci.manager.DevelopmentProcessManager;
 import abapci.model.IContinuousIntegrationModel;
 import abapci.utils.AnnotationRuleColorChanger;
@@ -225,9 +225,10 @@ public class ContinuousIntegrationPresenter {
 				.filter(item -> item.getFirstFailedUnitTest() != null)
 				.collect(Collectors.<AbapPackageTestState>toList());
 
-		if (packagesWithFailedTests.isEmpty()) {
-			link.setVisible(false);
-		} else {
+		List<AbapPackageTestState> packagesWithFailedAtc = getAbapPackageTestStatesForCurrentProject().stream()
+				.filter(item -> item.getFirstFailedAtc() != null).collect(Collectors.<AbapPackageTestState>toList());
+
+		if (packagesWithFailedTests.size() > 0) {
 			link.setVisible(true);
 			if (packagesWithFailedTests.size() == 1) {
 				link.setText(
@@ -236,17 +237,48 @@ public class ContinuousIntegrationPresenter {
 			} else {
 				link.setText(String.format("Open first failed tests for  %s packages", packagesWithFailedTests.size()));
 			}
+		} else {
+			if (packagesWithFailedAtc.size() > 0) {
+				link.setVisible(true);
+				if (packagesWithFailedAtc.size() == 1) {
+					link.setText(InvalidItemUtil.getOutputForAtcTest(packagesWithFailedAtc.get(0).getFirstFailedAtc())
+							+ "     ");
+				} else {
+					link.setText(String.format("Open first failed atc finding for  %s packages",
+							packagesWithFailedAtc.size()));
+				}
+
+			} else {
+				link.setVisible(false);
+			}
+
 		}
 
 	}
 
-	public void openEditorsForFailedTests() {
+	public void openEditorsForFailedItems() {
+		if (sourcecodeState.equals(SourcecodeState.ATC_FAIL)) {
+			openEditorsForFailedAtc();
+		} else {
+			openEditorsForFailedTests();
+		}
+	}
+
+	private void openEditorsForFailedTests() {
 
 		List<AbapPackageTestState> packagesWithFailedTests = getAbapPackageTestStatesForCurrentProject().stream()
 				.filter(item -> item.getFirstFailedUnitTest() != null)
 				.collect(Collectors.<AbapPackageTestState>toList());
 
-		EditorHandler.open(currentProject, packagesWithFailedTests);
+		EditorHandler.openUnit(currentProject, packagesWithFailedTests);
+	}
+
+	private void openEditorsForFailedAtc() {
+
+		List<AbapPackageTestState> packagesWithFailedAtc = getAbapPackageTestStatesForCurrentProject().stream()
+				.filter(item -> item.getFirstFailedAtc() != null).collect(Collectors.<AbapPackageTestState>toList());
+
+		EditorHandler.openAtc(currentProject, packagesWithFailedAtc);
 	}
 
 	private String buildInfoLine(List<AbapPackageTestState> abapPackageTestStatesForCurrentProject) {
@@ -256,12 +288,18 @@ public class ContinuousIntegrationPresenter {
 		int overallSuppressed = abapPackageTestStatesForCurrentProject.stream()
 				.mapToInt(item -> item.getAUnitNumSuppressed()).sum();
 
-		String unitTestInfoString = String.format("(%s,%s,%s)", overallOk, overallErrors, overallSuppressed);
+		int overallAtcErr = abapPackageTestStatesForCurrentProject.stream().mapToInt(item -> item.getAtcNumErr()).sum();
+		int overallAtcSuppressed = abapPackageTestStatesForCurrentProject.stream()
+				.mapToInt(item -> item.getAtcNumSuppressed()).sum();
+
+		String unitTestInfoString = String.format("[%s,%s,%s]", overallOk, overallErrors, overallSuppressed);
+		String atcInfoString = String.format("[%s,%s]", overallAtcErr, overallAtcSuppressed);
 
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 		Date date = new Date();
 
-		return dateFormat.format(date) + ": " + currentProject.getName() + " " + unitTestInfoString;
+		return dateFormat.format(date) + ": " + currentProject.getName() + " " + unitTestInfoString + " "
+				+ atcInfoString;
 	}
 
 	private SourcecodeState evalSourceCodeTestState() {
@@ -351,7 +389,7 @@ public class ContinuousIntegrationPresenter {
 				item -> item.getUnitTestState() == TestState.UNDEF || item.getUnitTestState() == TestState.OFFL);
 	}
 
-	public void mergeUnitTestResultSummary(UnitTestResultSummary unitTestResultSummary) {
+	public void mergeUnitTestResultSummary(TestResultSummary unitTestResultSummary) {
 
 		for (AbapPackageTestState testState : getAbapPackageTestStatesForCurrentProject()) {
 			if (testState.getPackageName().equals(unitTestResultSummary.getPackageName())) {
@@ -362,7 +400,7 @@ public class ContinuousIntegrationPresenter {
 		updateViewsAsync();
 	}
 
-	public void mergeAtcWorklist(UnitTestResultSummary atcTestResultSummary) {
+	public void mergeAtcWorklist(TestResultSummary atcTestResultSummary) {
 		for (AbapPackageTestState testState : getAbapPackageTestStatesForCurrentProject()) {
 			if (testState.getPackageName().equals(atcTestResultSummary.getPackageName())) {
 				testState.setAtcTestResult(atcTestResultSummary.getTestResult());

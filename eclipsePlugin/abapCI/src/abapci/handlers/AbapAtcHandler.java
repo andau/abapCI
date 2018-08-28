@@ -69,7 +69,7 @@ public class AbapAtcHandler extends AbstractHandler {
 		String worklistId = worklistBackendAccess.createWorklist(abapProject, atcVariant, progressMonitor);
 		for (ActivationObject activationObject : activationObjects) {
 			checkableItems.add(new MyAtcCheckableItem(URI.create(activationObject.getUri()),
-					activationObject.getClass().getName(), "DEVC/K"));
+					activationObject.getClass().getName(), activationObject.getType()));
 		}
 
 		IAtcWorklistRun worklistRun = worklistBackendAccess.startAtcRunForWorklist(abapProject, checkableItems,

@@ -18,9 +18,14 @@ public class EditorHandler {
 		AdtNavigationServiceFactory.createNavigationService().navigate(project, objRef, true);
 	}
 
-	public static void open(IProject currentProject, List<AbapPackageTestState> packagesWithFailedTests) {
+	public static void openUnit(IProject currentProject, List<AbapPackageTestState> packagesWithFailedTests) {
 		packagesWithFailedTests.stream()
 				.forEach(item -> open(currentProject, item.getFirstFailedUnitTest().getFirstStackEntry().getUri()));
+	}
+
+	public static void openAtc(IProject currentProject, List<AbapPackageTestState> packagesWithFailedTests) {
+		packagesWithFailedTests.stream()
+				.forEach(item -> open(currentProject, URI.create(item.getFirstFailedAtc().getDescription())));
 	}
 
 }

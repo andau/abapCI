@@ -35,22 +35,21 @@ public class AtcTestManager extends AbstractTestManager {
 				.map(item -> item.getPackageName()).collect(Collectors.<String>toList()));
 
 		overallTestState = TestState.UNDEF;
-		for (String packageName : packageNames) {
-			try {
-				// TODO Extract Project
-				atcWorklist = new AbapAtcHandler().executePackage(project, packageName);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+
+		for (AbapPackageTestState abapPackageTestState : activeAbapPackageTestStates) {
+
+			List<ActivationObject> inactiveObjectsForPackage = inactiveObjects.stream()
+					.filter(item -> item.packagename.equals(abapPackageTestState.getPackageName()))
+					.collect(Collectors.<ActivationObject>toList());
+
+			if (inactiveObjectsForPackage.size() > 0) {
+				atcWorklist = new AbapAtcHandler().executeObjects(project, inactiveObjects);
+				TestResult testResult = AtcResultAnalyzer.getTestResult(atcWorklist);
+
+				abapPackageTestState.setAtcTestResult(testResult);
+				mergePackageTestStateIntoGlobalTestState(testResult.getTestState());
+
 			}
-
-			TestResult testResult = AtcResultAnalyzer.getTestResult(atcWorklist);
-			mergePackageTestStateIntoGlobalTestState(testResult.getTestState());
-
-			List<AbapPackageTestState> packageTestStatesNew = packageTestStates.stream()
-					.filter(item -> item.getPackageName().equals(packageName))
-					.collect(Collectors.<AbapPackageTestState>toList());
-			packageTestStatesNew.forEach(item -> item.setAtcTestResult(testResult));
 
 		}
 

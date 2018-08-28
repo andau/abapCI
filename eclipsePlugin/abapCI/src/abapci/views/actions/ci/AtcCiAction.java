@@ -7,7 +7,7 @@ import com.sap.adt.atc.model.atcworklist.IAtcWorklist;
 import abapci.AbapCiPlugin;
 import abapci.AbapProjectUtil;
 import abapci.domain.AbapPackageTestState;
-import abapci.domain.UnitTestResultSummary;
+import abapci.domain.TestResultSummary;
 import abapci.handlers.AbapAtcHandler;
 import abapci.presenter.ContinuousIntegrationPresenter;
 import abapci.result.TestResultSummaryFactory;
@@ -31,7 +31,7 @@ public class AtcCiAction extends AbstractCiAction {
 				IProject project = AbapProjectUtil.getProjectByProjectName(abapPackageTestState.getProjectName());
 				IAtcWorklist atcWorklist = new AbapAtcHandler().executePackage(project,
 						abapPackageTestState.getPackageName());
-				UnitTestResultSummary atcTestResultSummary = new UnitTestResultSummary(
+				TestResultSummary atcTestResultSummary = new TestResultSummary(
 						abapPackageTestState.getPackageName(), AtcResultAnalyzer.getTestResult(atcWorklist));
 				continuousIntegrationPresenter.mergeAtcWorklist(atcTestResultSummary);
 

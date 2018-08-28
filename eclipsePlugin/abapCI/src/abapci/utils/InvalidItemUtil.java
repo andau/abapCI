@@ -21,4 +21,8 @@ public class InvalidItemUtil {
 		return matcher.find() ? matcher.group(1) : "";
 	}
 
+	public static String getOutputForAtcTest(InvalidItem invalidItem) {
+		return invalidItem.getClassName();
+	}
+
 }

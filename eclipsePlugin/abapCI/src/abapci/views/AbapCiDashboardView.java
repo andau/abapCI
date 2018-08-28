@@ -74,7 +74,7 @@ public class AbapCiDashboardView extends ViewPart {
 		openErrorHyperlink.setLayoutData(new GridData(SWT.LEFT, SWT.WRAP, true, true));
 		openErrorHyperlink.addHyperlinkListener(new HyperlinkAdapter() {
 			public void linkActivated(HyperlinkEvent e) {
-				presenter.openEditorsForFailedTests();
+				presenter.openEditorsForFailedItems();
 			}
 
 		});

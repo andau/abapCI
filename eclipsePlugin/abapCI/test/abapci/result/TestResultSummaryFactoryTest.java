@@ -16,7 +16,7 @@ import com.sap.adt.tools.abapsource.abapunit.IAbapUnitResult;
 import com.sap.adt.tools.abapsource.abapunit.IAbapUnitResultItem;
 
 import abapci.domain.TestState;
-import abapci.domain.UnitTestResultSummary;
+import abapci.domain.TestResultSummary;
 
 @RunWith(PowerMockRunner.class)
 public class TestResultSummaryFactoryTest {
@@ -51,7 +51,7 @@ public class TestResultSummaryFactoryTest {
 
 	@Test
 	public void testNoError() {
-		UnitTestResultSummary unitTestResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME,
+		TestResultSummary unitTestResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME,
 				unitResultOkMock);
 		Assert.assertEquals(TestState.OK, unitTestResultSummary.getTestResult().getTestState());
 	}
@@ -60,7 +60,7 @@ public class TestResultSummaryFactoryTest {
 	public void testOneError() {
 		PowerMockito.when(unitResultWithErrorMock.getAlerts()).thenReturn(Arrays.asList(abapUnitAlertMock));
 
-		UnitTestResultSummary unitTestResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME,
+		TestResultSummary unitTestResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME,
 				unitResultWithErrorMock);
 		Assert.assertEquals(TestState.NOK, unitTestResultSummary.getTestResult().getTestState());
 	}
@@ -70,7 +70,7 @@ public class TestResultSummaryFactoryTest {
 		PowerMockito.when(abapUnitResultItemMock.getAlerts()).thenReturn(Arrays.asList(abapUnitAlertMock));
 		PowerMockito.when(unitResultWithErrorMock.getItems()).thenReturn(Arrays.asList(abapUnitResultItemMock));
 
-		UnitTestResultSummary unitTestResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME,
+		TestResultSummary unitTestResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME,
 				unitResultWithErrorMock);
 		Assert.assertEquals(TestState.NOK, unitTestResultSummary.getTestResult().getTestState());
 	}
@@ -80,7 +80,7 @@ public class TestResultSummaryFactoryTest {
 		PowerMockito.when(abapUnitResultItemMock.getAlerts()).thenReturn(Arrays.asList(abapUnitAlertMock));
 		PowerMockito.when(unitResultWithErrorMock.getItems()).thenReturn(Arrays.asList(abapUnitResultItemMock));
 
-		UnitTestResultSummary unitTestResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME,
+		TestResultSummary unitTestResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME,
 				unitResultWithErrorMock);
 		Assert.assertEquals(TestState.NOK, unitTestResultSummary.getTestResult().getTestState());
 	}
@@ -93,7 +93,7 @@ public class TestResultSummaryFactoryTest {
 		PowerMockito.when(abapUnitResultItemMock.getChildItems()).thenReturn(Arrays.asList(abapUnitResultItemSubMock));
 		PowerMockito.when(unitResultWithErrorMock.getItems()).thenReturn(Arrays.asList(abapUnitResultItemMock));
 
-		UnitTestResultSummary unitTestResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME,
+		TestResultSummary unitTestResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME,
 				unitResultWithErrorMock);
 		Assert.assertEquals(TestState.NOK, unitTestResultSummary.getTestResult().getTestState());
 	}

@@ -293,7 +293,7 @@ public class AbapCiMainView extends ViewPart {
 				@Override
 				public String getText(Object element) {
 					AbapPackageTestState p = (AbapPackageTestState) element;
-					return p.getAtcNumErr();
+					return Integer.toString(p.getAtcNumErr());
 				}
 			});
 
@@ -323,7 +323,7 @@ public class AbapCiMainView extends ViewPart {
 				@Override
 				public String getText(Object element) {
 					AbapPackageTestState p = (AbapPackageTestState) element;
-					return p.getAtcNumSuppressed();
+					return Integer.toString(p.getAtcNumSuppressed());
 				}
 			});
 

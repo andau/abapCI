@@ -16,7 +16,7 @@ import com.sap.adt.tools.abapsource.abapunit.TestRunException;
 import com.sap.adt.tools.abapsource.abapunit.services.AdtServicesPlugin;
 import com.sap.adt.tools.abapsource.abapunit.services.IAdtServicesFactory;
 
-import abapci.domain.UnitTestResultSummary;
+import abapci.domain.TestResultSummary;
 import abapci.feature.FeatureFacade;
 import abapci.result.TestResultSummaryFactory;
 
@@ -33,7 +33,7 @@ public class AbapUnitHandler extends AbstractHandler {
 		return executePackage(null, packageName);
 	}
 
-	public UnitTestResultSummary executePackage(IProject project, String packageName) {
+	public TestResultSummary executePackage(IProject project, String packageName) {
 
 		boolean flag = false;
 		IAdtServicesFactory servicesFactory = AdtServicesPlugin.getDefault().getFactory();
@@ -54,7 +54,7 @@ public class AbapUnitHandler extends AbstractHandler {
 		 * task.setDurations(AbapUnitTestDuration.getAsEnum(durations));
 		 */
 
-		UnitTestResultSummary unitTestResultSummary;
+		TestResultSummary unitTestResultSummary;
 
 		try {
 			IAbapUnitResult abapUnitResult = abapUnitService.executeUnitTests(task, false, packageName);

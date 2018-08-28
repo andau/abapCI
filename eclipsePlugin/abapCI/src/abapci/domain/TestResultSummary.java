@@ -3,19 +3,19 @@ package abapci.domain;
 import java.beans.PropertyChangeSupport;
 import java.util.List;
 
-public class UnitTestResultSummary {
+public class TestResultSummary {
 
 	private final String packageName;
 	private TestResult testResult;
 
 	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
-	public UnitTestResultSummary(String packageName, boolean testrunOk, int numTests, List<InvalidItem> invalidItems) {
+	public TestResultSummary(String packageName, boolean testrunOk, int numTests, List<InvalidItem> invalidItems) {
 		this.packageName = packageName;
 		this.testResult = new TestResult(testrunOk, numTests, invalidItems);
 	}
 
-	public UnitTestResultSummary(String packageName, TestResult testResult) {
+	public TestResultSummary(String packageName, TestResult testResult) {
 		this.packageName = packageName;
 		this.testResult = testResult;
 	}

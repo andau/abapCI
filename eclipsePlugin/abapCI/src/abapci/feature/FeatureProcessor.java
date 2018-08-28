@@ -69,8 +69,9 @@ public class FeatureProcessor {
 					} else {
 						TestState atcTestState = atcTestManager.executeAllPackages(presenter.getCurrentProject(),
 								presenter.getAbapPackageTestStatesForCurrentProject(), inactiveObjects);
+						developmentProcessManager.setAtcTeststate(atcTestState);
+						themeUpdateManager.updateTheme(developmentProcessManager.getSourcecodeState());
 					}
-
 				}
 
 				if (featureFacade.getJenkinsFeature().isActive() && unitTestState == TestState.OK
