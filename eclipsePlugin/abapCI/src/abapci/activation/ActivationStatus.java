@@ -1,5 +1,5 @@
 package abapci.activation;
 
 public enum ActivationStatus {
-	MODIFIED, ACTIVATED
+	MODIFIED, ACTIVATED, ADDED_TO_JOB
 }

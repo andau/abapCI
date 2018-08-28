@@ -19,6 +19,7 @@ import com.sap.adt.atc.model.atcworklist.IAtcWorklistRun;
 import com.sap.adt.tools.core.internal.AbapProjectService;
 import com.sap.adt.tools.core.project.IAbapProject;
 
+import abapci.domain.ActivationObject;
 import abapci.feature.FeatureFacade;
 
 public class AbapAtcHandler extends AbstractHandler {
@@ -51,6 +52,32 @@ public class AbapAtcHandler extends AbstractHandler {
 		String objectSetName = packageName;
 		boolean forceObjectSet = true;
 		boolean includeExemptedFindings = false;
+
+		return worklistBackendAccess.getWorklist(abapProject, worklistRun.getWorklistId(),
+				worklistRun.getWorklistTimestamp().toString(), objectSetName, forceObjectSet, includeExemptedFindings,
+				progressMonitor);
+
+	}
+
+	public IAtcWorklist executeObjects(IProject project, List<ActivationObject> activationObjects) {
+		IAtcWorklistBackendAccess worklistBackendAccess = AtcBackendServices.getWorklistBackendAccess();
+		IAbapProject abapProject = AbapProjectService.getInstance().createFromProjectUnchecked(project);
+		List<IAtcCheckableItem> checkableItems = new ArrayList<>();
+
+		IProgressMonitor progressMonitor = new NullProgressMonitor();
+		String atcVariant = featureFacade.getAtcFeature().getVariant();
+		String worklistId = worklistBackendAccess.createWorklist(abapProject, atcVariant, progressMonitor);
+		for (ActivationObject activationObject : activationObjects) {
+			checkableItems.add(new MyAtcCheckableItem(URI.create(activationObject.getUri()),
+					activationObject.getClass().getName(), "DEVC/K"));
+		}
+
+		IAtcWorklistRun worklistRun = worklistBackendAccess.startAtcRunForWorklist(abapProject, checkableItems,
+				worklistId, progressMonitor);
+
+		boolean forceObjectSet = true;
+		boolean includeExemptedFindings = false;
+		String objectSetName = "TODO";
 
 		return worklistBackendAccess.getWorklist(abapProject, worklistRun.getWorklistId(),
 				worklistRun.getWorklistTimestamp().toString(), objectSetName, forceObjectSet, includeExemptedFindings,

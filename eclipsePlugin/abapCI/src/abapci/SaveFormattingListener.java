@@ -53,6 +53,8 @@ public class SaveFormattingListener implements IExecutionListener {
 
 			String sourcecodePrefix = featureFacade.getSourcecodeFormattingFeature().getPrefix();
 
+			activationPool.unregisterAllIncludedInJob();
+
 			for (IEditorReference editorReference : editorReferences) {
 
 				if (editorReference.isDirty()) {

@@ -40,4 +40,12 @@ public class Activation {
 		return status == ActivationStatus.ACTIVATED;
 	}
 
+	public void setIncludedInJob() {
+		status = ActivationStatus.ADDED_TO_JOB;
+	}
+
+	public boolean isIncludedInJob() {
+		return status == ActivationStatus.ADDED_TO_JOB;
+	}
+
 }

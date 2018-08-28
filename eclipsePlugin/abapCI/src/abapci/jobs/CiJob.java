@@ -22,6 +22,7 @@ public class CiJob extends Job {
 	private static CiJob instance;
 
 	private List<String> triggerPackages;
+	private List<ActivationObject> inactiveObjects;
 	private String projectName;
 
 	private Date triggerDate;
@@ -67,7 +68,7 @@ public class CiJob extends Job {
 
 		int processingStep = evaluateAndResetProcessingFlags();
 		if (processingStep > 0) {
-			featureProcessor.setPackages(triggerPackages);
+			featureProcessor.setPackagesAndObjects(triggerPackages, inactiveObjects);
 			featureProcessor.processEnabledFeatures();
 		}
 
@@ -129,9 +130,11 @@ public class CiJob extends Job {
 		schedule();
 	}
 
-	public void setTriggerPackages(IProject project, List<String> triggerPackages) {
+	public void setTriggerPackages(IProject project, List<String> triggerPackages,
+			List<ActivationObject> inactiveObjects) {
 		this.projectName = project.getName();
 		this.triggerPackages = triggerPackages;
+		this.inactiveObjects = inactiveObjects;
 	}
 
 }

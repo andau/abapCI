@@ -29,6 +29,7 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 	private CiJob job;
 	private ContinuousIntegrationPresenter continuousIntegrationPresenter;
 	private ActivationPool activationPool;
+	private int currentInactiveObjectsCount;
 
 	public GeneralResourceChangeListener(ContinuousIntegrationPresenter continuousIntegrationPresenter) {
 		sapConnection = new SapConnection();
@@ -63,7 +64,15 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 
 						List<ActivationObject> inactiveObjects = sapConnection
 								.getInactiveObjects(currentProject.getName());
-						List<Activation> activations = activationPool.getActiveActivations();
+
+						if (currentInactiveObjectsCount > inactiveObjects.size()) {
+							inactiveObjects = activationPool.getLastInactiveObjects();
+						}
+
+						currentInactiveObjectsCount = inactiveObjects.size();
+						activationPool.setLastInactiveObjects(inactiveObjects);
+
+						List<Activation> activations = activationPool.findAllActiveOrIncludedInJob();
 
 						List<String> selectedPackages = new ArrayList<String>();
 
@@ -85,22 +94,24 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 							job.setTriggerPackages(continuousIntegrationPresenter.getCurrentProject(),
 									continuousIntegrationPresenter.getAbapPackageTestStatesForCurrentProject().stream()
 											.map(item -> item.getPackageName()).distinct()
-											.collect(Collectors.<String>toList()));
+											.collect(Collectors.<String>toList()),
+									null);
 							job.start();
 						} else if (!selectedPackages.isEmpty()) {
 							continuousIntegrationPresenter.setCurrentProject(currentProject);
-							job.setTriggerPackages(continuousIntegrationPresenter.getCurrentProject(),
-									selectedPackages);
+							job.setTriggerPackages(continuousIntegrationPresenter.getCurrentProject(), selectedPackages,
+									inactiveObjects);
 							job.start();
-							activationPool.unregisterAllActivated();
+							activationPool.changeActivedToIncludedInJob();
 						} else if (!activations.isEmpty()) {
 							continuousIntegrationPresenter.setCurrentProject(currentProject);
 							job.setTriggerPackages(continuousIntegrationPresenter.getCurrentProject(),
 									continuousIntegrationPresenter.getAbapPackageTestStatesForCurrentProject().stream()
 											.map(item -> item.getPackageName()).distinct()
-											.collect(Collectors.<String>toList()));
+											.collect(Collectors.<String>toList()),
+									inactiveObjects);
 							job.start();
-							activationPool.unregisterAllActivated();
+							activationPool.changeActivedToIncludedInJob();
 						}
 					}
 				}

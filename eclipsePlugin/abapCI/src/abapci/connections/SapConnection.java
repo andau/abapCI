@@ -19,10 +19,8 @@ import abapci.domain.ActivationObject;
 
 public class SapConnection {
 
-	private List<ActivationObject> currentInactiveObjects;
-
 	public SapConnection() {
-		currentInactiveObjects = new ArrayList<>();
+		new ArrayList<>();
 	}
 
 	public boolean isConnected(String projectName) {
@@ -32,46 +30,31 @@ public class SapConnection {
 	public List<ActivationObject> unprocessedActivatedObjects(String projectName)
 			throws InactivatedObjectEvaluationException {
 		return getInactiveObjects(projectName);
-
-		/**
-		 * if (checkForNewInactiveItems(newInactiveObjects, currentInactiveObjects)) {
-		 * activatedObjects = currentInactiveObjects; } currentInactiveObjects =
-		 * newInactiveObjects;
-		 * 
-		 * return activatedObjects;
-		 **/
-	}
-
-	private boolean checkForNewInactiveItems(List<ActivationObject> newInactiveObjects,
-			List<ActivationObject> currentInactiveObjects) {
-		return newInactiveObjects.size() < currentInactiveObjects.size();
 	}
 
 	public List<ActivationObject> getInactiveObjects(String projectName) throws InactivatedObjectEvaluationException {
 
 		try {
-			List<ActivationObject> activatedObjects = new ArrayList<>();
-
 			IActivationServiceFactory activationServiceFactory = AdtActivationPlugin.getDefault()
 					.getActivationServiceFactory();
 			IActivationService activationService = activationServiceFactory.createActivationService(projectName);
 			IInactiveCtsObjectList newInactiveCtsObjectList = activationService
 					.getInactiveCtsObjects(new NullProgressMonitor());
-			return convertToStringList(newInactiveCtsObjectList);
+			return convertToActivationObjectList(newInactiveCtsObjectList);
 		} catch (Exception ex) {
 			throw new InactivatedObjectEvaluationException(ex);
 		}
 
 	}
 
-	private List<ActivationObject> convertToStringList(IInactiveCtsObjectList inactiveCtsObjectList) {
+	private List<ActivationObject> convertToActivationObjectList(IInactiveCtsObjectList inactiveCtsObjectList) {
 		List<ActivationObject> activationObjects = new ArrayList<>();
 		for (Iterator<IInactiveCtsObject> iterator = inactiveCtsObjectList.getEntry().iterator(); iterator.hasNext();) {
 			IInactiveCtsObject ctsObject = iterator.next();
 			if (ctsObject.hasObjectRef()) {
 				IAdtObjectReference ref = ctsObject.getObject().getRef();
 				if (!ref.getName().equals("Z_BAPI_HE_VARIANT_CALC")) {
-					activationObjects.add(new ActivationObject(ref.getPackageName(), ref.getName()));
+					activationObjects.add(new ActivationObject(ref.getPackageName(), ref.getName(), ref.getUri()));
 				}
 			}
 

@@ -8,6 +8,7 @@ import org.eclipse.core.resources.IProject;
 import com.sap.adt.atc.model.atcworklist.IAtcWorklist;
 
 import abapci.domain.AbapPackageTestState;
+import abapci.domain.ActivationObject;
 import abapci.domain.TestResult;
 import abapci.domain.TestState;
 import abapci.handlers.AbapAtcHandler;
@@ -21,7 +22,8 @@ public class AtcTestManager extends AbstractTestManager {
 		super(continuousIntegrationPresenter, projectName, packageNames);
 	}
 
-	public TestState executeAllPackages(IProject project, List<AbapPackageTestState> activeAbapPackageTestStates) {
+	public TestState executeAllPackages(IProject project, List<AbapPackageTestState> activeAbapPackageTestStates,
+			List<ActivationObject> inactiveObjects) {
 
 		List<AbapPackageTestState> packageTestStates = activeAbapPackageTestStates.stream()
 				.filter(item -> !item.getUnitTestState().equals(TestState.DEACT))
@@ -51,9 +53,6 @@ public class AtcTestManager extends AbstractTestManager {
 			packageTestStatesNew.forEach(item -> item.setAtcTestResult(testResult));
 
 		}
-
-		// setAbapPackagesTestState(packageTestStates, overallTestState,
-		// TestStateType.ATC);
 
 		return overallTestState;
 

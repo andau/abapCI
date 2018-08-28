@@ -2,6 +2,7 @@ package abapci.feature;
 
 import java.util.List;
 
+import abapci.domain.ActivationObject;
 import abapci.domain.SourcecodeState;
 import abapci.domain.TestState;
 import abapci.manager.AUnitTestManager;
@@ -22,6 +23,7 @@ public class FeatureProcessor {
 
 	private FeatureFacade featureFacade;
 	private ContinuousIntegrationPresenter presenter;
+	private List<ActivationObject> inactiveObjects;
 
 	public FeatureProcessor(ContinuousIntegrationPresenter presenter, String projectName,
 			List<String> initialPackages) {
@@ -38,9 +40,10 @@ public class FeatureProcessor {
 
 	}
 
-	public void setPackages(List<String> packageNames) {
+	public void setPackagesAndObjects(List<String> packageNames, List<ActivationObject> inactiveObjects) {
 		aUnitTestManager.setPackages(packageNames);
 		atcTestManager.setPackages(packageNames);
+		this.inactiveObjects = inactiveObjects;
 	}
 
 	public void processEnabledFeatures() {
@@ -56,12 +59,18 @@ public class FeatureProcessor {
 
 				presenter.updateViewsAsync(developmentProcessManager.getSourcecodeState());
 
-				if (featureFacade.getAtcFeature().isActive() && unitTestState == TestState.OK
-						&& oldSourcecodeState != SourcecodeState.OK && oldSourcecodeState != SourcecodeState.ATC_FAIL) {
-					TestState atcTestState = atcTestManager.executeAllPackages(presenter.getCurrentProject(),
-							presenter.getAbapPackageTestStatesForCurrentProject());
-					developmentProcessManager.setAtcTeststate(atcTestState);
-					themeUpdateManager.updateTheme(developmentProcessManager.getSourcecodeState());
+				if (featureFacade.getAtcFeature().isActive()) {
+					if (unitTestState == TestState.OK && oldSourcecodeState != SourcecodeState.OK
+							&& oldSourcecodeState != SourcecodeState.ATC_FAIL) {
+						TestState atcTestState = atcTestManager.executeAllPackages(presenter.getCurrentProject(),
+								presenter.getAbapPackageTestStatesForCurrentProject(), inactiveObjects);
+						developmentProcessManager.setAtcTeststate(atcTestState);
+						themeUpdateManager.updateTheme(developmentProcessManager.getSourcecodeState());
+					} else {
+						TestState atcTestState = atcTestManager.executeAllPackages(presenter.getCurrentProject(),
+								presenter.getAbapPackageTestStatesForCurrentProject(), inactiveObjects);
+					}
+
 				}
 
 				if (featureFacade.getJenkinsFeature().isActive() && unitTestState == TestState.OK
