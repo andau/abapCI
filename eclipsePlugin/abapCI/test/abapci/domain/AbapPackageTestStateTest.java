@@ -17,12 +17,12 @@ public class AbapPackageTestStateTest {
 
 		List<InvalidItem> invalidItems = new ArrayList<InvalidItem>();
 		invalidItems.add(new InvalidItem("TESTPACKAGE", "", false));
-		abapPackageTestState.setUnitTestResult(new TestResult(true, 1, invalidItems));
+		abapPackageTestState.setUnitTestResult(new TestResult(true, 1, invalidItems, null));
 		assertEquals("Errors: 1", abapPackageTestState.getAUnitInfo());
-		abapPackageTestState.setUnitTestResult(new TestResult(true, 1, new ArrayList<InvalidItem>()));
+		abapPackageTestState.setUnitTestResult(new TestResult(true, 1, new ArrayList<InvalidItem>(), null));
 		assertEquals("OK", abapPackageTestState.getAUnitInfo());
 
-		abapPackageTestState.setUnitTestResult(new TestResult(true, 1, invalidItems));
+		abapPackageTestState.setUnitTestResult(new TestResult(true, 1, invalidItems, null));
 		assertEquals("Errors: 1", abapPackageTestState.getAtcInfo());
 
 		abapPackageTestState.setJenkinsInfo(TestState.UNDEF.toString());

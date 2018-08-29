@@ -69,4 +69,8 @@ public class ActivationPool {
 		return inactiveObjects;
 	}
 
+	public void resetProcessedInactiveObjects() {
+		inactiveObjects = null;
+	}
+
 }

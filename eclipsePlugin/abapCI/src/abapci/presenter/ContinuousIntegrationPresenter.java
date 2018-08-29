@@ -21,6 +21,7 @@ import abapci.Exception.ContinuousIntegrationConfigFileParseException;
 import abapci.domain.AbapPackageTestState;
 import abapci.domain.ContinuousIntegrationConfig;
 import abapci.domain.GlobalTestState;
+import abapci.domain.InvalidItem;
 import abapci.domain.SourcecodeState;
 import abapci.domain.TestResult;
 import abapci.domain.TestResultSummary;
@@ -257,7 +258,7 @@ public class ContinuousIntegrationPresenter {
 	}
 
 	public void openEditorsForFailedItems() {
-		if (sourcecodeState.equals(SourcecodeState.ATC_FAIL)) {
+		if (evalSourceCodeTestState().equals(SourcecodeState.ATC_FAIL)) {
 			openEditorsForFailedAtc();
 		} else {
 			openEditorsForFailedTests();
@@ -403,10 +404,28 @@ public class ContinuousIntegrationPresenter {
 	public void mergeAtcWorklist(TestResultSummary atcTestResultSummary) {
 		for (AbapPackageTestState testState : getAbapPackageTestStatesForCurrentProject()) {
 			if (testState.getPackageName().equals(atcTestResultSummary.getPackageName())) {
-				testState.setAtcTestResult(atcTestResultSummary.getTestResult());
+				TestResult newTestResult = mergeIntoExistingTestResult(testState.getAtcTestResult(),
+						atcTestResultSummary.getTestResult());
+				testState.setAtcTestResult(newTestResult);
 			}
 		}
 
 		updateViewsAsync();
+	}
+
+	private TestResult mergeIntoExistingTestResult(TestResult currentTestResult, TestResult newTestResult) {
+
+		List<InvalidItem> newInvalidItems = new ArrayList<InvalidItem>();
+
+		for (InvalidItem invalidItem : currentTestResult.getActiveErrors()) {
+			if (!newTestResult.getActivatedObjects().stream()
+					.anyMatch(item -> item.getClassname().equals(invalidItem.getClassName()))) {
+				newInvalidItems.add(invalidItem);
+			}
+		}
+
+		newInvalidItems.addAll(newTestResult.getActiveErrors());
+
+		return new TestResult(true, 0, newInvalidItems, null);
 	}
 }

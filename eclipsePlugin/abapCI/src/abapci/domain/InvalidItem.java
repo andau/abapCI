@@ -1,17 +1,16 @@
 package abapci.domain;
 
+import java.net.URI;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import com.sap.adt.tools.abapsource.abapunit.IAbapUnitAlertStackEntry;
 
 public class InvalidItem {
 
 	private String className;
 	private String description;
 	private boolean suppressed;
-	private IAbapUnitAlertStackEntry firstStackEntry;
+	private URI uriToError;
 
 	public InvalidItem(String className, String description, boolean suppressed) {
 		this.className = className;
@@ -19,12 +18,11 @@ public class InvalidItem {
 		this.suppressed = suppressed;
 	}
 
-	public InvalidItem(String className, String description, boolean suppressed,
-			IAbapUnitAlertStackEntry abapUnitAlertStackEntry) {
+	public InvalidItem(String className, String description, boolean suppressed, URI uriToError) {
 		this.className = className;
 		this.description = description;
 		this.suppressed = suppressed;
-		this.firstStackEntry = abapUnitAlertStackEntry;
+		this.uriToError = uriToError;
 	}
 
 	public String getDescription() {
@@ -39,8 +37,8 @@ public class InvalidItem {
 		return suppressed;
 	}
 
-	public IAbapUnitAlertStackEntry getFirstStackEntry() {
-		return firstStackEntry;
+	public URI getUriToError() {
+		return uriToError;
 	}
 
 	public static List<InvalidItem> filterInvalidItems(List<InvalidItem> invalidItems,

@@ -103,6 +103,8 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 									inactiveObjects);
 							job.start();
 							activationPool.changeActivedToIncludedInJob();
+							activationPool.resetProcessedInactiveObjects();
+							currentInactiveObjectsCount = 0;
 						} else if (!activations.isEmpty()) {
 							continuousIntegrationPresenter.setCurrentProject(currentProject);
 							job.setTriggerPackages(continuousIntegrationPresenter.getCurrentProject(),
@@ -112,6 +114,8 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 									inactiveObjects);
 							job.start();
 							activationPool.changeActivedToIncludedInJob();
+							activationPool.resetProcessedInactiveObjects();
+							currentInactiveObjectsCount = 0;
 						}
 					}
 				}

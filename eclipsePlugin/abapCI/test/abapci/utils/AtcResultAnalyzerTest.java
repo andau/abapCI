@@ -26,7 +26,7 @@ import abapci.domain.TestState;
 import abapci.views.ViewModel;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ViewModel.class})
+@PrepareForTest({ ViewModel.class })
 public class AtcResultAnalyzerTest {
 
 	AtcResultAnalyzer atcResultAnalyzer;
@@ -52,39 +52,39 @@ public class AtcResultAnalyzerTest {
 	@Mock
 	IAtcFinding suppressedAtcFinding;
 
-	
-
 	@Before
 	public void before() {
-		final String SUPPRESSED_FINDING_LOC = "SUPPRESSED_FINDING"; 
-		
+		final String SUPPRESSED_FINDING_LOC = "SUPPRESSED_FINDING";
+
 		PowerMockito.when(atcWorklist.getObjects()).thenReturn(atcObjectList);
-		PowerMockito.when(atcWorklist.getObjects().getObject()).thenReturn(new BasicEList<IAtcObject>(Arrays.asList(atcObject)));
+		PowerMockito.when(atcWorklist.getObjects().getObject())
+				.thenReturn(new BasicEList<IAtcObject>(Arrays.asList(atcObject)));
 		PowerMockito.when(atcObject.getFindings()).thenReturn(atcFindingList);
-		
+
 		PowerMockito.when(activeAtcFinding.getPriority()).thenReturn(1);
-		
+
 		PowerMockito.when(suppressedAtcFinding.getPriority()).thenReturn(1);
 		PowerMockito.when(suppressedAtcFinding.getLocation()).thenReturn("/" + SUPPRESSED_FINDING_LOC + "/");
 		ViewModel viewModelInstance = PowerMockito.mock(ViewModel.class);
 		Whitebox.setInternalState(ViewModel.class, "INSTANCE", viewModelInstance);
-		PowerMockito.when(viewModelInstance.getSuppressions()).thenReturn(Arrays.asList(new Suppression(SUPPRESSED_FINDING_LOC)));
+		PowerMockito.when(viewModelInstance.getSuppressions())
+				.thenReturn(Arrays.asList(new Suppression(SUPPRESSED_FINDING_LOC)));
 	}
 
 	@Test
 	public void emptyFindingTest() {
 		PowerMockito.when(atcFindingList.getFinding())
 				.thenReturn(new BasicEList<IAtcFinding>(Arrays.asList(emptyAtcFinding)));
-		TestResult testResult = AtcResultAnalyzer.getTestResult(atcWorklist);
+		TestResult testResult = AtcResultAnalyzer.getTestResult(atcWorklist, null);
 		assertEquals(TestState.OK, testResult.getTestState());
 	}
 
-	//TODO Fix Test 
-	//@Test
+	// TODO Fix Test
+	// @Test
 	public void oneActiveFindingTest() {
 		PowerMockito.when(atcFindingList.getFinding())
 				.thenReturn(new BasicEList<IAtcFinding>(Arrays.asList(activeAtcFinding)));
-		TestResult testResult = AtcResultAnalyzer.getTestResult(atcWorklist);
+		TestResult testResult = AtcResultAnalyzer.getTestResult(atcWorklist, null);
 		assertEquals(TestState.NOK, testResult.getTestState());
 	}
 
@@ -92,7 +92,7 @@ public class AtcResultAnalyzerTest {
 	public void oneSuppressedFindingTest() {
 		PowerMockito.when(atcFindingList.getFinding())
 				.thenReturn(new BasicEList<IAtcFinding>(Arrays.asList(suppressedAtcFinding)));
-		TestResult testResult = AtcResultAnalyzer.getTestResult(atcWorklist);
+		TestResult testResult = AtcResultAnalyzer.getTestResult(atcWorklist, null);
 		assertEquals(TestState.OK, testResult.getTestState());
 	}
 

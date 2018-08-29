@@ -30,13 +30,12 @@ public class CiJob extends Job {
 	private boolean shortDelayProcessing;
 	private boolean longDelayProcessing;
 
-	private static final long SHORT_DELAY_PROCESSING_DELAY = 2000;
-	private static final long LONG_DELAY_PROCESSING_DELAY = 5000;
+	private static final long DELAYED_PROCESSING_TIMESPAN = 2000;
 
 	private FeatureProcessor featureProcessor;
 
 	private CiJob(ContinuousIntegrationPresenter continuousIntegrationPresenter) {
-		super("Running abapCI");
+		super("AbapCI active");
 		triggerDate = new Date();
 		triggerPackages = continuousIntegrationPresenter.getAbapPackageTestStatesForCurrentProject().stream()
 				.map(item -> item.getPackageName()).collect(Collectors.<String>toList());
@@ -108,14 +107,9 @@ public class CiJob extends Job {
 
 		long timeSinceLastTrigger = new Date().getTime() - triggerDate.getTime();
 
-		if (shortDelayProcessing && timeSinceLastTrigger > SHORT_DELAY_PROCESSING_DELAY) {
+		if (shortDelayProcessing && timeSinceLastTrigger > DELAYED_PROCESSING_TIMESPAN) {
 			shortDelayProcessing = false;
 			processingStep = 2;
-		}
-
-		if (longDelayProcessing && timeSinceLastTrigger > LONG_DELAY_PROCESSING_DELAY) {
-			longDelayProcessing = false;
-			processingStep = 3;
 		}
 
 		return processingStep;

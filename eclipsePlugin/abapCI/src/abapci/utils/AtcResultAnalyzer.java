@@ -1,13 +1,17 @@
 package abapci.utils;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.sap.adt.atc.model.atcfinding.IAtcFinding;
 import com.sap.adt.atc.model.atcfinding.IAtcFindingList;
 import com.sap.adt.atc.model.atcobject.IAtcObject;
 import com.sap.adt.atc.model.atcworklist.IAtcWorklist;
 
+import abapci.domain.ActivationObject;
 import abapci.domain.InvalidItem;
 import abapci.domain.TestResult;
 import abapci.domain.TestState;
@@ -15,13 +19,13 @@ import abapci.views.ViewModel;
 
 public class AtcResultAnalyzer {
 
-	public static TestResult getTestResult(IAtcWorklist atcWorklist) {
+	public static TestResult getTestResult(IAtcWorklist atcWorklist, List<ActivationObject> activatedObjects) {
 		TestResult testResult;
 
 		if (atcWorklist == null) {
 			testResult = new TestResult();
 		} else {
-			testResult = new TestResult(true, 0, getInvalidItems(atcWorklist));
+			testResult = new TestResult(true, 0, getInvalidItems(atcWorklist), activatedObjects);
 		}
 
 		return testResult;
@@ -38,7 +42,12 @@ public class AtcResultAnalyzer {
 					boolean isSuppressed = ViewModel.INSTANCE.getSuppressions().stream()
 							.anyMatch(item -> location.contains("/" + item.getClassName().toLowerCase() + "/"));
 
-					invalidItems.add(new InvalidItem(finding.getCheckTitle(), finding.getLocation(), isSuppressed));
+					// TODO Identifier is Objectname and Line
+					Pattern devObjectNamePattern = Pattern.compile("findings\\/(.*)\\/CLAS");
+					Matcher matcher = devObjectNamePattern.matcher(finding.getUri());
+					String devObjectName = matcher.find() ? matcher.group(1) : "UNDEF";
+					invalidItems.add(new InvalidItem(devObjectName, finding.getCheckTitle(), isSuppressed,
+							URI.create(finding.getLocation())));
 				}
 			}
 		}

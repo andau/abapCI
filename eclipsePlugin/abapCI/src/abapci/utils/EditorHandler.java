@@ -20,12 +20,12 @@ public class EditorHandler {
 
 	public static void openUnit(IProject currentProject, List<AbapPackageTestState> packagesWithFailedTests) {
 		packagesWithFailedTests.stream()
-				.forEach(item -> open(currentProject, item.getFirstFailedUnitTest().getFirstStackEntry().getUri()));
+				.forEach(item -> open(currentProject, item.getFirstFailedUnitTest().getUriToError()));
 	}
 
 	public static void openAtc(IProject currentProject, List<AbapPackageTestState> packagesWithFailedTests) {
 		packagesWithFailedTests.stream()
-				.forEach(item -> open(currentProject, URI.create(item.getFirstFailedAtc().getDescription())));
+				.forEach(item -> open(currentProject, item.getFirstFailedAtc().getUriToError()));
 	}
 
 }

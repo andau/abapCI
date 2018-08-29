@@ -1,5 +1,6 @@
 package abapci.views;
 
+import java.net.URI;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
@@ -41,7 +42,6 @@ import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.part.ViewPart;
 
 import com.sap.adt.project.AdtCoreProjectServiceFactory;
-import com.sap.adt.tools.abapsource.abapunit.IAbapUnitAlertStackEntry;
 
 import abapci.AbapCiPlugin;
 import abapci.domain.AbapPackageTestState;
@@ -336,7 +336,9 @@ public class AbapCiMainView extends ViewPart {
 					return p.getAtcLastRun();
 				}
 			});
+		}
 
+		if (featureFacade.getJenkinsFeature().isActive()) {
 			colNumber++;
 			col = createTableViewerColumn("Jenkins state", 100, colNumber);
 			col.setLabelProvider(new ColumnLabelProvider() {
@@ -379,7 +381,7 @@ public class AbapCiMainView extends ViewPart {
 	private final class MyHyperlinkLabelProvider extends StyledCellLabelProvider {
 		MyHyperlink m_control;
 		IProject project;
-		IAbapUnitAlertStackEntry firstStackEntry;
+		URI uriToFirstError;
 
 		private MyHyperlinkLabelProvider(Composite parent) {
 			m_control = new MyHyperlink(parent, SWT.WRAP);
@@ -397,14 +399,18 @@ public class AbapCiMainView extends ViewPart {
 				}
 			}
 
-			firstStackEntry = p.getFirstFailedUnitTest() != null ? p.getFirstFailedUnitTest().getFirstStackEntry()
-					: null;
+			uriToFirstError = p.getFirstFailedUnitTest() != null ? p.getFirstFailedUnitTest().getUriToError() : null;
 			m_control.setText(
-					firstStackEntry != null ? InvalidItemUtil.getOutputForUnitTest(p.getFirstFailedUnitTest()) : "");
+					uriToFirstError != null ? InvalidItemUtil.getOutputForUnitTest(p.getFirstFailedUnitTest()) : "");
 
+			if (featureFacade.getAtcFeature().isActive() && uriToFirstError == null) {
+				uriToFirstError = p.getFirstFailedAtc() != null ? p.getFirstFailedAtc().getUriToError() : null;
+				m_control.setText(
+						uriToFirstError != null ? InvalidItemUtil.getOutputForAtcTest(p.getFirstFailedAtc()) : "");
+			}
 			m_control.addHyperlinkListener(new HyperlinkAdapter() {
 				public void linkActivated(HyperlinkEvent e) {
-					EditorHandler.open(project, firstStackEntry != null ? firstStackEntry.getUri() : null);
+					EditorHandler.open(project, uriToFirstError);
 				}
 			});
 

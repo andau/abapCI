@@ -12,6 +12,7 @@ import com.sap.adt.tools.abapsource.abapunit.IAbapUnitResultItem;
 
 import abapci.domain.InvalidItem;
 import abapci.domain.TestResultSummary;
+import abapci.utils.InvalidItemUtil;
 import abapci.views.ViewModel;
 
 public class TestResultSummaryFactory {
@@ -37,7 +38,8 @@ public class TestResultSummaryFactory {
 			if (criticalAlert.getStackEntries() != null && !criticalAlert.getStackEntries().isEmpty()) {
 				firstStackEntry = criticalAlert.getStackEntries().get(0);
 			}
-			invalidItems.add(new InvalidItem("", criticalAlert.getTitle(), false, firstStackEntry));
+			invalidItems.add(new InvalidItem(InvalidItemUtil.extractClassName(firstStackEntry.getDescription()),
+					criticalAlert.getTitle(), false, firstStackEntry.getUri()));
 
 		}
 
@@ -103,4 +105,5 @@ public class TestResultSummaryFactory {
 	public static TestResultSummary createUndefined() {
 		return createUndefined(UNDEFINED_PACKAGE_NAME);
 	}
+
 }

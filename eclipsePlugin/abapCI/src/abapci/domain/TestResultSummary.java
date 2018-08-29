@@ -12,7 +12,7 @@ public class TestResultSummary {
 
 	public TestResultSummary(String packageName, boolean testrunOk, int numTests, List<InvalidItem> invalidItems) {
 		this.packageName = packageName;
-		this.testResult = new TestResult(testrunOk, numTests, invalidItems);
+		this.testResult = new TestResult(testrunOk, numTests, invalidItems, null);
 	}
 
 	public TestResultSummary(String packageName, TestResult testResult) {

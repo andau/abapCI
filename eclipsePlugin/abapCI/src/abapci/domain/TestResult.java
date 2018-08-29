@@ -14,12 +14,15 @@ public class TestResult {
 	private int numTests;
 	private List<InvalidItem> invalidItems;
 	private Date lastRun;
+	private List<ActivationObject> activatedObjects;
 
-	public TestResult(boolean testrunOk, int numTests, List<InvalidItem> invalidItems) {
+	public TestResult(boolean testrunOk, int numTests, List<InvalidItem> invalidItems,
+			List<ActivationObject> activatedObjects) {
 		this.activated = true;
 		this.testrunOk = testrunOk;
 		this.numTests = numTests;
 		this.invalidItems = invalidItems;
+		this.activatedObjects = activatedObjects;
 		this.lastRun = Calendar.getInstance().getTime();
 	}
 
@@ -75,6 +78,10 @@ public class TestResult {
 
 	public InvalidItem getFirstInvalidItem() {
 		return invalidItems.isEmpty() ? null : invalidItems.get(0);
+	}
+
+	public List<ActivationObject> getActivatedObjects() {
+		return activatedObjects;
 	}
 
 }

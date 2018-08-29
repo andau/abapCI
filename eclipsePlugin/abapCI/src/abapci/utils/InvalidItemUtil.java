@@ -8,21 +8,20 @@ import abapci.domain.InvalidItem;
 public class InvalidItemUtil {
 
 	public static String getOutputForUnitTest(InvalidItem invalidItem) {
-		String className = extractClassName(invalidItem.getFirstStackEntry().getDescription());
 		String description = invalidItem.getDescription();
 		description = description.replaceAll("Critical Assertion Error:", "");
 		description = description.replaceAll("Kritischer Assertion-Fehler:", "");
-		return String.format("%s: %s", className, description);
-	}
-
-	private static String extractClassName(String description) {
-		Pattern pattern = Pattern.compile("<(.*?)=");
-		Matcher matcher = pattern.matcher(description);
-		return matcher.find() ? matcher.group(1) : "";
+		return String.format("%s: %s", invalidItem.getClassName(), description);
 	}
 
 	public static String getOutputForAtcTest(InvalidItem invalidItem) {
-		return invalidItem.getClassName();
+		return invalidItem.getClassName() + ": " + invalidItem.getDescription();
+	}
+
+	public static String extractClassName(String description) {
+		Pattern pattern = Pattern.compile("<(.*?)=");
+		Matcher matcher = pattern.matcher(description);
+		return matcher.find() ? matcher.group(1) : "";
 	}
 
 }

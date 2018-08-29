@@ -142,4 +142,8 @@ public class AbapPackageTestState {
 		return atcTestResult.getActiveErrors().size() > 0 ? atcTestResult.getActiveErrors().get(0) : null;
 	}
 
+	public TestResult getAtcTestResult() {
+		return atcTestResult;
+	}
+
 }

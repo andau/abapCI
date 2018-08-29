@@ -5,7 +5,6 @@ import java.util.List;
 import org.eclipse.core.resources.IProject;
 
 import abapci.domain.AbapPackageTestState;
-import abapci.domain.TestResult;
 import abapci.domain.TestResultSummary;
 import abapci.domain.TestState;
 import abapci.handlers.AbapUnitHandler;
@@ -31,9 +30,7 @@ public class AUnitTestManager extends AbstractTestManager {
 						abapPackageTestState.getPackageName());
 				abapPackageTestState.setUnitTestResult(unitTestResultSummary.getTestResult());
 
-				TestResult testResult = unitTestResultSummary.getTestResult();
-
-				mergePackageTestStateIntoGlobalTestState(testResult.getTestState());
+				mergePackageTestStateIntoGlobalTestState(unitTestResultSummary.getTestResult().getTestState());
 
 			}
 
