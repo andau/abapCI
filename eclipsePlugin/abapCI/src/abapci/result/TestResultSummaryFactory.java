@@ -38,8 +38,10 @@ public class TestResultSummaryFactory {
 			if (criticalAlert.getStackEntries() != null && !criticalAlert.getStackEntries().isEmpty()) {
 				firstStackEntry = criticalAlert.getStackEntries().get(0);
 			}
+			String firstDetail = criticalAlert.getDetails().size() == 0 ? ""
+					: criticalAlert.getDetails().get(0).getText().toString();
 			invalidItems.add(new InvalidItem(InvalidItemUtil.extractClassName(firstStackEntry.getDescription()),
-					criticalAlert.getTitle(), false, firstStackEntry.getUri()));
+					criticalAlert.getTitle(), false, firstStackEntry.getUri(), firstDetail));
 
 		}
 

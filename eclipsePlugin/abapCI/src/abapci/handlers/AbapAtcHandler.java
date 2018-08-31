@@ -42,8 +42,6 @@ public class AbapAtcHandler extends AbstractHandler {
 		IProgressMonitor progressMonitor = new NullProgressMonitor();
 		IAbapProject abapProject = AbapProjectService.getInstance().createFromProjectUnchecked(project);
 
-		// TODO Make check variant variable
-
 		String atcVariant = featureFacade.getAtcFeature().getVariant();
 		String worklistId = worklistBackendAccess.createWorklist(abapProject, atcVariant, progressMonitor);
 		checkableItems.add(new MyAtcCheckableItem(createAtcUri(packageName), packageName, "DEVC/K"));

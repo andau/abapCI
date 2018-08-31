@@ -26,38 +26,38 @@ public class AtcTestManager extends AbstractTestManager {
 	public TestState executeAllPackages(IProject project, List<AbapPackageTestState> activeAbapPackageTestStates,
 			List<ActivationObject> inactiveObjects) {
 
-		// List<AbapPackageTestState> packageTestStates =
-		// activeAbapPackageTestStates.stream()
-		// .filter(item -> !item.getUnitTestState().equals(TestState.DEACT))
-		// .collect(Collectors.<AbapPackageTestState>toList());
-
-		IAtcWorklist atcWorklist = null;
-
-		// packageNames.addAll(packageTestStates.stream().filter(item ->
-		// !item.getAtcTestState().equals(TestState.UNDEF))
-		// .map(item -> item.getPackageName()).collect(Collectors.<String>toList()));
-
 		overallTestState = TestState.UNDEF;
 
-		for (AbapPackageTestState abapPackageTestState : activeAbapPackageTestStates) {
+		for (AbapPackageTestState abapPackageTestState : activeAbapPackageTestStates.stream()
+				.filter(item -> !item.getAtcTestState().equals(TestState.DEACT)).collect(Collectors.toList())) {
 
-			List<ActivationObject> inactiveObjectsForPackage = inactiveObjects.stream()
-					.filter(item -> item.packagename.equals(abapPackageTestState.getPackageName()))
-					.collect(Collectors.<ActivationObject>toList());
+			IAtcWorklist atcWorklist = null;
 
-			if (inactiveObjectsForPackage.size() > 0) {
-				atcWorklist = new AbapAtcHandler().executeObjects(project, inactiveObjects);
+			if (abapPackageTestState.getAtcTestState() == TestState.OFFL && inactiveObjects == null) {
+				atcWorklist = new AbapAtcHandler().executePackage(project, abapPackageTestState.getPackageName());
+			}
+
+			else if (inactiveObjects.stream()
+					.anyMatch(item -> item.packagename.equals(abapPackageTestState.getPackageName()))) {
+
+				List<ActivationObject> inactiveObjectsForPackage = inactiveObjects.stream()
+						.filter(item -> item.packagename.equals(abapPackageTestState.getPackageName()))
+						.collect(Collectors.<ActivationObject>toList());
+
+				if (inactiveObjectsForPackage.size() > 0) {
+					atcWorklist = new AbapAtcHandler().executeObjects(project, inactiveObjects);
+				}
+			}
+
+			if (atcWorklist != null) {
+
 				TestResult testResult = AtcResultAnalyzer.getTestResult(atcWorklist, inactiveObjects);
-
 				TestResultSummary testResultSummary = new TestResultSummary(abapPackageTestState.getPackageName(),
 						AtcResultAnalyzer.getTestResult(atcWorklist, inactiveObjects));
-
 				continuousIntegrationPresenter.mergeAtcWorklist(testResultSummary);
-
 				mergePackageTestStateIntoGlobalTestState(testResult.getTestState());
 
 			}
-
 		}
 
 		return overallTestState;

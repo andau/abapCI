@@ -23,9 +23,8 @@ public class ThemeUpdateManager {
 
 	public void updateTheme(SourcecodeState sourcecodeState) {
 
-
 		if (featureFacade.getColorChangerFeature().isActive()) {
-			
+
 			String targetTheme;
 
 			switch (sourcecodeState) {
@@ -44,7 +43,7 @@ public class ThemeUpdateManager {
 				break;
 			}
 
-			final String changeToTheme = targetTheme; 
+			final String changeToTheme = targetTheme;
 			Runnable task = () -> PlatformUI.getWorkbench().getThemeManager().setCurrentTheme(changeToTheme);
 			Display.getDefault().asyncExec(task);
 		}

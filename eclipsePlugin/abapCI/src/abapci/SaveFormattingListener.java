@@ -51,9 +51,9 @@ public class SaveFormattingListener implements IExecutionListener {
 			IEditorReference[] editorReferences = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 					.getEditorReferences();
 
-			String sourcecodePrefix = featureFacade.getSourcecodeFormattingFeature().getPrefix();
-
 			activationPool.unregisterAllIncludedInJob();
+
+			String sourcecodePrefix = featureFacade.getSourcecodeFormattingFeature().getPrefix();
 
 			for (IEditorReference editorReference : editorReferences) {
 

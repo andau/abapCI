@@ -37,7 +37,7 @@ public class AtcResultAnalyzer {
 		for (IAtcObject object : atcWorklist.getObjects().getObject()) {
 			IAtcFindingList findingList = object.getFindings();
 			for (IAtcFinding finding : findingList.getFinding()) {
-				if (finding.getPriority() == 1) {
+				if (finding != null && finding.getPriority() == 1) {
 					String location = finding.getLocation().toLowerCase();
 					boolean isSuppressed = ViewModel.INSTANCE.getSuppressions().stream()
 							.anyMatch(item -> location.contains("/" + item.getClassName().toLowerCase() + "/"));

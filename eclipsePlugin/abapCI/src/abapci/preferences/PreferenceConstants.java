@@ -15,7 +15,9 @@ public class PreferenceConstants {
 
 	public static final String PREF_UNIT_RUN_ON_SAVE = "abapUnitRunOnSavePreference";
 
-	public static final String PREF_ATC_RUN_AFTER_UT_TURN_GREEN = "atcRunAfterUnitTestsTurnGreenPreference";
+	public static final String PREF_ATC_RUN_INITIAL = "atcRunAfterUnitTestsTurnGreenPreference";
+
+	public static final String PREF_ATC_RUN_DELTA_ACTIVATED_OBJECTS = "atcRunDeltaActivatedObjectsPreference";
 
 	public static final String PREF_ATC_VARIANT = "atcVariantPreference";
 

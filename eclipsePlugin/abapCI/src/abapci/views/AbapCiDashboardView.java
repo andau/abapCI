@@ -51,10 +51,6 @@ public class AbapCiDashboardView extends ViewPart {
 		entireContainer = new Composite(parent, SWT.NONE);
 		entireContainer.setLayout(new GridLayout(1, false));
 
-		// projectline = new Label(entireContainer, SWT.FILL);
-		// projectline.setText("");
-		// projectline.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, true, true));
-
 		lblOverallTestState = new Label(entireContainer, SWT.CENTER);
 		FontData[] fontData = lblOverallTestState.getFont().getFontData();
 		fontData[0].setHeight(16);

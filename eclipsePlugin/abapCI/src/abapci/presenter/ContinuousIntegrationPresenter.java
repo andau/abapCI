@@ -42,7 +42,6 @@ public class ContinuousIntegrationPresenter {
 	private IProject currentProject;
 	private List<AbapPackageTestState> abapPackageTestStates;
 	private AbapCiDashboardView abapCiDashboardView;
-	private SourcecodeState sourcecodeState;
 	private DevelopmentProcessManager developmentProcessManager;
 
 	public ContinuousIntegrationPresenter(AbapCiMainView abapCiMainView,
@@ -51,7 +50,6 @@ public class ContinuousIntegrationPresenter {
 		this.model = continuousIntegrationModel;
 		this.currentProject = currentProject;
 		this.abapPackageTestStates = new ArrayList<AbapPackageTestState>();
-		this.sourcecodeState = SourcecodeState.UNDEF;
 		developmentProcessManager = new DevelopmentProcessManager();
 
 		loadPackages();
@@ -165,7 +163,6 @@ public class ContinuousIntegrationPresenter {
 	}
 
 	public void updateViewsAsync(SourcecodeState sourcecodeState) {
-		this.sourcecodeState = sourcecodeState;
 		Runnable task = () -> updateViews();
 		Display.getDefault().asyncExec(task);
 	}

@@ -11,11 +11,13 @@ public class InvalidItem {
 	private String description;
 	private boolean suppressed;
 	private URI uriToError;
+	private String detail;
 
-	public InvalidItem(String className, String description, boolean suppressed) {
+	public InvalidItem(String className, String description, boolean suppressed, URI uri, String detail) {
 		this.className = className;
 		this.description = description;
 		this.suppressed = suppressed;
+		this.detail = detail;
 	}
 
 	public InvalidItem(String className, String description, boolean suppressed, URI uriToError) {
@@ -27,6 +29,10 @@ public class InvalidItem {
 
 	public String getDescription() {
 		return description;
+	}
+
+	public String getDetail() {
+		return detail;
 	}
 
 	public String getClassName() {

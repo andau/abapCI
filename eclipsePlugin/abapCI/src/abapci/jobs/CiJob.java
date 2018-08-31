@@ -12,6 +12,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
 import abapci.Exception.InactivatedObjectEvaluationException;
+import abapci.activation.ActivationPool;
 import abapci.connections.SapConnection;
 import abapci.domain.ActivationObject;
 import abapci.feature.FeatureProcessor;
@@ -69,6 +70,10 @@ public class CiJob extends Job {
 		if (processingStep > 0) {
 			featureProcessor.setPackagesAndObjects(triggerPackages, inactiveObjects);
 			featureProcessor.processEnabledFeatures();
+		}
+
+		if (processingStep == 2) {
+			ActivationPool.getInstance().unregisterAllIncludedInJob();
 		}
 
 		if (shortDelayProcessing || longDelayProcessing) {

@@ -66,8 +66,16 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 
 	private void createAtcChapter() {
 
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ATC_RUN_AFTER_UT_TURN_GREEN,
+		Label atcInfoLabel = new Label(getFieldEditorParent(), SWT.NONE);
+		atcInfoLabel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
+		atcInfoLabel.setText(
+				"An activated ATC feature can lead to big data volume in table SATC_AC_RESULTVT, reorganize continuously!");
+
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ATC_RUN_INITIAL,
 				"&Run ATC after Unit Teststate changes state to OK (experimental)", getFieldEditorParent()));
+
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ATC_RUN_DELTA_ACTIVATED_OBJECTS,
+				"&Run ATC for each activated object", getFieldEditorParent()));
 
 		addField(new StringFieldEditor(PreferenceConstants.PREF_ATC_VARIANT, "&Run ATC with variant:",
 				getFieldEditorParent()));

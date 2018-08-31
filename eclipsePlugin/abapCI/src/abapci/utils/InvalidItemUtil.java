@@ -11,7 +11,7 @@ public class InvalidItemUtil {
 		String description = invalidItem.getDescription();
 		description = description.replaceAll("Critical Assertion Error:", "");
 		description = description.replaceAll("Kritischer Assertion-Fehler:", "");
-		return String.format("%s: %s", invalidItem.getClassName(), description);
+		return String.format("%s: %s", invalidItem.getClassName(), description + "; " + invalidItem.getDetail());
 	}
 
 	public static String getOutputForAtcTest(InvalidItem invalidItem) {

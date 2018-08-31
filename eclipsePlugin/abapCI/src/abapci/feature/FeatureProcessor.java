@@ -60,15 +60,21 @@ public class FeatureProcessor {
 				presenter.updateViewsAsync(developmentProcessManager.getSourcecodeState());
 
 				if (featureFacade.getAtcFeature().isActive()) {
-					if (unitTestState == TestState.OK && oldSourcecodeState != SourcecodeState.OK
-							&& oldSourcecodeState != SourcecodeState.ATC_FAIL) {
-						TestState atcTestState = atcTestManager.executeAllPackages(presenter.getCurrentProject(),
+					TestState atcTestState = null;
+					if (featureFacade.getAtcFeature().isRunInitial()
+							&& presenter.getAbapPackageTestStatesForCurrentProject().stream()
+									.anyMatch(item -> item.getAtcTestState().equals(TestState.OFFL))) {
+						atcTestState = atcTestManager.executeAllPackages(presenter.getCurrentProject(),
 								presenter.getAbapPackageTestStatesForCurrentProject(), inactiveObjects);
-						developmentProcessManager.setAtcTeststate(atcTestState);
-						themeUpdateManager.updateTheme(developmentProcessManager.getSourcecodeState());
-					} else {
-						TestState atcTestState = atcTestManager.executeAllPackages(presenter.getCurrentProject(),
+					}
+
+					if (featureFacade.getAtcFeature().isRunActivatedObjects() && inactiveObjects != null) {
+
+						atcTestState = atcTestManager.executeAllPackages(presenter.getCurrentProject(),
 								presenter.getAbapPackageTestStatesForCurrentProject(), inactiveObjects);
+					}
+
+					if (atcTestState != null) {
 						developmentProcessManager.setAtcTeststate(atcTestState);
 						themeUpdateManager.updateTheme(developmentProcessManager.getSourcecodeState());
 					}

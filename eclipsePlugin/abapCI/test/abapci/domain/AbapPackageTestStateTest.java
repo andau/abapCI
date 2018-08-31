@@ -16,7 +16,7 @@ public class AbapPackageTestStateTest {
 		assertEquals(TestState.UNDEF.toString(), abapPackageTestState.getJenkinsInfo());
 
 		List<InvalidItem> invalidItems = new ArrayList<InvalidItem>();
-		invalidItems.add(new InvalidItem("TESTPACKAGE", "", false));
+		invalidItems.add(new InvalidItem("TESTPACKAGE", "", false, null, ""));
 		abapPackageTestState.setUnitTestResult(new TestResult(true, 1, invalidItems, null));
 		assertEquals("Errors: 1", abapPackageTestState.getAUnitInfo());
 		abapPackageTestState.setUnitTestResult(new TestResult(true, 1, new ArrayList<InvalidItem>(), null));
