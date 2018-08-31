@@ -59,11 +59,6 @@ public class AbapPackageTestState {
 		return aUnitTestResult.getTestState();
 	}
 
-	@Deprecated
-	public String getAUnitInfo() {
-		return aUnitTestResult.getTestResultInfo();
-	}
-
 	public int getAUnitNumOk() {
 		return aUnitTestResult.getNumOk();
 	}
@@ -77,8 +72,7 @@ public class AbapPackageTestState {
 	}
 
 	public String getAUnitLastRun() {
-		return aUnitTestResult.getTestState() != TestState.UNDEF
-				? new SimpleDateFormat("HH:mm").format(aUnitTestResult.getLastRun())
+		return aUnitTestResult.getLastRun() != null ? new SimpleDateFormat("HH:mm").format(aUnitTestResult.getLastRun())
 				: "";
 	}
 
@@ -90,11 +84,6 @@ public class AbapPackageTestState {
 	public void setUnitTestResult(TestResult aUnitTestResult) {
 		this.aUnitTestResult = aUnitTestResult;
 		propertyChangeSupport.firePropertyChange("aUnitTestResult", this.aUnitTestResult, aUnitTestResult);
-	}
-
-	@Deprecated
-	public String getAtcInfo() {
-		return atcTestResult.getTestResultInfo();
 	}
 
 	public TestState getAtcTestState() {
@@ -118,8 +107,7 @@ public class AbapPackageTestState {
 	}
 
 	public String getAtcLastRun() {
-		return atcTestResult.getTestState() != TestState.UNDEF
-				? new SimpleDateFormat("HH:mm").format(atcTestResult.getLastRun())
+		return atcTestResult.getLastRun() != null ? new SimpleDateFormat("HH:mm").format(atcTestResult.getLastRun())
 				: "";
 	}
 

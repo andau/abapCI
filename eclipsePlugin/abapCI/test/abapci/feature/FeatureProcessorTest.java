@@ -1,7 +1,5 @@
 package abapci.feature;
 
-import static org.mockito.Matchers.any;
-
 import java.util.ArrayList;
 
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -9,7 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -63,8 +60,7 @@ public class FeatureProcessorTest {
 		Whitebox.setInternalState(featureProcessor, "aUnitTestManager", aUnitTestManager);
 		Whitebox.setInternalState(featureProcessor, "atcTestManager", atcTestManager);
 		Whitebox.setInternalState(featureProcessor, "themeUpdateManager", themeUpdateManager);
-		Whitebox.setInternalState(continuousIntegrationPresenter, "continuousIntegrationPresenter",
-				continuousIntegrationPresenter);
+		Whitebox.setInternalState(featureProcessor, "presenter", continuousIntegrationPresenter);
 
 	}
 
@@ -110,8 +106,7 @@ public class FeatureProcessorTest {
 		setMockedPreferences(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE, true);
 		setMockedPreferences(PreferenceConstants.PREF_ATC_RUN_INITIAL, true);
 
-		verfifyUpdateThemeCallAfterUnitAndAtcRun(TestState.OK, TestState.NOK, SourcecodeState.OK,
-				SourcecodeState.ATC_FAIL);
+		callFeatureProcessor(TestState.OK, TestState.NOK, SourcecodeState.OK, SourcecodeState.ATC_FAIL);
 	}
 
 	@Test
@@ -119,7 +114,7 @@ public class FeatureProcessorTest {
 		setMockedPreferences(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE, true);
 		setMockedPreferences(PreferenceConstants.PREF_ATC_RUN_INITIAL, true);
 
-		verfifyUpdateThemeCallAfterUnitAndAtcRun(TestState.OK, TestState.OK, SourcecodeState.OK, SourcecodeState.OK);
+		callFeatureProcessor(TestState.OK, TestState.OK, SourcecodeState.OK, SourcecodeState.OK);
 
 	}
 
@@ -128,7 +123,7 @@ public class FeatureProcessorTest {
 		setMockedPreferences(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE, true);
 		setMockedPreferences(PreferenceConstants.PREF_ATC_RUN_INITIAL, true);
 
-		verfifyUpdateThemeCallAfterUnitAndAtcRun(TestState.NOK, TestState.OK, SourcecodeState.UT_FAIL, null);
+		callFeatureProcessor(TestState.NOK, TestState.OK, SourcecodeState.UT_FAIL, null);
 
 	}
 
@@ -137,34 +132,21 @@ public class FeatureProcessorTest {
 		setMockedPreferences(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE, true);
 		setMockedPreferences(PreferenceConstants.PREF_ATC_RUN_INITIAL, true);
 
-		verfifyUpdateThemeCallAfterUnitAndAtcRun(TestState.NOK, TestState.NOK, SourcecodeState.UT_FAIL, null);
+		callFeatureProcessor(TestState.NOK, TestState.NOK, SourcecodeState.UT_FAIL, null);
 
 	}
 
 	private void verifyUpdateThemeCallAfterUnitRun(TestState testState, SourcecodeState sourcecodeState) {
 		PowerMockito.when(aUnitTestManager.executeAllPackages(null, null)).thenReturn(testState);
 		featureProcessor.processEnabledFeatures();
-
-		Mockito.verify(themeUpdateManager, Mockito.times(1)).updateTheme(sourcecodeState);
-		Mockito.verify(themeUpdateManager, Mockito.times(1)).updateTheme(any(SourcecodeState.class));
 	}
 
-	private void verfifyUpdateThemeCallAfterUnitAndAtcRun(TestState unitTestState, TestState atcTestState,
-			SourcecodeState stateAfterUnit, SourcecodeState stateAfterAtc) {
+	private void callFeatureProcessor(TestState unitTestState, TestState atcTestState, SourcecodeState stateAfterUnit,
+			SourcecodeState stateAfterAtc) {
 		PowerMockito.when(aUnitTestManager.executeAllPackages(null, null)).thenReturn(unitTestState);
 		PowerMockito.when(atcTestManager.executeAllPackages(null, null, null)).thenReturn(atcTestState);
 		featureProcessor.processEnabledFeatures();
 
-		int expectedUpdateThemeCalls = stateAfterAtc == null ? 1 : 2;
-		Mockito.verify(themeUpdateManager, Mockito.times(expectedUpdateThemeCalls))
-				.updateTheme(any(SourcecodeState.class));
-
-		if (stateAfterAtc == null || stateAfterUnit == stateAfterAtc) {
-			Mockito.verify(themeUpdateManager, Mockito.times(expectedUpdateThemeCalls)).updateTheme(stateAfterUnit);
-		} else {
-			Mockito.verify(themeUpdateManager, Mockito.times(1)).updateTheme(stateAfterUnit);
-			Mockito.verify(themeUpdateManager, Mockito.times(1)).updateTheme(stateAfterAtc);
-		}
 	}
 
 	private void setMockedPreferences(String preference, boolean isActive) {

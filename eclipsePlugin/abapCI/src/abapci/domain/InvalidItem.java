@@ -13,10 +13,11 @@ public class InvalidItem {
 	private URI uriToError;
 	private String detail;
 
-	public InvalidItem(String className, String description, boolean suppressed, URI uri, String detail) {
+	public InvalidItem(String className, String description, boolean suppressed, URI uriToError, String detail) {
 		this.className = className;
 		this.description = description;
 		this.suppressed = suppressed;
+		this.uriToError = uriToError;
 		this.detail = detail;
 	}
 

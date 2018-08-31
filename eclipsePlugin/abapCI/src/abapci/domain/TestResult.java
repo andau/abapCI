@@ -29,14 +29,14 @@ public class TestResult {
 	public TestResult(boolean activated) {
 		this.activated = activated;
 		this.invalidItems = new ArrayList<>();
-		this.lastRun = Calendar.getInstance().getTime();
+		this.lastRun = null;
 	}
 
 	public TestResult() {
 		this.activated = true;
 		undefined = true;
 		this.invalidItems = new ArrayList<>();
-		this.lastRun = Calendar.getInstance().getTime();
+		this.lastRun = null;
 	}
 
 	public TestState getTestState() {

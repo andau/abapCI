@@ -20,81 +20,38 @@ import abapci.result.TestResultSummaryFactory;
 @RunWith(PowerMockRunner.class)
 public class TestResultSummaryFactoryTest {
 
-	final String TEST_PACKAGE_NAME = "TEST_PACKAGE"; 
+	final String TEST_PACKAGE_NAME = "TEST_PACKAGE";
 
-    @Mock
-    IAbapUnitResult unitResultWithErrorMock; 
-    @Mock
-    IAbapUnitResult unitResultOkMock; 
 	@Mock
-	IAbapUnitAlert abapUnitAlertMock; 
+	IAbapUnitResult unitResultWithErrorMock;
 	@Mock
-	IAbapUnitAlert abapUnitIgnoreAlertMock; 
-	@Mock 
-	IAbapUnitResultItem abapUnitResultItemMock; 
+	IAbapUnitResult unitResultOkMock;
 	@Mock
-	IAbapUnitResultItem abapUnitResultItemSubMock; 
+	IAbapUnitAlert abapUnitAlertMock;
 	@Mock
-	IAbapUnitResultItem abapUnitResultItemSubSubMock; 
-	
+	IAbapUnitAlert abapUnitIgnoreAlertMock;
+	@Mock
+	IAbapUnitResultItem abapUnitResultItemMock;
+	@Mock
+	IAbapUnitResultItem abapUnitResultItemSubMock;
+	@Mock
+	IAbapUnitResultItem abapUnitResultItemSubSubMock;
+
 	@Before
 	public void before() {
-		PowerMockito.when(abapUnitAlertMock.getTitle()).thenReturn("Testalert"); 
+		PowerMockito.when(abapUnitAlertMock.getTitle()).thenReturn("Testalert");
 		PowerMockito.when(unitResultWithErrorMock.getAlerts()).thenReturn(Arrays.asList(abapUnitAlertMock));
 
-		PowerMockito.when(abapUnitIgnoreAlertMock.getTitle()).thenReturn("Testalert"); 
-		PowerMockito.when(abapUnitIgnoreAlertMock.getSeverity()).thenReturn(AbapUnitAlertSeverity.TOLERABLE); 
-		PowerMockito.when(unitResultOkMock.getAlerts()).thenReturn(Arrays.asList(abapUnitIgnoreAlertMock)); 
+		PowerMockito.when(abapUnitIgnoreAlertMock.getTitle()).thenReturn("Testalert");
+		PowerMockito.when(abapUnitIgnoreAlertMock.getSeverity()).thenReturn(AbapUnitAlertSeverity.TOLERABLE);
+		PowerMockito.when(unitResultOkMock.getAlerts()).thenReturn(Arrays.asList(abapUnitIgnoreAlertMock));
 
 	}
 
-	
 	@Test
 	public void testNoError() {
 		TestResultSummary unitTestResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME, unitResultOkMock);
-		Assert.assertEquals(TestState.OK, unitTestResultSummary.getTestResult().getTestState()); 
-	}
-
-	
-	@Test
-	public void testOneError() {
-		PowerMockito.when(unitResultWithErrorMock.getAlerts()).thenReturn(Arrays.asList(abapUnitAlertMock));
-
-		TestResultSummary unitTestResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME, unitResultWithErrorMock);
-		Assert.assertEquals(TestState.NOK, unitTestResultSummary.getTestResult().getTestState()); 
-	}
-
-	@Test
-	public void testOneSubError() {
-		PowerMockito.when(abapUnitResultItemMock.getAlerts()).thenReturn(Arrays.asList(abapUnitAlertMock)); 
-		PowerMockito.when(unitResultWithErrorMock.getItems()).thenReturn(Arrays.asList(abapUnitResultItemMock));
-
-
-
-		TestResultSummary unitTestResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME, unitResultWithErrorMock);
-		Assert.assertEquals(TestState.NOK, unitTestResultSummary.getTestResult().getTestState()); 
-	}
-
-	@Test
-	public void testOneSubSubError() {
-		PowerMockito.when(abapUnitResultItemMock.getAlerts()).thenReturn(Arrays.asList(abapUnitAlertMock)); 
-		PowerMockito.when(unitResultWithErrorMock.getItems()).thenReturn(Arrays.asList(abapUnitResultItemMock));
-
-		TestResultSummary unitTestResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME, unitResultWithErrorMock);
-		Assert.assertEquals(TestState.NOK, unitTestResultSummary.getTestResult().getTestState()); 
-	}
-
-	@Test
-	public void testOneSubSubSubError() {
-		PowerMockito.when(abapUnitResultItemSubSubMock.getAlerts()).thenReturn(Arrays.asList(abapUnitAlertMock)); 
-		PowerMockito.when(abapUnitResultItemSubMock.getChildItems()).thenReturn(Arrays.asList(abapUnitResultItemSubSubMock));
-		PowerMockito.when(abapUnitResultItemMock.getChildItems()).thenReturn(Arrays.asList(abapUnitResultItemSubMock));
-		PowerMockito.when(unitResultWithErrorMock.getItems()).thenReturn(Arrays.asList(abapUnitResultItemMock));
-
-		TestResultSummary unitTestResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME, unitResultWithErrorMock);
-		Assert.assertEquals(TestState.NOK, unitTestResultSummary.getTestResult().getTestState()); 
+		Assert.assertEquals(TestState.OK, unitTestResultSummary.getTestResult().getTestState());
 	}
 
 }
-
-

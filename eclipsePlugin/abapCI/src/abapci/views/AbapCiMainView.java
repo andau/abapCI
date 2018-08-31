@@ -50,6 +50,7 @@ import abapci.lang.UiTexts;
 import abapci.presenter.ContinuousIntegrationPresenter;
 import abapci.utils.EditorHandler;
 import abapci.utils.InvalidItemUtil;
+import abapci.utils.StringUtils;
 import abapci.views.actions.ci.AbapGitCiAction;
 import abapci.views.actions.ci.AbapUnitCiAction;
 import abapci.views.actions.ci.AbapUnitCiActionOpenFirstError;
@@ -242,7 +243,8 @@ public class AbapCiMainView extends ViewPart {
 			@Override
 			public String getText(Object element) {
 				AbapPackageTestState p = (AbapPackageTestState) element;
-				return Integer.toString(p.getAUnitNumOk());
+				return StringUtils.IsNullOrEmpty(p.getAUnitLastRun()) ? StringUtils.EMPTY
+						: Integer.toString(p.getAUnitNumOk());
 			}
 		});
 
@@ -252,7 +254,8 @@ public class AbapCiMainView extends ViewPart {
 			@Override
 			public String getText(Object element) {
 				AbapPackageTestState p = (AbapPackageTestState) element;
-				return Integer.toString(p.getAUnitNumErr());
+				return StringUtils.IsNullOrEmpty(p.getAUnitLastRun()) ? StringUtils.EMPTY
+						: Integer.toString(p.getAUnitNumErr());
 			}
 		});
 
@@ -262,7 +265,8 @@ public class AbapCiMainView extends ViewPart {
 			@Override
 			public String getText(Object element) {
 				AbapPackageTestState p = (AbapPackageTestState) element;
-				return Integer.toString(p.getAUnitNumSuppressed());
+				return StringUtils.IsNullOrEmpty(p.getAUnitLastRun()) ? StringUtils.EMPTY
+						: Integer.toString(p.getAUnitNumSuppressed());
 			}
 		});
 
@@ -293,7 +297,8 @@ public class AbapCiMainView extends ViewPart {
 				@Override
 				public String getText(Object element) {
 					AbapPackageTestState p = (AbapPackageTestState) element;
-					return Integer.toString(p.getAtcNumErr());
+					return StringUtils.IsNullOrEmpty(p.getAtcLastRun()) ? StringUtils.EMPTY
+							: Integer.toString(p.getAtcNumErr());
 				}
 			});
 
@@ -303,7 +308,7 @@ public class AbapCiMainView extends ViewPart {
 				@Override
 				public String getText(Object element) {
 					AbapPackageTestState p = (AbapPackageTestState) element;
-					return p.getAtcNumWarn();
+					return StringUtils.IsNullOrEmpty(p.getAtcLastRun()) ? StringUtils.EMPTY : p.getAtcNumWarn();
 				}
 			});
 
@@ -313,7 +318,7 @@ public class AbapCiMainView extends ViewPart {
 				@Override
 				public String getText(Object element) {
 					AbapPackageTestState p = (AbapPackageTestState) element;
-					return p.getAtcNumInfo();
+					return StringUtils.IsNullOrEmpty(p.getAtcLastRun()) ? StringUtils.EMPTY : p.getAtcNumInfo();
 				}
 			});
 
@@ -323,7 +328,8 @@ public class AbapCiMainView extends ViewPart {
 				@Override
 				public String getText(Object element) {
 					AbapPackageTestState p = (AbapPackageTestState) element;
-					return Integer.toString(p.getAtcNumSuppressed());
+					return StringUtils.IsNullOrEmpty(p.getAtcLastRun()) ? StringUtils.EMPTY
+							: Integer.toString(p.getAtcNumSuppressed());
 				}
 			});
 

@@ -12,7 +12,7 @@ public class ContinuousIntegrationTestModel implements IContinuousIntegrationMod
 	@Override
 	public List<ContinuousIntegrationConfig> getAll() throws ContinuousIntegrationConfigFileParseException {
 		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<ContinuousIntegrationConfig>();
 	}
 
 	@Override
