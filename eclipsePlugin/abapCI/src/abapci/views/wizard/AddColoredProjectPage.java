@@ -30,7 +30,11 @@ public class AddColoredProjectPage extends Dialog {
 		super(parentShell);
 		this.presenter = presenter;
 		this.project = project;
-		parentShell.setText("Set  the coloring for the ABAP project");
+	}
+
+	protected void configureShell(Shell shell) {
+		super.configureShell(shell);
+		shell.setText("Set coloring for ABAP project");
 	}
 
 	@Override

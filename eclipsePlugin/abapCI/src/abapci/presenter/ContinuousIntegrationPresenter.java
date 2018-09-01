@@ -27,6 +27,7 @@ import abapci.domain.TestResult;
 import abapci.domain.TestResultSummary;
 import abapci.domain.TestState;
 import abapci.domain.UiColor;
+import abapci.feature.FeatureFacade;
 import abapci.manager.DevelopmentProcessManager;
 import abapci.model.IContinuousIntegrationModel;
 import abapci.utils.AnnotationRuleColorChanger;
@@ -43,6 +44,7 @@ public class ContinuousIntegrationPresenter {
 	private List<AbapPackageTestState> abapPackageTestStates;
 	private AbapCiDashboardView abapCiDashboardView;
 	private DevelopmentProcessManager developmentProcessManager;
+	private FeatureFacade featureFacade;
 
 	public ContinuousIntegrationPresenter(AbapCiMainView abapCiMainView,
 			IContinuousIntegrationModel continuousIntegrationModel, IProject currentProject) {
@@ -51,6 +53,7 @@ public class ContinuousIntegrationPresenter {
 		this.currentProject = currentProject;
 		this.abapPackageTestStates = new ArrayList<AbapPackageTestState>();
 		developmentProcessManager = new DevelopmentProcessManager();
+		featureFacade = new FeatureFacade();
 
 		loadPackages();
 		setViewerInput();
@@ -192,7 +195,7 @@ public class ContinuousIntegrationPresenter {
 
 		if (view != null && abapPackageTestStatesForCurrentProject != null) {
 			view.setViewerInput(abapPackageTestStatesForCurrentProject);
-			view.statusLabel.setText("Package information updated");
+			view.statusLabel.setText("CI run package summary updated");
 		}
 
 		// changeColoringForRightAnnotationRuler();
@@ -228,24 +231,15 @@ public class ContinuousIntegrationPresenter {
 
 		if (packagesWithFailedTests.size() > 0) {
 			link.setVisible(true);
-			if (packagesWithFailedTests.size() == 1) {
-				link.setText(
-						InvalidItemUtil.getOutputForUnitTest(packagesWithFailedTests.get(0).getFirstFailedUnitTest())
-								+ "     ");
-			} else {
-				link.setText(String.format("Open first failed tests for  %s packages", packagesWithFailedTests.size()));
-			}
+			List<InvalidItem> firstFailedTests = packagesWithFailedTests.stream()
+					.map(item -> item.getFirstFailedUnitTest()).collect(Collectors.toList());
+			link.setText(InvalidItemUtil.getOutputForUnitTest(firstFailedTests));
 		} else {
 			if (packagesWithFailedAtc.size() > 0) {
 				link.setVisible(true);
-				if (packagesWithFailedAtc.size() == 1) {
-					link.setText(InvalidItemUtil.getOutputForAtcTest(packagesWithFailedAtc.get(0).getFirstFailedAtc())
-							+ "     ");
-				} else {
-					link.setText(String.format("Open first failed atc finding for  %s packages",
-							packagesWithFailedAtc.size()));
-				}
-
+				List<InvalidItem> firstFailedTests = packagesWithFailedAtc.stream()
+						.map(item -> item.getFirstFailedAtc()).collect(Collectors.toList());
+				link.setText(InvalidItemUtil.getOutputForAtcTest(firstFailedTests));
 			} else {
 				link.setVisible(false);
 			}
@@ -291,7 +285,10 @@ public class ContinuousIntegrationPresenter {
 				.mapToInt(item -> item.getAtcNumSuppressed()).sum();
 
 		String unitTestInfoString = String.format("[%s,%s,%s]", overallOk, overallErrors, overallSuppressed);
-		String atcInfoString = String.format("[%s,%s]", overallAtcErr, overallAtcSuppressed);
+
+		String atcInfoString = featureFacade.getAtcFeature().isActive()
+				? String.format(" [%s,%s]", overallAtcErr, overallAtcSuppressed)
+				: "";
 
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 		Date date = new Date();

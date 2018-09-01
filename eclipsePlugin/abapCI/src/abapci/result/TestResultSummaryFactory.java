@@ -34,12 +34,16 @@ public class TestResultSummaryFactory {
 
 		List<InvalidItem> invalidItems = new ArrayList<>();
 		for (IAbapUnitAlert criticalAlert : criticalAlerts) {
+
 			IAbapUnitAlertStackEntry firstStackEntry = null;
 			if (criticalAlert.getStackEntries() != null && !criticalAlert.getStackEntries().isEmpty()) {
 				firstStackEntry = criticalAlert.getStackEntries().get(0);
 			}
 			String firstDetail = criticalAlert.getDetails().size() == 0 ? ""
 					: criticalAlert.getDetails().get(0).getText().toString();
+			if (criticalAlert.getDetails().get(0).getChildDetails().size() > 0) {
+				firstDetail = firstDetail + ", " + criticalAlert.getDetails().get(0).getChildDetails().get(0).getText();
+			}
 			invalidItems.add(new InvalidItem(InvalidItemUtil.extractClassName(firstStackEntry.getDescription()),
 					criticalAlert.getTitle(), false, firstStackEntry.getUri(), firstDetail));
 

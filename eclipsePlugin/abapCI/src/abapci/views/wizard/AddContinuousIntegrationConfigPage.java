@@ -40,9 +40,13 @@ public class AddContinuousIntegrationConfigPage extends Dialog {
 		this.presenter = presenter;
 		this.ciConfig = ciConfig;
 		this.showPopUpButton = showPopUpButton;
-		parentShell.setText("Add a package to the CI Job");
 
 		featureFacade = new FeatureFacade();
+	}
+
+	protected void configureShell(Shell shell) {
+		super.configureShell(shell);
+		shell.setText("ABAP package configuration for CI Job");
 	}
 
 	@Override
