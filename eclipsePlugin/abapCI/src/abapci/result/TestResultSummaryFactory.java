@@ -12,6 +12,7 @@ import com.sap.adt.tools.abapsource.abapunit.IAbapUnitResultItem;
 
 import abapci.domain.InvalidItem;
 import abapci.domain.TestResultSummary;
+import abapci.utils.AlertDetailMessageExtractor;
 import abapci.utils.InvalidItemUtil;
 import abapci.views.ViewModel;
 
@@ -39,14 +40,10 @@ public class TestResultSummaryFactory {
 			if (criticalAlert.getStackEntries() != null && !criticalAlert.getStackEntries().isEmpty()) {
 				firstStackEntry = criticalAlert.getStackEntries().get(0);
 			}
-			String firstDetail = criticalAlert.getDetails().size() == 0 ? ""
-					: criticalAlert.getDetails().get(0).getText().toString();
-			if (criticalAlert.getDetails().get(0).getChildDetails().size() > 0) {
-				firstDetail = firstDetail + ", " + criticalAlert.getDetails().get(0).getChildDetails().get(0).getText();
-			}
-			invalidItems.add(new InvalidItem(InvalidItemUtil.extractClassName(firstStackEntry.getDescription()),
-					criticalAlert.getTitle(), false, firstStackEntry.getUri(), firstDetail));
 
+			String extractedDetailMessage = AlertDetailMessageExtractor.extractMessageForUi(criticalAlert);
+			invalidItems.add(new InvalidItem(InvalidItemUtil.extractClassName(firstStackEntry.getDescription()),
+					criticalAlert.getTitle(), false, firstStackEntry.getUri(), extractedDetailMessage));
 		}
 
 		int numTests = 0;
@@ -61,6 +58,10 @@ public class TestResultSummaryFactory {
 		}
 
 		return new TestResultSummary(packageName, true, numTests, invalidItems);
+	}
+
+	private static String extractUsefulMessage(String detailMessage) {
+		return detailMessage.contains("===") ? detailMessage.substring(0, detailMessage.indexOf("===")) : detailMessage;
 	}
 
 	private static int getNumTests(IAbapUnitResultItem item) {
