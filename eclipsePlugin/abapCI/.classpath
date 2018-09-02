@@ -46,6 +46,7 @@
 			<accessrule kind="accessible" pattern="org/eclipse/ui/internal/ViewReference"/>
 			<accessrule kind="accessible" pattern="com/sap/adt/tools/abapsource/abapunit/IAbapUnitAlert"/>
 			<accessrule kind="accessible" pattern="com/sap/adt/tools/core/model/util/AdtObjectReferenceAdapterFactory"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/tools/abapsource/ui/internal/sources/cleanup/AbapSourceCleanupHandler"/>
 		</accessrules>
 	</classpathentry>
 	<classpathentry kind="src" output="target/classes" path="src">

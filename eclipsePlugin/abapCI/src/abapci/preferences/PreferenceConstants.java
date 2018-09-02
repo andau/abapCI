@@ -35,6 +35,8 @@ public class PreferenceConstants {
 
 	public static final String PREF_SOURCE_CODE_FORMATTING_PREFIX = "sourceCodeFormattingPrefix";
 
+	public static final String PREF_SOURCE_CODE_CLEANUP_NOT_USED_VARIABLES = "sourceCodeCleanupNotUsedVariables";
+
 	public static final String PREF_ABAP_GIT_PACKAGE_CHANGE_ENABLED = "abapGitPackageChangeEnabled";
 
 	public static final String PREF_UNIT_RUN_CRITICAL_TESTS_ENABLED = "unitRunCriticalTestsEnabled";

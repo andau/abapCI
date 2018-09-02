@@ -104,6 +104,8 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 				"&Automatic sourcecode formatting enabled", getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.PREF_SOURCE_CODE_FORMATTING_PREFIX,
 				"&Mandatory prefix in source code to enable formatter", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_SOURCE_CODE_CLEANUP_NOT_USED_VARIABLES,
+				"&Automatically cleanup not used variabels (when formatting)", getFieldEditorParent()));
 
 	}
 

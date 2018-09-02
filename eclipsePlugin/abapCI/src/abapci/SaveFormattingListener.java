@@ -61,6 +61,9 @@ public class SaveFormattingListener implements IExecutionListener {
 					if (featureFacade.getSourcecodeFormattingFeature().isActive() && sourcecodeFormatHandler
 							.isAutoformatEnabled(editorReference.getEditor(true), sourcecodePrefix)) {
 						sourcecodeFormatHandler.formatEditor(editorReference.getEditor(true));
+						if (featureFacade.getSourcecodeFormattingFeature().isCleanupVariablesEnabled()) {
+							sourcecodeFormatHandler.deleteUnusedVariables(editorReference.getEditor(true));
+						}
 					}
 
 					String projectName = AbapProjectUtil.getCurrentProject(editorReference.getEditor(false)).getName();

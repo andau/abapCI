@@ -70,6 +70,8 @@ public class FeatureFactory {
 		String prefix = prefs.getString(PreferenceConstants.PREF_SOURCE_CODE_FORMATTING_PREFIX);
 		SourcecodeFormattingFeature feature = new SourcecodeFormattingFeature(prefix);
 		feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_SOURCE_CODE_FORMATTING_ENABLED));
+		feature.setCleanupVariablesEnabled(
+				prefs.getBoolean(PreferenceConstants.PREF_SOURCE_CODE_CLEANUP_NOT_USED_VARIABLES));
 		return feature;
 	}
 

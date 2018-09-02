@@ -13,7 +13,10 @@ import org.eclipse.ui.ISources;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.ITextEditor;
 
+import com.sap.adt.tools.abapsource.ui.internal.sources.cleanup.AbapSourceCleanupHandler;
 import com.sap.adt.tools.abapsource.ui.sources.prettyprinter.PrettyPrintHandler;
+
+import abapci.cleanup.AbapSourceCleanupHandlerCopy;
 
 public class SourcecodeFormatHandler {
 
@@ -65,6 +68,30 @@ public class SourcecodeFormatHandler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public void deleteUnusedVariables(IEditorPart editorPart) {
+		HashMap parametersMap = new HashMap<String, String>();
+		EvaluationContext evaluationContext = new EvaluationContext(null, new Object());
+		evaluationContext.addVariable(ISources.ACTIVE_EDITOR_NAME, editorPart);
+
+		CommandManager manager = new CommandManager();
+		Category category = manager.getCategory("TBD");
+		category.define("name", "description");
+		String scope = "all";
+		Command command = manager.getCommand(AbapSourceCleanupHandler.COMMAND_ID + "." + scope);
+		command.define(AbapSourceCleanupHandler.COMMAND_ID + "." + scope, "description", category);
+
+		ExecutionEvent executionEvent = new ExecutionEvent(command, parametersMap, null, evaluationContext);
+
+		try {
+			AbapSourceCleanupHandlerCopy sourceCleanupHandler = new AbapSourceCleanupHandlerCopy();
+			sourceCleanupHandler.execute(executionEvent);
+		} catch (org.eclipse.core.commands.ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	public IEditorPart autoformattableEditor(IEditorPart editor) {
