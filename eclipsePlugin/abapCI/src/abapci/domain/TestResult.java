@@ -50,7 +50,7 @@ public class TestResult {
 		} else if (!testrunOk) {
 			testState = TestState.OFFL;
 		} else {
-			testState = getActiveErrors().isEmpty() ? TestState.OK : TestState.NOK;
+			testState = getActiveErrors(ErrorPriority.ERROR).isEmpty() ? TestState.OK : TestState.NOK;
 		}
 
 		return testState;
@@ -58,6 +58,11 @@ public class TestResult {
 
 	public List<InvalidItem> getActiveErrors() {
 		return invalidItems.stream().filter(item -> !item.isSuppressed()).collect(Collectors.toList());
+	}
+
+	public List<InvalidItem> getActiveErrors(ErrorPriority priority) {
+		return invalidItems.stream().filter(item -> !item.isSuppressed() && priority.equals(item.getPriority()))
+				.collect(Collectors.toList());
 	}
 
 	public List<InvalidItem> getSuppressedErrors() {
@@ -77,7 +82,7 @@ public class TestResult {
 	}
 
 	public InvalidItem getFirstInvalidItem() {
-		return invalidItems.isEmpty() ? null : invalidItems.get(0);
+		return getActiveErrors(ErrorPriority.ERROR).isEmpty() ? null : getActiveErrors(ErrorPriority.ERROR).get(0);
 	}
 
 	public List<ActivationObject> getActivatedObjects() {

@@ -308,7 +308,8 @@ public class AbapCiMainView extends ViewPart {
 				@Override
 				public String getText(Object element) {
 					AbapPackageTestState p = (AbapPackageTestState) element;
-					return StringUtils.IsNullOrEmpty(p.getAtcLastRun()) ? StringUtils.EMPTY : p.getAtcNumWarn();
+					return StringUtils.IsNullOrEmpty(p.getAtcLastRun()) ? StringUtils.EMPTY
+							: Integer.toString(p.getAtcNumWarn());
 				}
 			});
 
@@ -318,7 +319,8 @@ public class AbapCiMainView extends ViewPart {
 				@Override
 				public String getText(Object element) {
 					AbapPackageTestState p = (AbapPackageTestState) element;
-					return StringUtils.IsNullOrEmpty(p.getAtcLastRun()) ? StringUtils.EMPTY : p.getAtcNumInfo();
+					return StringUtils.IsNullOrEmpty(p.getAtcLastRun()) ? StringUtils.EMPTY
+							: Integer.toString(p.getAtcNumInfo());
 				}
 			});
 

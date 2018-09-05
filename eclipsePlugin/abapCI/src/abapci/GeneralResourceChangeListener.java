@@ -75,6 +75,7 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 						List<Activation> activations = activationPool.findAllActiveOrIncludedInJob();
 
 						List<String> selectedPackages = new ArrayList<String>();
+						List<ActivationObject> activatedInactiveObjects = new ArrayList<ActivationObject>();
 
 						if (activations != null && !activations.isEmpty())
 							for (ActivationObject inactiveObject : inactiveObjects) {
@@ -83,6 +84,7 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 										&& activations.stream().anyMatch(item -> item.getObjectName().toLowerCase()
 												.contains(inactiveObject.getClassname().toLowerCase()))) {
 									selectedPackages.add(inactiveObject.packagename);
+									activatedInactiveObjects.add(inactiveObject);
 								}
 							}
 
@@ -100,7 +102,7 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 						} else if (!selectedPackages.isEmpty()) {
 							continuousIntegrationPresenter.setCurrentProject(currentProject);
 							job.setTriggerPackages(continuousIntegrationPresenter.getCurrentProject(), selectedPackages,
-									inactiveObjects);
+									activatedInactiveObjects);
 							job.start();
 							activationPool.changeActivedToIncludedInJob();
 							activationPool.resetProcessedInactiveObjects();
@@ -111,7 +113,7 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 									continuousIntegrationPresenter.getAbapPackageTestStatesForCurrentProject().stream()
 											.map(item -> item.getPackageName()).distinct()
 											.collect(Collectors.<String>toList()),
-									inactiveObjects);
+									activatedInactiveObjects);
 							job.start();
 							activationPool.changeActivedToIncludedInJob();
 							activationPool.resetProcessedInactiveObjects();

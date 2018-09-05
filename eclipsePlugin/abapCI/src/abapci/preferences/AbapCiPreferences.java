@@ -66,10 +66,13 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 
 	private void createAtcChapter() {
 
-		Label atcInfoLabel = new Label(getFieldEditorParent(), SWT.NONE);
-		atcInfoLabel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
-		atcInfoLabel.setText(
-				"An activated ATC feature can lead to big data volume in table SATC_AC_RESULTVT, reorganize continuously!");
+		Label atcInfoLabel1 = new Label(getFieldEditorParent(), SWT.NONE);
+		atcInfoLabel1.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
+		atcInfoLabel1.setText("    Can cause big data volume in table SATC_AC_RESULTVT,");
+
+		Label atcInfoLabel2 = new Label(getFieldEditorParent(), SWT.NONE);
+		atcInfoLabel2.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
+		atcInfoLabel2.setText("    reorganize the table with program SATC_AC_CLEANUP continuously!");
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ATC_RUN_INITIAL,
 				"&Run ATC after Unit Teststate changes state to OK (experimental)", getFieldEditorParent()));

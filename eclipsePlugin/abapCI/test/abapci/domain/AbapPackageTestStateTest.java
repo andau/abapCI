@@ -17,7 +17,7 @@ public class AbapPackageTestStateTest {
 		assertEquals(TestState.UNDEF, abapPackageTestState.getAtcTestState());
 
 		List<InvalidItem> invalidItems = new ArrayList<InvalidItem>();
-		invalidItems.add(new InvalidItem("TESTPACKAGE", "", false, null, ""));
+		invalidItems.add(new InvalidItem("TESTPACKAGE", "", false, null, "", ErrorPriority.ERROR));
 		abapPackageTestState.setUnitTestResult(new TestResult(true, 1, invalidItems, null));
 		assertEquals(TestState.NOK, abapPackageTestState.getUnitTestState());
 		abapPackageTestState.setUnitTestResult(new TestResult(true, 1, new ArrayList<InvalidItem>(), null));

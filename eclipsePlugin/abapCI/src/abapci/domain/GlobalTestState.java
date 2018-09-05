@@ -27,10 +27,10 @@ public class GlobalTestState {
 			testStateOutput = "Tests fail";
 			break;
 		case ATC_FAIL:
-			testStateOutput = "ATC findings";
+			testStateOutput = "ATC errors";
 			break;
 		case OK:
-			testStateOutput = "Tests OK";
+			testStateOutput = "      OK     ";
 			break;
 		case OFFL:
 			testStateOutput = "No connection";

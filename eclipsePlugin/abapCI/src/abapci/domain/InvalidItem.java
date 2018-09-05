@@ -12,20 +12,25 @@ public class InvalidItem {
 	private boolean suppressed;
 	private URI uriToError;
 	private String detail;
+	private ErrorPriority priority;
 
-	public InvalidItem(String className, String description, boolean suppressed, URI uriToError, String detail) {
+	public InvalidItem(String className, String description, boolean suppressed, URI uriToError, String detail,
+			ErrorPriority priority) {
 		this.className = className;
 		this.description = description;
 		this.suppressed = suppressed;
 		this.uriToError = uriToError;
 		this.detail = detail;
+		this.priority = priority;
 	}
 
-	public InvalidItem(String className, String description, boolean suppressed, URI uriToError) {
+	public InvalidItem(String className, String description, boolean suppressed, URI uriToError,
+			ErrorPriority priority) {
 		this.className = className;
 		this.description = description;
 		this.suppressed = suppressed;
 		this.uriToError = uriToError;
+		this.priority = priority;
 	}
 
 	public String getDescription() {
@@ -59,6 +64,10 @@ public class InvalidItem {
 
 	public static Predicate<InvalidItem> isActive() {
 		return p -> !p.suppressed;
+	}
+
+	public ErrorPriority getPriority() {
+		return priority;
 	}
 
 }

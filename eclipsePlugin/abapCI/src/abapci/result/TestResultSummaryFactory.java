@@ -10,6 +10,7 @@ import com.sap.adt.tools.abapsource.abapunit.IAbapUnitAlertStackEntry;
 import com.sap.adt.tools.abapsource.abapunit.IAbapUnitResult;
 import com.sap.adt.tools.abapsource.abapunit.IAbapUnitResultItem;
 
+import abapci.domain.ErrorPriority;
 import abapci.domain.InvalidItem;
 import abapci.domain.TestResultSummary;
 import abapci.utils.AlertDetailMessageExtractor;
@@ -43,7 +44,8 @@ public class TestResultSummaryFactory {
 
 			String extractedDetailMessage = AlertDetailMessageExtractor.extractMessageForUi(criticalAlert);
 			invalidItems.add(new InvalidItem(InvalidItemUtil.extractClassName(firstStackEntry.getDescription()),
-					criticalAlert.getTitle(), false, firstStackEntry.getUri(), extractedDetailMessage));
+					criticalAlert.getTitle(), false, firstStackEntry.getUri(), extractedDetailMessage,
+					ErrorPriority.ERROR));
 		}
 
 		int numTests = 0;

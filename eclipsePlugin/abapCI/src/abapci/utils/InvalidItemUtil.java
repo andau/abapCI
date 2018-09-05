@@ -21,7 +21,8 @@ public class InvalidItemUtil {
 			invalidItemsOutput.append(getOutputForUnitTest(invalidItem) + System.getProperty("line.separator"));
 		}
 		if (invalidItems.size() > 1) {
-			invalidItemsOutput.append(String.format("There are in total %d failed unit tests", invalidItems.size()));
+			invalidItemsOutput.append(
+					String.format("There are in total %d packages with failed unit tests", invalidItems.size()));
 		}
 
 		return invalidItemsOutput.toString();
@@ -33,7 +34,8 @@ public class InvalidItemUtil {
 			invalidItemsOutput.append(getOutputForAtcTest(invalidItem) + System.getProperty("line.separator"));
 		}
 		if (invalidItems.size() > 1) {
-			invalidItemsOutput.append(String.format("There are in total %d ATC findings", invalidItems.size()));
+			invalidItemsOutput
+					.append(String.format("There are in total %d packages with ATC findings", invalidItems.size()));
 		}
 		return invalidItemsOutput.toString();
 	}

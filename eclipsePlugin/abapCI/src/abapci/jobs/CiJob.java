@@ -31,7 +31,7 @@ public class CiJob extends Job {
 	private boolean shortDelayProcessing;
 	private boolean longDelayProcessing;
 
-	private static final long DELAYED_PROCESSING_TIMESPAN = 2000;
+	private static final long DELAYED_PROCESSING_TIMESPAN = 5000;
 
 	private FeatureProcessor featureProcessor;
 

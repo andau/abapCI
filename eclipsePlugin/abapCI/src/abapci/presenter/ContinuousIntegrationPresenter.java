@@ -281,13 +281,18 @@ public class ContinuousIntegrationPresenter {
 				.mapToInt(item -> item.getAUnitNumSuppressed()).sum();
 
 		int overallAtcErr = abapPackageTestStatesForCurrentProject.stream().mapToInt(item -> item.getAtcNumErr()).sum();
+		int overallAtcWarnings = abapPackageTestStatesForCurrentProject.stream().mapToInt(item -> item.getAtcNumWarn())
+				.sum();
+		int overallAtcInfos = abapPackageTestStatesForCurrentProject.stream().mapToInt(item -> item.getAtcNumInfo())
+				.sum();
 		int overallAtcSuppressed = abapPackageTestStatesForCurrentProject.stream()
 				.mapToInt(item -> item.getAtcNumSuppressed()).sum();
 
 		String unitTestInfoString = String.format("[%s,%s,%s]", overallOk, overallErrors, overallSuppressed);
 
 		String atcInfoString = featureFacade.getAtcFeature().isActive()
-				? String.format(" [%s,%s]", overallAtcErr, overallAtcSuppressed)
+				? String.format(" [%s,%s,%s,%s]", overallAtcErr, overallAtcWarnings, overallAtcInfos,
+						overallAtcSuppressed)
 				: "";
 
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
@@ -305,7 +310,7 @@ public class ContinuousIntegrationPresenter {
 			switch (currentUnitTestState) {
 			case OFFL:
 			case NOK:
-				// no change as this is the highest state
+				// no change as this are the highest states
 				break;
 			case UNDEF:
 			case OK:
@@ -322,10 +327,12 @@ public class ContinuousIntegrationPresenter {
 
 		for (AbapPackageTestState testState : getAbapPackageTestStatesForCurrentProject()) {
 			switch (currentAtcState) {
-			case OFFL:
 			case NOK:
 				// no change as this is the highest state
 				break;
+			case OFFL:
+				currentAtcState = testState.getAtcTestState() == TestState.NOK ? testState.getAtcTestState()
+						: currentAtcState;
 			case UNDEF:
 			case OK:
 			case DEACT:

@@ -91,15 +91,15 @@ public class AbapPackageTestState {
 	}
 
 	public int getAtcNumErr() {
-		return this.atcTestResult.getActiveErrors().size();
+		return this.atcTestResult.getActiveErrors(ErrorPriority.ERROR).size();
 	}
 
-	public String getAtcNumWarn() {
-		return "n/a";
+	public int getAtcNumWarn() {
+		return this.atcTestResult.getActiveErrors(ErrorPriority.WARNING).size();
 	}
 
-	public String getAtcNumInfo() {
-		return "n/a";
+	public int getAtcNumInfo() {
+		return this.atcTestResult.getActiveErrors(ErrorPriority.INFO).size();
 	}
 
 	public int getAtcNumSuppressed() {
@@ -123,11 +123,15 @@ public class AbapPackageTestState {
 	}
 
 	public InvalidItem getFirstFailedUnitTest() {
-		return aUnitTestResult.getActiveErrors().size() > 0 ? aUnitTestResult.getActiveErrors().get(0) : null;
+		return aUnitTestResult.getActiveErrors(ErrorPriority.ERROR).size() > 0
+				? aUnitTestResult.getActiveErrors(ErrorPriority.ERROR).get(0)
+				: null;
 	}
 
 	public InvalidItem getFirstFailedAtc() {
-		return atcTestResult.getActiveErrors().size() > 0 ? atcTestResult.getActiveErrors().get(0) : null;
+		return atcTestResult.getActiveErrors(ErrorPriority.ERROR).size() > 0
+				? atcTestResult.getActiveErrors(ErrorPriority.ERROR).get(0)
+				: null;
 	}
 
 	public TestResult getAtcTestResult() {

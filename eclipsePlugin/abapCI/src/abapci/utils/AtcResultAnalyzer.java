@@ -12,6 +12,7 @@ import com.sap.adt.atc.model.atcobject.IAtcObject;
 import com.sap.adt.atc.model.atcworklist.IAtcWorklist;
 
 import abapci.domain.ActivationObject;
+import abapci.domain.ErrorPriority;
 import abapci.domain.InvalidItem;
 import abapci.domain.TestResult;
 import abapci.domain.TestState;
@@ -37,7 +38,7 @@ public class AtcResultAnalyzer {
 		for (IAtcObject object : atcWorklist.getObjects().getObject()) {
 			IAtcFindingList findingList = object.getFindings();
 			for (IAtcFinding finding : findingList.getFinding()) {
-				if (finding != null && finding.getPriority() == 1) {
+				if (finding != null) {
 					String location = finding.getLocation().toLowerCase();
 					boolean isSuppressed = ViewModel.INSTANCE.getSuppressions().stream()
 							.anyMatch(item -> location.contains("/" + item.getClassName().toLowerCase() + "/"));
@@ -47,7 +48,7 @@ public class AtcResultAnalyzer {
 					Matcher matcher = devObjectNamePattern.matcher(finding.getUri());
 					String devObjectName = matcher.find() ? matcher.group(1) : "UNDEF";
 					invalidItems.add(new InvalidItem(devObjectName, finding.getCheckTitle(), isSuppressed,
-							URI.create(finding.getLocation())));
+							URI.create(finding.getLocation()), ErrorPriority.getFromInt(finding.getPriority())));
 				}
 			}
 		}
