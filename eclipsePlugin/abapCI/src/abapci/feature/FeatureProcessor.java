@@ -2,7 +2,7 @@ package abapci.feature;
 
 import java.util.List;
 
-import abapci.domain.ActivationObject;
+import abapci.activation.Activation;
 import abapci.domain.SourcecodeState;
 import abapci.domain.TestState;
 import abapci.manager.AUnitTestManager;
@@ -23,7 +23,7 @@ public class FeatureProcessor {
 
 	private FeatureFacade featureFacade;
 	private ContinuousIntegrationPresenter presenter;
-	private List<ActivationObject> inactiveObjects;
+	private List<Activation> inactiveObjects;
 
 	public FeatureProcessor(ContinuousIntegrationPresenter presenter, String projectName,
 			List<String> initialPackages) {
@@ -40,7 +40,7 @@ public class FeatureProcessor {
 
 	}
 
-	public void setPackagesAndObjects(List<String> packageNames, List<ActivationObject> inactiveObjects) {
+	public void setPackagesAndObjects(List<String> packageNames, List<Activation> inactiveObjects) {
 		aUnitTestManager.setPackages(packageNames);
 		atcTestManager.setPackages(packageNames);
 		this.inactiveObjects = inactiveObjects;
@@ -57,37 +57,34 @@ public class FeatureProcessor {
 				developmentProcessManager.setUnitTeststate(unitTestState);
 				themeUpdateManager.updateTheme(developmentProcessManager.getSourcecodeState());
 
-				presenter.updateViewsAsync(developmentProcessManager.getSourcecodeState());
-
-				if (featureFacade.getAtcFeature().isActive()) {
-					TestState atcTestState = null;
-					if (featureFacade.getAtcFeature().isRunInitial()
-							&& presenter.getAbapPackageTestStatesForCurrentProject().stream()
-									.anyMatch(item -> item.getAtcTestState().equals(TestState.OFFL))) {
-						atcTestState = atcTestManager.executeAllPackages(presenter.getCurrentProject(),
-								presenter.getAbapPackageTestStatesForCurrentProject(), inactiveObjects);
-					}
-
-					if (featureFacade.getAtcFeature().isRunActivatedObjects() && inactiveObjects != null) {
-
-						atcTestState = atcTestManager.executeAllPackages(presenter.getCurrentProject(),
-								presenter.getAbapPackageTestStatesForCurrentProject(), inactiveObjects);
-					}
-
-					if (atcTestState != null) {
-						developmentProcessManager.setAtcTeststate(atcTestState);
-						themeUpdateManager.updateTheme(developmentProcessManager.getSourcecodeState());
-					}
-				}
-
-				if (featureFacade.getJenkinsFeature().isActive() && unitTestState == TestState.OK
-						&& oldSourcecodeState != SourcecodeState.OK && oldSourcecodeState != SourcecodeState.ATC_FAIL) {
-					jenkinsManager.executeAllPackages();
-				}
-
-				presenter.updateViewsAsync(developmentProcessManager.getSourcecodeState());
 			}
-		} catch (Exception ex) {
+
+			if (featureFacade.getAtcFeature().isActive()) {
+				TestState atcTestState = null;
+				if (featureFacade.getAtcFeature().isRunInitial()
+						&& presenter.getAbapPackageTestStatesForCurrentProject().stream()
+								.anyMatch(item -> item.getAtcTestState().equals(TestState.OFFL))) {
+					atcTestState = atcTestManager.executeAllPackages(presenter.getCurrentProject(),
+							presenter.getAbapPackageTestStatesForCurrentProject(), inactiveObjects);
+				}
+
+				if (featureFacade.getAtcFeature().isRunActivatedObjects() && inactiveObjects != null) {
+
+					atcTestState = atcTestManager.executeAllPackages(presenter.getCurrentProject(),
+							presenter.getAbapPackageTestStatesForCurrentProject(), inactiveObjects);
+				}
+
+				if (atcTestState != null) {
+					developmentProcessManager.setAtcTeststate(atcTestState);
+					themeUpdateManager.updateTheme(developmentProcessManager.getSourcecodeState());
+				}
+			}
+
+			presenter.updateViewsAsync(developmentProcessManager.getSourcecodeState());
+
+		} catch (
+
+		Exception ex) {
 			presenter.setStatusMessage("Testrun failed, exception: " + ex.getMessage());
 		}
 

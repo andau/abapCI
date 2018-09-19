@@ -19,7 +19,7 @@ import com.sap.adt.atc.model.atcworklist.IAtcWorklistRun;
 import com.sap.adt.tools.core.internal.AbapProjectService;
 import com.sap.adt.tools.core.project.IAbapProject;
 
-import abapci.domain.ActivationObject;
+import abapci.activation.Activation;
 import abapci.feature.FeatureFacade;
 
 public class AbapAtcHandler extends AbstractHandler {
@@ -57,7 +57,7 @@ public class AbapAtcHandler extends AbstractHandler {
 
 	}
 
-	public IAtcWorklist executeObjects(IProject project, List<ActivationObject> activationObjects) {
+	public IAtcWorklist executeObjects(IProject project, List<Activation> inactiveObjects) {
 		IAtcWorklistBackendAccess worklistBackendAccess = AtcBackendServices.getWorklistBackendAccess();
 		IAbapProject abapProject = AbapProjectService.getInstance().createFromProjectUnchecked(project);
 		List<IAtcCheckableItem> checkableItems = new ArrayList<>();
@@ -65,9 +65,9 @@ public class AbapAtcHandler extends AbstractHandler {
 		IProgressMonitor progressMonitor = new NullProgressMonitor();
 		String atcVariant = featureFacade.getAtcFeature().getVariant();
 		String worklistId = worklistBackendAccess.createWorklist(abapProject, atcVariant, progressMonitor);
-		for (ActivationObject activationObject : activationObjects) {
-			checkableItems.add(new MyAtcCheckableItem(URI.create(activationObject.getUri()),
-					activationObject.getClass().getName(), activationObject.getType()));
+		for (Activation activation : inactiveObjects) {
+			checkableItems.add(
+					new MyAtcCheckableItem(activation.getUri(), activation.getClass().getName(), activation.getType()));
 		}
 
 		IAtcWorklistRun worklistRun = worklistBackendAccess.startAtcRunForWorklist(abapProject, checkableItems,

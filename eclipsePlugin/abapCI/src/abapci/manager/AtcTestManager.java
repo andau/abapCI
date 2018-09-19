@@ -7,8 +7,8 @@ import org.eclipse.core.resources.IProject;
 
 import com.sap.adt.atc.model.atcworklist.IAtcWorklist;
 
+import abapci.activation.Activation;
 import abapci.domain.AbapPackageTestState;
-import abapci.domain.ActivationObject;
 import abapci.domain.TestResult;
 import abapci.domain.TestResultSummary;
 import abapci.domain.TestState;
@@ -24,7 +24,7 @@ public class AtcTestManager extends AbstractTestManager {
 	}
 
 	public TestState executeAllPackages(IProject project, List<AbapPackageTestState> activeAbapPackageTestStates,
-			List<ActivationObject> inactiveObjects) {
+			List<Activation> inactiveObjects) {
 
 		overallTestState = TestState.UNDEF;
 
@@ -38,11 +38,11 @@ public class AtcTestManager extends AbstractTestManager {
 			}
 
 			else if (inactiveObjects.stream()
-					.anyMatch(item -> item.packagename.equals(abapPackageTestState.getPackageName()))) {
+					.anyMatch(item -> item.getPackageName().equals(abapPackageTestState.getPackageName()))) {
 
-				List<ActivationObject> inactiveObjectsForPackage = inactiveObjects.stream()
-						.filter(item -> item.packagename.equals(abapPackageTestState.getPackageName()))
-						.collect(Collectors.<ActivationObject>toList());
+				List<Activation> inactiveObjectsForPackage = inactiveObjects.stream()
+						.filter(item -> item.getPackageName().equals(abapPackageTestState.getPackageName()))
+						.collect(Collectors.<Activation>toList());
 
 				if (inactiveObjectsForPackage.size() > 0) {
 					atcWorklist = new AbapAtcHandler().executeObjects(project, inactiveObjects);

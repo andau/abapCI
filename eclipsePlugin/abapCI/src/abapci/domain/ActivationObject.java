@@ -1,5 +1,6 @@
 package abapci.domain;
 
+@Deprecated
 public class ActivationObject {
 	public String packagename;
 	public String classname;

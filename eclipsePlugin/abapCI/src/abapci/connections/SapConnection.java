@@ -1,5 +1,6 @@
 package abapci.connections;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -15,7 +16,7 @@ import com.sap.adt.destinations.logon.AdtLogonServiceFactory;
 import com.sap.adt.tools.core.model.adtcore.IAdtObjectReference;
 
 import abapci.Exception.InactivatedObjectEvaluationException;
-import abapci.domain.ActivationObject;
+import abapci.activation.Activation;
 
 public class SapConnection {
 
@@ -27,12 +28,12 @@ public class SapConnection {
 		return AdtLogonServiceFactory.createLogonService().isLoggedOn(projectName);
 	}
 
-	public List<ActivationObject> unprocessedActivatedObjects(String projectName)
+	public List<Activation> unprocessedActivatedObjects(String projectName)
 			throws InactivatedObjectEvaluationException {
 		return getInactiveObjects(projectName);
 	}
 
-	public List<ActivationObject> getInactiveObjects(String projectName) throws InactivatedObjectEvaluationException {
+	public List<Activation> getInactiveObjects(String projectName) throws InactivatedObjectEvaluationException {
 
 		try {
 			IActivationServiceFactory activationServiceFactory = AdtActivationPlugin.getDefault()
@@ -47,15 +48,15 @@ public class SapConnection {
 
 	}
 
-	private List<ActivationObject> convertToActivationObjectList(IInactiveCtsObjectList inactiveCtsObjectList) {
-		List<ActivationObject> activationObjects = new ArrayList<>();
+	private List<Activation> convertToActivationObjectList(IInactiveCtsObjectList inactiveCtsObjectList) {
+		List<Activation> activationObjects = new ArrayList<>();
 		for (Iterator<IInactiveCtsObject> iterator = inactiveCtsObjectList.getEntry().iterator(); iterator.hasNext();) {
 			IInactiveCtsObject ctsObject = iterator.next();
 			if (ctsObject.hasObjectRef()) {
 				IAdtObjectReference ref = ctsObject.getObject().getRef();
 				if (!ref.getName().equals("Z_BAPI_HE_VARIANT_CALC")) {
-					activationObjects.add(
-							new ActivationObject(ref.getPackageName(), ref.getName(), ref.getUri(), ref.getType()));
+					activationObjects.add(new Activation(ref.getName(), ref.getPackageName(), "",
+							URI.create(ref.getUri()), ref.getType()));
 				}
 			}
 

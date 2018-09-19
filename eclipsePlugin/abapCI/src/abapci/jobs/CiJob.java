@@ -12,9 +12,9 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
 import abapci.Exception.InactivatedObjectEvaluationException;
-import abapci.activation.ActivationPool;
+import abapci.activation.Activation;
+import abapci.activation.ActivationDetector;
 import abapci.connections.SapConnection;
-import abapci.domain.ActivationObject;
 import abapci.feature.FeatureProcessor;
 import abapci.presenter.ContinuousIntegrationPresenter;
 
@@ -23,7 +23,7 @@ public class CiJob extends Job {
 	private static CiJob instance;
 
 	private List<String> triggerPackages;
-	private List<ActivationObject> inactiveObjects;
+	private List<Activation> inactiveObjects;
 	private String projectName;
 
 	private Date triggerDate;
@@ -73,7 +73,7 @@ public class CiJob extends Job {
 		}
 
 		if (processingStep == 2) {
-			ActivationPool.getInstance().unregisterAllIncludedInJob();
+			ActivationDetector.getInstance().unregisterAllIncludedInJob();
 		}
 
 		if (shortDelayProcessing || longDelayProcessing) {
@@ -89,10 +89,10 @@ public class CiJob extends Job {
 		final SapConnection sapConnection = new SapConnection();
 
 		try {
-			List<ActivationObject> activatedObjects = sapConnection.getInactiveObjects(projectName);
+			List<Activation> activatedObjects = sapConnection.getInactiveObjects(projectName);
 
 			if (activatedObjects != null && activatedObjects.size() > 0) {
-				activatedPackages = activatedObjects.stream().map(item -> item.packagename)
+				activatedPackages = activatedObjects.stream().map(item -> item.getPackageName())
 						.collect(Collectors.<String>toList());
 			}
 		} catch (InactivatedObjectEvaluationException e) {
@@ -130,10 +130,10 @@ public class CiJob extends Job {
 	}
 
 	public void setTriggerPackages(IProject project, List<String> triggerPackages,
-			List<ActivationObject> inactiveObjects) {
+			List<Activation> activatedInactiveObjects) {
 		this.projectName = project.getName();
 		this.triggerPackages = triggerPackages;
-		this.inactiveObjects = inactiveObjects;
+		this.inactiveObjects = activatedInactiveObjects;
 	}
 
 }

@@ -4,21 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import abapci.domain.ActivationObject;
+public class ActivationDetector {
 
-public class ActivationPool {
-
-	private static ActivationPool instance;
+	private static ActivationDetector instance;
 	private List<Activation> activations;
-	private List<ActivationObject> inactiveObjects;
+	private List<Activation> inactiveObjects;
 
-	private ActivationPool() {
+	private ActivationDetector() {
 		activations = new ArrayList<Activation>();
 	}
 
-	public static ActivationPool getInstance() {
+	public static ActivationDetector getInstance() {
 		if (instance == null) {
-			instance = new ActivationPool();
+			instance = new ActivationDetector();
 		}
 		return instance;
 	}
@@ -29,7 +27,7 @@ public class ActivationPool {
 
 	public void setActivated(String objectName) {
 		for (Activation activation : activations) {
-			if (activation.getObjectName().equals(objectName)) {
+			if (activation != null && activation.getObjectName().equals(objectName)) {
 				activation.setActivated();
 			}
 		}
@@ -43,13 +41,32 @@ public class ActivationPool {
 		}
 	}
 
+	@Deprecated
+	public List<Activation> findActivationsAssignedToProject() {
+
+		return findAllActiveOrIncludedInJob().stream()
+				.filter(item -> item.getPackageName() != null || !item.getPackageName().isEmpty())
+				.collect(Collectors.toList());
+	}
+
+	public List<Activation> findActiveActivationsAssignedToProject() {
+
+		return findAllActive().stream()
+				.filter(item -> item.getPackageName() != null && !item.getPackageName().isEmpty())
+				.collect(Collectors.toList());
+	}
+
 	public List<Activation> findAllActiveOrIncludedInJob() {
 		return activations.stream().filter(item -> item.isActivated() || item.isIncludedInJob())
 				.collect(Collectors.<Activation>toList());
 	}
 
+	public List<Activation> findAllActive() {
+		return activations.stream().filter(item -> item.isActivated()).collect(Collectors.<Activation>toList());
+	}
+
 	public void unregisterAllIncludedInJob() {
-		activations.removeIf(item -> item.isIncludedInJob());
+		activations.removeIf(item -> item == null || item.isIncludedInJob());
 	}
 
 	public void changeActivedToIncludedInJob() {
@@ -61,11 +78,11 @@ public class ActivationPool {
 
 	}
 
-	public void setLastInactiveObjects(List<ActivationObject> inactiveObjects) {
+	public void setLastInactiveObjects(List<Activation> inactiveObjects) {
 		this.inactiveObjects = inactiveObjects;
 	}
 
-	public List<ActivationObject> getLastInactiveObjects() {
+	public List<Activation> getLastInactiveObjects() {
 		return inactiveObjects;
 	}
 

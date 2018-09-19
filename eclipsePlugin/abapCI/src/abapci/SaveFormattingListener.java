@@ -1,26 +1,35 @@
 package abapci;
 
+import java.net.URI;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IExecutionListener;
 import org.eclipse.core.commands.NotHandledException;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.Adapters;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 
+import com.sap.adt.tools.core.IAdtObjectReference;
+import com.sap.adt.tools.core.ui.editors.IAdtFormEditor;
+
 import abapci.activation.Activation;
-import abapci.activation.ActivationPool;
+import abapci.activation.ActivationDetector;
 import abapci.feature.FeatureFacade;
 
 public class SaveFormattingListener implements IExecutionListener {
 
 	private FeatureFacade featureFacade;
-	private ActivationPool activationPool;
+	private ActivationDetector activationPool;
 
 	public SaveFormattingListener() {
 		featureFacade = new FeatureFacade();
-		activationPool = ActivationPool.getInstance();
+		activationPool = ActivationDetector.getInstance();
 	}
 
 	@Override
@@ -66,33 +75,69 @@ public class SaveFormattingListener implements IExecutionListener {
 						}
 					}
 
-					String projectName = AbapProjectUtil.getCurrentProject(editorReference.getEditor(false)).getName();
-					String packageName = ""; // would be awesome to get the package info here too, e.g. with ADT
-
 					if ("org.eclipse.ui.file.save".equals(arg0)
 							|| "com.sap.adt.activation.ui.command.singleActivation".equals(arg0)
 							|| "com.sap.adt.activation.ui.command.multiActivation".equals(arg0)) {
 
-						Activation activation = new Activation(editorReference.getName(), packageName, projectName);
-						activationPool.registerModified(activation);
-					}
-				}
+						Activation activation = getCurrentAdtObject(editorReference);
 
-				if ("com.sap.adt.activation.ui.command.multiActivation".equals(arg0)) {
-					activationPool.setActivatedEntireProject(AbapProjectUtil.getCurrentProject().getName());
+						if (activation != null) {
+							activationPool.registerModified(activation);
+						}
+					}
+
+					if ("com.sap.adt.activation.ui.command.multiActivation".equals(arg0)) {
+						activationPool.setActivatedEntireProject(AbapProjectUtil.getCurrentProject().getName());
+					}
 				}
 			}
 
 			if ("com.sap.adt.activation.ui.command.singleActivation".equals(arg0)) {
-				IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-				IEditorPart activeEditor = activePage.getActiveEditor();
-				Activation activation = new Activation(activeEditor.getTitle(), "",
-						AbapProjectUtil.getCurrentProject().getName());
-				activationPool.registerModified(activation);
-				activationPool.setActivated(activeEditor.getTitle());
+				IEditorPart activeEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+						.getActiveEditor();
+				List<IEditorReference> activeEditorReferences = Arrays.asList(editorReferences).stream()
+						.filter(item -> item != null && activeEditor.equals(item.getEditor(false)))
+						.collect(Collectors.toList());
 
+				if (!activeEditorReferences.isEmpty()) {
+					Activation activation = getCurrentAdtObject(activeEditorReferences.get(0));
+					activationPool.registerModified(activation);
+					activationPool.setActivated(activeEditorReferences.get(0).getName());
+				}
 			}
 
 		}
+
+	}
+
+	private Activation getCurrentAdtObject(IEditorReference editorReference) {
+
+		Activation activation = null;
+
+		if (!(editorReference.getEditor(false) instanceof IAdtFormEditor)) {
+			return null;
+		}
+		IAdtFormEditor adtEditor = (IAdtFormEditor) editorReference.getEditor(false);
+		IFile file = adtEditor.getModelFile();
+		IAdtObjectReference adtObject = (IAdtObjectReference) Adapters.adapt((Object) file, IAdtObjectReference.class);
+		if (adtObject == null) {
+			return null;
+		}
+
+		if (adtObject.getPackageName() == null && adtObject.getType().equals("FUGR/FF")) {
+			URI parentUri = adtObject.getParentUri();
+			// TODO how to get from function module parent URI to package?
+			// needed to run unit tests for affected package only
+		}
+
+		if (adtObject != null) {
+			String projectName = AbapProjectUtil.getCurrentProject(editorReference.getEditor(false)).getName();
+
+			activation = new Activation(editorReference.getName(), adtObject.getPackageName(), projectName,
+					adtObject.getUri(), adtObject.getType());
+		}
+
+		return activation;
+
 	}
 }

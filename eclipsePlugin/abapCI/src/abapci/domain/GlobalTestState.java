@@ -30,7 +30,7 @@ public class GlobalTestState {
 			testStateOutput = "ATC errors";
 			break;
 		case OK:
-			testStateOutput = "      OK     ";
+			testStateOutput = "-      OK     -";
 			break;
 		case OFFL:
 			testStateOutput = "No connection";

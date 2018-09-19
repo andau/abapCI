@@ -1,32 +1,36 @@
 package abapci.activation;
 
+import java.net.URI;
+
 public class Activation {
 
-	public Activation(String objectName, String packageName, String projectName) {
+	private String projectName;
+	private String packageName;
+	private String objectName;
+	private ActivationStatus status;
+	private URI uri;
+	private String type;
+
+	public Activation(String objectName, String packageName, String projectName, URI uri, String type) {
 		this.objectName = objectName;
 		this.packageName = packageName;
 		this.projectName = projectName;
+		this.uri = uri;
+		this.status = ActivationStatus.MODIFIED;
+		this.type = type;
 	}
-
-	private String objectName;
 
 	public String getObjectName() {
 		return objectName;
 	}
 
-	private String packageName;
-
 	public String getPackageName() {
 		return packageName;
 	}
 
-	private String projectName;
-
 	public String getProjectName() {
 		return projectName;
 	}
-
-	private ActivationStatus status;
 
 	public ActivationStatus getActivationStatus() {
 		return status;
@@ -46,6 +50,18 @@ public class Activation {
 
 	public boolean isIncludedInJob() {
 		return status == ActivationStatus.ADDED_TO_JOB;
+	}
+
+	public String getPackagename() {
+		return packageName;
+	}
+
+	public URI getUri() {
+		return uri;
+	}
+
+	public String getType() {
+		return type;
 	}
 
 }

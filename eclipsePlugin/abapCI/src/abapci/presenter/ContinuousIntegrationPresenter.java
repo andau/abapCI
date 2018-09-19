@@ -185,7 +185,7 @@ public class ContinuousIntegrationPresenter {
 			// abapCiDashboardView.projectline.setText(TODO reserved for projectinfo when
 			// infoline is used for all infos);
 
-			abapCiDashboardView.infoline.setText(buildInfoLine(abapPackageTestStatesForCurrentProject) + "     ");
+			abapCiDashboardView.infoline.setText(buildInfoLine(abapPackageTestStatesForCurrentProject) + "        ");
 			abapCiDashboardView.infoline.setLayoutData(abapCiDashboardView.infoline.getLayoutData());
 
 			rebuildHyperlink(abapCiDashboardView.getEntireContainer(), abapCiDashboardView.openErrorHyperlink);
@@ -416,17 +416,12 @@ public class ContinuousIntegrationPresenter {
 
 	private TestResult mergeIntoExistingTestResult(TestResult currentTestResult, TestResult newTestResult) {
 
-		List<InvalidItem> newInvalidItems = new ArrayList<InvalidItem>();
+		TestResult mergedTestResult = new TestResult(true, 0, currentTestResult.getActiveErrors(),
+				currentTestResult.getActivatedObjects());
 
-		for (InvalidItem invalidItem : currentTestResult.getActiveErrors()) {
-			if (!newTestResult.getActivatedObjects().stream()
-					.anyMatch(item -> item.getClassname().equals(invalidItem.getClassName()))) {
-				newInvalidItems.add(invalidItem);
-			}
-		}
+		mergedTestResult.removeActiveErrorsFor(newTestResult.getActivatedObjects());
+		mergedTestResult.addErrors(newTestResult.getActiveErrors());
 
-		newInvalidItems.addAll(newTestResult.getActiveErrors());
-
-		return new TestResult(true, 0, newInvalidItems, null);
+		return mergedTestResult;
 	}
 }

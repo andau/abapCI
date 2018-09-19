@@ -73,14 +73,6 @@ public class AtcResultAnalyzerTest {
 				.thenReturn(Arrays.asList(new Suppression(SUPPRESSED_FINDING_LOC)));
 	}
 
-	@Test
-	public void emptyFindingTest() {
-		PowerMockito.when(atcFindingList.getFinding())
-				.thenReturn(new BasicEList<IAtcFinding>(Arrays.asList(emptyAtcFinding)));
-		TestResult testResult = AtcResultAnalyzer.getTestResult(atcWorklist, null);
-		assertEquals(TestState.OK, testResult.getTestState());
-	}
-
 	// TODO Fix Test
 	// @Test
 	public void oneActiveFindingTest() {

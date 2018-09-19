@@ -2,9 +2,12 @@ package abapci.domain;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import abapci.activation.Activation;
 
 public class TestResult {
 
@@ -14,15 +17,26 @@ public class TestResult {
 	private int numTests;
 	private List<InvalidItem> invalidItems;
 	private Date lastRun;
-	private List<ActivationObject> activatedObjects;
+	private List<Activation> activatedObjects;
 
+	@Deprecated
 	public TestResult(boolean testrunOk, int numTests, List<InvalidItem> invalidItems,
-			List<ActivationObject> activatedObjects) {
+			List<Activation> inactiveObjects) {
 		this.activated = true;
 		this.testrunOk = testrunOk;
 		this.numTests = numTests;
 		this.invalidItems = invalidItems;
-		this.activatedObjects = activatedObjects;
+		this.activatedObjects = inactiveObjects;
+		this.lastRun = Calendar.getInstance().getTime();
+	}
+
+	public TestResult(boolean testrunOk, int numTests, Collection<InvalidItem> invalidItems,
+			List<Activation> inactiveObjects) {
+		this.activated = true;
+		this.testrunOk = testrunOk;
+		this.numTests = numTests;
+		this.invalidItems = new ArrayList<InvalidItem>(invalidItems);
+		this.activatedObjects = inactiveObjects;
 		this.lastRun = Calendar.getInstance().getTime();
 	}
 
@@ -85,8 +99,25 @@ public class TestResult {
 		return getActiveErrors(ErrorPriority.ERROR).isEmpty() ? null : getActiveErrors(ErrorPriority.ERROR).get(0);
 	}
 
-	public List<ActivationObject> getActivatedObjects() {
+	public List<Activation> getActivatedObjects() {
 		return activatedObjects;
+	}
+
+	public void removeActiveErrorsFor(List<Activation> activations) {
+		List<InvalidItem> newInvalidItems = invalidItems.stream().collect(Collectors.toList());
+		for (InvalidItem invalidItem : invalidItems) {
+			if (activations.stream().anyMatch(
+					item -> item.getObjectName().toLowerCase().contains(invalidItem.getClassName().toLowerCase()))) {
+				newInvalidItems.remove(invalidItem);
+			}
+		}
+
+		invalidItems = newInvalidItems;
+
+	}
+
+	public void addErrors(List<InvalidItem> activeErrors) {
+		invalidItems.addAll(activeErrors);
 	}
 
 }

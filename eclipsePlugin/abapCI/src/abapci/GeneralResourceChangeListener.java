@@ -12,10 +12,11 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 
+import abapci.Exception.InactivatedObjectEvaluationException;
 import abapci.activation.Activation;
-import abapci.activation.ActivationPool;
+import abapci.activation.ActivationDetector;
+import abapci.activation.ActivationHelper;
 import abapci.connections.SapConnection;
-import abapci.domain.ActivationObject;
 import abapci.domain.ContinuousIntegrationConfig;
 import abapci.feature.FeatureFacade;
 import abapci.jobs.CiJob;
@@ -28,7 +29,7 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 	private boolean initialRun;
 	private CiJob job;
 	private ContinuousIntegrationPresenter continuousIntegrationPresenter;
-	private ActivationPool activationPool;
+	private ActivationDetector activationDetector;
 	private int currentInactiveObjectsCount;
 
 	public GeneralResourceChangeListener(ContinuousIntegrationPresenter continuousIntegrationPresenter) {
@@ -36,7 +37,7 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 		initialRun = false;
 		this.continuousIntegrationPresenter = continuousIntegrationPresenter;
 		job = CiJob.getInstance(continuousIntegrationPresenter);
-		activationPool = ActivationPool.getInstance();
+		activationDetector = ActivationDetector.getInstance();
 		new FeatureFacade();
 	}
 
@@ -61,34 +62,18 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 					}
 
 					if (currentProject != null && sapConnection.isConnected(currentProject.getName())) {
+						updateInactiveObjects(currentProject);
 
-						List<ActivationObject> inactiveObjects = sapConnection
-								.getInactiveObjects(currentProject.getName());
+						List<String> selectedPackages = new ArrayList<>();
+						List<Activation> activatedInactiveObjects = new ArrayList<>();
 
-						if (currentInactiveObjectsCount > inactiveObjects.size()) {
-							inactiveObjects = activationPool.getLastInactiveObjects();
+						// TODO merge activation and activatedInactive
+						List<Activation> activations = activationDetector.findAllActiveOrIncludedInJob();
+
+						if (activations != null && !activations.isEmpty()) {
+							activatedInactiveObjects = activations;
+							selectedPackages = ActivationHelper.getPackages(activations);
 						}
-
-						currentInactiveObjectsCount = inactiveObjects.size();
-						activationPool.setLastInactiveObjects(inactiveObjects);
-
-						List<Activation> activations = activationPool.findAllActiveOrIncludedInJob();
-
-						List<String> selectedPackages = new ArrayList<String>();
-						List<ActivationObject> activatedInactiveObjects = new ArrayList<ActivationObject>();
-
-						if (activations != null && !activations.isEmpty())
-							for (ActivationObject inactiveObject : inactiveObjects) {
-								if (inactiveObject.packagename != null
-										&& !selectedPackages.contains(inactiveObject.packagename)
-										&& activations.stream().anyMatch(item -> item.getObjectName().toLowerCase()
-												.contains(inactiveObject.getClassname().toLowerCase()))) {
-									selectedPackages.add(inactiveObject.packagename);
-									activatedInactiveObjects.add(inactiveObject);
-								}
-							}
-
-						showDialogForPackages(currentProject, selectedPackages);
 
 						if (!initialRun || continuousIntegrationPresenter.runNecessary()) {
 							initialRun = true;
@@ -99,24 +84,18 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 											.collect(Collectors.<String>toList()),
 									null);
 							job.start();
-						} else if (!selectedPackages.isEmpty()) {
+						} else if (!activations.isEmpty()) {
 							continuousIntegrationPresenter.setCurrentProject(currentProject);
 							job.setTriggerPackages(continuousIntegrationPresenter.getCurrentProject(), selectedPackages,
 									activatedInactiveObjects);
 							job.start();
-							activationPool.changeActivedToIncludedInJob();
-							activationPool.resetProcessedInactiveObjects();
-							currentInactiveObjectsCount = 0;
-						} else if (!activations.isEmpty()) {
-							continuousIntegrationPresenter.setCurrentProject(currentProject);
-							job.setTriggerPackages(continuousIntegrationPresenter.getCurrentProject(),
-									continuousIntegrationPresenter.getAbapPackageTestStatesForCurrentProject().stream()
-											.map(item -> item.getPackageName()).distinct()
-											.collect(Collectors.<String>toList()),
-									activatedInactiveObjects);
-							job.start();
-							activationPool.changeActivedToIncludedInJob();
-							activationPool.resetProcessedInactiveObjects();
+							if (!activationDetector.findActiveActivationsAssignedToProject().isEmpty()) {
+								showDialogForPackages(currentProject, selectedPackages);
+							}
+							activationDetector.changeActivedToIncludedInJob();
+
+							activationDetector.resetProcessedInactiveObjects();
+
 							currentInactiveObjectsCount = 0;
 						}
 					}
@@ -129,6 +108,23 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 
 			}
 
+		}
+	}
+
+	private void updateInactiveObjects(IProject currentProject) {
+		List<Activation> inactiveObjects;
+		try {
+			inactiveObjects = sapConnection.getInactiveObjects(currentProject.getName());
+
+			if (currentInactiveObjectsCount > inactiveObjects.size()) {
+				inactiveObjects = activationDetector.getLastInactiveObjects();
+			}
+
+			currentInactiveObjectsCount = inactiveObjects.size();
+			activationDetector.setLastInactiveObjects(inactiveObjects);
+
+		} catch (InactivatedObjectEvaluationException e) {
+			// if inactiveObjects could not be set we move on
 		}
 	}
 

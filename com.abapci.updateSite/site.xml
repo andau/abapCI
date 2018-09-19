@@ -26,4 +26,5 @@
    <feature url="features/com.abapci.feature_0.4.3.jar" id="com.abapci.feature" version="0.4.3"/>
    <feature url="features/com.abapci.feature_0.4.4.jar" id="com.abapci.feature" version="0.4.4"/>
    <feature url="features/com.abapci.feature_0.4.5.jar" id="com.abapci.feature" version="0.4.5"/>
+   <feature url="features/com.abapci.feature_0.4.6.jar" id="com.abapci.feature" version="0.4.6"/>
 </site>

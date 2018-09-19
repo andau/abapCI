@@ -11,7 +11,7 @@ import com.sap.adt.atc.model.atcfinding.IAtcFindingList;
 import com.sap.adt.atc.model.atcobject.IAtcObject;
 import com.sap.adt.atc.model.atcworklist.IAtcWorklist;
 
-import abapci.domain.ActivationObject;
+import abapci.activation.Activation;
 import abapci.domain.ErrorPriority;
 import abapci.domain.InvalidItem;
 import abapci.domain.TestResult;
@@ -20,13 +20,13 @@ import abapci.views.ViewModel;
 
 public class AtcResultAnalyzer {
 
-	public static TestResult getTestResult(IAtcWorklist atcWorklist, List<ActivationObject> activatedObjects) {
+	public static TestResult getTestResult(IAtcWorklist atcWorklist, List<Activation> inactiveObjects) {
 		TestResult testResult;
 
 		if (atcWorklist == null) {
 			testResult = new TestResult();
 		} else {
-			testResult = new TestResult(true, 0, getInvalidItems(atcWorklist), activatedObjects);
+			testResult = new TestResult(true, 0, getInvalidItems(atcWorklist), inactiveObjects);
 		}
 
 		return testResult;
@@ -47,6 +47,7 @@ public class AtcResultAnalyzer {
 					Pattern devObjectNamePattern = Pattern.compile("findings\\/(.*)\\/CLAS");
 					Matcher matcher = devObjectNamePattern.matcher(finding.getUri());
 					String devObjectName = matcher.find() ? matcher.group(1) : "UNDEF";
+					devObjectName = object.getName();
 					invalidItems.add(new InvalidItem(devObjectName, finding.getCheckTitle(), isSuppressed,
 							URI.create(finding.getLocation()), ErrorPriority.getFromInt(finding.getPriority())));
 				}
