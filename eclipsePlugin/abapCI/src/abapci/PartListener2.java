@@ -94,13 +94,14 @@ public class PartListener2 implements IPartListener2 {
 					boolean changeColorOfTabHeader = featureFacade.getColoredProjectsTabHeaderFeature().isActive();
 					boolean changeColorOfLeftRuler = featureFacade.getColoredProjectsLeftRulerFeature().isActive();
 					boolean changeColorOfRightRuler = featureFacade.getColoredProjectsRightRulerFeature().isActive();
+					boolean changeStatusBar = featureFacade.getColoredProjectFeature().isChangeStatusBarActive();
 
 					if (changeColorOfTabHeader) {
 						generalThemePresenter.updateEditorLabel(uiColor);
 					}
 
 					annotationRuleColorChanger.change(activeEditor, uiColor, changeColorOfLeftRuler,
-							changeColorOfRightRuler);
+							changeColorOfRightRuler, changeStatusBar);
 
 				} catch (AbapCiColoredProjectFileParseException e) {
 					// if there was an error retrieving the color we skip this feature,

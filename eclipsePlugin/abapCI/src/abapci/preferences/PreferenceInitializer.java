@@ -29,8 +29,10 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.PREF_SOURCE_CODE_FORMATTING_PREFIX, "#autoformat");
 		store.setDefault(PreferenceConstants.PREF_SOURCE_CODE_CLEANUP_NOT_USED_VARIABLES, false);
 
+		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_TAB_HEADER_ENABLED, false);
 		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_LEFT_RULER_ENABLED, true);
 		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_RIGHT_RULER_ENABLED, true);
+		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_STATUS_BAR_ENABLED, true);
 
 		store.setDefault(PreferenceConstants.PREF_UNIT_RUN_CRITICAL_TESTS_ENABLED, true);
 		store.setDefault(PreferenceConstants.PREF_UNIT_RUN_DANGEROUS_TESTS_ENABLED, true);

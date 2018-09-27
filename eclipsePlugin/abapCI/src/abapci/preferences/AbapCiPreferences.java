@@ -125,6 +125,10 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_COLORED_PROJECTS_RIGHT_RULER_ENABLED,
 				"&Change color of right ruler for colored projects", getFieldEditorParent()));
+
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_COLORED_PROJECTS_STATUS_BAR_ENABLED,
+				"&Change color of status bar for colored projects", getFieldEditorParent()));
+
 	}
 
 	private void createJenkinsChapter() {

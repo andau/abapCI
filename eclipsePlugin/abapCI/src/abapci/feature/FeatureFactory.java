@@ -38,6 +38,14 @@ public class FeatureFactory {
 		return feature;
 	}
 
+	public ColoredProjectFeature createColoredProjectFeature() {
+		initPrefs();
+		ColoredProjectFeature feature = new ColoredProjectFeature();
+		feature.setChangeStatusBarActive(
+				prefs.getBoolean(PreferenceConstants.PREF_COLORED_PROJECTS_STATUS_BAR_ENABLED));
+		return feature;
+	}
+
 	public JenkinsFeature createJenkinsFeature() {
 		initPrefs();
 		JenkinsFeature feature = new JenkinsFeature();

@@ -220,7 +220,7 @@ public class ContinuousIntegrationPresenter {
 				currentColor = UiColor.WHITE;
 			}
 			AnnotationRuleColorChanger annotationRuleColorChanger = new AnnotationRuleColorChanger();
-			annotationRuleColorChanger.change(activeEditor, currentColor, false, true);
+			annotationRuleColorChanger.change(activeEditor, currentColor, false, true, true);
 		}
 	}
 

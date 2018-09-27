@@ -26,14 +26,14 @@ import abapci.domain.UiColor;
 public class AnnotationRuleColorChanger {
 
 	public void change(IEditorPart editorPart, UiColor uiColor, boolean changeColorOfLeftRuler,
-			boolean changeColorOfRightRuler) {
+			boolean changeColorOfRightRuler, boolean changeStatusBar) {
 		try {
 
 			Shell currentShell = editorPart.getEditorSite().getShell();
 
 			RGB rgb = ColorToRGBMapper.mapUiColorToTheme(uiColor);
 
-			if (rgb != null) {
+			if (rgb != null && changeStatusBar) {
 
 				currentShell.setBackgroundMode(SWT.INHERIT_DEFAULT);
 				setBackgroundForChildren(currentShell, new Color(Display.getDefault(), rgb),

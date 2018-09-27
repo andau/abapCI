@@ -107,4 +107,8 @@ public class FeatureFacade {
 		return featureFactory.createSimpleColorFeature(ColorFeatureType.PREF_ATC_TEST_FAIL_BACKGROUND_COLOR);
 	}
 
+	public ColoredProjectFeature getColoredProjectFeature() {
+		return featureFactory.createColoredProjectFeature();
+	}
+
 }
