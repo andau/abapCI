@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 
+import abapci.activation.Activation;
 import abapci.domain.AbapPackageTestState;
 import abapci.domain.TestResultSummary;
 import abapci.domain.TestState;
@@ -17,7 +18,8 @@ public class AUnitTestManager extends AbstractTestManager {
 		super(continuousIntegrationPresenter, projectName, packageNames);
 	}
 
-	public TestState executeAllPackages(IProject project, List<AbapPackageTestState> activeAbapPackageTestStates) {
+	public TestState executeAllPackages(IProject project, List<AbapPackageTestState> activeAbapPackageTestStates,
+			List<Activation> inactiveObjects) {
 
 		TestResultSummary unitTestResultSummary;
 
@@ -26,10 +28,16 @@ public class AUnitTestManager extends AbstractTestManager {
 
 			if (!abapPackageTestState.getUnitTestState().equals(TestState.DEACT)
 					&& packageNames.stream().anyMatch(item -> item.equals(abapPackageTestState.getPackageName()))) {
-				unitTestResultSummary = new AbapUnitHandler().executePackage(project,
-						abapPackageTestState.getPackageName());
-				abapPackageTestState.setUnitTestResult(unitTestResultSummary.getTestResult());
+				if (inactiveObjects == null) {
+					unitTestResultSummary = new AbapUnitHandler().executePackage(project,
+							abapPackageTestState.getPackageName());
+				} else {
+					unitTestResultSummary = new AbapUnitHandler().executeObjects(project,
+							abapPackageTestState.getPackageName(), inactiveObjects);
+					continuousIntegrationPresenter.mergeUnitTestResult(unitTestResultSummary);
+				}
 
+				abapPackageTestState.setUnitTestResult(unitTestResultSummary.getTestResult());
 				mergePackageTestStateIntoGlobalTestState(unitTestResultSummary.getTestResult().getTestState());
 
 			}

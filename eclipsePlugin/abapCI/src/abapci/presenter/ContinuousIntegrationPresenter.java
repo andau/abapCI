@@ -28,8 +28,10 @@ import abapci.domain.TestResultSummary;
 import abapci.domain.TestState;
 import abapci.domain.UiColor;
 import abapci.feature.FeatureFacade;
-import abapci.manager.DevelopmentProcessManager;
 import abapci.model.IContinuousIntegrationModel;
+import abapci.result.SourceCodeStateEvaluator;
+import abapci.result.TestResultConsolidator;
+import abapci.result.TestResultType;
 import abapci.utils.AnnotationRuleColorChanger;
 import abapci.utils.EditorHandler;
 import abapci.utils.InvalidItemUtil;
@@ -43,8 +45,9 @@ public class ContinuousIntegrationPresenter {
 	private IProject currentProject;
 	private List<AbapPackageTestState> abapPackageTestStates;
 	private AbapCiDashboardView abapCiDashboardView;
-	private DevelopmentProcessManager developmentProcessManager;
 	private FeatureFacade featureFacade;
+	private TestResultConsolidator testResultConsolidator;
+	private SourceCodeStateEvaluator sourceCodeStateEvaluator;
 
 	public ContinuousIntegrationPresenter(AbapCiMainView abapCiMainView,
 			IContinuousIntegrationModel continuousIntegrationModel, IProject currentProject) {
@@ -52,8 +55,9 @@ public class ContinuousIntegrationPresenter {
 		this.model = continuousIntegrationModel;
 		this.currentProject = currentProject;
 		this.abapPackageTestStates = new ArrayList<AbapPackageTestState>();
-		developmentProcessManager = new DevelopmentProcessManager();
 		featureFacade = new FeatureFacade();
+		testResultConsolidator = new TestResultConsolidator();
+		sourceCodeStateEvaluator = new SourceCodeStateEvaluator();
 
 		loadPackages();
 		setViewerInput();
@@ -303,48 +307,7 @@ public class ContinuousIntegrationPresenter {
 	}
 
 	private SourcecodeState evalSourceCodeTestState() {
-
-		TestState currentUnitTestState = TestState.UNDEF;
-
-		for (AbapPackageTestState testState : getAbapPackageTestStatesForCurrentProject()) {
-			switch (currentUnitTestState) {
-			case OFFL:
-			case NOK:
-				// no change as this are the highest states
-				break;
-			case UNDEF:
-			case OK:
-			case DEACT:
-				currentUnitTestState = testState.getUnitTestState() != TestState.DEACT ? testState.getUnitTestState()
-						: currentUnitTestState;
-				break;
-			}
-		}
-
-		developmentProcessManager.setUnitTeststate(currentUnitTestState);
-
-		TestState currentAtcState = TestState.UNDEF;
-
-		for (AbapPackageTestState testState : getAbapPackageTestStatesForCurrentProject()) {
-			switch (currentAtcState) {
-			case NOK:
-				// no change as this is the highest state
-				break;
-			case OFFL:
-				currentAtcState = testState.getAtcTestState() == TestState.NOK ? testState.getAtcTestState()
-						: currentAtcState;
-			case UNDEF:
-			case OK:
-			case DEACT:
-				currentAtcState = testState.getAtcTestState() != TestState.DEACT ? testState.getAtcTestState()
-						: currentAtcState;
-				break;
-			}
-		}
-
-		developmentProcessManager.setAtcTeststate(currentAtcState);
-
-		return developmentProcessManager.getSourcecodeState();
+		return sourceCodeStateEvaluator.evaluate(getAbapPackageTestStatesForCurrentProject());
 	}
 
 	public IProject getCurrentProject() {
@@ -387,8 +350,10 @@ public class ContinuousIntegrationPresenter {
 	}
 
 	public boolean runNecessary() {
-		return getAbapPackageTestStatesForCurrentProject().stream().anyMatch(
-				item -> item.getUnitTestState() == TestState.UNDEF || item.getUnitTestState() == TestState.OFFL);
+		return !featureFacade.getUnitFeature().isRunActivatedObjectsOnly()
+				&& getAbapPackageTestStatesForCurrentProject().stream()
+						.anyMatch(item -> item.getUnitTestState() == TestState.UNDEF
+								|| item.getUnitTestState() == TestState.OFFL);
 	}
 
 	public void mergeUnitTestResultSummary(TestResultSummary unitTestResultSummary) {
@@ -403,25 +368,16 @@ public class ContinuousIntegrationPresenter {
 	}
 
 	public void mergeAtcWorklist(TestResultSummary atcTestResultSummary) {
-		for (AbapPackageTestState testState : getAbapPackageTestStatesForCurrentProject()) {
-			if (testState.getPackageName().equals(atcTestResultSummary.getPackageName())) {
-				TestResult newTestResult = mergeIntoExistingTestResult(testState.getAtcTestResult(),
-						atcTestResultSummary.getTestResult());
-				testState.setAtcTestResult(newTestResult);
-			}
-		}
+		testResultConsolidator.computeConsolidatedTestResult(atcTestResultSummary,
+				getAbapPackageTestStatesForCurrentProject(), TestResultType.ATC);
 
 		updateViewsAsync();
 	}
 
-	private TestResult mergeIntoExistingTestResult(TestResult currentTestResult, TestResult newTestResult) {
+	public void mergeUnitTestResult(TestResultSummary unitTestResultSummary) {
+		testResultConsolidator.computeConsolidatedTestResult(unitTestResultSummary,
+				getAbapPackageTestStatesForCurrentProject(), TestResultType.UNIT);
 
-		TestResult mergedTestResult = new TestResult(true, 0, currentTestResult.getActiveErrors(),
-				currentTestResult.getActivatedObjects());
-
-		mergedTestResult.removeActiveErrorsFor(newTestResult.getActivatedObjects());
-		mergedTestResult.addErrors(newTestResult.getActiveErrors());
-
-		return mergedTestResult;
+		updateViewsAsync();
 	}
 }

@@ -1,19 +1,15 @@
 package abapci.feature;
 
-public class UnitFeature  extends ActiveFeature{
-   
-	private int interval; 
+public class UnitFeature extends ActiveFeature {
 
+	private boolean runActivatedObjectsOnly;
 
-public int getInterval() {
-	return interval;
-}
+	public boolean isRunActivatedObjectsOnly() {
+		return runActivatedObjectsOnly;
+	}
 
-public void setInterval(int interval) {
-	this.interval = interval;
-}
+	public void setRunActivatedObjectsOnly(boolean runActivatedObjectsOnly) {
+		this.runActivatedObjectsOnly = runActivatedObjectsOnly;
+	}
 
-
-
-   
 }

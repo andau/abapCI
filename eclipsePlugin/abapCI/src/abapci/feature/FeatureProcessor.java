@@ -19,11 +19,11 @@ public class FeatureProcessor {
 	private AtcTestManager atcTestManager;
 
 	private ThemeUpdateManager themeUpdateManager;
-	private DevelopmentProcessManager developmentProcessManager;
 
 	private FeatureFacade featureFacade;
 	private ContinuousIntegrationPresenter presenter;
 	private List<Activation> inactiveObjects;
+	private DevelopmentProcessManager developmentProcessManager;
 
 	public FeatureProcessor(ContinuousIntegrationPresenter presenter, String projectName,
 			List<String> initialPackages) {
@@ -32,9 +32,9 @@ public class FeatureProcessor {
 		aUnitTestManager = new AUnitTestManager(presenter, projectName, initialPackages);
 		jenkinsManager = new JenkinsManager(presenter, projectName, initialPackages);
 		atcTestManager = new AtcTestManager(presenter, projectName, initialPackages);
+		developmentProcessManager = new DevelopmentProcessManager();
 
 		themeUpdateManager = new ThemeUpdateManager();
-		developmentProcessManager = new DevelopmentProcessManager();
 
 		featureFacade = new FeatureFacade();
 
@@ -52,8 +52,17 @@ public class FeatureProcessor {
 			if (featureFacade.getUnitFeature().isActive()) {
 				SourcecodeState oldSourcecodeState = developmentProcessManager.getSourcecodeState();
 
-				TestState unitTestState = aUnitTestManager.executeAllPackages(presenter.getCurrentProject(),
-						presenter.getAbapPackageTestStatesForCurrentProject());
+				TestState unitTestState = TestState.UNDEF;
+				if (featureFacade.getUnitFeature().isRunActivatedObjectsOnly()) {
+					if (inactiveObjects != null) {
+						unitTestState = aUnitTestManager.executeAllPackages(presenter.getCurrentProject(),
+								presenter.getAbapPackageTestStatesForCurrentProject(), inactiveObjects);
+					}
+				} else {
+					unitTestState = aUnitTestManager.executeAllPackages(presenter.getCurrentProject(),
+							presenter.getAbapPackageTestStatesForCurrentProject(), null);
+				}
+
 				developmentProcessManager.setUnitTeststate(unitTestState);
 				themeUpdateManager.updateTheme(developmentProcessManager.getSourcecodeState());
 

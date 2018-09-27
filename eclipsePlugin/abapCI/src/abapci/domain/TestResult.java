@@ -15,23 +15,12 @@ public class TestResult {
 	private boolean undefined;
 	private boolean testrunOk;
 	private int numTests;
-	private List<InvalidItem> invalidItems;
+	private Collection<InvalidItem> invalidItems;
 	private Date lastRun;
-	private List<Activation> activatedObjects;
-
-	@Deprecated
-	public TestResult(boolean testrunOk, int numTests, List<InvalidItem> invalidItems,
-			List<Activation> inactiveObjects) {
-		this.activated = true;
-		this.testrunOk = testrunOk;
-		this.numTests = numTests;
-		this.invalidItems = invalidItems;
-		this.activatedObjects = inactiveObjects;
-		this.lastRun = Calendar.getInstance().getTime();
-	}
+	private Collection<Activation> activatedObjects;
 
 	public TestResult(boolean testrunOk, int numTests, Collection<InvalidItem> invalidItems,
-			List<Activation> inactiveObjects) {
+			Collection<Activation> inactiveObjects) {
 		this.activated = true;
 		this.testrunOk = testrunOk;
 		this.numTests = numTests;
@@ -70,16 +59,16 @@ public class TestResult {
 		return testState;
 	}
 
-	public List<InvalidItem> getActiveErrors() {
+	public Collection<InvalidItem> getActiveErrors() {
 		return invalidItems.stream().filter(item -> !item.isSuppressed()).collect(Collectors.toList());
 	}
 
-	public List<InvalidItem> getActiveErrors(ErrorPriority priority) {
+	public Collection<InvalidItem> getActiveErrors(ErrorPriority priority) {
 		return invalidItems.stream().filter(item -> !item.isSuppressed() && priority.equals(item.getPriority()))
 				.collect(Collectors.toList());
 	}
 
-	public List<InvalidItem> getSuppressedErrors() {
+	public Collection<InvalidItem> getSuppressedErrors() {
 		return invalidItems.stream().filter(item -> item.isSuppressed()).collect(Collectors.toList());
 	}
 
@@ -96,14 +85,15 @@ public class TestResult {
 	}
 
 	public InvalidItem getFirstInvalidItem() {
-		return getActiveErrors(ErrorPriority.ERROR).isEmpty() ? null : getActiveErrors(ErrorPriority.ERROR).get(0);
+		return getActiveErrors(ErrorPriority.ERROR).isEmpty() ? null
+				: getActiveErrors(ErrorPriority.ERROR).iterator().next();
 	}
 
-	public List<Activation> getActivatedObjects() {
+	public Collection<Activation> getActivatedObjects() {
 		return activatedObjects;
 	}
 
-	public void removeActiveErrorsFor(List<Activation> activations) {
+	public void removeActiveErrorsFor(Collection<Activation> activations) {
 		List<InvalidItem> newInvalidItems = invalidItems.stream().collect(Collectors.toList());
 		for (InvalidItem invalidItem : invalidItems) {
 			if (activations.stream().anyMatch(
@@ -116,7 +106,7 @@ public class TestResult {
 
 	}
 
-	public void addErrors(List<InvalidItem> activeErrors) {
+	public void addErrors(Collection<InvalidItem> activeErrors) {
 		invalidItems.addAll(activeErrors);
 	}
 

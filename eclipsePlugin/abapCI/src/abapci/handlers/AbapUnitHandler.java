@@ -1,5 +1,7 @@
 package abapci.handlers;
 
+import java.util.List;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -16,6 +18,7 @@ import com.sap.adt.tools.abapsource.abapunit.TestRunException;
 import com.sap.adt.tools.abapsource.abapunit.services.AdtServicesPlugin;
 import com.sap.adt.tools.abapsource.abapunit.services.IAdtServicesFactory;
 
+import abapci.activation.Activation;
 import abapci.domain.TestResultSummary;
 import abapci.feature.FeatureFacade;
 import abapci.result.TestResultSummaryFactory;
@@ -53,6 +56,42 @@ public class AbapUnitHandler extends AbstractHandler {
 		 * int durations = evaluateDurations();
 		 * task.setDurations(AbapUnitTestDuration.getAsEnum(durations));
 		 */
+
+		TestResultSummary unitTestResultSummary;
+
+		try {
+			IAbapUnitResult abapUnitResult = abapUnitService.executeUnitTests(task, false, packageName);
+			unitTestResultSummary = TestResultSummaryFactory.create(packageName, abapUnitResult);
+
+			return unitTestResultSummary;
+
+		} catch (TestRunException e) {
+			if (e.getCause() instanceof CommunicationException) {
+				unitTestResultSummary = TestResultSummaryFactory.createOffline(packageName);
+			} else {
+				unitTestResultSummary = TestResultSummaryFactory.createUndefined(packageName);
+			}
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CommunicationException e) {
+			e.printStackTrace();
+			unitTestResultSummary = TestResultSummaryFactory.createUndefined(packageName);
+		} catch (Exception ex) {
+			unitTestResultSummary = TestResultSummaryFactory.createUndefined(packageName);
+		}
+
+		return unitTestResultSummary;
+	}
+
+	public TestResultSummary executeObjects(IProject project, String packageName, List<Activation> activations) {
+		boolean flag = false;
+		IAdtServicesFactory servicesFactory = AdtServicesPlugin.getDefault().getFactory();
+		IAbapUnitService abapUnitService = servicesFactory.createAbapUnitService(project.getName(), flag);
+		AbapUnitTask task = new AbapUnitTask(packageName);
+
+		for (Activation activation : activations) {
+			task.addTestItem(new TestItem(activation.getUri().toString(), activation.getUri().toString()));
+		}
 
 		TestResultSummary unitTestResultSummary;
 
@@ -119,4 +158,5 @@ public class AbapUnitHandler extends AbstractHandler {
 
 		return riskLevels;
 	}
+
 }

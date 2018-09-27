@@ -17,6 +17,7 @@ public class FeatureFactory {
 		initPrefs();
 		UnitFeature feature = new UnitFeature();
 		feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE));
+		feature.setRunActivatedObjectsOnly(prefs.getBoolean(PreferenceConstants.PREF_UNIT_RUN_ACTIVATED_OBJECTS_ONLY));
 		return feature;
 	}
 

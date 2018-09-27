@@ -52,7 +52,8 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 		plugin = this;
 
 		featureFacade = new FeatureFacade();
-		if (featureFacade.getUnitFeature().isActive() || featureFacade.getAtcFeature().isActive()) {
+		if (featureFacade.getUnitFeature().isActive() || featureFacade.getAtcFeature().isActive()
+				|| featureFacade.getAtcFeature().isRunActivatedObjects()) {
 			generalThemePresenter = new GeneralThemePresenter(new ColoredProjectModel());
 			continuousIntegrationPresenter = new ContinuousIntegrationPresenter(null, new ContinuousIntegrationModel(),
 					null);

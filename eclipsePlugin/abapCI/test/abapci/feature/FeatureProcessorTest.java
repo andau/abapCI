@@ -137,13 +137,13 @@ public class FeatureProcessorTest {
 	}
 
 	private void verifyUpdateThemeCallAfterUnitRun(TestState testState, SourcecodeState sourcecodeState) {
-		PowerMockito.when(aUnitTestManager.executeAllPackages(null, null)).thenReturn(testState);
+		PowerMockito.when(aUnitTestManager.executeAllPackages(null, null, null)).thenReturn(testState);
 		featureProcessor.processEnabledFeatures();
 	}
 
 	private void callFeatureProcessor(TestState unitTestState, TestState atcTestState, SourcecodeState stateAfterUnit,
 			SourcecodeState stateAfterAtc) {
-		PowerMockito.when(aUnitTestManager.executeAllPackages(null, null)).thenReturn(unitTestState);
+		PowerMockito.when(aUnitTestManager.executeAllPackages(null, null, null)).thenReturn(unitTestState);
 		PowerMockito.when(atcTestManager.executeAllPackages(null, null, null)).thenReturn(atcTestState);
 		featureProcessor.processEnabledFeatures();
 

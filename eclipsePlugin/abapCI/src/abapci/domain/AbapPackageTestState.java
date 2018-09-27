@@ -8,7 +8,7 @@ public class AbapPackageTestState {
 	private String projectName;
 	private String packageName;
 	private String jenkinsInfo;
-	private TestResult aUnitTestResult;
+	private TestResult unitTestResult;
 	private TestResult atcTestResult;
 
 	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
@@ -22,7 +22,7 @@ public class AbapPackageTestState {
 		this.projectName = projectName;
 		this.packageName = packageName;
 		this.jenkinsInfo = jenkinsInfo;
-		this.aUnitTestResult = aUnitTestResult;
+		this.unitTestResult = aUnitTestResult;
 		this.atcTestResult = atcTestResult;
 	}
 
@@ -31,7 +31,7 @@ public class AbapPackageTestState {
 		this.projectName = projectName;
 		this.packageName = packageName;
 		this.jenkinsInfo = TestState.UNDEF.toString();
-		this.aUnitTestResult = new TestResult();
+		this.unitTestResult = new TestResult();
 		this.atcTestResult = new TestResult();
 	}
 
@@ -56,23 +56,23 @@ public class AbapPackageTestState {
 	}
 
 	public TestState getUnitTestState() {
-		return aUnitTestResult.getTestState();
+		return unitTestResult.getTestState();
 	}
 
 	public int getAUnitNumOk() {
-		return aUnitTestResult.getNumOk();
+		return unitTestResult.getNumOk();
 	}
 
 	public int getAUnitNumErr() {
-		return aUnitTestResult.getActiveErrors().size();
+		return unitTestResult.getActiveErrors().size();
 	}
 
 	public int getAUnitNumSuppressed() {
-		return aUnitTestResult.getSuppressedErrors().size();
+		return unitTestResult.getSuppressedErrors().size();
 	}
 
 	public String getAUnitLastRun() {
-		return aUnitTestResult.getLastRun() != null ? new SimpleDateFormat("HH:mm").format(aUnitTestResult.getLastRun())
+		return unitTestResult.getLastRun() != null ? new SimpleDateFormat("HH:mm").format(unitTestResult.getLastRun())
 				: "";
 	}
 
@@ -82,8 +82,8 @@ public class AbapPackageTestState {
 	}
 
 	public void setUnitTestResult(TestResult aUnitTestResult) {
-		this.aUnitTestResult = aUnitTestResult;
-		propertyChangeSupport.firePropertyChange("aUnitTestResult", this.aUnitTestResult, aUnitTestResult);
+		this.unitTestResult = aUnitTestResult;
+		propertyChangeSupport.firePropertyChange("aUnitTestResult", this.unitTestResult, aUnitTestResult);
 	}
 
 	public TestState getAtcTestState() {
@@ -118,24 +118,28 @@ public class AbapPackageTestState {
 
 	@Override
 	public String toString() {
-		return packageName + " " + jenkinsInfo + " " + aUnitTestResult.getTestState() + " "
+		return packageName + " " + jenkinsInfo + " " + unitTestResult.getTestState() + " "
 				+ atcTestResult.getTestState();
 	}
 
 	public InvalidItem getFirstFailedUnitTest() {
-		return aUnitTestResult.getActiveErrors(ErrorPriority.ERROR).size() > 0
-				? aUnitTestResult.getActiveErrors(ErrorPriority.ERROR).get(0)
+		return unitTestResult.getActiveErrors(ErrorPriority.ERROR).size() > 0
+				? unitTestResult.getActiveErrors(ErrorPriority.ERROR).iterator().next()
 				: null;
 	}
 
 	public InvalidItem getFirstFailedAtc() {
 		return atcTestResult.getActiveErrors(ErrorPriority.ERROR).size() > 0
-				? atcTestResult.getActiveErrors(ErrorPriority.ERROR).get(0)
+				? atcTestResult.getActiveErrors(ErrorPriority.ERROR).iterator().next()
 				: null;
 	}
 
 	public TestResult getAtcTestResult() {
 		return atcTestResult;
+	}
+
+	public TestResult getUnitTestResult() {
+		return unitTestResult;
 	}
 
 }

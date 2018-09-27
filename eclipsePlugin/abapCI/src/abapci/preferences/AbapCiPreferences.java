@@ -30,6 +30,9 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE,
 				"&Run Unit tests after an ABAP object is activated", getFieldEditorParent()));
 
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_UNIT_RUN_ACTIVATED_OBJECTS_ONLY,
+				"&Run Unit tests only for activated ABAP objects", getFieldEditorParent()));
+
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_CHANGE_COLOR_ON_FAILED_TESTS,
 				"&Change Theme layout on failed tests (do not use with dark theme)", getFieldEditorParent()));
 

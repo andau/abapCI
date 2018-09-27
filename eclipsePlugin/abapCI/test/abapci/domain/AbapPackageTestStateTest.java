@@ -3,7 +3,7 @@ package abapci.domain;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 import org.junit.Test;
 
@@ -16,7 +16,7 @@ public class AbapPackageTestStateTest {
 		assertEquals(TestState.UNDEF.toString(), abapPackageTestState.getJenkinsInfo());
 		assertEquals(TestState.UNDEF, abapPackageTestState.getAtcTestState());
 
-		List<InvalidItem> invalidItems = new ArrayList<InvalidItem>();
+		Collection<InvalidItem> invalidItems = new ArrayList<InvalidItem>();
 		invalidItems.add(new InvalidItem("TESTPACKAGE", "", false, null, "", ErrorPriority.ERROR));
 		abapPackageTestState.setUnitTestResult(new TestResult(true, 1, invalidItems, null));
 		assertEquals(TestState.NOK, abapPackageTestState.getUnitTestState());
