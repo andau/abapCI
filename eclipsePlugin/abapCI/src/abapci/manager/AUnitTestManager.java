@@ -13,9 +13,9 @@ import abapci.presenter.ContinuousIntegrationPresenter;
 
 public class AUnitTestManager extends AbstractTestManager {
 
-	public AUnitTestManager(ContinuousIntegrationPresenter continuousIntegrationPresenter, String projectName,
+	public AUnitTestManager(ContinuousIntegrationPresenter continuousIntegrationPresenter, IProject project,
 			List<String> packageNames) {
-		super(continuousIntegrationPresenter, projectName, packageNames);
+		super(continuousIntegrationPresenter, project, packageNames);
 	}
 
 	public TestState executeAllPackages(IProject project, List<AbapPackageTestState> activeAbapPackageTestStates,

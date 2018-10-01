@@ -30,6 +30,7 @@ import abapci.domain.UiColor;
 import abapci.feature.FeatureFacade;
 import abapci.model.IContinuousIntegrationModel;
 import abapci.result.SourceCodeStateEvaluator;
+import abapci.result.SourceCodeStateInfo;
 import abapci.result.TestResultConsolidator;
 import abapci.result.TestResultType;
 import abapci.utils.AnnotationRuleColorChanger;
@@ -48,6 +49,7 @@ public class ContinuousIntegrationPresenter {
 	private FeatureFacade featureFacade;
 	private TestResultConsolidator testResultConsolidator;
 	private SourceCodeStateEvaluator sourceCodeStateEvaluator;
+	private SourceCodeStateInfo sourceCodeStateInfo;
 
 	public ContinuousIntegrationPresenter(AbapCiMainView abapCiMainView,
 			IContinuousIntegrationModel continuousIntegrationModel, IProject currentProject) {
@@ -58,6 +60,7 @@ public class ContinuousIntegrationPresenter {
 		featureFacade = new FeatureFacade();
 		testResultConsolidator = new TestResultConsolidator();
 		sourceCodeStateEvaluator = new SourceCodeStateEvaluator();
+		sourceCodeStateInfo = new SourceCodeStateInfo();
 
 		loadPackages();
 		setViewerInput();

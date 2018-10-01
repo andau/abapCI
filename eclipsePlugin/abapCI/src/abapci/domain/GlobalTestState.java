@@ -20,25 +20,49 @@ public class GlobalTestState {
 	}
 
 	public String getTestStateOutputForDashboard() {
-		String testStateOutput = "";
 
-		switch (this.sourcecodeState) {
-		case UT_FAIL:
-			testStateOutput = "Tests fail";
-			break;
-		case ATC_FAIL:
-			testStateOutput = "ATC errors";
-			break;
-		case OK:
-			testStateOutput = "-      OK     -";
-			break;
-		case OFFL:
-			testStateOutput = "No connection";
-			break;
-		case UNDEF:
-		default:
-			testStateOutput = "Tests n/a";
-			break;
+		String testStateOutput = "";
+		if (featureFacade.getTestTypeFeature().isTddActive()) {
+			switch (this.sourcecodeState) {
+			case UT_FAIL:
+				testStateOutput = "WRITE CODE";
+				break;
+			case ATC_FAIL:
+				testStateOutput = "REFACTOR";
+				break;
+			case OK:
+				testStateOutput = "WRITE TEST";
+				break;
+			case OFFL:
+				testStateOutput = "THINK";
+				break;
+			case UNDEF:
+			default:
+				testStateOutput = "Tests n/a";
+				break;
+			}
+
+		} else {
+
+			switch (this.sourcecodeState) {
+			case UT_FAIL:
+				testStateOutput = "Tests fail";
+				break;
+			case ATC_FAIL:
+				testStateOutput = "ATC errors";
+				break;
+			case OK:
+				testStateOutput = "-      OK     -";
+				break;
+			case OFFL:
+				testStateOutput = "No connection";
+				break;
+			case UNDEF:
+			default:
+				testStateOutput = "Tests n/a";
+				break;
+			}
+
 		}
 		return testStateOutput;
 	}

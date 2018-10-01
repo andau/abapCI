@@ -12,7 +12,6 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 
-import abapci.Exception.InactivatedObjectEvaluationException;
 import abapci.activation.Activation;
 import abapci.activation.ActivationDetector;
 import abapci.activation.ActivationHelper;
@@ -30,7 +29,6 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 	private CiJob job;
 	private ContinuousIntegrationPresenter continuousIntegrationPresenter;
 	private ActivationDetector activationDetector;
-	private int currentInactiveObjectsCount;
 
 	public GeneralResourceChangeListener(ContinuousIntegrationPresenter continuousIntegrationPresenter) {
 		sapConnection = new SapConnection();
@@ -62,7 +60,6 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 					}
 
 					if (currentProject != null && sapConnection.isConnected(currentProject.getName())) {
-						updateInactiveObjects(currentProject);
 
 						List<String> selectedPackages = new ArrayList<>();
 						List<Activation> activatedInactiveObjects = new ArrayList<>();
@@ -92,11 +89,6 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 							if (!activationDetector.findActiveActivationsAssignedToProject().isEmpty()) {
 								showDialogForPackages(currentProject, selectedPackages);
 							}
-							activationDetector.changeActivedToIncludedInJob();
-
-							activationDetector.resetProcessedInactiveObjects();
-
-							currentInactiveObjectsCount = 0;
 						}
 					}
 				}
@@ -108,23 +100,6 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 
 			}
 
-		}
-	}
-
-	private void updateInactiveObjects(IProject currentProject) {
-		List<Activation> inactiveObjects;
-		try {
-			inactiveObjects = sapConnection.getInactiveObjects(currentProject.getName());
-
-			if (currentInactiveObjectsCount > inactiveObjects.size()) {
-				inactiveObjects = activationDetector.getLastInactiveObjects();
-			}
-
-			currentInactiveObjectsCount = inactiveObjects.size();
-			activationDetector.setLastInactiveObjects(inactiveObjects);
-
-		} catch (InactivatedObjectEvaluationException e) {
-			// if inactiveObjects could not be set we move on
 		}
 	}
 

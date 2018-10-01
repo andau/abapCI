@@ -1,5 +1,6 @@
 package abapci.jobs;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,114 +25,98 @@ public class CiJob extends Job {
 
 	private List<String> triggerPackages;
 	private List<Activation> inactiveObjects;
-	private String projectName;
+	private List<Activation> currentInactiveObjects;
+	private IProject project;
 
 	private Date triggerDate;
-	private boolean immediateProcessing;
-	private boolean shortDelayProcessing;
-	private boolean longDelayProcessing;
+	private boolean triggerProcessor;
 
-	private static final long DELAYED_PROCESSING_TIMESPAN = 5000;
+	private static final long DELAYED_PROCESSING_TIMESPAN = 10000;
 
 	private FeatureProcessor featureProcessor;
+	private SapConnection sapConnection;
 
 	private CiJob(ContinuousIntegrationPresenter continuousIntegrationPresenter) {
 		super("AbapCI active");
-		triggerDate = new Date();
 		triggerPackages = continuousIntegrationPresenter.getAbapPackageTestStatesForCurrentProject().stream()
 				.map(item -> item.getPackageName()).collect(Collectors.<String>toList());
-		featureProcessor = new FeatureProcessor(continuousIntegrationPresenter, projectName, triggerPackages);
+		featureProcessor = new FeatureProcessor(continuousIntegrationPresenter, project, triggerPackages);
+
+		resetProcessing();
 	}
 
 	public static CiJob getInstance(ContinuousIntegrationPresenter continuousIntegrationPresenter) {
 		if (CiJob.instance == null) {
 			CiJob.instance = new CiJob(continuousIntegrationPresenter);
+			CiJob.instance.resetProcessing();
 		}
 		return CiJob.instance;
-	}
-
-	public void resetProcessingFlags() {
-		immediateProcessing = true;
-		shortDelayProcessing = true;
-		longDelayProcessing = true;
 	}
 
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
 
 		try {
-			Thread.sleep(500);
+			Thread.sleep(300);
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 			return Status.CANCEL_STATUS;
 		}
 
-		int processingStep = evaluateAndResetProcessingFlags();
-		if (processingStep > 0) {
+		if (triggerProcessor) {
+			SimpleDateFormat timeformat = new SimpleDateFormat("HH:mm:ss");
+			System.out.println(String.format("Feature processor started at %s", timeformat.format(new Date())));
 			featureProcessor.setPackagesAndObjects(triggerPackages, inactiveObjects);
 			featureProcessor.processEnabledFeatures();
+			triggerProcessor = false;
 		}
 
-		if (processingStep == 2) {
-			ActivationDetector.getInstance().unregisterAllIncludedInJob();
-		}
-
-		if (shortDelayProcessing || longDelayProcessing) {
+		if (evaluateRerun()) {
 			schedule();
 		}
 
 		return Status.OK_STATUS;
 	}
 
-	private List<String> getActivatedPackages() {
-		List<String> activatedPackages = new ArrayList<>();
-
-		final SapConnection sapConnection = new SapConnection();
+	private boolean evaluateRerun() {
 
 		try {
-			List<Activation> activatedObjects = sapConnection.getInactiveObjects(projectName);
-
-			if (activatedObjects != null && activatedObjects.size() > 0) {
-				activatedPackages = activatedObjects.stream().map(item -> item.getPackageName())
-						.collect(Collectors.<String>toList());
+			List<Activation> newInactiveObjects = sapConnection.getInactiveObjects(project);
+			if (newInactiveObjects.size() != currentInactiveObjects.size()) {
+				triggerProcessor = true;
+				currentInactiveObjects = newInactiveObjects;
+				System.out.println(String.format("Number of inactive objects %d", currentInactiveObjects.size()));
 			}
 		} catch (InactivatedObjectEvaluationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-
-		return activatedPackages;
-	}
-
-	private int evaluateAndResetProcessingFlags() {
-		int processingStep = -1;
-		if (immediateProcessing) {
-			immediateProcessing = false;
-			processingStep = 1;
 		}
 
 		long timeSinceLastTrigger = new Date().getTime() - triggerDate.getTime();
 
-		if (shortDelayProcessing && timeSinceLastTrigger > DELAYED_PROCESSING_TIMESPAN) {
-			shortDelayProcessing = false;
-			processingStep = 2;
+		if (currentInactiveObjects.size() == 0) {
+			ActivationDetector.getInstance().unregisterAllIncludedInJob();
 		}
 
-		return processingStep;
+		return (timeSinceLastTrigger < DELAYED_PROCESSING_TIMESPAN);
 	}
 
 	public void stop() {
 	}
 
 	public void start() {
-		resetProcessingFlags();
-		triggerDate = new Date();
 		schedule();
+	}
+
+	private void resetProcessing() {
+		triggerDate = new Date();
+		triggerProcessor = true;
+		sapConnection = new SapConnection();
+		currentInactiveObjects = new ArrayList<Activation>();
 	}
 
 	public void setTriggerPackages(IProject project, List<String> triggerPackages,
 			List<Activation> activatedInactiveObjects) {
-		this.projectName = project.getName();
+		this.project = project;
 		this.triggerPackages = triggerPackages;
 		this.inactiveObjects = activatedInactiveObjects;
 	}

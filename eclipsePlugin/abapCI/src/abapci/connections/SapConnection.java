@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 import com.sap.adt.activation.AdtActivationPlugin;
@@ -28,17 +29,16 @@ public class SapConnection {
 		return AdtLogonServiceFactory.createLogonService().isLoggedOn(projectName);
 	}
 
-	public List<Activation> unprocessedActivatedObjects(String projectName)
-			throws InactivatedObjectEvaluationException {
-		return getInactiveObjects(projectName);
+	public List<Activation> unprocessedActivatedObjects(IProject project) throws InactivatedObjectEvaluationException {
+		return getInactiveObjects(project);
 	}
 
-	public List<Activation> getInactiveObjects(String projectName) throws InactivatedObjectEvaluationException {
+	public List<Activation> getInactiveObjects(IProject project) throws InactivatedObjectEvaluationException {
 
 		try {
 			IActivationServiceFactory activationServiceFactory = AdtActivationPlugin.getDefault()
 					.getActivationServiceFactory();
-			IActivationService activationService = activationServiceFactory.createActivationService(projectName);
+			IActivationService activationService = activationServiceFactory.createActivationService(project.getName());
 			IInactiveCtsObjectList newInactiveCtsObjectList = activationService
 					.getInactiveCtsObjects(new NullProgressMonitor());
 			return convertToActivationObjectList(newInactiveCtsObjectList);

@@ -60,8 +60,6 @@ public class SaveFormattingListener implements IExecutionListener {
 			IEditorReference[] editorReferences = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 					.getEditorReferences();
 
-			activationPool.unregisterAllIncludedInJob();
-
 			String sourcecodePrefix = featureFacade.getSourcecodeFormattingFeature().getPrefix();
 
 			for (IEditorReference editorReference : editorReferences) {
@@ -85,11 +83,11 @@ public class SaveFormattingListener implements IExecutionListener {
 							activationPool.registerModified(activation);
 						}
 					}
-
-					if ("com.sap.adt.activation.ui.command.multiActivation".equals(arg0)) {
-						activationPool.setActivatedEntireProject(AbapProjectUtil.getCurrentProject().getName());
-					}
 				}
+			}
+
+			if ("com.sap.adt.activation.ui.command.multiActivation".equals(arg0)) {
+				activationPool.setActivatedEntireProject(AbapProjectUtil.getCurrentProject().getName());
 			}
 
 			if ("com.sap.adt.activation.ui.command.singleActivation".equals(arg0)) {

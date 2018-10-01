@@ -2,6 +2,8 @@ package abapci.manager;
 
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
+
 import abapci.domain.AbapPackageTestState;
 import abapci.domain.TestState;
 import abapci.presenter.ContinuousIntegrationPresenter;
@@ -9,14 +11,14 @@ import abapci.views.ViewModel;
 
 abstract class AbstractTestManager {
 
-	String projectName;
+	IProject project;
 	protected List<String> packageNames;
 	protected ContinuousIntegrationPresenter continuousIntegrationPresenter;
 
-	public AbstractTestManager(ContinuousIntegrationPresenter continuousIntegrationPresenter, String projectName,
+	public AbstractTestManager(ContinuousIntegrationPresenter continuousIntegrationPresenter, IProject project,
 			List<String> packageNames) {
 		this.continuousIntegrationPresenter = continuousIntegrationPresenter;
-		this.projectName = projectName;
+		this.project = project;
 		this.packageNames = packageNames;
 		overallTestState = TestState.UNDEF;
 	}

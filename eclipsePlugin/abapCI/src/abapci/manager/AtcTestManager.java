@@ -18,9 +18,9 @@ import abapci.utils.AtcResultAnalyzer;
 
 public class AtcTestManager extends AbstractTestManager {
 
-	public AtcTestManager(ContinuousIntegrationPresenter continuousIntegrationPresenter, String projectName,
+	public AtcTestManager(ContinuousIntegrationPresenter continuousIntegrationPresenter, IProject project,
 			List<String> packageNames) {
-		super(continuousIntegrationPresenter, projectName, packageNames);
+		super(continuousIntegrationPresenter, project, packageNames);
 	}
 
 	public TestState executeAllPackages(IProject project, List<AbapPackageTestState> activeAbapPackageTestStates,

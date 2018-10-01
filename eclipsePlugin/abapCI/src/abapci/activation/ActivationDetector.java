@@ -8,7 +8,6 @@ public class ActivationDetector {
 
 	private static ActivationDetector instance;
 	private List<Activation> activations;
-	private List<Activation> inactiveObjects;
 
 	private ActivationDetector() {
 		activations = new ArrayList<Activation>();
@@ -76,18 +75,6 @@ public class ActivationDetector {
 			}
 		}
 
-	}
-
-	public void setLastInactiveObjects(List<Activation> inactiveObjects) {
-		this.inactiveObjects = inactiveObjects;
-	}
-
-	public List<Activation> getLastInactiveObjects() {
-		return inactiveObjects;
-	}
-
-	public void resetProcessedInactiveObjects() {
-		inactiveObjects = null;
 	}
 
 }

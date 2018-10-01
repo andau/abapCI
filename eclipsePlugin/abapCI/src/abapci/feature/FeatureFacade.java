@@ -111,4 +111,8 @@ public class FeatureFacade {
 		return featureFactory.createColoredProjectFeature();
 	}
 
+	public TestTypeFeature getTestTypeFeature() {
+		return new TestTypeFeature();
+	}
+
 }

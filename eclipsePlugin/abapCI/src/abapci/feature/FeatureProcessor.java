@@ -2,6 +2,8 @@ package abapci.feature;
 
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
+
 import abapci.activation.Activation;
 import abapci.domain.SourcecodeState;
 import abapci.domain.TestState;
@@ -25,13 +27,12 @@ public class FeatureProcessor {
 	private List<Activation> inactiveObjects;
 	private DevelopmentProcessManager developmentProcessManager;
 
-	public FeatureProcessor(ContinuousIntegrationPresenter presenter, String projectName,
-			List<String> initialPackages) {
+	public FeatureProcessor(ContinuousIntegrationPresenter presenter, IProject project, List<String> initialPackages) {
 
 		this.presenter = presenter;
-		aUnitTestManager = new AUnitTestManager(presenter, projectName, initialPackages);
-		jenkinsManager = new JenkinsManager(presenter, projectName, initialPackages);
-		atcTestManager = new AtcTestManager(presenter, projectName, initialPackages);
+		aUnitTestManager = new AUnitTestManager(presenter, project, initialPackages);
+		jenkinsManager = new JenkinsManager(presenter, project, initialPackages);
+		atcTestManager = new AtcTestManager(presenter, project, initialPackages);
 		developmentProcessManager = new DevelopmentProcessManager();
 
 		themeUpdateManager = new ThemeUpdateManager();

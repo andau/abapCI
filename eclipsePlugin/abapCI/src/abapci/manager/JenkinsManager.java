@@ -2,11 +2,13 @@ package abapci.manager;
 
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
+
 import abapci.presenter.ContinuousIntegrationPresenter;
 
 public class JenkinsManager {
 
-	public JenkinsManager(ContinuousIntegrationPresenter presenter, String projectName, List<String> packages) {
+	public JenkinsManager(ContinuousIntegrationPresenter presenter, IProject project, List<String> packages) {
 	}
 
 	public void executeAllPackages() {

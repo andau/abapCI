@@ -2,7 +2,9 @@ package abapci.feature;
 
 import java.util.ArrayList;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.ui.PlatformUI;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,8 +56,9 @@ public class FeatureProcessorTest {
 
 		ContinuousIntegrationPresenter presenter = new ContinuousIntegrationPresenter(null,
 				new ContinuousIntegrationTestModel(), null);
-		String projectName = "";
-		featureProcessor = new FeatureProcessor(presenter, projectName, new ArrayList<String>());
+		IProject project = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor()
+				.getEditorInput().getAdapter(IProject.class);
+		featureProcessor = new FeatureProcessor(presenter, project, new ArrayList<String>());
 		Whitebox.setInternalState(featureProcessor, "featureFacade", featureFacade);
 		Whitebox.setInternalState(featureProcessor, "aUnitTestManager", aUnitTestManager);
 		Whitebox.setInternalState(featureProcessor, "atcTestManager", atcTestManager);
