@@ -10,6 +10,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IExecutionListener;
 import org.eclipse.core.commands.NotHandledException;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
@@ -87,7 +88,8 @@ public class SaveFormattingListener implements IExecutionListener {
 			}
 
 			if ("com.sap.adt.activation.ui.command.multiActivation".equals(arg0)) {
-				activationPool.setActivatedEntireProject(AbapProjectUtil.getCurrentProject().getName());
+				activationPool.setActivatedEntireProject(AbapProjectUtil.getCurrentProject());
+				activationPool.activationClickDetected();
 			}
 
 			if ("com.sap.adt.activation.ui.command.singleActivation".equals(arg0)) {
@@ -102,6 +104,7 @@ public class SaveFormattingListener implements IExecutionListener {
 					activationPool.registerModified(activation);
 					activationPool.setActivated(activeEditorReferences.get(0).getName());
 				}
+				activationPool.activationClickDetected();
 			}
 
 		}
@@ -129,9 +132,9 @@ public class SaveFormattingListener implements IExecutionListener {
 		}
 
 		if (adtObject != null) {
-			String projectName = AbapProjectUtil.getCurrentProject(editorReference.getEditor(false)).getName();
+			IProject project = AbapProjectUtil.getCurrentProject(editorReference.getEditor(false));
 
-			activation = new Activation(editorReference.getName(), adtObject.getPackageName(), projectName,
+			activation = new Activation(editorReference.getName(), adtObject.getPackageName(), project,
 					adtObject.getUri(), adtObject.getType());
 		}
 

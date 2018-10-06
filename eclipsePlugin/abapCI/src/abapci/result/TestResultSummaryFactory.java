@@ -1,7 +1,11 @@
 package abapci.result;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import org.eclipse.core.resources.IProject;
 
 import com.sap.adt.tools.abapsource.abapunit.AbapUnitAlertSeverity;
 import com.sap.adt.tools.abapsource.abapunit.AbapUnitResultItemType;
@@ -10,20 +14,22 @@ import com.sap.adt.tools.abapsource.abapunit.IAbapUnitAlertStackEntry;
 import com.sap.adt.tools.abapsource.abapunit.IAbapUnitResult;
 import com.sap.adt.tools.abapsource.abapunit.IAbapUnitResultItem;
 
+import abapci.activation.Activation;
 import abapci.domain.ErrorPriority;
 import abapci.domain.InvalidItem;
-import abapci.domain.TestResultSummary;
 import abapci.utils.AlertDetailMessageExtractor;
 import abapci.utils.InvalidItemUtil;
 import abapci.views.ViewModel;
 
 public class TestResultSummaryFactory {
+	private static final IProject UNDEFINED_PROJECT = null;
 	private static final String UNDEFINED_PACKAGE_NAME = null;
 
 	private TestResultSummaryFactory() {
 	}
 
-	public static TestResultSummary create(String packageName, IAbapUnitResult abapUnitResult) {
+	public static TestResultSummary create(IProject project, String packageName, IAbapUnitResult abapUnitResult,
+			Set<Activation> activations) {
 		List<IAbapUnitAlert> criticalAlerts = getCriticalAlerts(abapUnitResult.getAlerts(), false);
 
 		for (IAbapUnitResultItem abapUnitResultItem : abapUnitResult.getItems()) {
@@ -59,7 +65,7 @@ public class TestResultSummaryFactory {
 
 		}
 
-		return new TestResultSummary(packageName, true, numTests, invalidItems);
+		return new TestResultSummary(project, packageName, true, numTests, invalidItems, activations);
 	}
 
 	private static String extractUsefulMessage(String detailMessage) {
@@ -103,16 +109,18 @@ public class TestResultSummaryFactory {
 		return criticalAlerts;
 	}
 
-	public static TestResultSummary createUndefined(String packageName) {
-		return new TestResultSummary(packageName, false, 0, new ArrayList<InvalidItem>());
+	public static TestResultSummary createUndefined(IProject project, String packageName) {
+		return new TestResultSummary(project, packageName, false, 0, new ArrayList<InvalidItem>(),
+				new HashSet<Activation>());
 	}
 
-	public static TestResultSummary createOffline(String packageName) {
-		return new TestResultSummary(packageName, false, 0, new ArrayList<InvalidItem>());
+	public static TestResultSummary createOffline(IProject project, String packageName) {
+		return new TestResultSummary(project, packageName, false, 0, new ArrayList<InvalidItem>(),
+				new HashSet<Activation>());
 	}
 
 	public static TestResultSummary createUndefined() {
-		return createUndefined(UNDEFINED_PACKAGE_NAME);
+		return createUndefined(UNDEFINED_PROJECT, UNDEFINED_PACKAGE_NAME);
 	}
 
 }

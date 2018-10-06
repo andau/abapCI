@@ -1,6 +1,7 @@
 package abapci.manager;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IProject;
@@ -9,11 +10,11 @@ import com.sap.adt.atc.model.atcworklist.IAtcWorklist;
 
 import abapci.activation.Activation;
 import abapci.domain.AbapPackageTestState;
-import abapci.domain.TestResult;
-import abapci.domain.TestResultSummary;
 import abapci.domain.TestState;
 import abapci.handlers.AbapAtcHandler;
 import abapci.presenter.ContinuousIntegrationPresenter;
+import abapci.result.TestResult;
+import abapci.result.TestResultSummary;
 import abapci.utils.AtcResultAnalyzer;
 
 public class AtcTestManager extends AbstractTestManager {
@@ -40,24 +41,27 @@ public class AtcTestManager extends AbstractTestManager {
 			else if (inactiveObjects.stream()
 					.anyMatch(item -> item.getPackageName().equals(abapPackageTestState.getPackageName()))) {
 
-				List<Activation> inactiveObjectsForPackage = inactiveObjects.stream()
+				Set<Activation> inactiveObjectsForPackage = inactiveObjects.stream()
 						.filter(item -> item.getPackageName().equals(abapPackageTestState.getPackageName()))
-						.collect(Collectors.<Activation>toList());
+						.collect(Collectors.toSet());
 
 				if (inactiveObjectsForPackage.size() > 0) {
-					atcWorklist = new AbapAtcHandler().executeObjects(project, inactiveObjects);
+					atcWorklist = new AbapAtcHandler().executeObjects(project, inactiveObjectsForPackage);
 				}
+
+				if (atcWorklist != null) {
+
+					TestResult testResult = AtcResultAnalyzer.getTestResult(atcWorklist, inactiveObjectsForPackage);
+					TestResultSummary testResultSummary = new TestResultSummary(project,
+							abapPackageTestState.getPackageName(),
+							AtcResultAnalyzer.getTestResult(atcWorklist, inactiveObjectsForPackage));
+					continuousIntegrationPresenter.mergeAtcWorklist(testResultSummary);
+					mergePackageTestStateIntoGlobalTestState(testResult.getTestState());
+
+				}
+
 			}
 
-			if (atcWorklist != null) {
-
-				TestResult testResult = AtcResultAnalyzer.getTestResult(atcWorklist, inactiveObjects);
-				TestResultSummary testResultSummary = new TestResultSummary(abapPackageTestState.getPackageName(),
-						AtcResultAnalyzer.getTestResult(atcWorklist, inactiveObjects));
-				continuousIntegrationPresenter.mergeAtcWorklist(testResultSummary);
-				mergePackageTestStateIntoGlobalTestState(testResult.getTestState());
-
-			}
 		}
 
 		return overallTestState;

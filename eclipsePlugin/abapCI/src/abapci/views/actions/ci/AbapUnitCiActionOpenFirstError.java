@@ -49,7 +49,7 @@ public class AbapUnitCiActionOpenFirstError extends AbstractCiAction {
 				}
 
 			} catch (Exception ex) {
-				TestResultSummaryFactory.createOffline(abapPackageTestState.getPackageName());
+				TestResultSummaryFactory.createOffline(null, abapPackageTestState.getPackageName());
 			}
 
 		}

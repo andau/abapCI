@@ -1,4 +1,4 @@
-package abapci.domain;
+package abapci.result;
 
 import java.util.Arrays;
 
@@ -15,7 +15,7 @@ import com.sap.adt.tools.abapsource.abapunit.IAbapUnitAlert;
 import com.sap.adt.tools.abapsource.abapunit.IAbapUnitResult;
 import com.sap.adt.tools.abapsource.abapunit.IAbapUnitResultItem;
 
-import abapci.result.TestResultSummaryFactory;
+import abapci.domain.TestState;
 
 @RunWith(PowerMockRunner.class)
 public class TestResultSummaryFactoryTest {
@@ -50,7 +50,8 @@ public class TestResultSummaryFactoryTest {
 
 	@Test
 	public void testNoError() {
-		TestResultSummary unitTestResultSummary = TestResultSummaryFactory.create(TEST_PACKAGE_NAME, unitResultOkMock);
+		TestResultSummary unitTestResultSummary = TestResultSummaryFactory.create(null, TEST_PACKAGE_NAME,
+				unitResultOkMock, null);
 		Assert.assertEquals(TestState.OK, unitTestResultSummary.getTestResult().getTestState());
 	}
 

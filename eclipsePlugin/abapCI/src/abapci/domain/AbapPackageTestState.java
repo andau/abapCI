@@ -4,6 +4,8 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.text.SimpleDateFormat;
 
+import abapci.result.TestResult;
+
 public class AbapPackageTestState {
 	private String projectName;
 	private String packageName;
@@ -59,8 +61,8 @@ public class AbapPackageTestState {
 		return unitTestResult.getTestState();
 	}
 
-	public int getAUnitNumOk() {
-		return unitTestResult.getNumOk();
+	public int getNumTests() {
+		return unitTestResult.getNumItems();
 	}
 
 	public int getAUnitNumErr() {
@@ -88,6 +90,10 @@ public class AbapPackageTestState {
 
 	public TestState getAtcTestState() {
 		return atcTestResult.getTestState();
+	}
+
+	public int getNumFiles() {
+		return this.atcTestResult.getNumItems();
 	}
 
 	public int getAtcNumErr() {

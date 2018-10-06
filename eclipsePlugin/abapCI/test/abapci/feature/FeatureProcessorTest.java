@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.ui.PlatformUI;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,6 +44,8 @@ public class FeatureProcessorTest {
 	ThemeUpdateManager themeUpdateManager;
 	@Mock
 	ContinuousIntegrationPresenter continuousIntegrationPresenter;
+	@Mock
+	IProject project;
 
 	@Before
 	public void setUp() throws Exception {
@@ -56,8 +57,6 @@ public class FeatureProcessorTest {
 
 		ContinuousIntegrationPresenter presenter = new ContinuousIntegrationPresenter(null,
 				new ContinuousIntegrationTestModel(), null);
-		IProject project = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor()
-				.getEditorInput().getAdapter(IProject.class);
 		featureProcessor = new FeatureProcessor(presenter, project, new ArrayList<String>());
 		Whitebox.setInternalState(featureProcessor, "featureFacade", featureFacade);
 		Whitebox.setInternalState(featureProcessor, "aUnitTestManager", aUnitTestManager);

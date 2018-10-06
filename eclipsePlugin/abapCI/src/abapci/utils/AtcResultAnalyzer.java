@@ -3,6 +3,7 @@ package abapci.utils;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,13 +15,13 @@ import com.sap.adt.atc.model.atcworklist.IAtcWorklist;
 import abapci.activation.Activation;
 import abapci.domain.ErrorPriority;
 import abapci.domain.InvalidItem;
-import abapci.domain.TestResult;
 import abapci.domain.TestState;
+import abapci.result.TestResult;
 import abapci.views.ViewModel;
 
 public class AtcResultAnalyzer {
 
-	public static TestResult getTestResult(IAtcWorklist atcWorklist, List<Activation> inactiveObjects) {
+	public static TestResult getTestResult(IAtcWorklist atcWorklist, Set<Activation> inactiveObjects) {
 		TestResult testResult;
 
 		if (atcWorklist == null) {

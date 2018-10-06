@@ -21,8 +21,8 @@ import com.sap.adt.atc.model.atcobject.IAtcObjectList;
 import com.sap.adt.atc.model.atcworklist.IAtcWorklist;
 
 import abapci.domain.Suppression;
-import abapci.domain.TestResult;
 import abapci.domain.TestState;
+import abapci.result.TestResult;
 import abapci.views.ViewModel;
 
 @RunWith(PowerMockRunner.class)

@@ -35,15 +35,13 @@ public class AnnotationRuleColorChanger {
 
 			if (rgb != null && changeStatusBar) {
 
-				currentShell.setBackgroundMode(SWT.INHERIT_DEFAULT);
 				setBackgroundForChildren(currentShell, new Color(Display.getDefault(), rgb),
 						"org.eclipse.jface.action.StatusLine", 0);
 
-				// setBackgroundForLabel(currentShell, new Color(Display.getDefault(), rgb),
-				// "org.eclipse.swt.custom.CTabFolder", 0, "ZCL_BIG_TRUCK");
-
 			} else {
-				currentShell.setBackgroundMode(SWT.INHERIT_NONE);
+				setBackgroundForChildren(currentShell,
+						Display.getDefault().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND),
+						"org.eclipse.jface.action.StatusLine", 0);
 			}
 
 			ITextViewer textViewer = null;

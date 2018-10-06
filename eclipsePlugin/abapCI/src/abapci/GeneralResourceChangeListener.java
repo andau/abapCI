@@ -80,12 +80,18 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 											.map(item -> item.getPackageName()).distinct()
 											.collect(Collectors.<String>toList()),
 									null);
-							job.start();
-						} else if (!activations.isEmpty()) {
-							continuousIntegrationPresenter.setCurrentProject(currentProject);
+							job.start(true);
+						} else if (!activations.isEmpty() && activationDetector.hasUnprocessedActivationClicks()) {
+							IProject activatedProject = activationDetector.getCurrentProject();
+							if (activatedProject != null) {
+								continuousIntegrationPresenter
+										.setCurrentProject(activationDetector.getCurrentProject());
+							}
 							job.setTriggerPackages(continuousIntegrationPresenter.getCurrentProject(), selectedPackages,
 									activatedInactiveObjects);
-							job.start();
+							job.start(true);
+							System.out.println("Job started");
+							activationDetector.resetUnprocessedActivationClicks();
 							if (!activationDetector.findActiveActivationsAssignedToProject().isEmpty()) {
 								showDialogForPackages(currentProject, selectedPackages);
 							}

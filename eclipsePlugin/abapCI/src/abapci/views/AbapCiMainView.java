@@ -238,13 +238,13 @@ public class AbapCiMainView extends ViewPart {
 		});
 
 		colNumber++;
-		col = createTableViewerColumn("OK", 40, colNumber);
+		col = createTableViewerColumn("#", 40, colNumber);
 		col.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
 				AbapPackageTestState p = (AbapPackageTestState) element;
 				return StringUtils.IsNullOrEmpty(p.getAUnitLastRun()) ? StringUtils.EMPTY
-						: Integer.toString(p.getAUnitNumOk());
+						: Integer.toString(p.getNumTests());
 			}
 		});
 
@@ -288,6 +288,17 @@ public class AbapCiMainView extends ViewPart {
 				public String getText(Object element) {
 					AbapPackageTestState p = (AbapPackageTestState) element;
 					return p.getAtcTestState().toString();
+				}
+			});
+
+			colNumber++;
+			col = createTableViewerColumn("#", 40, colNumber);
+			col.setLabelProvider(new ColumnLabelProvider() {
+				@Override
+				public String getText(Object element) {
+					AbapPackageTestState p = (AbapPackageTestState) element;
+					return StringUtils.IsNullOrEmpty(p.getAtcLastRun()) ? StringUtils.EMPTY
+							: Integer.toString(p.getNumFiles());
 				}
 			});
 

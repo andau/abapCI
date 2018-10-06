@@ -1,13 +1,16 @@
 package abapci.views.actions.ci;
 
+import java.util.HashSet;
+
 import org.eclipse.core.resources.IProject;
 
 import abapci.AbapCiPlugin;
 import abapci.AbapProjectUtil;
+import abapci.activation.Activation;
 import abapci.domain.AbapPackageTestState;
-import abapci.domain.TestResultSummary;
 import abapci.handlers.AbapUnitHandler;
 import abapci.presenter.ContinuousIntegrationPresenter;
+import abapci.result.TestResultSummary;
 import abapci.result.TestResultSummaryFactory;
 
 public class AbapUnitCiAction extends AbstractCiAction {
@@ -28,11 +31,11 @@ public class AbapUnitCiAction extends AbstractCiAction {
 			try {
 				IProject project = AbapProjectUtil.getProjectByProjectName(abapPackageTestState.getProjectName());
 				TestResultSummary unitTestResultSummary = new AbapUnitHandler().executePackage(project,
-						abapPackageTestState.getPackageName());
+						abapPackageTestState.getPackageName(), new HashSet<Activation>());
 				continuousIntegrationPresenter.mergeUnitTestResultSummary(unitTestResultSummary);
 
 			} catch (Exception ex) {
-				TestResultSummaryFactory.createOffline(abapPackageTestState.getPackageName());
+				TestResultSummaryFactory.createOffline(null, abapPackageTestState.getPackageName());
 			}
 
 		}

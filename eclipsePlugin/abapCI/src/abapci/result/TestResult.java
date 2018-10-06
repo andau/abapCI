@@ -1,29 +1,33 @@
-package abapci.domain;
+package abapci.result;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import abapci.activation.Activation;
+import abapci.domain.ErrorPriority;
+import abapci.domain.InvalidItem;
+import abapci.domain.TestState;
 
 public class TestResult {
 
 	private boolean activated;
 	private boolean undefined;
 	private boolean testrunOk;
-	private int numTests;
+	private int numItems;
 	private Collection<InvalidItem> invalidItems;
 	private Date lastRun;
 	private Collection<Activation> activatedObjects;
 
-	public TestResult(boolean testrunOk, int numTests, Collection<InvalidItem> invalidItems,
+	public TestResult(boolean testrunOk, int numItems, Collection<InvalidItem> invalidItems,
 			Collection<Activation> inactiveObjects) {
 		this.activated = true;
 		this.testrunOk = testrunOk;
-		this.numTests = numTests;
+		this.numItems = numItems;
 		this.invalidItems = new ArrayList<InvalidItem>(invalidItems);
 		this.activatedObjects = inactiveObjects;
 		this.lastRun = Calendar.getInstance().getTime();
@@ -59,21 +63,21 @@ public class TestResult {
 		return testState;
 	}
 
-	public Collection<InvalidItem> getActiveErrors() {
-		return invalidItems.stream().filter(item -> !item.isSuppressed()).collect(Collectors.toList());
+	public Set<InvalidItem> getActiveErrors() {
+		return invalidItems.stream().filter(item -> !item.isSuppressed()).collect(Collectors.toSet());
 	}
 
-	public Collection<InvalidItem> getActiveErrors(ErrorPriority priority) {
+	public Set<InvalidItem> getActiveErrors(ErrorPriority priority) {
 		return invalidItems.stream().filter(item -> !item.isSuppressed() && priority.equals(item.getPriority()))
-				.collect(Collectors.toList());
+				.collect(Collectors.toSet());
 	}
 
-	public Collection<InvalidItem> getSuppressedErrors() {
-		return invalidItems.stream().filter(item -> item.isSuppressed()).collect(Collectors.toList());
+	public Set<InvalidItem> getSuppressedErrors() {
+		return invalidItems.stream().filter(item -> item.isSuppressed()).collect(Collectors.toSet());
 	}
 
-	public int getNumOk() {
-		return numTests - getActiveErrors().size();
+	public int getNumItems() {
+		return numItems;
 	}
 
 	public String getTestResultInfo() {
@@ -108,6 +112,23 @@ public class TestResult {
 
 	public void addErrors(Collection<InvalidItem> activeErrors) {
 		invalidItems.addAll(activeErrors);
+	}
+
+	public void addMissingItemsCount(Collection<Activation> activations) {
+		int newItems;
+		if (activations != null) {
+			Collection<String> activationNames = activations.stream().map(item -> item.getObjectName())
+					.collect(Collectors.toSet());
+			if (activatedObjects == null) {
+				activatedObjects = activations;
+			} else {
+				activatedObjects.addAll(activations);
+			}
+		}
+
+		numItems = (activatedObjects != null)
+				? activatedObjects.stream().map(item -> item.getObjectName()).collect(Collectors.toSet()).size()
+				: 0;
 	}
 
 }

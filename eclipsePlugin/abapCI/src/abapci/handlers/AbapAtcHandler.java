@@ -2,6 +2,7 @@ package abapci.handlers;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -57,7 +58,7 @@ public class AbapAtcHandler extends AbstractHandler {
 
 	}
 
-	public IAtcWorklist executeObjects(IProject project, List<Activation> inactiveObjects) {
+	public IAtcWorklist executeObjects(IProject project, Collection<Activation> inactiveObjects) {
 		IAtcWorklistBackendAccess worklistBackendAccess = AtcBackendServices.getWorklistBackendAccess();
 		IAbapProject abapProject = AbapProjectService.getInstance().createFromProjectUnchecked(project);
 		List<IAtcCheckableItem> checkableItems = new ArrayList<>();

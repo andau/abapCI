@@ -1,6 +1,7 @@
 package abapci.handlers;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -19,8 +20,8 @@ import com.sap.adt.tools.abapsource.abapunit.services.AdtServicesPlugin;
 import com.sap.adt.tools.abapsource.abapunit.services.IAdtServicesFactory;
 
 import abapci.activation.Activation;
-import abapci.domain.TestResultSummary;
 import abapci.feature.FeatureFacade;
+import abapci.result.TestResultSummary;
 import abapci.result.TestResultSummaryFactory;
 
 /**
@@ -33,10 +34,10 @@ public class AbapUnitHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		String packageName = event.getParameter("1");
-		return executePackage(null, packageName);
+		return executePackage(null, packageName, new HashSet<Activation>());
 	}
 
-	public TestResultSummary executePackage(IProject project, String packageName) {
+	public TestResultSummary executePackage(IProject project, String packageName, Set<Activation> activations) {
 
 		boolean flag = false;
 		IAdtServicesFactory servicesFactory = AdtServicesPlugin.getDefault().getFactory();
@@ -61,29 +62,29 @@ public class AbapUnitHandler extends AbstractHandler {
 
 		try {
 			IAbapUnitResult abapUnitResult = abapUnitService.executeUnitTests(task, false, packageName);
-			unitTestResultSummary = TestResultSummaryFactory.create(packageName, abapUnitResult);
+			unitTestResultSummary = TestResultSummaryFactory.create(project, packageName, abapUnitResult, activations);
 
 			return unitTestResultSummary;
 
 		} catch (TestRunException e) {
 			if (e.getCause() instanceof CommunicationException) {
-				unitTestResultSummary = TestResultSummaryFactory.createOffline(packageName);
+				unitTestResultSummary = TestResultSummaryFactory.createOffline(project, packageName);
 			} else {
-				unitTestResultSummary = TestResultSummaryFactory.createUndefined(packageName);
+				unitTestResultSummary = TestResultSummaryFactory.createUndefined(project, packageName);
 			}
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (CommunicationException e) {
 			e.printStackTrace();
-			unitTestResultSummary = TestResultSummaryFactory.createUndefined(packageName);
+			unitTestResultSummary = TestResultSummaryFactory.createUndefined(project, packageName);
 		} catch (Exception ex) {
-			unitTestResultSummary = TestResultSummaryFactory.createUndefined(packageName);
+			unitTestResultSummary = TestResultSummaryFactory.createUndefined(project, packageName);
 		}
 
 		return unitTestResultSummary;
 	}
 
-	public TestResultSummary executeObjects(IProject project, String packageName, List<Activation> activations) {
+	public TestResultSummary executeObjects(IProject project, String packageName, Set<Activation> activations) {
 		boolean flag = false;
 		IAdtServicesFactory servicesFactory = AdtServicesPlugin.getDefault().getFactory();
 		IAbapUnitService abapUnitService = servicesFactory.createAbapUnitService(project.getName(), flag);
@@ -97,23 +98,23 @@ public class AbapUnitHandler extends AbstractHandler {
 
 		try {
 			IAbapUnitResult abapUnitResult = abapUnitService.executeUnitTests(task, false, packageName);
-			unitTestResultSummary = TestResultSummaryFactory.create(packageName, abapUnitResult);
+			unitTestResultSummary = TestResultSummaryFactory.create(project, packageName, abapUnitResult, activations);
 
 			return unitTestResultSummary;
 
 		} catch (TestRunException e) {
 			if (e.getCause() instanceof CommunicationException) {
-				unitTestResultSummary = TestResultSummaryFactory.createOffline(packageName);
+				unitTestResultSummary = TestResultSummaryFactory.createOffline(project, packageName);
 			} else {
-				unitTestResultSummary = TestResultSummaryFactory.createUndefined(packageName);
+				unitTestResultSummary = TestResultSummaryFactory.createUndefined(project, packageName);
 			}
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (CommunicationException e) {
 			e.printStackTrace();
-			unitTestResultSummary = TestResultSummaryFactory.createUndefined(packageName);
+			unitTestResultSummary = TestResultSummaryFactory.createUndefined(project, packageName);
 		} catch (Exception ex) {
-			unitTestResultSummary = TestResultSummaryFactory.createUndefined(packageName);
+			unitTestResultSummary = TestResultSummaryFactory.createUndefined(project, packageName);
 		}
 
 		return unitTestResultSummary;

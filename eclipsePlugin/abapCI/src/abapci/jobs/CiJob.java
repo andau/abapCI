@@ -31,7 +31,7 @@ public class CiJob extends Job {
 	private Date triggerDate;
 	private boolean triggerProcessor;
 
-	private static final long DELAYED_PROCESSING_TIMESPAN = 10000;
+	private static final long MAX_PROCESSING_DELAY = 20000;
 
 	private FeatureProcessor featureProcessor;
 	private SapConnection sapConnection;
@@ -63,6 +63,10 @@ public class CiJob extends Job {
 			return Status.CANCEL_STATUS;
 		}
 
+		if (evaluateRerun()) {
+			schedule();
+		}
+
 		if (triggerProcessor) {
 			SimpleDateFormat timeformat = new SimpleDateFormat("HH:mm:ss");
 			System.out.println(String.format("Feature processor started at %s", timeformat.format(new Date())));
@@ -71,14 +75,13 @@ public class CiJob extends Job {
 			triggerProcessor = false;
 		}
 
-		if (evaluateRerun()) {
-			schedule();
-		}
-
 		return Status.OK_STATUS;
 	}
 
 	private boolean evaluateRerun() {
+
+		boolean rerun = true;
+		boolean timeup = false;
 
 		try {
 			List<Activation> newInactiveObjects = sapConnection.getInactiveObjects(project);
@@ -95,15 +98,22 @@ public class CiJob extends Job {
 
 		if (currentInactiveObjects.size() == 0) {
 			ActivationDetector.getInstance().unregisterAllIncludedInJob();
+			rerun = false;
+			System.out.println(String.format("Ci job - no rerun necessary"));
 		}
 
-		return (timeSinceLastTrigger < DELAYED_PROCESSING_TIMESPAN);
+		if (timeSinceLastTrigger < MAX_PROCESSING_DELAY) {
+			timeup = true;
+			System.out.println(String.format("Ci job - run out of time"));
+		}
+		return rerun && !timeup;
 	}
 
 	public void stop() {
 	}
 
-	public void start() {
+	public void start(boolean triggerProcessor) {
+		this.triggerProcessor = triggerProcessor;
 		schedule();
 	}
 

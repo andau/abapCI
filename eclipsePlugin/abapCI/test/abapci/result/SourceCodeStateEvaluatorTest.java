@@ -14,7 +14,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import abapci.domain.AbapPackageTestState;
 import abapci.domain.SourcecodeState;
-import abapci.domain.TestResult;
 import abapci.domain.TestState;
 import abapci.feature.FeatureFacade;
 import abapci.feature.UnitFeature;

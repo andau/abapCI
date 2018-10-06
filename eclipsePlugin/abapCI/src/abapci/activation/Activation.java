@@ -2,19 +2,21 @@ package abapci.activation;
 
 import java.net.URI;
 
+import org.eclipse.core.resources.IProject;
+
 public class Activation {
 
-	private String projectName;
+	private IProject project;
 	private String packageName;
 	private String objectName;
 	private ActivationStatus status;
 	private URI uri;
 	private String type;
 
-	public Activation(String objectName, String packageName, String projectName, URI uri, String type) {
+	public Activation(String objectName, String packageName, IProject project, URI uri, String type) {
+		this.project = project;
 		this.objectName = objectName;
 		this.packageName = packageName;
-		this.projectName = projectName;
 		this.uri = uri;
 		this.status = ActivationStatus.MODIFIED;
 		this.type = type;
@@ -28,8 +30,8 @@ public class Activation {
 		return packageName;
 	}
 
-	public String getProjectName() {
-		return projectName;
+	public IProject getProject() {
+		return project;
 	}
 
 	public ActivationStatus getActivationStatus() {

@@ -23,15 +23,15 @@ import abapci.domain.ContinuousIntegrationConfig;
 import abapci.domain.GlobalTestState;
 import abapci.domain.InvalidItem;
 import abapci.domain.SourcecodeState;
-import abapci.domain.TestResult;
-import abapci.domain.TestResultSummary;
 import abapci.domain.TestState;
 import abapci.domain.UiColor;
 import abapci.feature.FeatureFacade;
 import abapci.model.IContinuousIntegrationModel;
 import abapci.result.SourceCodeStateEvaluator;
 import abapci.result.SourceCodeStateInfo;
+import abapci.result.TestResult;
 import abapci.result.TestResultConsolidator;
+import abapci.result.TestResultSummary;
 import abapci.result.TestResultType;
 import abapci.utils.AnnotationRuleColorChanger;
 import abapci.utils.EditorHandler;
@@ -281,7 +281,7 @@ public class ContinuousIntegrationPresenter {
 	}
 
 	private String buildInfoLine(List<AbapPackageTestState> abapPackageTestStatesForCurrentProject) {
-		int overallOk = abapPackageTestStatesForCurrentProject.stream().mapToInt(item -> item.getAUnitNumOk()).sum();
+		int overallTests = abapPackageTestStatesForCurrentProject.stream().mapToInt(item -> item.getNumTests()).sum();
 		int overallErrors = abapPackageTestStatesForCurrentProject.stream().mapToInt(item -> item.getAUnitNumErr())
 				.sum();
 		int overallSuppressed = abapPackageTestStatesForCurrentProject.stream()
@@ -295,7 +295,7 @@ public class ContinuousIntegrationPresenter {
 		int overallAtcSuppressed = abapPackageTestStatesForCurrentProject.stream()
 				.mapToInt(item -> item.getAtcNumSuppressed()).sum();
 
-		String unitTestInfoString = String.format("[%s,%s,%s]", overallOk, overallErrors, overallSuppressed);
+		String unitTestInfoString = String.format("[%s,%s,%s]", overallTests, overallErrors, overallSuppressed);
 
 		String atcInfoString = featureFacade.getAtcFeature().isActive()
 				? String.format(" [%s,%s,%s,%s]", overallAtcErr, overallAtcWarnings, overallAtcInfos,

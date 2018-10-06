@@ -55,7 +55,7 @@ public class SapConnection {
 			if (ctsObject.hasObjectRef()) {
 				IAdtObjectReference ref = ctsObject.getObject().getRef();
 				if (!ref.getName().equals("Z_BAPI_HE_VARIANT_CALC")) {
-					activationObjects.add(new Activation(ref.getName(), ref.getPackageName(), "",
+					activationObjects.add(new Activation(ref.getName(), ref.getPackageName(), null,
 							URI.create(ref.getUri()), ref.getType()));
 				}
 			}

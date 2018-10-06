@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.eclipse.core.resources.IProject;
+
 public class ActivationDetector {
 
 	private static ActivationDetector instance;
 	private List<Activation> activations;
+	private boolean unprocessedActivationClick;
 
 	private ActivationDetector() {
 		activations = new ArrayList<Activation>();
@@ -32,9 +35,9 @@ public class ActivationDetector {
 		}
 	}
 
-	public void setActivatedEntireProject(String projectname) {
+	public void setActivatedEntireProject(IProject project) {
 		for (Activation activation : activations) {
-			if (activation.getProjectName().equals(projectname)) {
+			if (activation.getProject().equals(project)) {
 				activation.setActivated();
 			}
 		}
@@ -74,7 +77,22 @@ public class ActivationDetector {
 				activation.setIncludedInJob();
 			}
 		}
+	}
 
+	public void activationClickDetected() {
+		unprocessedActivationClick = true;
+	}
+
+	public boolean hasUnprocessedActivationClicks() {
+		return unprocessedActivationClick;
+	}
+
+	public void resetUnprocessedActivationClicks() {
+		unprocessedActivationClick = false;
+	}
+
+	public IProject getCurrentProject() {
+		return findAllActiveOrIncludedInJob().size() > 0 ? findAllActiveOrIncludedInJob().get(0).getProject() : null;
 	}
 
 }

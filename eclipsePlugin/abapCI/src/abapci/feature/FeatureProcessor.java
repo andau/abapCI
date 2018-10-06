@@ -3,6 +3,9 @@ package abapci.feature;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.widgets.Display;
 
 import abapci.activation.Activation;
 import abapci.domain.SourcecodeState;
@@ -92,10 +95,9 @@ public class FeatureProcessor {
 
 			presenter.updateViewsAsync(developmentProcessManager.getSourcecodeState());
 
-		} catch (
-
-		Exception ex) {
-			presenter.setStatusMessage("Testrun failed, exception: " + ex.getMessage());
+		} catch (Exception ex) {
+			presenter.setStatusMessage("Testrun failed, exception: " + ex.getMessage(),
+					new Color(Display.getCurrent(), new RGB(255, 0, 0)));
 		}
 
 	}
