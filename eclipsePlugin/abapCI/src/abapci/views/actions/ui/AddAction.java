@@ -6,7 +6,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
 import abapci.presenter.ContinuousIntegrationPresenter;
-import abapci.views.wizard.AddContinuousIntegrationConfigPage;
+import abapci.views.wizard.AddOrUpdateContinuousIntegrationConfigPage;
 
 public class AddAction extends Action {
 
@@ -22,7 +22,7 @@ public class AddAction extends Action {
 
 	public void run() {
 
-		AddContinuousIntegrationConfigPage ciConfigPage = new AddContinuousIntegrationConfigPage(
+		AddOrUpdateContinuousIntegrationConfigPage ciConfigPage = new AddOrUpdateContinuousIntegrationConfigPage(
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), presenter, null, false);
 		if (ciConfigPage.open() == Window.OK) {
 

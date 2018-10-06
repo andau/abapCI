@@ -17,7 +17,7 @@ import abapci.AbapCiPlugin;
 import abapci.domain.ContinuousIntegrationConfig;
 import abapci.presenter.ContinuousIntegrationPresenter;
 import abapci.views.AbapCiMainView;
-import abapci.views.wizard.AddContinuousIntegrationConfigPage;
+import abapci.views.wizard.AddOrUpdateContinuousIntegrationConfigPage;
 
 public class AbapCiRunAddHandler extends AbstractHandler {
 
@@ -42,7 +42,7 @@ public class AbapCiRunAddHandler extends AbstractHandler {
 					AbapCiMainView ciMainView = (AbapCiMainView) page.findView(AbapCiMainView.ID);
 					ContinuousIntegrationPresenter continuousIntegrationPresenter = AbapCiPlugin
 							.getDefault().continuousIntegrationPresenter;
-					AddContinuousIntegrationConfigPage addContinuousIntegrationConfigPage = new AddContinuousIntegrationConfigPage(
+					AddOrUpdateContinuousIntegrationConfigPage addContinuousIntegrationConfigPage = new AddOrUpdateContinuousIntegrationConfigPage(
 							PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
 							continuousIntegrationPresenter, ciConfig, false);
 					if (addContinuousIntegrationConfigPage.open() == Window.OK) {

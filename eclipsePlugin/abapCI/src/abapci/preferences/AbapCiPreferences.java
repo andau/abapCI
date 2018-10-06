@@ -26,12 +26,40 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 	public void createFieldEditors() {
 
 		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "1. Automatic unit test runs");
+		createUnitTestChapter();
 
+		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "2. Automatic ATC runs (experimental)");
+		createAtcChapter();
+
+		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "3. Different coloring for each ABAP project");
+		createColorChangeChapter();
+
+		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "4. Automatic source code formatting");
+		createSourceCodeFormattingChapter();
+
+		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "5. Shortcut for abapGit");
+		createAbapGitChapter();
+
+		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "6. Automatic ATC runs (experimental)");
+		createAtcChapter();
+
+		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "7. Trigger Jenkins from Eclipse (experimental)");
+		createJenkinsChapter();
+
+		// Unit test level selection seems currently not supported ( at least with 7.50)
+		// - therefore its deactived for the moment
+		// addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "Abap Unit Test
+		// severity and duration");
+		// createAbapUnitDetailsChapter();
+
+	}
+
+	private void createUnitTestChapter() {
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE,
-				"&Run Unit tests after an ABAP object is activated", getFieldEditorParent()));
+				"&Run Unit tests after an ABAP object was activated", getFieldEditorParent()));
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_UNIT_RUN_ACTIVATED_OBJECTS_ONLY,
-				"&Run Unit tests only for activated ABAP objects", getFieldEditorParent()));
+				"&Run Unit tests for the activated ABAP objects only", getFieldEditorParent()));
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_CHANGE_COLOR_ON_FAILED_TESTS,
 				"&Change Theme layout on failed tests (do not use with dark theme)", getFieldEditorParent()));
@@ -43,45 +71,20 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 
 		addField(new ColorFieldEditor(PreferenceConstants.PREF_UNIT_TEST_FAIL_BACKGROUND_COLOR,
 				"Backgroundcolor for FAIL Unit Test State used in ABAP CI dashboard", getFieldEditorParent()));
-
-		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "2. Different coloring for each ABAP project");
-		createColorChangeChapter();
-
-		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "3. Automatic source code formatting");
-		createSourceCodeFormattingChapter();
-
-		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "4. Shortcut for abapGit");
-		createAbapGitChapter();
-
-		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "5. Automatic ATC runs (experimental)");
-		createAtcChapter();
-
-		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "6. Trigger Jenkins from Eclipse (experimental)");
-		createJenkinsChapter();
-
-		// Unit test level selection seems currently not supported ( at least with 7.50)
-		// - therefore its deactived for the moment
-		// addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "Abap Unit Test
-		// severity and duration");
-		// createAbapUnitDetailsChapter();
-
 	}
 
 	private void createAtcChapter() {
 
 		Label atcInfoLabel1 = new Label(getFieldEditorParent(), SWT.NONE);
 		atcInfoLabel1.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
-		atcInfoLabel1.setText("    Can cause big data volume in table SATC_AC_RESULTVT,");
+		atcInfoLabel1.setText("    This feature writes data into the table SATC_AC_RESULTVT,");
 
 		Label atcInfoLabel2 = new Label(getFieldEditorParent(), SWT.NONE);
 		atcInfoLabel2.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
 		atcInfoLabel2.setText("    reorganize the table with program SATC_AC_CLEANUP continuously!");
 
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ATC_RUN_INITIAL,
-				"&Run ATC after Unit Teststate changes state to OK (experimental)", getFieldEditorParent()));
-
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ATC_RUN_DELTA_ACTIVATED_OBJECTS,
-				"&Run ATC for each activated object", getFieldEditorParent()));
+				"&Run ATC for each activated ABAP objects only", getFieldEditorParent()));
 
 		addField(new StringFieldEditor(PreferenceConstants.PREF_ATC_VARIANT, "&Run ATC with variant:",
 				getFieldEditorParent()));

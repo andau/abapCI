@@ -70,7 +70,6 @@ public class FeatureProcessorTest {
 	public void unitOkTest() throws Exception {
 
 		setMockedPreferences(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE, true);
-		setMockedPreferences(PreferenceConstants.PREF_ATC_RUN_INITIAL, false);
 
 		verifyUpdateThemeCallAfterUnitRun(TestState.OK, SourcecodeState.OK);
 	}
@@ -79,7 +78,6 @@ public class FeatureProcessorTest {
 	public void unitNokTest() throws Exception {
 
 		setMockedPreferences(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE, true);
-		setMockedPreferences(PreferenceConstants.PREF_ATC_RUN_INITIAL, false);
 
 		verifyUpdateThemeCallAfterUnitRun(TestState.NOK, SourcecodeState.UT_FAIL);
 	}
@@ -88,7 +86,6 @@ public class FeatureProcessorTest {
 	public void unitUndefTest() throws Exception {
 
 		setMockedPreferences(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE, true);
-		setMockedPreferences(PreferenceConstants.PREF_ATC_RUN_INITIAL, false);
 
 		verifyUpdateThemeCallAfterUnitRun(TestState.UNDEF, SourcecodeState.UNDEF);
 
@@ -98,7 +95,6 @@ public class FeatureProcessorTest {
 	public void unitOfflTest() throws Exception {
 
 		setMockedPreferences(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE, true);
-		setMockedPreferences(PreferenceConstants.PREF_ATC_RUN_INITIAL, false);
 
 		verifyUpdateThemeCallAfterUnitRun(TestState.OFFL, SourcecodeState.OFFL);
 	}
@@ -106,7 +102,6 @@ public class FeatureProcessorTest {
 	@Test
 	public void unitOkAndAtcNokTest() throws Exception {
 		setMockedPreferences(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE, true);
-		setMockedPreferences(PreferenceConstants.PREF_ATC_RUN_INITIAL, true);
 
 		callFeatureProcessor(TestState.OK, TestState.NOK, SourcecodeState.OK, SourcecodeState.ATC_FAIL);
 	}
@@ -114,7 +109,6 @@ public class FeatureProcessorTest {
 	@Test
 	public void unitOkAndAtcOkTest() throws Exception {
 		setMockedPreferences(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE, true);
-		setMockedPreferences(PreferenceConstants.PREF_ATC_RUN_INITIAL, true);
 
 		callFeatureProcessor(TestState.OK, TestState.OK, SourcecodeState.OK, SourcecodeState.OK);
 
@@ -123,7 +117,6 @@ public class FeatureProcessorTest {
 	@Test
 	public void unitNokAndAtcOkTest() throws Exception {
 		setMockedPreferences(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE, true);
-		setMockedPreferences(PreferenceConstants.PREF_ATC_RUN_INITIAL, true);
 
 		callFeatureProcessor(TestState.NOK, TestState.OK, SourcecodeState.UT_FAIL, null);
 
@@ -132,8 +125,6 @@ public class FeatureProcessorTest {
 	@Test
 	public void unitNokAndAtcNokTest() throws Exception {
 		setMockedPreferences(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE, true);
-		setMockedPreferences(PreferenceConstants.PREF_ATC_RUN_INITIAL, true);
-
 		callFeatureProcessor(TestState.NOK, TestState.NOK, SourcecodeState.UT_FAIL, null);
 
 	}

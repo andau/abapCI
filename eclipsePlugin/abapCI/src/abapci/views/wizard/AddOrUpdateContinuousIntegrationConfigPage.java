@@ -22,7 +22,7 @@ import abapci.domain.ContinuousIntegrationConfig;
 import abapci.feature.FeatureFacade;
 import abapci.presenter.ContinuousIntegrationPresenter;
 
-public class AddContinuousIntegrationConfigPage extends Dialog {
+public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 
 	ContinuousIntegrationPresenter presenter;
 	FeatureFacade featureFacade;
@@ -34,7 +34,7 @@ public class AddContinuousIntegrationConfigPage extends Dialog {
 	Button showPopUpYes;
 	boolean showPopUpButton;
 
-	public AddContinuousIntegrationConfigPage(Shell parentShell, ContinuousIntegrationPresenter presenter,
+	public AddOrUpdateContinuousIntegrationConfigPage(Shell parentShell, ContinuousIntegrationPresenter presenter,
 			ContinuousIntegrationConfig ciConfig, boolean showPopUpButton) {
 		super(parentShell);
 		this.presenter = presenter;
@@ -137,7 +137,6 @@ public class AddContinuousIntegrationConfigPage extends Dialog {
 		}
 		presenter.addContinousIntegrationConfig(new ContinuousIntegrationConfig(cbProjectContent.getText(),
 				packageText.getText(), activated.getSelection(), activated.getSelection()));
-		presenter.setViewerInput();
 		super.okPressed();
 	}
 }

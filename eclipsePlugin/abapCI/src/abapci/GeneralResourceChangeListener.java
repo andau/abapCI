@@ -20,7 +20,7 @@ import abapci.domain.ContinuousIntegrationConfig;
 import abapci.feature.FeatureFacade;
 import abapci.jobs.CiJob;
 import abapci.presenter.ContinuousIntegrationPresenter;
-import abapci.views.wizard.AddContinuousIntegrationConfigPage;
+import abapci.views.wizard.AddOrUpdateContinuousIntegrationConfigPage;
 
 public class GeneralResourceChangeListener implements IResourceChangeListener {
 
@@ -123,7 +123,7 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 
 	private void handleNewConfig(ContinuousIntegrationConfig ciConfig) {
 
-		AddContinuousIntegrationConfigPage addContinuousIntegrationConfigPage = new AddContinuousIntegrationConfigPage(
+		AddOrUpdateContinuousIntegrationConfigPage addContinuousIntegrationConfigPage = new AddOrUpdateContinuousIntegrationConfigPage(
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), continuousIntegrationPresenter,
 				ciConfig, true);
 		if (addContinuousIntegrationConfigPage.open() == Window.OK) {

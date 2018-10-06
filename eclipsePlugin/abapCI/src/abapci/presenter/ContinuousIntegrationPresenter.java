@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IProject;
@@ -49,7 +50,6 @@ public class ContinuousIntegrationPresenter {
 	private FeatureFacade featureFacade;
 	private TestResultConsolidator testResultConsolidator;
 	private SourceCodeStateEvaluator sourceCodeStateEvaluator;
-	private SourceCodeStateInfo sourceCodeStateInfo;
 
 	public ContinuousIntegrationPresenter(AbapCiMainView abapCiMainView,
 			IContinuousIntegrationModel continuousIntegrationModel, IProject currentProject) {
@@ -60,7 +60,7 @@ public class ContinuousIntegrationPresenter {
 		featureFacade = new FeatureFacade();
 		testResultConsolidator = new TestResultConsolidator();
 		sourceCodeStateEvaluator = new SourceCodeStateEvaluator();
-		sourceCodeStateInfo = new SourceCodeStateInfo();
+		new SourceCodeStateInfo();
 
 		loadPackages();
 		setViewerInput();
@@ -73,8 +73,7 @@ public class ContinuousIntegrationPresenter {
 	public void removeContinousIntegrationConfig(ContinuousIntegrationConfig ciConfig) {
 		try {
 			model.remove(ciConfig);
-			loadPackages();
-			setViewerInput();
+			deleteAbapPackage(ciConfig);
 		} catch (ContinuousIntegrationConfigFileParseException e) {
 			setStatusMessage("Parsing of xml file failed");
 			e.printStackTrace();
@@ -90,8 +89,8 @@ public class ContinuousIntegrationPresenter {
 			}
 
 			model.add(ciConfig);
-			loadPackages();
-			setViewerInput();
+			addOrUpdateAbapPackage(ciConfig);
+			updateViewsAsync();
 		} catch (ContinuousIntegrationConfigFileParseException e) {
 			setStatusMessage("Parsing error when updating project",
 					new Color(Display.getCurrent(), new RGB(255, 0, 0)));
@@ -100,6 +99,41 @@ public class ContinuousIntegrationPresenter {
 					new Color(Display.getCurrent(), new RGB(255, 0, 0)));
 		}
 
+	}
+
+	private void addOrUpdateAbapPackage(ContinuousIntegrationConfig ciConfig) {
+		boolean updated = false;
+
+		AbapPackageTestState packageForCiConfig = new AbapPackageTestState(ciConfig.getProjectName(),
+				ciConfig.getPackageName(), "UNDEF", new TestResult(ciConfig.getUtActivated()),
+				new TestResult(ciConfig.getAtcActivated()));
+
+		ListIterator<AbapPackageTestState> iterator = abapPackageTestStates.listIterator();
+		while (iterator.hasNext()) {
+			AbapPackageTestState abapPackageTestState = iterator.next();
+			if (abapPackageTestState.getProjectName().equals(ciConfig.getProjectName())
+					&& abapPackageTestState.getPackageName().equals(ciConfig.getPackageName())) {
+				iterator.set(packageForCiConfig);
+				updated = true;
+			}
+		}
+
+		if (updated == false) {
+			abapPackageTestStates.add(packageForCiConfig);
+		}
+
+	}
+
+	private void deleteAbapPackage(ContinuousIntegrationConfig ciConfig) {
+		ListIterator<AbapPackageTestState> iterator = abapPackageTestStates.listIterator();
+		while (iterator.hasNext()) {
+			AbapPackageTestState abapPackageTestState = iterator.next();
+			if (abapPackageTestState.getProjectName().equals(ciConfig.getProjectName())
+					&& abapPackageTestState.getPackageName().equals(ciConfig.getPackageName())) {
+				iterator.remove();
+			}
+
+		}
 	}
 
 	public void setViewerInput() {

@@ -24,7 +24,6 @@ public class FeatureFactory {
 	public AtcFeature createAtcFeature() {
 		initPrefs();
 		AtcFeature feature = new AtcFeature();
-		feature.setRunInitial(prefs.getBoolean(PreferenceConstants.PREF_ATC_RUN_INITIAL));
 		feature.setRunActivatedObjects(prefs.getBoolean(PreferenceConstants.PREF_ATC_RUN_DELTA_ACTIVATED_OBJECTS));
 		feature.setActive(feature.isRunInitial() || feature.isRunActivatedObjects());
 		feature.setVariant(prefs.getString(PreferenceConstants.PREF_ATC_VARIANT));

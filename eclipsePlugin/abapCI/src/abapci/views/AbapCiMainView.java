@@ -58,6 +58,7 @@ import abapci.views.actions.ci.AtcCiAction;
 import abapci.views.actions.ci.JenkinsCiAction;
 import abapci.views.actions.ui.AddAction;
 import abapci.views.actions.ui.DeleteAction;
+import abapci.views.actions.ui.UpdateAction;
 
 public class AbapCiMainView extends ViewPart {
 
@@ -72,6 +73,7 @@ public class AbapCiMainView extends ViewPart {
 	private Action aUnitActionOpenFirstError;
 	private Action atcAction;
 	private Action addAction;
+	private Action updateAction;
 	private Action deleteAction;
 	private Action abapGitAction;
 
@@ -168,6 +170,7 @@ public class AbapCiMainView extends ViewPart {
 
 	private void fillContextMenu(IMenuManager manager) {
 		manager.add(addAction);
+		manager.add(updateAction);
 		manager.add(deleteAction);
 		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 		manager.add(aUnitAction);
@@ -180,6 +183,7 @@ public class AbapCiMainView extends ViewPart {
 	// TODO fill Action Methoden zusammenfÃƒÆ’Ã‚Â¼gen
 	private void fillLocalToolBar(IToolBarManager manager) {
 		manager.add(addAction);
+		manager.add(updateAction);
 		manager.add(deleteAction);
 		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 		manager.add(aUnitAction);
@@ -200,6 +204,7 @@ public class AbapCiMainView extends ViewPart {
 				"Open first failed test(s)", "Open first failed test for the selected package(s)");
 		atcAction = new AtcCiAction(continuousIntegrationPresenter, "Run ATC", "Run ATC for selected packages");
 		addAction = new AddAction(continuousIntegrationPresenter, UiTexts.LABEL_ACTION_ADD_PACKAGE);
+		updateAction = new UpdateAction(continuousIntegrationPresenter, UiTexts.LABEL_ACTION_UPDATE_PACKAGE);
 		deleteAction = new DeleteAction(continuousIntegrationPresenter, UiTexts.LABEL_ACTION_REMOVE_PACKAGE);
 		abapGitAction = new AbapGitCiAction(continuousIntegrationPresenter, "Open abapGIT", "Open abapGIT in SAP GUI");
 	}
