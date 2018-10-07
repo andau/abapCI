@@ -1,4 +1,4 @@
-package abapci.xml;
+package abapci.coloredProject.model;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -17,8 +17,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import abapci.Exception.AbapCiColoredProjectFileParseException;
-import abapci.domain.ColoredProject;
 import abapci.domain.UiColor;
+import abapci.xml.XmlFileLocationHelper;
+import abapci.xml.XmlWriter;
 
 public class ColoredProjectModelXml {
 

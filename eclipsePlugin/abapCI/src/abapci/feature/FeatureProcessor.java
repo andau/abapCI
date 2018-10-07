@@ -74,13 +74,6 @@ public class FeatureProcessor {
 
 			if (featureFacade.getAtcFeature().isActive()) {
 				TestState atcTestState = null;
-				if (featureFacade.getAtcFeature().isRunInitial()
-						&& presenter.getAbapPackageTestStatesForCurrentProject().stream()
-								.anyMatch(item -> item.getAtcTestState().equals(TestState.OFFL))) {
-					atcTestState = atcTestManager.executeAllPackages(presenter.getCurrentProject(),
-							presenter.getAbapPackageTestStatesForCurrentProject(), inactiveObjects);
-				}
-
 				if (featureFacade.getAtcFeature().isRunActivatedObjects() && inactiveObjects != null) {
 
 					atcTestState = atcTestManager.executeAllPackages(presenter.getCurrentProject(),

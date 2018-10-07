@@ -1,11 +1,9 @@
-package abapci.model;
+package abapci.coloredProject.model;
 
 import java.util.List;
 
 import abapci.Exception.AbapCiColoredProjectFileParseException;
-import abapci.domain.ColoredProject;
 import abapci.domain.UiColor;
-import abapci.xml.ColoredProjectModelXml;
 
 public class ColoredProjectModel {
 

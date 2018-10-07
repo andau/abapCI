@@ -10,8 +10,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.osgi.service.prefs.BackingStoreException;
 
+import abapci.coloredProject.model.ColoredProject;
 import abapci.domain.AbapPackageTestState;
-import abapci.domain.ColoredProject;
 import abapci.domain.GlobalTestState;
 import abapci.domain.SourcecodeState;
 import abapci.domain.Suppression;

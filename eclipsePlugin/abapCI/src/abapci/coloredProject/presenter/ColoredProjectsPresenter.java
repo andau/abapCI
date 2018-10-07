@@ -1,4 +1,4 @@
-package abapci.presenter;
+package abapci.coloredProject.presenter;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -6,9 +6,10 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
 import abapci.Exception.AbapCiColoredProjectFileParseException;
-import abapci.domain.ColoredProject;
-import abapci.model.ColoredProjectModel;
-import abapci.views.AbapCiColoredProjectView;
+import abapci.coloredProject.model.ColoredProject;
+import abapci.coloredProject.model.ColoredProjectModel;
+import abapci.coloredProject.view.AbapCiColoredProjectView;
+import abapci.domain.UiColor;
 
 public class ColoredProjectsPresenter {
 
@@ -84,6 +85,10 @@ public class ColoredProjectsPresenter {
 		setStatusMessage(message, new Color(Display.getCurrent(), new RGB(0, 0, 0)));
 	}
 
+	public void setStatusErrorMessage(String message) {
+		setStatusMessage(message, new Color(Display.getCurrent(), new RGB(255, 0, 0)));
+	}
+
 	public void setStatusMessage(String message, Color color) {
 		Runnable task = () -> setStatusMessageInternal(message, color);
 		Display.getDefault().asyncExec(task);
@@ -102,4 +107,8 @@ public class ColoredProjectsPresenter {
 		}
 	}
 
+	public UiColor getUiColorOrDefault(String projectName) throws AbapCiColoredProjectFileParseException {
+		UiColor assignedUiColor = model.getColorForProject(projectName);
+		return assignedUiColor == null ? UiColor.DEFAULT : assignedUiColor;
+	}
 }

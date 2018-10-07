@@ -1,4 +1,4 @@
-package abapci.model;
+package abapci.coloredProject.model;
 
 public class ColoredProjectModelTest {
 

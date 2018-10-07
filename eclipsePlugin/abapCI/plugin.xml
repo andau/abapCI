@@ -49,7 +49,7 @@
        commandId="com.abapci.ciRun.add">
 	 </handler>
       <handler
-       class="abapci.handlers.AbapColoredProjectHandler"
+       class="abapci.coloredProject.handler.AbapColoredProjectHandler"
        commandId="com.abapci.coloredProject">
 	 </handler>
       
@@ -293,7 +293,7 @@
             name="ABAP Colored Projects"
             icon="icons/abapci_logo.ico"
             category="abapCI"
-            class="abapci.views.AbapCiColoredProjectView"
+            class="abapci.coloredProject.view.AbapCiColoredProjectView"
             id="abapci.views.AbapCiColoredProjectView">
       </view>
 

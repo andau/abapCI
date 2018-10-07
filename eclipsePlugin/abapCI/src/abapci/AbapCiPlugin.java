@@ -10,8 +10,8 @@ import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import abapci.coloredProject.model.ColoredProjectModel;
 import abapci.feature.FeatureFacade;
-import abapci.model.ColoredProjectModel;
 import abapci.model.ContinuousIntegrationModel;
 import abapci.presenter.ContinuousIntegrationPresenter;
 import abapci.presenter.GeneralThemePresenter;

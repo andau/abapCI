@@ -1,12 +1,11 @@
-package abapci.views.actions.ui;
+package abapci.coloredProject.view;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.window.Window;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
-import abapci.presenter.ColoredProjectsPresenter;
-import abapci.views.wizard.AddColoredProjectPage;
+import abapci.coloredProject.presenter.ColoredProjectsPresenter;
 
 public class AddColoredProjectAction extends Action {
 	ColoredProjectsPresenter presenter;
@@ -21,7 +20,7 @@ public class AddColoredProjectAction extends Action {
 	@Override
 	public void run() {
 
-		AddColoredProjectPage coloredProjectDialog = new AddColoredProjectPage(
+		AddOrUpdateColoredProjectPage coloredProjectDialog = new AddOrUpdateColoredProjectPage(
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), presenter, null);
 		if (coloredProjectDialog.open() == Window.OK) {
 

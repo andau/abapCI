@@ -8,7 +8,7 @@ import org.osgi.framework.FrameworkUtil;
 public class XmlFileLocationHelper {
 
 	public IPath getStateLocation() {
-		Bundle bundle = FrameworkUtil.getBundle(abapci.views.AbapCiColoredProjectView.class);
+		Bundle bundle = FrameworkUtil.getBundle(abapci.coloredProject.view.AbapCiColoredProjectView.class);
 		return Platform.getStateLocation(bundle);
 	}
 

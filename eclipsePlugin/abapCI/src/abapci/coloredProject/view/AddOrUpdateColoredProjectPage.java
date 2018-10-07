@@ -1,4 +1,4 @@
-package abapci.views.wizard;
+package abapci.coloredProject.view;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,21 +15,22 @@ import org.eclipse.swt.widgets.Shell;
 import com.sap.adt.project.AdtCoreProjectServiceFactory;
 import com.sap.adt.tools.core.internal.AbapProjectService;
 
-import abapci.domain.ColoredProject;
+import abapci.coloredProject.model.ColoredProject;
+import abapci.coloredProject.presenter.ColoredProjectsPresenter;
 import abapci.domain.UiColor;
-import abapci.presenter.ColoredProjectsPresenter;
 
-public class AddColoredProjectPage extends Dialog {
+public class AddOrUpdateColoredProjectPage extends Dialog {
 
 	ColoredProjectsPresenter presenter;
 	Combo comboColoredProject;
 	Combo comboColor;
-	IProject project;
+	ColoredProject coloredProject;
 
-	public AddColoredProjectPage(Shell parentShell, ColoredProjectsPresenter presenter, IProject project) {
+	public AddOrUpdateColoredProjectPage(Shell parentShell, ColoredProjectsPresenter presenter,
+			ColoredProject coloredProject) {
 		super(parentShell);
 		this.presenter = presenter;
-		this.project = project;
+		this.coloredProject = coloredProject;
 	}
 
 	protected void configureShell(Shell shell) {
@@ -49,11 +50,6 @@ public class AddColoredProjectPage extends Dialog {
 		comboColoredProject.pack();
 		comboColoredProject.setItems(getAbapProjectsArray());
 
-		if (project != null) {
-			comboColoredProject.setText(project.getName());
-			comboColoredProject.setEnabled(false);
-		}
-
 		Label colorLabel = new Label(container, SWT.READ_ONLY);
 		colorLabel.setToolTipText("Select a predefined color");
 		colorLabel.setText("Color:");
@@ -62,6 +58,13 @@ public class AddColoredProjectPage extends Dialog {
 		comboColor = new Combo(container, SWT.READ_ONLY);
 		comboColor.pack();
 		comboColor.setItems(getElementsOfEnum(UiColor.class));
+
+		if (coloredProject != null) {
+			comboColoredProject.setText(coloredProject.getName());
+			comboColoredProject.setEnabled(false);
+
+			comboColor.select(coloredProject.getUiColor().ordinal());
+		}
 
 		return container;
 	}

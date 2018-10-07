@@ -1,4 +1,4 @@
-package abapci.views;
+package abapci.coloredProject.view;
 
 import java.util.List;
 
@@ -26,11 +26,10 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
-import abapci.domain.ColoredProject;
+import abapci.coloredProject.model.ColoredProject;
+import abapci.coloredProject.model.ColoredProjectModel;
+import abapci.coloredProject.presenter.ColoredProjectsPresenter;
 import abapci.lang.UiTexts;
-import abapci.model.ColoredProjectModel;
-import abapci.presenter.ColoredProjectsPresenter;
-import abapci.views.actions.ui.AddColoredProjectAction;
 import abapci.views.actions.ui.DeleteColoredProjectAction;
 
 public class AbapCiColoredProjectView extends ViewPart {
@@ -44,6 +43,7 @@ public class AbapCiColoredProjectView extends ViewPart {
 
 	private TableViewer viewer;
 	private Action addAction;
+	private Action updateAction;
 	private Action deleteAction;
 
 	ColoredProjectsPresenter coloredProjectsPresenter;
@@ -153,16 +153,19 @@ public class AbapCiColoredProjectView extends ViewPart {
 
 	private void fillContextMenu(IMenuManager manager) {
 		manager.add(addAction);
+		manager.add(updateAction);
 		manager.add(deleteAction);
 	}
 
 	private void fillLocalToolBar(IToolBarManager manager) {
 		manager.add(addAction);
+		manager.add(updateAction);
 		manager.add(deleteAction);
 	}
 
 	private void fillLocalPullDown(IMenuManager manager) {
 		manager.add(addAction);
+		manager.add(updateAction);
 		manager.add(deleteAction);
 	}
 
@@ -171,6 +174,8 @@ public class AbapCiColoredProjectView extends ViewPart {
 		// TODO set Images for actions
 
 		addAction = new AddColoredProjectAction(coloredProjectsPresenter, UiTexts.LABEL_ACTION_ADD_COLORED_PROJECT);
+		updateAction = new UpdateColoredProjectAction(coloredProjectsPresenter,
+				UiTexts.LABEL_ACTION_UPDATE_COLORED_PROJECT);
 		deleteAction = new DeleteColoredProjectAction(coloredProjectsPresenter,
 				UiTexts.LABEL_ACTION_REMOVE_COLORED_PROJECT);
 	}

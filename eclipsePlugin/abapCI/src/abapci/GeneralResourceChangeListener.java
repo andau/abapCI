@@ -127,7 +127,8 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), continuousIntegrationPresenter,
 				ciConfig, true);
 		if (addContinuousIntegrationConfigPage.open() == Window.OK) {
-			continuousIntegrationPresenter.loadPackages();
+			continuousIntegrationPresenter.setStatusMessage(
+					String.format("Configuration for package %s added to CI run", ciConfig.getPackageName()));
 		}
 
 	}

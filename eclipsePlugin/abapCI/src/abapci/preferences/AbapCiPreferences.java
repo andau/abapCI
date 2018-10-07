@@ -40,10 +40,7 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "5. Shortcut for abapGit");
 		createAbapGitChapter();
 
-		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "6. Automatic ATC runs (experimental)");
-		createAtcChapter();
-
-		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "7. Trigger Jenkins from Eclipse (experimental)");
+		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "6. Trigger Jenkins from Eclipse (experimental)");
 		createJenkinsChapter();
 
 		// Unit test level selection seems currently not supported ( at least with 7.50)
@@ -83,7 +80,7 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 		atcInfoLabel2.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
 		atcInfoLabel2.setText("    reorganize the table with program SATC_AC_CLEANUP continuously!");
 
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ATC_RUN_DELTA_ACTIVATED_OBJECTS,
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ATC_RUN_ACTIVATED_OBJECTS_ONLY,
 				"&Run ATC for each activated ABAP objects only", getFieldEditorParent()));
 
 		addField(new StringFieldEditor(PreferenceConstants.PREF_ATC_VARIANT, "&Run ATC with variant:",

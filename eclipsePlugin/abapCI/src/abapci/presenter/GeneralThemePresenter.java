@@ -4,9 +4,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 
 import abapci.Exception.AbapCiColoredProjectFileParseException;
+import abapci.coloredProject.model.ColoredProjectModel;
 import abapci.domain.UiColor;
 import abapci.domain.UiTheme;
-import abapci.model.ColoredProjectModel;
 import abapci.utils.ColorToThemeMapper;
 
 public class GeneralThemePresenter {
@@ -29,6 +29,7 @@ public class GeneralThemePresenter {
 
 	}
 
+	@Deprecated
 	public UiColor getUiColor(String currentProjectname) throws AbapCiColoredProjectFileParseException {
 		return model.getColorForProject(currentProjectname);
 	}

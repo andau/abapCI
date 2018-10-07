@@ -1,4 +1,4 @@
-package abapci.xml;
+package abapci.coloredProject.model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -10,7 +10,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import abapci.Exception.AbapCiColoredProjectFileParseException;
-import abapci.domain.ColoredProject;
 import abapci.domain.UiColor;
 
 public class ColoredProjectModelXmlTest {
