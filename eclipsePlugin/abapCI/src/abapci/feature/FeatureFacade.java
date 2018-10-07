@@ -111,8 +111,7 @@ public class FeatureFacade {
 		return featureFactory.createColoredProjectFeature();
 	}
 
-	public TestTypeFeature getTestTypeFeature() {
-		return new TestTypeFeature();
+	public TddModeFeature getTddModeFeature() {
+		return featureFactory.createTddModeFeature();
 	}
-
 }

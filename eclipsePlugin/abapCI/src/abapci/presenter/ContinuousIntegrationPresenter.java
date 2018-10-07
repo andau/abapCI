@@ -50,6 +50,7 @@ public class ContinuousIntegrationPresenter {
 	private FeatureFacade featureFacade;
 	private TestResultConsolidator testResultConsolidator;
 	private SourceCodeStateEvaluator sourceCodeStateEvaluator;
+	private SourceCodeStateInfo sourceCodeStateInfo;
 
 	public ContinuousIntegrationPresenter(AbapCiMainView abapCiMainView,
 			IContinuousIntegrationModel continuousIntegrationModel, IProject currentProject) {
@@ -60,7 +61,7 @@ public class ContinuousIntegrationPresenter {
 		featureFacade = new FeatureFacade();
 		testResultConsolidator = new TestResultConsolidator();
 		sourceCodeStateEvaluator = new SourceCodeStateEvaluator();
-		new SourceCodeStateInfo();
+		sourceCodeStateInfo = new SourceCodeStateInfo();
 
 		loadPackages();
 		setViewerInput();
@@ -220,7 +221,13 @@ public class ContinuousIntegrationPresenter {
 			SourcecodeState currentSourceCodeState = evalSourceCodeTestState();
 			GlobalTestState globalTestState = new GlobalTestState(currentSourceCodeState);
 
-			abapCiDashboardView.lblOverallTestState.setText(globalTestState.getTestStateOutputForDashboard());
+			String globalTestStateString = globalTestState.getTestStateOutputForDashboard();
+			if (globalTestStateString.equals(GlobalTestState.WRITE_TEST)
+					&& sourceCodeStateInfo.refactorStepIsStillSuggested()) {
+				globalTestStateString = GlobalTestState.REFACTOR;
+			}
+			sourceCodeStateInfo.setSourceCodeState(globalTestStateString);
+			abapCiDashboardView.lblOverallTestState.setText(globalTestStateString);
 			abapCiDashboardView.lblOverallTestState.redraw();
 
 			// abapCiDashboardView.projectline.setText(TODO reserved for projectinfo when

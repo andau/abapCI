@@ -8,6 +8,9 @@ import abapci.feature.FeatureFacade;
 
 public class GlobalTestState {
 
+	public static final String THINK = "THINK";
+	public static final String REFACTOR = "REFACTOR";
+	public static final String WRITE_TEST = "WRITE TEST";
 	private SourcecodeState sourcecodeState;
 	private FeatureFacade featureFacade;
 
@@ -22,19 +25,19 @@ public class GlobalTestState {
 	public String getTestStateOutputForDashboard() {
 
 		String testStateOutput = "";
-		if (featureFacade.getTestTypeFeature().isTddActive()) {
+		if (featureFacade.getTddModeFeature().isActive()) {
 			switch (this.sourcecodeState) {
 			case UT_FAIL:
 				testStateOutput = "WRITE CODE";
 				break;
 			case ATC_FAIL:
-				testStateOutput = "REFACTOR";
+				testStateOutput = REFACTOR;
 				break;
 			case OK:
-				testStateOutput = "WRITE TEST";
+				testStateOutput = WRITE_TEST;
 				break;
 			case OFFL:
-				testStateOutput = "THINK";
+				testStateOutput = THINK;
 				break;
 			case UNDEF:
 			default:

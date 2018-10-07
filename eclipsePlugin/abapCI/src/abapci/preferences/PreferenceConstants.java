@@ -61,6 +61,8 @@ public class PreferenceConstants {
 
 	public static final String PREF_ATC_TEST_FAIL_BACKGROUND_COLOR = "atcTestFailBackgroundColor";
 
+	public static final String PREF_TDD_MODE = "tddMode";
+
 	private PreferenceConstants() {
 	}
 

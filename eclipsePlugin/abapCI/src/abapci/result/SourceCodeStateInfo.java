@@ -3,26 +3,30 @@ package abapci.result;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-import abapci.domain.SourcecodeState;
+import abapci.domain.GlobalTestState;
 
 public class SourceCodeStateInfo {
-	private SourcecodeState sourceCodeState;
+	private String globalTestState;
 	private LocalDateTime stateActiveSince;
 
 	public SourceCodeStateInfo() {
-		sourceCodeState = SourcecodeState.UNDEF;
+		globalTestState = GlobalTestState.THINK;
 		stateActiveSince = LocalDateTime.now();
 	}
 
-	public void setSourceCodeState(SourcecodeState sourcecodeState) {
-		if (!this.sourceCodeState.equals(sourcecodeState)) {
-			this.sourceCodeState = sourcecodeState;
+	public void setSourceCodeState(String globalTestState) {
+		if (!this.globalTestState.equals(globalTestState)) {
+			this.globalTestState = globalTestState;
 			this.stateActiveSince = LocalDateTime.now();
 		}
 	}
 
 	public int secondsSinceLastStateChange() {
 		LocalDateTime now = LocalDateTime.now();
-		return (int) Duration.between(now, stateActiveSince).getSeconds();
+		return (int) Duration.between(stateActiveSince, now).getSeconds();
+	}
+
+	public boolean refactorStepIsStillSuggested() {
+		return globalTestState.equals(GlobalTestState.REFACTOR) && secondsSinceLastStateChange() < 30;
 	}
 }

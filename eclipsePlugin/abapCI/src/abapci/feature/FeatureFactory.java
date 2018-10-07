@@ -30,6 +30,13 @@ public class FeatureFactory {
 		return feature;
 	}
 
+	public TddModeFeature createTddModeFeature() {
+		initPrefs();
+		TddModeFeature feature = new TddModeFeature();
+		feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_TDD_MODE));
+		return feature;
+	}
+
 	public ColorChangerFeature createColorChangerFeature() {
 		initPrefs();
 		ColorChangerFeature feature = new ColorChangerFeature();

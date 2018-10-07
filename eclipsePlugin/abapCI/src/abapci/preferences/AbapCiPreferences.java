@@ -89,6 +89,9 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 		addField(new ColorFieldEditor(PreferenceConstants.PREF_ATC_TEST_FAIL_BACKGROUND_COLOR,
 				"Backgroundcolor for FAIL ATC State used in ABAP CI dashboard", getFieldEditorParent()));
 
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_TDD_MODE, "&Show TDD Labels on ABAP CI Dashboard",
+				getFieldEditorParent()));
+
 	}
 
 	private void addHeaderLabelWithSpaceBefore(Composite fieldEditorParent, String headerText) {
