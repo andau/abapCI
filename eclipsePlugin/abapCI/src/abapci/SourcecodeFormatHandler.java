@@ -49,6 +49,7 @@ public class SourcecodeFormatHandler {
 	}
 
 	public void formatEditor(IEditorPart editorPart) {
+		@SuppressWarnings("rawtypes")
 		HashMap parametersMap = new HashMap();
 		EvaluationContext evaluationContext = new EvaluationContext(null, new Object());
 		evaluationContext.addVariable(ISources.ACTIVE_EDITOR_NAME, editorPart);
@@ -71,7 +72,7 @@ public class SourcecodeFormatHandler {
 	}
 
 	public void deleteUnusedVariables(IEditorPart editorPart) {
-		HashMap parametersMap = new HashMap<String, String>();
+		HashMap<String, String> parametersMap = new HashMap<>();
 		EvaluationContext evaluationContext = new EvaluationContext(null, new Object());
 		evaluationContext.addVariable(ISources.ACTIVE_EDITOR_NAME, editorPart);
 

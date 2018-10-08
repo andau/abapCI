@@ -5,7 +5,6 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.ui.IEditorReference;
@@ -21,7 +20,6 @@ import com.sap.adt.projectexplorer.ui.node.AbapRepositoryBaseNode;
 import com.sap.adt.sapgui.ui.editors.AdtSapGuiEditorUtilityFactory;
 import com.sap.adt.sapgui.ui.internal.editors.GuiEditorInput;
 
-import abapci.AbapCiPlugin;
 import abapci.AbapProjectUtil;
 import abapci.abapgit.AbapGitPackageChanger;
 import abapci.feature.FeatureFacade;
@@ -76,10 +74,6 @@ public class AbapGitHandler extends AbstractHandler {
 	}
 
 	public Object execute(String projectname) {
-
-		if (projectname == null || projectname.equals("")) {
-			IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore();
-		}
 
 		IProject project = AdtCoreProjectServiceFactory.createCoreProjectService().findProject(projectname);
 

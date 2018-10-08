@@ -212,9 +212,9 @@ public class AbapSourceCleanupHandlerCopy extends AbstractAdtEditorHandler {
 	}
 
 	private IDestinationData getDestination(IEditorPart editor) throws CoreException {
-		IFileEditorInput fileInput;
 		IFile file;
 		IEditorInput input = editor.getEditorInput();
+		IFileEditorInput fileInput;
 		if (input instanceof IFileEditorInput && (file = (fileInput = (IFileEditorInput) input).getFile()) != null) {
 			return ((IAbapProject) file.getProject().getAdapter(IAbapProject.class)).getDestinationData();
 		}

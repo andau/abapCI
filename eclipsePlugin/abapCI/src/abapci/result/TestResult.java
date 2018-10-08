@@ -115,10 +115,7 @@ public class TestResult {
 	}
 
 	public void addMissingItemsCount(Collection<Activation> activations) {
-		int newItems;
 		if (activations != null) {
-			Collection<String> activationNames = activations.stream().map(item -> item.getObjectName())
-					.collect(Collectors.toSet());
 			if (activatedObjects == null) {
 				activatedObjects = activations;
 			} else {

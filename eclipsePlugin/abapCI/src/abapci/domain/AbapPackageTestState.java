@@ -92,7 +92,7 @@ public class AbapPackageTestState {
 		return atcTestResult.getTestState();
 	}
 
-	public int getNumFiles() {
+	public int getAtcNumFiles() {
 		return this.atcTestResult.getNumItems();
 	}
 

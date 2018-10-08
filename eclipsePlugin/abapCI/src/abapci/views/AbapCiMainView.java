@@ -303,7 +303,7 @@ public class AbapCiMainView extends ViewPart {
 				public String getText(Object element) {
 					AbapPackageTestState p = (AbapPackageTestState) element;
 					return StringUtils.IsNullOrEmpty(p.getAtcLastRun()) ? StringUtils.EMPTY
-							: Integer.toString(p.getNumFiles());
+							: Integer.toString(p.getAtcNumFiles());
 				}
 			});
 

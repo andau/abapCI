@@ -328,6 +328,8 @@ public class ContinuousIntegrationPresenter {
 		int overallSuppressed = abapPackageTestStatesForCurrentProject.stream()
 				.mapToInt(item -> item.getAUnitNumSuppressed()).sum();
 
+		int overallAtcNum = abapPackageTestStatesForCurrentProject.stream().mapToInt(item -> item.getAtcNumFiles())
+				.sum();
 		int overallAtcErr = abapPackageTestStatesForCurrentProject.stream().mapToInt(item -> item.getAtcNumErr()).sum();
 		int overallAtcWarnings = abapPackageTestStatesForCurrentProject.stream().mapToInt(item -> item.getAtcNumWarn())
 				.sum();
@@ -336,11 +338,11 @@ public class ContinuousIntegrationPresenter {
 		int overallAtcSuppressed = abapPackageTestStatesForCurrentProject.stream()
 				.mapToInt(item -> item.getAtcNumSuppressed()).sum();
 
-		String unitTestInfoString = String.format("[%s,%s,%s]", overallTests, overallErrors, overallSuppressed);
+		String unitTestInfoString = String.format("[%s - %s,%s]", overallTests, overallErrors, overallSuppressed);
 
 		String atcInfoString = featureFacade.getAtcFeature().isActive()
-				? String.format(" [%s,%s,%s,%s]", overallAtcErr, overallAtcWarnings, overallAtcInfos,
-						overallAtcSuppressed)
+				? String.format(" [%s - %s,%s,%s,%s]", overallAtcNum, overallAtcErr, overallAtcWarnings,
+						overallAtcInfos, overallAtcSuppressed)
 				: "";
 
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");

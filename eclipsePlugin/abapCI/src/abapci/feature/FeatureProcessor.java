@@ -8,19 +8,16 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
 import abapci.activation.Activation;
-import abapci.domain.SourcecodeState;
 import abapci.domain.TestState;
 import abapci.manager.AUnitTestManager;
 import abapci.manager.AtcTestManager;
 import abapci.manager.DevelopmentProcessManager;
-import abapci.manager.JenkinsManager;
 import abapci.manager.ThemeUpdateManager;
 import abapci.presenter.ContinuousIntegrationPresenter;
 
 public class FeatureProcessor {
 
 	private AUnitTestManager aUnitTestManager;
-	private JenkinsManager jenkinsManager;
 	private AtcTestManager atcTestManager;
 
 	private ThemeUpdateManager themeUpdateManager;
@@ -34,7 +31,6 @@ public class FeatureProcessor {
 
 		this.presenter = presenter;
 		aUnitTestManager = new AUnitTestManager(presenter, project, initialPackages);
-		jenkinsManager = new JenkinsManager(presenter, project, initialPackages);
 		atcTestManager = new AtcTestManager(presenter, project, initialPackages);
 		developmentProcessManager = new DevelopmentProcessManager();
 
@@ -54,7 +50,6 @@ public class FeatureProcessor {
 
 		try {
 			if (featureFacade.getUnitFeature().isActive()) {
-				SourcecodeState oldSourcecodeState = developmentProcessManager.getSourcecodeState();
 
 				TestState unitTestState = TestState.UNDEF;
 				if (featureFacade.getUnitFeature().isRunActivatedObjectsOnly()) {
