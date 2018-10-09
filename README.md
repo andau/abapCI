@@ -11,7 +11,7 @@ The only prerequisite to use this plugin for developing ABAP is an [ABAP Develop
 ## Main Features: 
 [1. Automatic unit test runs](#1-automatic-unit-test-runs)<br>
 [2. Automatic ATC runs (experimental)](#2-automatic-atc-runs-experimental)<br> 
-[3. Visualisation of Source code state on UI](#3-visualisation-of-source-code-state-on-ui)
+[3. Visualisation of Source code state on UI](#3-visualisation-of-source-code-state-on-ui)<br>
 [4. Different coloring for each ABAP project](#4-different-coloring-for-each-abap-project)<br>
 [5. Automatic source code formatting](#5-automatic-source-code-formatting)<br>
 [6. Shortcut for abapGit](#6-shortcut-for-abapgit)<br>
