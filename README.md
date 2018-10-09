@@ -10,11 +10,12 @@ The only prerequisite to use this plugin for developing ABAP is an [ABAP Develop
 
 ## Main Features: 
 [1. Automatic unit test runs](#1-automatic-unit-test-runs)<br>
-[2. Automatic ATC runs (experimental)](#5-automatic-atc-runs-experimental)<br> 
-[3. Different coloring for each ABAP project](#2-different-coloring-for-each-abap-project)<br>
-[4. Automatic source code formatting](#3-automatic-source-code-formatting)<br>
-[5. Shortcut for abapGit](#4-shortcut-for-abapgit)<br>
-[6. Trigger Jenkins from Eclipse (experimental)](#6-trigger-jenkins-from-eclipse-experimental-)<br> 
+[2. Automatic ATC runs (experimental)](#2-automatic-atc-runs-experimental)<br> 
+[3. Visualisation of Source code state on UI](#3-visualisation-of-source-code-state-on-ui)
+[4. Different coloring for each ABAP project](#4-different-coloring-for-each-abap-project)<br>
+[5. Automatic source code formatting](#5-automatic-source-code-formatting)<br>
+[6. Shortcut for abapGit](#6-shortcut-for-abapgit)<br>
+[7. Trigger Jenkins from Eclipse (experimental)](#7-trigger-jenkins-from-eclipse-experimental-)<br> 
 
 ## Views, Dialogs and Settings 
 [View ABAP Continuous Integration](#view-abap-Continuous-integration)
@@ -50,7 +51,16 @@ By enabling the option "Run ATC for each activated ABAP object" this feature is 
 
 ATC runs are generating data in the table SATC_AC_RESULTVT, thus the ABAP program SATC_AC_CLEANUP should be run in each test environment regularly (manually or by a job). This feature tries to minimize the item generation by executing the ATC checks only for the set of activated ABAP objects. 
 
-## 3. Different coloring for each ABAP project 
+## 3. Visualisation of Source code state on UI
+In this section the indication of Unit test failures and ATC findings can be configured. 
+The options are: 
+
+Test Driven Development mode (TDD mode): If this checkbox is activated in the ABAP CI dashboard the TDD phases (WRITE TEST, WRITE CODE, REFACTOR) will be shown instead of the standard labels OK, TEST FAILS, ATC FINDINGS. In both cases the colors of the three phases can be configured with the next three preferences. 
+Additionally to the background color of the ABAP CI dashboard also a highlighting of the Eclipse statusbar and/or a change of the full Eclipse theme can be activated. The latter is not recommended especially for users of the Dark theme. 
+
+The last checkbox controls if an input dialog is shown if an object is activated which belongs to a package that is not already part of the ABAP CI run. 
+
+## 4. Different coloring for each ABAP project 
 This feature tries to get the well known SAP GUI coloring for different system/client combinations into Eclipse.
 
 A color can be assigned to a project (equally to a system/client combination) by selecting a project in the project explorer and pressing the menu item "Set coloring for project". Alternatively the color assignment can also be done directly in the Eclipse view "ABAP Colored projects". 
@@ -61,7 +71,7 @@ Currently only a part of all development objects are colored, eg.: classes, func
 There are three options for the coloring which can be activated in the Eclipse preferences (Window -> Preferences, section ABAP CI).  
 Changing the color of tab header and border (theme change), left ruler and/or right ruler. 
 
-## 4. Automatic source code formatting 
+## 5. Automatic source code formatting 
 A source code formatting for ABAP objects is already part of the ADT. To get an ABAP development object formatted, the context menu "Source Code -> Format" (or the Shortcut Shift + F1) can be used before saving and activating the objects.
 
 If the automatic source code formatting feature for an development object is enabled, this source code formatting is done automatically when the object is saved or activated - hopefully this saves a lot of time. 
@@ -83,11 +93,11 @@ PUBLIC
 ```
 If every ABAP development object (which is edited in text mode) should be autoformatted regardless any prefixes in the comments, the special filter value '<NO_FILTER>' can be used. 
 
-## 5. Shortcut for abapGit 
+## 6. Shortcut for abapGit 
 This feature provides a rudimentary integration of abapGit into Eclipse. The necessary steps to open abapGit from Eclipse (Open SAP GUI, selecting project, insert transaction code ZABAPGIT) are summarized into one menu entry, icon or shortcut (Ctrl+Shift+K)      
 There is currently an project ongoing where a native integration of abapGit into Eclipse is done. [https://github.com/abapGit/ADT_Frontend](https://github.com/abapGit/ADT_Frontend). 
        
-## 6. Trigger Jenkins from Eclipse(experimental)
+## 7. Trigger Jenkins from Eclipse(experimental)
 <description will be available soon>
 
 ## Views, Dialogs and Settings 
