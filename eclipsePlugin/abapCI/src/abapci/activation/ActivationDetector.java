@@ -59,7 +59,8 @@ public class ActivationDetector {
 	}
 
 	public List<Activation> findAllActiveOrIncludedInJob() {
-		return activations.stream().filter(item -> item.isActivated() || item.isIncludedInJob())
+		return activations.stream()
+				.filter(item -> item.getPackageName() != null && item.isActivated() || item.isIncludedInJob())
 				.collect(Collectors.<Activation>toList());
 	}
 
@@ -67,8 +68,8 @@ public class ActivationDetector {
 		return activations.stream().filter(item -> item.isActivated()).collect(Collectors.<Activation>toList());
 	}
 
-	public void unregisterAllIncludedInJob() {
-		activations.removeIf(item -> item == null || item.isIncludedInJob());
+	public void unregisterAllActivated() {
+		activations.removeIf(item -> item == null || item.isActivated());
 	}
 
 	public void changeActivedToIncludedInJob() {

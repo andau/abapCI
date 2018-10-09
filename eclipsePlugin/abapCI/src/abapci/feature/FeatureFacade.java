@@ -114,4 +114,8 @@ public class FeatureFacade {
 	public TddModeFeature getTddModeFeature() {
 		return featureFactory.createTddModeFeature();
 	}
+
+	public SourceCodeVisualisationFeature getSourceCodeVisualisationFeature() {
+		return featureFactory.createSourceCodeVisualisationFeature();
+	}
 }

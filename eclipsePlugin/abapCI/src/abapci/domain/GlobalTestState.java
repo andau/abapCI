@@ -11,6 +11,7 @@ public class GlobalTestState {
 	public static final String THINK = "THINK";
 	public static final String REFACTOR = "REFACTOR";
 	public static final String WRITE_TEST = "WRITE TEST";
+	public static final String WRITE_CODE = "WRITE CODE";
 	private SourcecodeState sourcecodeState;
 	private FeatureFacade featureFacade;
 
@@ -28,7 +29,7 @@ public class GlobalTestState {
 		if (featureFacade.getTddModeFeature().isActive()) {
 			switch (this.sourcecodeState) {
 			case UT_FAIL:
-				testStateOutput = "WRITE CODE";
+				testStateOutput = WRITE_CODE;
 				break;
 			case ATC_FAIL:
 				testStateOutput = REFACTOR;
@@ -41,7 +42,7 @@ public class GlobalTestState {
 				break;
 			case UNDEF:
 			default:
-				testStateOutput = "Tests n/a";
+				testStateOutput = "State n/a";
 				break;
 			}
 

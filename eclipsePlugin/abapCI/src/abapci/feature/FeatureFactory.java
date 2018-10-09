@@ -30,6 +30,15 @@ public class FeatureFactory {
 		return feature;
 	}
 
+	public SourceCodeVisualisationFeature createSourceCodeVisualisationFeature() {
+		initPrefs();
+		SourceCodeVisualisationFeature feature = new SourceCodeVisualisationFeature();
+		feature.setChangeStatusBarBackgroundColorEnabled(
+				prefs.getBoolean(PreferenceConstants.PREF_CHANGE_STATUS_BAR_BACKGROUND_COLOR));
+		return feature;
+
+	}
+
 	public TddModeFeature createTddModeFeature() {
 		initPrefs();
 		TddModeFeature feature = new TddModeFeature();

@@ -28,19 +28,22 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "1. Automatic unit test runs");
 		createUnitTestChapter();
 
-		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "2. Automatic ATC runs (experimental)");
+		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "2. Automatic ATC runs");
 		createAtcChapter();
 
-		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "3. Different coloring for each ABAP project");
+		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "3. Visualisation of SourceCode State on UI");
+		createSourceCodeVisualisationChapter();
+
+		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "4. Different coloring for each ABAP project");
 		createColorChangeChapter();
 
-		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "4. Automatic source code formatting");
+		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "5. Automatic source code formatting");
 		createSourceCodeFormattingChapter();
 
-		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "5. Shortcut for abapGit");
+		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "6. Shortcut for abapGit");
 		createAbapGitChapter();
 
-		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "6. Trigger Jenkins from Eclipse (experimental)");
+		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "7. Trigger Jenkins from Eclipse (experimental)");
 		createJenkinsChapter();
 
 		// Unit test level selection seems currently not supported ( at least with 7.50)
@@ -57,17 +60,6 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_UNIT_RUN_ACTIVATED_OBJECTS_ONLY,
 				"&Run Unit tests for the activated ABAP objects only", getFieldEditorParent()));
-
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_CHANGE_COLOR_ON_FAILED_TESTS,
-				"&Change Theme layout on failed tests (do not use with dark theme)", getFieldEditorParent()));
-
-		createHelperDialogsChapter();
-
-		addField(new ColorFieldEditor(PreferenceConstants.PREF_UNIT_TEST_OK_BACKGROUND_COLOR,
-				"Backgroundcolor for OK Unit Test State used in ABAP CI dashboard", getFieldEditorParent()));
-
-		addField(new ColorFieldEditor(PreferenceConstants.PREF_UNIT_TEST_FAIL_BACKGROUND_COLOR,
-				"Backgroundcolor for FAIL Unit Test State used in ABAP CI dashboard", getFieldEditorParent()));
 	}
 
 	private void createAtcChapter() {
@@ -86,11 +78,28 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 		addField(new StringFieldEditor(PreferenceConstants.PREF_ATC_VARIANT, "&Run ATC with variant:",
 				getFieldEditorParent()));
 
+	}
+
+	private void createSourceCodeVisualisationChapter() {
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_TDD_MODE, "&Show TDD Labels on ABAP CI Dashboard",
+				getFieldEditorParent()));
+
+		addField(new ColorFieldEditor(PreferenceConstants.PREF_UNIT_TEST_OK_BACKGROUND_COLOR,
+				"Backgroundcolor for OK Unit Test State used in ABAP CI dashboard", getFieldEditorParent()));
+
+		addField(new ColorFieldEditor(PreferenceConstants.PREF_UNIT_TEST_FAIL_BACKGROUND_COLOR,
+				"Backgroundcolor for FAIL Unit Test State used in ABAP CI dashboard", getFieldEditorParent()));
+
 		addField(new ColorFieldEditor(PreferenceConstants.PREF_ATC_TEST_FAIL_BACKGROUND_COLOR,
 				"Backgroundcolor for FAIL ATC State used in ABAP CI dashboard", getFieldEditorParent()));
 
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_TDD_MODE, "&Show TDD Labels on ABAP CI Dashboard",
-				getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_CHANGE_STATUS_BAR_BACKGROUND_COLOR,
+				"&Use test state color as background color of the Eclipser statusbar", getFieldEditorParent()));
+
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_CHANGE_COLOR_ON_FAILED_TESTS,
+				"&Change Theme layout on failed tests (do not use with dark theme)", getFieldEditorParent()));
+
+		createHelperDialogsChapter();
 
 	}
 

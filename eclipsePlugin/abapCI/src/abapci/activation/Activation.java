@@ -54,10 +54,6 @@ public class Activation {
 		return status == ActivationStatus.ADDED_TO_JOB;
 	}
 
-	public String getPackagename() {
-		return packageName;
-	}
-
 	public URI getUri() {
 		return uri;
 	}

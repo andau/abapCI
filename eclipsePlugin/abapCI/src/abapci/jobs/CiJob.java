@@ -97,7 +97,7 @@ public class CiJob extends Job {
 		long timeSinceLastTrigger = new Date().getTime() - triggerDate.getTime();
 
 		if (currentInactiveObjects.size() == 0) {
-			ActivationDetector.getInstance().unregisterAllIncludedInJob();
+			ActivationDetector.getInstance().unregisterAllActivated();
 			rerun = false;
 			System.out.println(String.format("Ci job - no rerun necessary"));
 		}

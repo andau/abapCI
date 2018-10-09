@@ -13,9 +13,6 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 
 import abapci.Exception.ContinuousIntegrationConfigFileParseException;
@@ -25,7 +22,6 @@ import abapci.domain.GlobalTestState;
 import abapci.domain.InvalidItem;
 import abapci.domain.SourcecodeState;
 import abapci.domain.TestState;
-import abapci.domain.UiColor;
 import abapci.feature.FeatureFacade;
 import abapci.model.IContinuousIntegrationModel;
 import abapci.result.SourceCodeStateEvaluator;
@@ -34,7 +30,7 @@ import abapci.result.TestResult;
 import abapci.result.TestResultConsolidator;
 import abapci.result.TestResultSummary;
 import abapci.result.TestResultType;
-import abapci.utils.AnnotationRuleColorChanger;
+import abapci.utils.BackgroundColorChanger;
 import abapci.utils.EditorHandler;
 import abapci.utils.InvalidItemUtil;
 import abapci.views.AbapCiDashboardView;
@@ -51,6 +47,7 @@ public class ContinuousIntegrationPresenter {
 	private TestResultConsolidator testResultConsolidator;
 	private SourceCodeStateEvaluator sourceCodeStateEvaluator;
 	private SourceCodeStateInfo sourceCodeStateInfo;
+	private BackgroundColorChanger backgroundColorChanger;
 
 	public ContinuousIntegrationPresenter(AbapCiMainView abapCiMainView,
 			IContinuousIntegrationModel continuousIntegrationModel, IProject currentProject) {
@@ -62,6 +59,7 @@ public class ContinuousIntegrationPresenter {
 		testResultConsolidator = new TestResultConsolidator();
 		sourceCodeStateEvaluator = new SourceCodeStateEvaluator();
 		sourceCodeStateInfo = new SourceCodeStateInfo();
+		backgroundColorChanger = new BackgroundColorChanger();
 
 		loadPackages();
 		setViewerInput();
@@ -216,19 +214,19 @@ public class ContinuousIntegrationPresenter {
 
 		List<AbapPackageTestState> abapPackageTestStatesForCurrentProject = getAbapPackageTestStatesForCurrentProject();
 
+		SourcecodeState currentSourceCodeState = evalSourceCodeTestState();
+		if (currentSourceCodeState.equals(SourcecodeState.OK) && (sourceCodeStateInfo.nextPlannedStepIsRefactorStep()
+				|| sourceCodeStateInfo.refactorStepIsStillSuggested())) {
+			currentSourceCodeState = SourcecodeState.ATC_FAIL;
+		}
+		GlobalTestState globalTestState = new GlobalTestState(currentSourceCodeState);
+		String globalTestStateString = globalTestState.getTestStateOutputForDashboard();
+
+		sourceCodeStateInfo.setSourceCodeState(globalTestStateString);
+
 		if (abapCiDashboardView != null) {
 
-			SourcecodeState currentSourceCodeState = evalSourceCodeTestState();
-			GlobalTestState globalTestState = new GlobalTestState(currentSourceCodeState);
-
-			String globalTestStateString = globalTestState.getTestStateOutputForDashboard();
-			if (globalTestStateString.equals(GlobalTestState.WRITE_TEST)
-					&& sourceCodeStateInfo.refactorStepIsStillSuggested()) {
-				globalTestStateString = GlobalTestState.REFACTOR;
-			}
-			sourceCodeStateInfo.setSourceCodeState(globalTestStateString);
 			abapCiDashboardView.lblOverallTestState.setText(globalTestStateString);
-			abapCiDashboardView.lblOverallTestState.redraw();
 
 			// abapCiDashboardView.projectline.setText(TODO reserved for projectinfo when
 			// infoline is used for all infos);
@@ -239,32 +237,16 @@ public class ContinuousIntegrationPresenter {
 			rebuildHyperlink(abapCiDashboardView.getEntireContainer(), abapCiDashboardView.openErrorHyperlink);
 
 			abapCiDashboardView.setBackgroundColor(globalTestState.getColor());
+			// abapCiDashboardView.lblOverallTestState.setForeground(globalTestState.getColor());
+		}
+
+		if (featureFacade.getSourceCodeVisualisationFeature().isChangeStatusBarBackgroundColorEnabled()) {
+			backgroundColorChanger.change(Display.getCurrent().getActiveShell(), globalTestState.getColor().getRGB());
 		}
 
 		if (view != null && abapPackageTestStatesForCurrentProject != null) {
 			view.setViewerInput(abapPackageTestStatesForCurrentProject);
 			view.statusLabel.setText("CI run package summary updated");
-		}
-
-		// changeColoringForRightAnnotationRuler();
-
-	}
-
-	private void changeColoringForRightAnnotationRuler() {
-		IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		IEditorPart activeEditor = activePage.getActiveEditor();
-
-		if (true) // check preferences
-		{
-			UiColor currentColor;
-			SourcecodeState currentSourceCodeState = evalSourceCodeTestState();
-			if (currentSourceCodeState == SourcecodeState.UT_FAIL) {
-				currentColor = UiColor.RED;
-			} else {
-				currentColor = UiColor.WHITE;
-			}
-			AnnotationRuleColorChanger annotationRuleColorChanger = new AnnotationRuleColorChanger();
-			annotationRuleColorChanger.change(activeEditor, currentColor, false, true, true);
 		}
 	}
 
@@ -338,10 +320,10 @@ public class ContinuousIntegrationPresenter {
 		int overallAtcSuppressed = abapPackageTestStatesForCurrentProject.stream()
 				.mapToInt(item -> item.getAtcNumSuppressed()).sum();
 
-		String unitTestInfoString = String.format("[%s - %s,%s]", overallTests, overallErrors, overallSuppressed);
+		String unitTestInfoString = String.format("[%s / %s,%s]", overallTests, overallErrors, overallSuppressed);
 
 		String atcInfoString = featureFacade.getAtcFeature().isActive()
-				? String.format(" [%s - %s,%s,%s,%s]", overallAtcNum, overallAtcErr, overallAtcWarnings,
+				? String.format(" [%s / %s,%s,%s,%s]", overallAtcNum, overallAtcErr, overallAtcWarnings,
 						overallAtcInfos, overallAtcSuppressed)
 				: "";
 

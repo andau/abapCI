@@ -29,4 +29,9 @@ public class SourceCodeStateInfo {
 	public boolean refactorStepIsStillSuggested() {
 		return globalTestState.equals(GlobalTestState.REFACTOR) && secondsSinceLastStateChange() < 30;
 	}
+
+	public boolean nextPlannedStepIsRefactorStep() {
+		return globalTestState.equals(GlobalTestState.WRITE_CODE);
+	}
+
 }

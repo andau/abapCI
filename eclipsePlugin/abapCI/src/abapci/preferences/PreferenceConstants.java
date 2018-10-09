@@ -63,6 +63,8 @@ public class PreferenceConstants {
 
 	public static final String PREF_TDD_MODE = "tddMode";
 
+	public static final String PREF_CHANGE_STATUS_BAR_BACKGROUND_COLOR = "chageStatusBarBackgroundColorEnabled";
+
 	private PreferenceConstants() {
 	}
 

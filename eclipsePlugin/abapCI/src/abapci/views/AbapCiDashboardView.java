@@ -58,6 +58,7 @@ public class AbapCiDashboardView extends ViewPart {
 
 		lblOverallTestState.setFont(new Font(Display.getCurrent(), fontData[0]));
 		lblOverallTestState.setLayoutData(new GridData(SWT.CENTER, SWT.FILL, true, true));
+		lblOverallTestState.setBounds(entireContainer.getBounds());
 
 		infoline = new Label(entireContainer, SWT.FILL);
 		infoline.setText(
