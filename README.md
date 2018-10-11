@@ -112,26 +112,30 @@ Explaination of this view to be followed
 ![abapCi Preferences Screenshot](https://github.com/andau/abapCI/blob/master/docu/abap_ci_preferences.png)
 
 1. Automatic unit test runs:<br>
-With the first checkbox `Run Unit tests after an ABAP object is activated` the feature can be activated.<br>
-The second setting `Change Theme layout on failed tests (do not use with dark theme)` can be used to trigger a change of the Eclipse editor color settings to indicate failed tests.<br> 
+With the first checkbox `Run Unit tests after an ABAP object is activated` the feature can be activated. The second setting should be checked when only the unit tests for actived ABAP classes should be run<br>
+The setting `Change Theme layout on failed tests (do not use with dark theme)` can be used to trigger a change of the Eclipse editor color settings to indicate failed tests.<br> 
 The last setting `Show a dialog when a new package for the CI run is detected.` is a helper function to add the ABAP packages  to the CI run. Each time an object is activated which belongs to a package not yet configured for the CI run, this dialog is shown. The dialog is shown for each package only onces, as there are two options (activate or deactivate) in the dialog and in any case a configuration for the package will be set.   
 
-2. Different coloring for each ABAP project<br>
+2. Automatic ATC runs<br>
+If the option in this section is activated for each activated ABAP object an ATC check is performed. Currently programs and classes are supported, function modules are not supported. 
+
+3. Visualisation of Source code state on UI<br>
+In this part the colors and texts which are used to indicate the current source code state can be configured. 
+
+4. Different coloring for each ABAP project<br>
 For coloring the source code editors there are three options.  
         `Change color of tab header for colored projects (do not use with dark theme)`<br>
         `Change color of left ruler for colored projects`<br>
         `Change color of right ruler for colored projects`<br>
 
-3. Automatic source code formatting<br>
+5. Automatic source code formatting<br>
 The feature can be enabled or disabled with the first checkbox in this section `Automatic sourcecode formatting enabled`</br>
 The configuration setting `Mandatory prefix in source code to enable formatter`contains the prefix with the starting string that one of the first three lines of the source code has to match to trigger the automatic source code formatting. The default value is #autoformat.
 
-4. Shortcut for abapGit<br>
+6. Shortcut for abapGit<br>
 This feature is currently enabled by default. The icons and menu items can currently not be suppressed<br> 
 The checkbox `Package changer for abapGit (not yet implemented on the ABAP backend)` should currently stay disabled as it leads to a error message because of the missing functionality in the ABAP backend. The only situation where it can be used at the moment is for testing purposes while developing the backend part of this feature <br>
 
-5. Automatic ATC runs (experimental)<br>
-
-6. Trigger Jenkins from Eclipse (experimental)</i><br>
+7. Trigger Jenkins from Eclipse (experimental)</i><br>
 The 4 settings `Jenkins BaseUrl (eg. localhost:8080)`, `Jenkins Username`, `Jenkins Password`, `Jenkins Build Token<` can be used to configure a connection to a Jenkins server.<br>
 
