@@ -224,20 +224,27 @@ public class ContinuousIntegrationPresenter {
 
 		sourceCodeStateInfo.setSourceCodeState(globalTestStateString);
 
-		if (abapCiDashboardView != null) {
+		try {
+			if (abapCiDashboardView != null) {
+				// TODO work in progess
+				abapCiDashboardView.lblOverallTestState.setText(globalTestStateString);
 
-			abapCiDashboardView.lblOverallTestState.setText(globalTestStateString);
+				// abapCiDashboardView.projectline.setText(TODO reserved for projectinfo when
+				// infoline is used for all infos);
 
-			// abapCiDashboardView.projectline.setText(TODO reserved for projectinfo when
-			// infoline is used for all infos);
+				abapCiDashboardView.infoline
+						.setText(buildInfoLine(abapPackageTestStatesForCurrentProject) + "        ");
+				abapCiDashboardView.infoline.setLayoutData(abapCiDashboardView.infoline.getLayoutData());
 
-			abapCiDashboardView.infoline.setText(buildInfoLine(abapPackageTestStatesForCurrentProject) + "        ");
-			abapCiDashboardView.infoline.setLayoutData(abapCiDashboardView.infoline.getLayoutData());
+				rebuildHyperlink(abapCiDashboardView.getEntireContainer(), abapCiDashboardView.openErrorHyperlink);
 
-			rebuildHyperlink(abapCiDashboardView.getEntireContainer(), abapCiDashboardView.openErrorHyperlink);
+				abapCiDashboardView.setBackgroundColor(globalTestState.getColor());
+				// abapCiDashboardView.lblOverallTestState.setForeground(globalTestState.getColor());
+			}
 
-			abapCiDashboardView.setBackgroundColor(globalTestState.getColor());
-			// abapCiDashboardView.lblOverallTestState.setForeground(globalTestState.getColor());
+		} catch (Exception ex) {
+			// ABAP CI dashoard UI state update failed, lets go on
+			// typically happens if CI Dashboard was closed during runtime
 		}
 
 		if (featureFacade.getSourceCodeVisualisationFeature().isChangeStatusBarBackgroundColorEnabled()) {

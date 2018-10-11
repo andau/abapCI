@@ -25,7 +25,7 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 
 	public void createFieldEditors() {
 
-		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "1. Automatic unit test runs");
+		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "1. Automatic Unit test runs");
 		createUnitTestChapter();
 
 		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "2. Automatic ATC runs");
@@ -59,7 +59,7 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 				"&Run Unit tests after an ABAP object was activated", getFieldEditorParent()));
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_UNIT_RUN_ACTIVATED_OBJECTS_ONLY,
-				"&Run Unit tests for the activated ABAP objects only", getFieldEditorParent()));
+				"&Run Unit tests for the activated ABAP objects, not for whole package", getFieldEditorParent()));
 	}
 
 	private void createAtcChapter() {
@@ -73,7 +73,7 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 		atcInfoLabel2.setText("    reorganize the table with program SATC_AC_CLEANUP continuously!");
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ATC_RUN_ACTIVATED_OBJECTS_ONLY,
-				"&Run ATC for each activated ABAP objects only", getFieldEditorParent()));
+				"&Run ATC check for activated ABAP objects", getFieldEditorParent()));
 
 		addField(new StringFieldEditor(PreferenceConstants.PREF_ATC_VARIANT, "&Run ATC with variant:",
 				getFieldEditorParent()));

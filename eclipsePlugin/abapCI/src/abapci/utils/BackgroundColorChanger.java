@@ -29,16 +29,18 @@ public class BackgroundColorChanger {
 
 	private void setBackgroundForChildren(Composite composite, Color color, String classname, int level) {
 		if (level < 3) {
-			Control[] children = composite.getChildren();
-			for (Control child : children) {
+			if (composite != null) {
+				Control[] children = composite.getChildren();
+				for (Control child : children) {
 
-				if (child.getClass().getName().equals(classname)) {
-					child.getParent().setBackground(color);
-				} else {
-					if (child instanceof Composite) {
-						setBackgroundForChildren((Composite) child, color, classname, ++level);
+					if (child.getClass().getName().equals(classname)) {
+						child.getParent().setBackground(color);
+					} else {
+						if (child instanceof Composite) {
+							setBackgroundForChildren((Composite) child, color, classname, ++level);
+						}
+						level--;
 					}
-					level--;
 				}
 			}
 		}
