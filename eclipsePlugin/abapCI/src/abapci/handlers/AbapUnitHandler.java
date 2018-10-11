@@ -31,6 +31,8 @@ import abapci.result.TestResultSummaryFactory;
  * @see org.eclipse.core.commands.AbstractHandler
  */
 public class AbapUnitHandler extends AbstractHandler {
+	private static final String ABAP_CLASS_TYPE = "CLAS/OC";
+
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		String packageName = event.getParameter("1");
@@ -91,7 +93,9 @@ public class AbapUnitHandler extends AbstractHandler {
 		AbapUnitTask task = new AbapUnitTask(packageName);
 
 		for (Activation activation : activations) {
-			task.addTestItem(new TestItem(activation.getUri().toString(), activation.getUri().toString()));
+			if (activation.getType().equals(ABAP_CLASS_TYPE)) {
+				task.addTestItem(new TestItem(activation.getUri().toString(), activation.getUri().toString()));
+			}
 		}
 
 		TestResultSummary unitTestResultSummary;
