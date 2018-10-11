@@ -50,6 +50,15 @@
 			<accessrule kind="accessible" pattern="com/sap/adt/tools/core/IAdtObjectReference"/>
 			<accessrule kind="accessible" pattern="com/sap/adt/tools/core/ui/editors/IAdtFormEditor"/>
 			<accessrule kind="accessible" pattern="com/sap/adt/atc/ui/interna/launch/AtcCheckableItem"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/atc/ui/internal/launch/AtcLauncher"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/atc/ui/internal/launch/IAtcLauncher"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/atc/AtcCustomizingFlavor"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/atc/IAtcCustomizing"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/atc/IAtcSetting"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/atc/ui/internal/setting/AtcCustomizingAccess"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/atc/ui/internal/setting/AtcProjectSettingStore"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/atc/ui/internal/IAtcWorklistService"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/atc/ui/internal/launch/worklist/AtcWorklistService"/>
 		</accessrules>
 	</classpathentry>
 	<classpathentry kind="src" output="target/classes" path="src">

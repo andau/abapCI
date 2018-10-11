@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-Vendor: %Bundle-Vendor
-Bundle-SymbolicName: com.abapci.core;singleton:=true
-Bundle-Version: 0.5.0.0
+Bundle-SymbolicName: bak_com.abapci.core_problem_view;singleton:=true
+Bundle-Version: 0.5.1.0
 Bundle-Activator: abapci.AbapCiPlugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -41,7 +41,8 @@ Require-Bundle: org.eclipse.ui,
  com.sap.adt.ris.whereused.ui;bundle-version="2.94.1",
  com.sap.adt.tools.abapsource,
  org.eclipse.ui.ide;bundle-version="3.13.1",
- org.eclipse.compare;bundle-version="3.7.101"
+ org.eclipse.compare;bundle-version="3.7.101",
+ org.eclipse.debug.core;bundle-version="3.11.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: abapci,
  abapci.connections,
