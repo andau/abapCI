@@ -1,4 +1,4 @@
-package abapci.utils;
+package abapci.coloredProject.general;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -9,31 +9,27 @@ import org.eclipse.jface.text.source.IOverviewRuler;
 import org.eclipse.jface.text.source.IVerticalRuler;
 import org.eclipse.jface.text.source.OverviewRuler;
 import org.eclipse.jface.text.source.SourceViewer;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 
-import abapci.domain.UiColor;
+import abapci.utils.BackgroundColorChanger;
 
-public class AnnotationRuleColorChanger {
+public class DisplayColorChanger {
 
 	BackgroundColorChanger backgroundColorChanger;
 
-	public AnnotationRuleColorChanger() {
+	public DisplayColorChanger() {
 		backgroundColorChanger = new BackgroundColorChanger();
 	}
 
-	public void change(IEditorPart editorPart, UiColor uiColor, boolean changeColorOfLeftRuler,
+	public void change(IEditorPart editorPart, DisplayColor displayColoring, boolean changeColorOfLeftRuler,
 			boolean changeColorOfRightRuler, boolean changeStatusBar) {
 		try {
 
-			RGB rgb = ColorToRGBMapper.mapUiColorToTheme(uiColor);
-
 			if (changeStatusBar) {
-				backgroundColorChanger.change(editorPart.getEditorSite().getShell(), rgb);
+				backgroundColorChanger.change(editorPart.getEditorSite().getShell(),
+						displayColoring.getStatusBarColor());
 			}
 
 			ITextViewer textViewer = null;
@@ -50,18 +46,17 @@ public class AnnotationRuleColorChanger {
 			CompositeRuler verticalRuler = (CompositeRuler) getVerticalRuler((SourceViewer) textViewer);
 			OverviewRuler overviewRuler = (OverviewRuler) getOverviewRuler((SourceViewer) textViewer);
 
-			if (rgb == null)
+			if (displayColoring.getAnnotationBarColor() == null)
 				return;
 
 			if (verticalRuler != null && changeColorOfLeftRuler) {
-				verticalRuler.getControl().setBackground(new Color(Display.getDefault(), rgb));
+				verticalRuler.getControl().setBackground(displayColoring.getAnnotationBarColor());
 			}
 
 			if (overviewRuler != null && changeColorOfRightRuler) {
-				overviewRuler.getHeaderControl().setBackground(new Color(Display.getDefault(), rgb));
-				overviewRuler.getControl().setBackground(new Color(Display.getDefault(), rgb));
+				overviewRuler.getHeaderControl().setBackground(displayColoring.getAnnotationBarColor());
+				overviewRuler.getControl().setBackground(displayColoring.getAnnotationBarColor());
 			}
-
 		} catch (
 
 		Exception e) {

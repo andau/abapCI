@@ -16,7 +16,7 @@ public class UpdateColoredProjectAction extends Action {
 	public UpdateColoredProjectAction(ColoredProjectsPresenter presenter, String label) {
 		this.setText(label);
 		this.setImageDescriptor(
-				PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
+				PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_FILE));
 		this.presenter = presenter;
 	}
 
@@ -29,7 +29,7 @@ public class UpdateColoredProjectAction extends Action {
 		if (firstElement instanceof ColoredProject) {
 			AddOrUpdateColoredProjectPage coloredProjectDialog = new AddOrUpdateColoredProjectPage(
 					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), presenter,
-					(ColoredProject) firstElement);
+					(ColoredProject) firstElement, false);
 			if (coloredProjectDialog.open() == Window.OK) {
 				presenter.setStatusMessage("Update to colored project configuration successful");
 			}

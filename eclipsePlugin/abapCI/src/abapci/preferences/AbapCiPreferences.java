@@ -3,6 +3,7 @@ package abapci.preferences;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ColorFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -81,8 +82,6 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 	}
 
 	private void createSourceCodeVisualisationChapter() {
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_TDD_MODE, "&Show TDD Labels on ABAP CI Dashboard",
-				getFieldEditorParent()));
 
 		addField(new ColorFieldEditor(PreferenceConstants.PREF_UNIT_TEST_OK_BACKGROUND_COLOR,
 				"Backgroundcolor for OK Unit Test State used in ABAP CI dashboard", getFieldEditorParent()));
@@ -94,10 +93,20 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 				"Backgroundcolor for FAIL ATC State used in ABAP CI dashboard", getFieldEditorParent()));
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_CHANGE_STATUS_BAR_BACKGROUND_COLOR,
-				"&Use test state color as background color of the Eclipser statusbar", getFieldEditorParent()));
+				"&Use source code  state color as background color of the Eclipser statusbar (and annotation ruler if activated)",
+				getFieldEditorParent()));
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_CHANGE_COLOR_ON_FAILED_TESTS,
 				"&Change Theme layout on failed tests (do not use with dark theme)", getFieldEditorParent()));
+
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_TDD_MODE, "&Show TDD Labels on ABAP CI Dashboard",
+				getFieldEditorParent()));
+
+		addField(new IntegerFieldEditor(PreferenceConstants.PREF_TDD_MIN_REQUIRED_SECONDS,
+				"&Show TDD Labels on ABAP CI Dashboard", getFieldEditorParent()));
+
+		Label emptyLabelAbapUnitDetails1 = new Label(getFieldEditorParent(), SWT.NONE);
+		emptyLabelAbapUnitDetails1.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
 
 		createHelperDialogsChapter();
 
@@ -128,9 +137,6 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 	}
 
 	private void createColorChangeChapter() {
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_COLORED_PROJECTS_TAB_HEADER_ENABLED,
-				"&Change color of tab header for colored projects (do not use with dark theme)",
-				getFieldEditorParent()));
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_COLORED_PROJECTS_LEFT_RULER_ENABLED,
 				"&Change color of left ruler for colored projects", getFieldEditorParent()));
@@ -140,6 +146,9 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_COLORED_PROJECTS_STATUS_BAR_ENABLED,
 				"&Change color of status bar for colored projects", getFieldEditorParent()));
+
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_COLORED_PROJECTS_NEW_DIALOG_ENABLED,
+				"&Show dialog when a new package without a color definition is detected", getFieldEditorParent()));
 
 	}
 

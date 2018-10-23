@@ -21,7 +21,7 @@ public class AddColoredProjectAction extends Action {
 	public void run() {
 
 		AddOrUpdateColoredProjectPage coloredProjectDialog = new AddOrUpdateColoredProjectPage(
-				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), presenter, null);
+				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), presenter, null, false);
 		if (coloredProjectDialog.open() == Window.OK) {
 
 			// TODO

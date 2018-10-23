@@ -7,6 +7,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.window.Window;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -17,7 +18,6 @@ import abapci.coloredProject.model.ColoredProjectModel;
 import abapci.coloredProject.presenter.ColoredProjectsPresenter;
 import abapci.coloredProject.view.AbapCiColoredProjectView;
 import abapci.coloredProject.view.AddOrUpdateColoredProjectPage;
-import abapci.domain.UiColor;
 
 public class AbapColoredProjectHandler extends AbstractHandler {
 
@@ -38,14 +38,14 @@ public class AbapColoredProjectHandler extends AbstractHandler {
 					ColoredProjectsPresenter coloredProjectPresenter = new ColoredProjectsPresenter(
 							abapCiColoredProjectView, new ColoredProjectModel());
 
-					UiColor assignedUiColor;
+					Color assignedUiColor;
 					try {
 						assignedUiColor = coloredProjectPresenter.getUiColorOrDefault(project.getName());
 
-						ColoredProject coloredProject = new ColoredProject(project.getName(), assignedUiColor);
+						ColoredProject coloredProject = new ColoredProject(project.getName(), assignedUiColor, false);
 						AddOrUpdateColoredProjectPage addColoredProjectPage = new AddOrUpdateColoredProjectPage(
 								PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
-								coloredProjectPresenter, coloredProject);
+								coloredProjectPresenter, coloredProject, false);
 
 						if (addColoredProjectPage.open() == Window.OK) {
 							coloredProjectPresenter.setStatusMessage(

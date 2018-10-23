@@ -15,6 +15,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -26,8 +27,8 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
+import abapci.AbapCiPlugin;
 import abapci.coloredProject.model.ColoredProject;
-import abapci.coloredProject.model.ColoredProjectModel;
 import abapci.coloredProject.presenter.ColoredProjectsPresenter;
 import abapci.lang.UiTexts;
 import abapci.views.actions.ui.DeleteColoredProjectAction;
@@ -65,6 +66,9 @@ public class AbapCiColoredProjectView extends ViewPart {
 
 	public void createPartControl(Composite parent) {
 
+		coloredProjectsPresenter = AbapCiPlugin.getDefault().coloredProjectsPresenter;
+		coloredProjectsPresenter.setView(this);
+
 		Composite entireContainer = new Composite(parent, SWT.NONE);
 		entireContainer.setLayout(new GridLayout(1, false));
 
@@ -88,17 +92,17 @@ public class AbapCiColoredProjectView extends ViewPart {
 		gridData.horizontalAlignment = GridData.FILL;
 		viewer.getControl().setLayoutData(gridData);
 
-		coloredProjectsPresenter = new ColoredProjectsPresenter(this, new ColoredProjectModel());
-
 		makeActions();
 		hookContextMenu();
 		contributeToActionBars();
 
+		coloredProjectsPresenter.setViewerInput();
+
 	}
 
 	private void createColumns(TableViewer viewer) {
-		String[] titles = { "ABAP Project", "Color" };
-		int[] bounds = { 250, 100 };
+		String[] titles = { "ABAP Project", "Color", "Suppressed" };
+		int[] bounds = { 250, 150, 50 };
 
 		TableViewerColumn col0 = createTableViewerColumn(titles[0], bounds[0], 0);
 		col0.setLabelProvider(new ColumnLabelProvider() {
@@ -112,9 +116,23 @@ public class AbapCiColoredProjectView extends ViewPart {
 		TableViewerColumn col1 = createTableViewerColumn(titles[1], bounds[1], 1);
 		col1.setLabelProvider(new ColumnLabelProvider() {
 			@Override
+			public Color getBackground(Object element) {
+				ColoredProject c = (ColoredProject) element;
+				return c.getColor();
+			}
+
 			public String getText(Object element) {
 				ColoredProject c = (ColoredProject) element;
-				return c.getUiColor().toString();
+				return c.getColor().toString();
+			}
+		});
+
+		TableViewerColumn col2 = createTableViewerColumn(titles[2], bounds[2], 2);
+		col2.setLabelProvider(new ColumnLabelProvider() {
+
+			public String getText(Object element) {
+				ColoredProject c = (ColoredProject) element;
+				return String.valueOf(c.suppressColoring());
 			}
 		});
 

@@ -18,6 +18,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.PREF_ATC_RUN_ACTIVATED_OBJECTS_ONLY, false);
 		store.setDefault(PreferenceConstants.PREF_ATC_VARIANT, "DEFAULT");
 		store.setDefault(PreferenceConstants.PREF_TDD_MODE, false);
+		store.setDefault(PreferenceConstants.PREF_TDD_MIN_REQUIRED_SECONDS, 30);
 
 		store.setDefault(PreferenceConstants.PREF_JENKINS_URL, "<jenkins_host>:<jenkins_port>");
 		store.setDefault(PreferenceConstants.PREF_JENKINS_USERNAME, "jenkins_username");
@@ -25,16 +26,16 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.PREF_JENKINS_BUILD_TOKEN, "PUT_YOUR_OWN_TOKEN_FOR_ABAP_CI");
 		store.setDefault(PreferenceConstants.PREF_JENKINS_RUN_AFTER_UNIT_TESTS_TURN_GREEN, false);
 		store.setDefault(PreferenceConstants.PREF_CHANGE_COLOR_ON_FAILED_TESTS, false);
-		store.setDefault(PreferenceConstants.PREF_CHANGE_STATUS_BAR_BACKGROUND_COLOR, false);
+		store.setDefault(PreferenceConstants.PREF_CHANGE_STATUS_BAR_BACKGROUND_COLOR, true);
 
 		store.setDefault(PreferenceConstants.PREF_SOURCE_CODE_FORMATTING_ENABLED, true);
 		store.setDefault(PreferenceConstants.PREF_SOURCE_CODE_FORMATTING_PREFIX, "#autoformat");
 		store.setDefault(PreferenceConstants.PREF_SOURCE_CODE_CLEANUP_NOT_USED_VARIABLES, false);
 
-		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_TAB_HEADER_ENABLED, false);
-		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_LEFT_RULER_ENABLED, true);
-		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_RIGHT_RULER_ENABLED, true);
-		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_STATUS_BAR_ENABLED, false);
+		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_LEFT_RULER_ENABLED, false);
+		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_RIGHT_RULER_ENABLED, false);
+		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_STATUS_BAR_ENABLED, true);
+		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_NEW_DIALOG_ENABLED, true);
 
 		store.setDefault(PreferenceConstants.PREF_UNIT_RUN_CRITICAL_TESTS_ENABLED, true);
 		store.setDefault(PreferenceConstants.PREF_UNIT_RUN_DANGEROUS_TESTS_ENABLED, true);

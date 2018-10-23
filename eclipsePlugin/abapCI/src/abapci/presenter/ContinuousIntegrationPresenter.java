@@ -15,7 +15,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 
+import abapci.Exception.AbapCiColoredProjectFileParseException;
 import abapci.Exception.ContinuousIntegrationConfigFileParseException;
+import abapci.coloredProject.general.WorkspaceColorProxySingleton;
+import abapci.coloredProject.model.ColoredProject;
 import abapci.domain.AbapPackageTestState;
 import abapci.domain.ContinuousIntegrationConfig;
 import abapci.domain.GlobalTestState;
@@ -215,8 +218,9 @@ public class ContinuousIntegrationPresenter {
 		List<AbapPackageTestState> abapPackageTestStatesForCurrentProject = getAbapPackageTestStatesForCurrentProject();
 
 		SourcecodeState currentSourceCodeState = evalSourceCodeTestState();
-		if (currentSourceCodeState.equals(SourcecodeState.OK) && (sourceCodeStateInfo.nextPlannedStepIsRefactorStep()
-				|| sourceCodeStateInfo.refactorStepIsStillSuggested())) {
+		if (currentSourceCodeState.equals(SourcecodeState.OK)
+				&& (sourceCodeStateInfo.nextPlannedStepIsRefactorStep() || sourceCodeStateInfo
+						.refactorStepIsStillSuggested(featureFacade.getTddModeFeature().getMinimumRequiredSeconds()))) {
 			currentSourceCodeState = SourcecodeState.ATC_FAIL;
 		}
 		GlobalTestState globalTestState = new GlobalTestState(currentSourceCodeState);
@@ -242,19 +246,25 @@ public class ContinuousIntegrationPresenter {
 				// abapCiDashboardView.lblOverallTestState.setForeground(globalTestState.getColor());
 			}
 
+			if (featureFacade.getSourceCodeVisualisationFeature().isChangeStatusBarBackgroundColorEnabled()) {
+				Color currentColor = globalTestState.getColor();
+				WorkspaceColorProxySingleton.getInstance()
+						.addOrUpdate(new ColoredProject(currentProject.getName(), currentColor));
+				backgroundColorChanger.change(Display.getCurrent().getActiveShell(), globalTestState.getColor());
+			}
+
+			if (view != null && abapPackageTestStatesForCurrentProject != null) {
+				view.setViewerInput(abapPackageTestStatesForCurrentProject);
+				view.statusLabel.setText("CI run package summary updated");
+			}
+
+		} catch (AbapCiColoredProjectFileParseException e) {
+			view.statusLabel.setText("File with project coloring could not be loaded");
 		} catch (Exception ex) {
 			// ABAP CI dashoard UI state update failed, lets go on
 			// typically happens if CI Dashboard was closed during runtime
 		}
 
-		if (featureFacade.getSourceCodeVisualisationFeature().isChangeStatusBarBackgroundColorEnabled()) {
-			backgroundColorChanger.change(Display.getCurrent().getActiveShell(), globalTestState.getColor().getRGB());
-		}
-
-		if (view != null && abapPackageTestStatesForCurrentProject != null) {
-			view.setViewerInput(abapPackageTestStatesForCurrentProject);
-			view.statusLabel.setText("CI run package summary updated");
-		}
 	}
 
 	private void rebuildHyperlink(Composite container, Hyperlink link) {

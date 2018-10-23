@@ -2,7 +2,6 @@ package abapci.utils;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -11,11 +10,10 @@ import org.eclipse.swt.widgets.Shell;
 
 public class BackgroundColorChanger {
 
-	public void change(Shell shell, RGB rgb) {
+	public void change(Shell shell, Color color) {
 
-		if (rgb != null) {
-			setBackgroundForChildren(shell, new Color(Display.getDefault(), rgb), "org.eclipse.jface.action.StatusLine",
-					0);
+		if (color != null) {
+			setBackgroundForChildren(shell, color, "org.eclipse.jface.action.StatusLine", 0);
 			// setBackgroundForLabel((Composite) currentShell.getChildren()[0], new
 			// Color(Display.getDefault(), rgb),
 			// "ZCL_BIG_TRUCK", 0, "ZCL_BIG_TRUCK");

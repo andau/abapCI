@@ -1,22 +1,32 @@
 package abapci.coloredProject.model;
 
-import abapci.domain.UiColor;
+import org.eclipse.swt.graphics.Color;
 
 public class ColoredProject {
 
 	private String name;
-	private UiColor uiColor;
+	private Color color;
+	private boolean suppressColoring;
 
-	public ColoredProject(String name, UiColor uiColor) {
+	public ColoredProject(String name, Color color) {
+		this(name, color, false);
+	}
+
+	public ColoredProject(String name, Color color, boolean suppressColoring) {
 		this.name = name;
-		this.uiColor = uiColor;
+		this.suppressColoring = suppressColoring;
+		this.color = color;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public UiColor getUiColor() {
-		return uiColor;
+	public Color getColor() {
+		return color;
+	}
+
+	public boolean suppressColoring() {
+		return suppressColoring;
 	}
 }

@@ -1,15 +1,19 @@
 package abapci.coloredProject.presenter;
 
+import java.util.Comparator;
+import java.util.List;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
 import abapci.Exception.AbapCiColoredProjectFileParseException;
+import abapci.Exception.ProjectColorNotDefinedException;
+import abapci.coloredProject.general.WorkspaceColorProxySingleton;
 import abapci.coloredProject.model.ColoredProject;
 import abapci.coloredProject.model.ColoredProjectModel;
 import abapci.coloredProject.view.AbapCiColoredProjectView;
-import abapci.domain.UiColor;
 
 public class ColoredProjectsPresenter {
 
@@ -24,9 +28,32 @@ public class ColoredProjectsPresenter {
 		setViewerInput();
 	}
 
+	public void addColoredProject(ColoredProject coloredProject) {
+		try {
+			if (coloredProject != null && model.getColoredProjects().stream()
+					.anyMatch(item -> item.getName().equals(coloredProject.getName()))) {
+				model.removeColoredProject(coloredProject);
+			}
+
+			model.addColoredProject(coloredProject);
+			WorkspaceColorProxySingleton.destroyInstance();
+			setViewerInput();
+		} catch (AbapCiColoredProjectFileParseException e) {
+			setStatusMessage(String.format("Parsing error of XML file when handling the coloring for project %s",
+					coloredProject.getName()), new Color(Display.getCurrent(), new RGB(255, 0, 0)));
+		} catch (Exception ex) {
+			setStatusMessage(
+					String.format("General error when trying to set the coloring for project %s, errormessage %s",
+							coloredProject.getName(), ex.getMessage()),
+					new Color(Display.getCurrent(), new RGB(255, 0, 0)));
+		}
+
+	}
+
 	public void removeColoredProject(ColoredProject coloredProject) {
 		try {
 			model.removeColoredProject(coloredProject);
+			WorkspaceColorProxySingleton.destroyInstance();
 			setViewerInput();
 		} catch (AbapCiColoredProjectFileParseException e) {
 			setStatusMessageParsingColoredProjectXmlFailed();
@@ -34,10 +61,24 @@ public class ColoredProjectsPresenter {
 		}
 	}
 
+	public void setView(AbapCiColoredProjectView view) {
+		this.view = view;
+	}
+
 	public void setViewerInput() {
 		try {
 			if (view != null) {
-				view.setViewerInput(model.getColoredProjects());
+
+				Comparator<ColoredProject> compareByName = new Comparator<ColoredProject>() {
+					@Override
+					public int compare(ColoredProject o1, ColoredProject o2) {
+						return o1.getName().compareTo(o2.getName());
+					}
+				};
+
+				List<ColoredProject> coloredProjects = model.getColoredProjects();
+				coloredProjects.sort(compareByName);
+				view.setViewerInput(coloredProjects);
 			}
 		} catch (AbapCiColoredProjectFileParseException e) {
 			setStatusMessageParsingColoredProjectXmlFailed();
@@ -58,27 +99,6 @@ public class ColoredProjectsPresenter {
 			ex.printStackTrace();
 
 		}
-	}
-
-	public void addColoredProject(ColoredProject coloredProject) {
-		try {
-			if (coloredProject != null && model.getColoredProjects().stream()
-					.anyMatch(item -> item.getName().equals(coloredProject.getName()))) {
-				model.removeColoredProject(coloredProject);
-			}
-
-			model.addColoredProject(coloredProject);
-			setViewerInput();
-		} catch (AbapCiColoredProjectFileParseException e) {
-			setStatusMessage(String.format("Parsing error of XML file when handling the coloring for project %s",
-					coloredProject.getName()), new Color(Display.getCurrent(), new RGB(255, 0, 0)));
-		} catch (Exception ex) {
-			setStatusMessage(
-					String.format("General error when trying to set the coloring for project %s, errormessage %s",
-							coloredProject.getName(), ex.getMessage()),
-					new Color(Display.getCurrent(), new RGB(255, 0, 0)));
-		}
-
 	}
 
 	public void setStatusMessage(String message) {
@@ -107,8 +127,12 @@ public class ColoredProjectsPresenter {
 		}
 	}
 
-	public UiColor getUiColorOrDefault(String projectName) throws AbapCiColoredProjectFileParseException {
-		UiColor assignedUiColor = model.getColorForProject(projectName);
-		return assignedUiColor == null ? UiColor.DEFAULT : assignedUiColor;
+	public Color getUiColorOrDefault(String projectName) throws AbapCiColoredProjectFileParseException {
+		try {
+			return model.getColorForProject(projectName);
+		} catch (ProjectColorNotDefinedException e) {
+			// no project coloring is a valid definition we return null
+			return null;
+		}
 	}
 }

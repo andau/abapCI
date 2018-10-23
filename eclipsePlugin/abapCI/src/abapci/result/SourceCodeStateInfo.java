@@ -26,8 +26,9 @@ public class SourceCodeStateInfo {
 		return (int) Duration.between(stateActiveSince, now).getSeconds();
 	}
 
-	public boolean refactorStepIsStillSuggested() {
-		return globalTestState.equals(GlobalTestState.REFACTOR) && secondsSinceLastStateChange() < 30;
+	public boolean refactorStepIsStillSuggested(int minimumRequiredRefactorTime) {
+		return globalTestState.equals(GlobalTestState.REFACTOR)
+				&& secondsSinceLastStateChange() < minimumRequiredRefactorTime;
 	}
 
 	public boolean nextPlannedStepIsRefactorStep() {

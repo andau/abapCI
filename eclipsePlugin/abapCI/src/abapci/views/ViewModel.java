@@ -6,6 +6,8 @@ import java.util.List;
 import org.eclipse.core.runtime.preferences.ConfigurationScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.osgi.service.prefs.BackingStoreException;
@@ -16,7 +18,6 @@ import abapci.domain.GlobalTestState;
 import abapci.domain.SourcecodeState;
 import abapci.domain.Suppression;
 import abapci.domain.TestState;
-import abapci.domain.UiColor;
 
 public enum ViewModel {
 	INSTANCE;
@@ -57,7 +58,8 @@ public enum ViewModel {
 
 		try {
 			for (String key : coloredProjectsPrefs.keys()) {
-				coloredProjects.add(new ColoredProject(coloredProjectsPrefs.get(key, "default"), UiColor.BLUE));
+				coloredProjects.add(new ColoredProject(coloredProjectsPrefs.get(key, "default"),
+						new Color(Display.getCurrent(), new RGB(0, 0, 255))));
 			}
 		} catch (BackingStoreException e) {
 			// TODO Auto-generated catch block

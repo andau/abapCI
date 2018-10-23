@@ -11,6 +11,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import abapci.coloredProject.model.ColoredProjectModel;
+import abapci.coloredProject.presenter.ColoredProjectsPresenter;
 import abapci.feature.FeatureFacade;
 import abapci.model.ContinuousIntegrationModel;
 import abapci.presenter.ContinuousIntegrationPresenter;
@@ -25,6 +26,7 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 	public static final String PLUGIN_ID = "com.abapci.core"; //$NON-NLS-1$
 
 	public ContinuousIntegrationPresenter continuousIntegrationPresenter;
+	public ColoredProjectsPresenter coloredProjectsPresenter;
 
 	// The shared instance
 	private static AbapCiPlugin plugin;
@@ -62,6 +64,11 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 
 		}
 
+		try {
+			coloredProjectsPresenter = new ColoredProjectsPresenter(null, new ColoredProjectModel());
+		} catch (Exception ex) {
+			// if here is a problem we will go on as this is no critical feature
+		}
 		initializePartChangeListener();
 
 		ICommandService service = PlatformUI.getWorkbench().getService(ICommandService.class);

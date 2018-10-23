@@ -3,7 +3,6 @@ package abapci.presenter;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 
-import abapci.Exception.AbapCiColoredProjectFileParseException;
 import abapci.coloredProject.model.ColoredProjectModel;
 import abapci.domain.UiColor;
 import abapci.domain.UiTheme;
@@ -28,10 +27,4 @@ public class GeneralThemePresenter {
 		Display.getDefault().asyncExec(task);
 
 	}
-
-	@Deprecated
-	public UiColor getUiColor(String currentProjectname) throws AbapCiColoredProjectFileParseException {
-		return model.getColorForProject(currentProjectname);
-	}
-
 }

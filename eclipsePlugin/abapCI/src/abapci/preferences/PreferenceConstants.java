@@ -33,6 +33,8 @@ public class PreferenceConstants {
 
 	public static final String PREF_COLORED_PROJECTS_STATUS_BAR_ENABLED = "coloredProjectsStatusBarEnabled";
 
+	public static final String PREF_COLORED_PROJECTS_NEW_DIALOG_ENABLED = "coloredProjectsNewDialogEnabled";
+
 	public static final String PREF_SOURCE_CODE_FORMATTING_ENABLED = "sourceCodeFormattingEnabled";
 
 	public static final String PREF_SOURCE_CODE_FORMATTING_PREFIX = "sourceCodeFormattingPrefix";
@@ -62,6 +64,8 @@ public class PreferenceConstants {
 	public static final String PREF_ATC_TEST_FAIL_BACKGROUND_COLOR = "atcTestFailBackgroundColor";
 
 	public static final String PREF_TDD_MODE = "tddMode";
+
+	public static final String PREF_TDD_MIN_REQUIRED_SECONDS = "tddMinRequiredSeconds";
 
 	public static final String PREF_CHANGE_STATUS_BAR_BACKGROUND_COLOR = "chageStatusBarBackgroundColorEnabled";
 
