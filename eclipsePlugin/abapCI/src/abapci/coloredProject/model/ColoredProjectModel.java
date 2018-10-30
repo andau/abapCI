@@ -2,10 +2,9 @@ package abapci.coloredProject.model;
 
 import java.util.List;
 
-import org.eclipse.swt.graphics.Color;
-
 import abapci.Exception.AbapCiColoredProjectFileParseException;
-import abapci.Exception.ProjectColorNotDefinedException;
+import abapci.coloredProject.model.projectColor.DefaultEclipseProjectColor;
+import abapci.coloredProject.model.projectColor.IProjectColor;
 
 public class ColoredProjectModel {
 
@@ -13,20 +12,24 @@ public class ColoredProjectModel {
 
 	public ColoredProjectModel() {
 
-		coloredProjectModelXml = new ColoredProjectModelXml();
+		this.coloredProjectModelXml = new ColoredProjectModelXml();
+	}
+	public ColoredProjectModel(ColoredProjectModelXml coloredProjectModelXml) {
+
+		this.coloredProjectModelXml = coloredProjectModelXml;
 	}
 
 	public void saveColoredProjects(List<ColoredProject> coloredProjects) {
 		coloredProjectModelXml.clear();
 		for (ColoredProject coloredProject : coloredProjects) {
 			coloredProjectModelXml.addColoredProjectToXML(coloredProject.getName(), coloredProject.getColor(),
-					coloredProject.suppressColoring());
+					coloredProject.isSuppressedColoring());
 		}
 	}
 
-	public Color getColorForProject(String projectName)
-			throws AbapCiColoredProjectFileParseException, ProjectColorNotDefinedException {
-		return coloredProjectModelXml.getColorForProject(projectName);
+	public IProjectColor getColorForProject(String projectName)
+			throws AbapCiColoredProjectFileParseException {
+		return coloredProjectModelXml.getColorForProject(projectName); 
 	}
 
 	public List<ColoredProject> getColoredProjects() throws AbapCiColoredProjectFileParseException {
@@ -39,6 +42,6 @@ public class ColoredProjectModel {
 
 	public void addColoredProject(ColoredProject coloredProject) {
 		coloredProjectModelXml.addColoredProjectToXML(coloredProject.getName(), coloredProject.getColor(),
-				coloredProject.suppressColoring());
+				coloredProject.isSuppressedColoring());
 	}
 }

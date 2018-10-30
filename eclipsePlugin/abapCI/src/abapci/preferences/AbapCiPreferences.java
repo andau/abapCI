@@ -26,10 +26,10 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 
 	public void createFieldEditors() {
 
-		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "1. Automatic Unit test runs");
+		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "1. Automatic Unit test run");
 		createUnitTestChapter();
 
-		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "2. Automatic ATC runs");
+		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "2. Automatic ATC run");
 		createAtcChapter();
 
 		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "3. Visualisation of SourceCode State on UI");

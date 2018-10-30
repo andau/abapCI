@@ -1,100 +1,58 @@
 package abapci.coloredProject.general;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import java.util.HashSet;
+import java.util.Set;
 
-import org.eclipse.jface.text.ITextViewer;
-import org.eclipse.jface.text.source.CompositeRuler;
-import org.eclipse.jface.text.source.IOverviewRuler;
-import org.eclipse.jface.text.source.IVerticalRuler;
-import org.eclipse.jface.text.source.OverviewRuler;
-import org.eclipse.jface.text.source.SourceViewer;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.part.MultiPageEditorPart;
-import org.eclipse.ui.texteditor.AbstractTextEditor;
-
-import abapci.utils.BackgroundColorChanger;
+import abapci.coloredProject.colorChanger.StatusBarColorChanger;
+import abapci.coloredProject.colorChanger.ColorChanger;
+import abapci.coloredProject.colorChanger.LeftRulerColorChanger;
+import abapci.coloredProject.colorChanger.RightRulerColorChanger;
+import abapci.coloredProject.colorChanger.StatusBarWidgetColorChanger;
+import abapci.coloredProject.colorChanger.TitleIconColorChanger;
+import abapci.feature.ColoredProjectFeature;
 
 public class DisplayColorChanger {
 
-	BackgroundColorChanger backgroundColorChanger;
+	public void change(IEditorPart editorPart, DisplayColor displayColor, ColoredProjectFeature coloredProjectFeature) {
 
-	public DisplayColorChanger() {
-		backgroundColorChanger = new BackgroundColorChanger();
-	}
+		Set<ColorChanger> activeColorChangers = getActiveColorChangers(editorPart, coloredProjectFeature);
 
-	public void change(IEditorPart editorPart, DisplayColor displayColoring, boolean changeColorOfLeftRuler,
-			boolean changeColorOfRightRuler, boolean changeStatusBar) {
-		try {
+		for (ColorChanger colorChanger : activeColorChangers) {
+			try {
+				colorChanger.change(displayColor.getStatusBarColor());
 
-			if (changeStatusBar) {
-				backgroundColorChanger.change(editorPart.getEditorSite().getShell(),
-						displayColoring.getStatusBarColor());
+			} catch (Exception e) {
+				e.printStackTrace();
+				// coloring will fail for specific editors
+				// as this is no mandatory feature lets continue
 			}
-
-			ITextViewer textViewer = null;
-			Object activeEditor;
-
-			if (editorPart instanceof AbstractTextEditor) {
-				activeEditor = editorPart;
-			} else {
-				activeEditor = ((MultiPageEditorPart) editorPart).getSelectedPage();
-			}
-			if (activeEditor instanceof AbstractTextEditor) {
-				textViewer = callGetSourceViewer((AbstractTextEditor) activeEditor);
-			}
-			CompositeRuler verticalRuler = (CompositeRuler) getVerticalRuler((SourceViewer) textViewer);
-			OverviewRuler overviewRuler = (OverviewRuler) getOverviewRuler((SourceViewer) textViewer);
-
-			if (displayColoring.getAnnotationBarColor() == null)
-				return;
-
-			if (verticalRuler != null && changeColorOfLeftRuler) {
-				verticalRuler.getControl().setBackground(displayColoring.getAnnotationBarColor());
-			}
-
-			if (overviewRuler != null && changeColorOfRightRuler) {
-				overviewRuler.getHeaderControl().setBackground(displayColoring.getAnnotationBarColor());
-				overviewRuler.getControl().setBackground(displayColoring.getAnnotationBarColor());
-			}
-		} catch (
-
-		Exception e) {
-			// coloring will fail for specific editors - so continue for the
-			// moment
-
 		}
+
 	}
 
-	private ITextViewer callGetSourceViewer(AbstractTextEditor editor) throws Exception {
-		try {
-			Method method = AbstractTextEditor.class.getDeclaredMethod("getSourceViewer"); //$NON-NLS-1$
-			method.setAccessible(true);
+	private Set<ColorChanger> getActiveColorChangers(IEditorPart editorPart,
+			ColoredProjectFeature coloredProjectFeature) {
 
-			return (ITextViewer) method.invoke(editor);
-		} catch (NullPointerException npe) {
-			return null;
-		}
+		
+		Set<ColorChanger> activeColorChangers = new HashSet<>();
+
+		if (coloredProjectFeature.isActive())
+			activeColorChangers.add(new TitleIconColorChanger(editorPart));
+
+		if (coloredProjectFeature.isChangeStatusBarActive())
+			activeColorChangers.add(new StatusBarColorChanger(Display.getCurrent().getActiveShell()));
+
+		if (coloredProjectFeature.isChangeStatusBarActive())
+			activeColorChangers.add(new StatusBarWidgetColorChanger());
+
+		if (coloredProjectFeature.isLeftRulerActive())
+			activeColorChangers.add(new LeftRulerColorChanger(editorPart));
+
+		if (coloredProjectFeature.isRightRulerActive())
+			activeColorChangers.add(new RightRulerColorChanger(editorPart));
+
+		return activeColorChangers;
 	}
-
-	private IOverviewRuler getOverviewRuler(SourceViewer viewer) {
-		try {
-			Field f = SourceViewer.class.getDeclaredField("fOverviewRuler"); //$NON-NLS-1$
-			f.setAccessible(true);
-			return (IOverviewRuler) f.get(viewer);
-		} catch (Exception err) {
-			return null;
-		}
-	}
-
-	private IVerticalRuler getVerticalRuler(SourceViewer viewer) {
-		try {
-			Field f = SourceViewer.class.getDeclaredField("fVerticalRuler"); //$NON-NLS-1$
-			f.setAccessible(true);
-			return (IVerticalRuler) f.get(viewer);
-		} catch (Exception err) {
-			return null;
-		}
-	}
-
 }

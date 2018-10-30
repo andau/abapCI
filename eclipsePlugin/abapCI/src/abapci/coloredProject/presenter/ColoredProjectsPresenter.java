@@ -9,10 +9,11 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
 import abapci.Exception.AbapCiColoredProjectFileParseException;
-import abapci.Exception.ProjectColorNotDefinedException;
 import abapci.coloredProject.general.WorkspaceColorProxySingleton;
 import abapci.coloredProject.model.ColoredProject;
 import abapci.coloredProject.model.ColoredProjectModel;
+import abapci.coloredProject.model.projectColor.DefaultEclipseProjectColor;
+import abapci.coloredProject.model.projectColor.IProjectColor;
 import abapci.coloredProject.view.AbapCiColoredProjectView;
 
 public class ColoredProjectsPresenter {
@@ -90,9 +91,9 @@ public class ColoredProjectsPresenter {
 	private void setStatusMessageParsingColoredProjectXmlFailed() {
 		try {
 			if (view != null) {
-				view.statusLabel.setText(PARSING_COLORED_PROJECT_XML_FAILED_MESSAGE);
+				view.setStatusLabelText(PARSING_COLORED_PROJECT_XML_FAILED_MESSAGE);
 				org.eclipse.swt.graphics.Color red = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
-				view.statusLabel.setForeground(red);
+				view.setStatusLabelForeground(red);
 			}
 		} catch (Exception ex) {
 			// if the status message can not be set we will ignore this
@@ -117,8 +118,8 @@ public class ColoredProjectsPresenter {
 	private void setStatusMessageInternal(String message, Color color) {
 		try {
 			if (view != null) {
-				view.statusLabel.setText(message);
-				view.statusLabel.setForeground(color);
+				view.setStatusLabelText(message);
+				view.setStatusLabelForeground(color);
 			}
 		} catch (Exception ex) {
 			// if the status message can not be set we will ignore this
@@ -127,12 +128,8 @@ public class ColoredProjectsPresenter {
 		}
 	}
 
-	public Color getUiColorOrDefault(String projectName) throws AbapCiColoredProjectFileParseException {
-		try {
-			return model.getColorForProject(projectName);
-		} catch (ProjectColorNotDefinedException e) {
-			// no project coloring is a valid definition we return null
-			return null;
-		}
+	public IProjectColor getProjectColor(String projectName) throws AbapCiColoredProjectFileParseException {
+		IProjectColor projectColor = model.getColorForProject(projectName);
+		return projectColor == null ? new DefaultEclipseProjectColor() : projectColor;
 	}
 }

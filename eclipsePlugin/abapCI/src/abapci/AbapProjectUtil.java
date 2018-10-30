@@ -54,7 +54,7 @@ public class AbapProjectUtil {
 
 	}
 
-	public static IProject getProjectByProjectName(String projectname) {
+	public static IProject getAbapProjectByProjectName(String projectname) {
 
 		IProject[] availableProjects = AdtCoreProjectServiceFactory.createCoreProjectService()
 				.getAvailableAdtCoreProjects();

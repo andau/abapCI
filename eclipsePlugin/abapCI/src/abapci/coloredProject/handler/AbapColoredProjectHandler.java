@@ -15,6 +15,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import abapci.Exception.AbapCiColoredProjectFileParseException;
 import abapci.coloredProject.model.ColoredProject;
 import abapci.coloredProject.model.ColoredProjectModel;
+import abapci.coloredProject.model.projectColor.IProjectColor;
 import abapci.coloredProject.presenter.ColoredProjectsPresenter;
 import abapci.coloredProject.view.AbapCiColoredProjectView;
 import abapci.coloredProject.view.AddOrUpdateColoredProjectPage;
@@ -38,9 +39,8 @@ public class AbapColoredProjectHandler extends AbstractHandler {
 					ColoredProjectsPresenter coloredProjectPresenter = new ColoredProjectsPresenter(
 							abapCiColoredProjectView, new ColoredProjectModel());
 
-					Color assignedUiColor;
 					try {
-						assignedUiColor = coloredProjectPresenter.getUiColorOrDefault(project.getName());
+						IProjectColor assignedUiColor = coloredProjectPresenter.getProjectColor(project.getName());
 
 						ColoredProject coloredProject = new ColoredProject(project.getName(), assignedUiColor, false);
 						AddOrUpdateColoredProjectPage addColoredProjectPage = new AddOrUpdateColoredProjectPage(

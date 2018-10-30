@@ -72,6 +72,7 @@ public class GlobalTestState {
 	}
 
 	public Color getColor() {
+		
 		RGB rgbColor = new RGB(211, 211, 211);
 
 		switch (this.sourcecodeState) {

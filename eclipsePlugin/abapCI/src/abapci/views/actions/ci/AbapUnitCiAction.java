@@ -29,7 +29,7 @@ public class AbapUnitCiAction extends AbstractCiAction {
 		for (AbapPackageTestState abapPackageTestState : getSelectedAbapPackageTestStates()) {
 
 			try {
-				IProject project = AbapProjectUtil.getProjectByProjectName(abapPackageTestState.getProjectName());
+				IProject project = AbapProjectUtil.getAbapProjectByProjectName(abapPackageTestState.getProjectName());
 				TestResultSummary unitTestResultSummary = new AbapUnitHandler().executePackage(project,
 						abapPackageTestState.getPackageName(), new HashSet<Activation>());
 				continuousIntegrationPresenter.mergeUnitTestResultSummary(unitTestResultSummary);

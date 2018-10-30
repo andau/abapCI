@@ -25,6 +25,9 @@ import org.eclipse.ui.PlatformUI;
 
 import abapci.AbapCiPlugin;
 import abapci.coloredProject.model.ColoredProject;
+import abapci.coloredProject.model.projectColor.IProjectColor;
+import abapci.coloredProject.model.projectColor.IProjectColorFactory;
+import abapci.coloredProject.model.projectColor.ProjectColorFactory;
 import abapci.coloredProject.presenter.ColoredProjectsPresenter;
 import abapci.feature.FeatureFacade;
 import abapci.preferences.PreferenceConstants;
@@ -94,7 +97,7 @@ public class AddOrUpdateColoredProjectPage extends Dialog {
 
 		btnSuppressColoring = new Button(container, SWT.CHECK);
 		btnSuppressColoring.setText("Do not color this project");
-		btnSuppressColoring.setSelection(coloredProject != null ? coloredProject.suppressColoring() : false);
+		btnSuppressColoring.setSelection(coloredProject != null ? coloredProject.isSuppressedColoring() : false);
 
 		addEmptyLine(container);
 
@@ -152,8 +155,10 @@ public class AddOrUpdateColoredProjectPage extends Dialog {
 
 		RGB selectedRgb = colorSelector.getColorValue();
 		if (comboColoredProject.getText() != null && !comboColoredProject.getText().equals("") && selectedRgb != null) {
+			IProjectColorFactory projectColorFactory = new ProjectColorFactory(); 
+			IProjectColor projectColor =projectColorFactory.create(selectedRgb, btnSuppressColoring.getSelection()); 
 			presenter.addColoredProject(new ColoredProject(comboColoredProject.getText(),
-					new Color(Display.getCurrent(), selectedRgb), btnSuppressColoring.getSelection()));
+					projectColor, btnSuppressColoring.getSelection()));
 			presenter.setViewerInput();
 		}
 		super.okPressed();

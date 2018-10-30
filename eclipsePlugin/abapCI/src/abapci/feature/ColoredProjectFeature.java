@@ -2,15 +2,16 @@ package abapci.feature;
 
 public class ColoredProjectFeature {
 
-	boolean changeStatusBarActive;
+	private boolean changeStatusBarActive;
 	private boolean leftRulerActive;
 	private boolean rightRulerActive;
 	private boolean dialogEnabled;
+	private boolean titleIconActive;
+	private boolean statusBarWidgetActive;
 
 	public boolean isChangeStatusBarActive() {
 		return changeStatusBarActive;
 	}
-
 	public void setChangeStatusBarActive(boolean active) {
 		this.changeStatusBarActive = active;
 	}
@@ -31,12 +32,35 @@ public class ColoredProjectFeature {
 		this.rightRulerActive = rightRulerActive;
 	}
 
+	public boolean isTitleIconActive() {
+		// TODO Auto-generated method stub
+		return titleIconActive;
+	}
+
+	public void setTitleIconActive(boolean titleIconActive) {
+		this.titleIconActive = titleIconActive;
+	}
+
+	public boolean isStatusBarWidgetActive() {
+		// TODO Auto-generated method stub
+		return statusBarWidgetActive;
+	}
+
+	public void setStatusBarWidgetActive(boolean statusBarWidgetActive) {
+		this.statusBarWidgetActive = statusBarWidgetActive;
+	}
+
 	public void setDialogEnabled(boolean dialogEnabled) {
 		this.dialogEnabled = dialogEnabled;
 	}
 
 	public boolean isDialogEnabled() {
 		return dialogEnabled;
+	}
+
+
+	public boolean isActive() {
+		return isChangeStatusBarActive() || isRightRulerActive() || isLeftRulerActive() || isTitleIconActive();
 	}
 
 }

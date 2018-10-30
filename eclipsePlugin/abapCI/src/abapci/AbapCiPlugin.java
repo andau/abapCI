@@ -10,6 +10,8 @@ import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import abapci.coloredProject.general.IStatusBarWidget;
+import abapci.coloredProject.general.StatusBarWidget;
 import abapci.coloredProject.model.ColoredProjectModel;
 import abapci.coloredProject.presenter.ColoredProjectsPresenter;
 import abapci.feature.FeatureFacade;
@@ -24,18 +26,20 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "com.abapci.core"; //$NON-NLS-1$
-
-	public ContinuousIntegrationPresenter continuousIntegrationPresenter;
-	public ColoredProjectsPresenter coloredProjectsPresenter;
-
 	// The shared instance
 	private static AbapCiPlugin plugin;
+
+	public ContinuousIntegrationPresenter continuousIntegrationPresenter;
+	private ColoredProjectsPresenter coloredProjectsPresenter;
+
 
 	private static IResourceChangeListener resourceChangeListener;
 	private static IPartListener2 partListener;
 
 	private FeatureFacade featureFacade;
 	private GeneralThemePresenter generalThemePresenter;
+	
+	private IStatusBarWidget statusBarWidget; 
 
 	/**
 	 * The constructor
@@ -61,8 +65,9 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 					null);
 
 			initializeResourceChangeListener();
-
+			
 		}
+		
 
 		try {
 			coloredProjectsPresenter = new ColoredProjectsPresenter(null, new ColoredProjectModel());
@@ -123,5 +128,19 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().addPartListener(partListener);
 		}
 
+	}
+	
+	public void attachStatusBarWidget(IStatusBarWidget statusBarWidget)
+	{
+		this.statusBarWidget = statusBarWidget; 
+	}
+	
+	public IStatusBarWidget getStatusBarWidget() 
+	{
+		return statusBarWidget; 
+	}
+
+	public ColoredProjectsPresenter getColoredProjectsPresenter() {
+		return coloredProjectsPresenter; 
 	}
 }

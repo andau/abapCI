@@ -243,7 +243,21 @@
        </command>
     </menuContribution>
 
-    
+    <group id="com.abapci.trimwidget" separatorsVisible="true">
+			<location>
+				<bar type="trim">
+           </bar>
+				<order position="before" relativeTo="status">
+           </order>
+			</location>
+		</group>
+		<widget class="abapci.coloredProject.general.StatusBarWidget" id="com.abapci.trim.status">
+			<location>
+				<bar path="com.abapci.trimwidget" type="trim">
+           </bar>
+			</location>
+		</widget>
+		
    </extension>
    
    <extension

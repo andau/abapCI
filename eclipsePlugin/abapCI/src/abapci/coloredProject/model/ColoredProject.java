@@ -2,20 +2,22 @@ package abapci.coloredProject.model;
 
 import org.eclipse.swt.graphics.Color;
 
+import abapci.coloredProject.model.projectColor.IProjectColor;
+
 public class ColoredProject {
 
 	private String name;
-	private Color color;
+	private IProjectColor projectColor;
 	private boolean suppressColoring;
 
-	public ColoredProject(String name, Color color) {
-		this(name, color, false);
+	public ColoredProject(String name, IProjectColor projectColor) {
+		this(name, projectColor, false);
 	}
 
-	public ColoredProject(String name, Color color, boolean suppressColoring) {
+	public ColoredProject(String name, IProjectColor projectColor, boolean suppressColoring) {
 		this.name = name;
 		this.suppressColoring = suppressColoring;
-		this.color = color;
+		this.projectColor = projectColor;
 	}
 
 	public String getName() {
@@ -23,10 +25,15 @@ public class ColoredProject {
 	}
 
 	public Color getColor() {
-		return color;
+		return projectColor.getColor();
 	}
 
-	public boolean suppressColoring() {
+	public boolean isSuppressedColoring() {
 		return suppressColoring;
+	}
+
+	public boolean getSuppressed() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

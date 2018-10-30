@@ -1,28 +1,14 @@
 package abapci;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import org.eclipse.jface.text.source.ISourceViewer;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPartReference;
-import org.eclipse.ui.texteditor.SourceViewerDecorationSupport;
-import org.eclipse.ui.texteditor.StatusTextEditor;
-
-import abapci.coloredProject.general.DisplayColorChanger;
 import abapci.coloredProject.general.EditorActivationHandler;
 import abapci.presenter.GeneralThemePresenter;
 
 public class PartListener2 implements IPartListener2 {
 
-	private GeneralThemePresenter generalThemePresenter;
-	private DisplayColorChanger annotationRuleColorChanger;
 
 	public PartListener2(GeneralThemePresenter generalThemePresenter) {
-		this.generalThemePresenter = generalThemePresenter;
-		this.annotationRuleColorChanger = new DisplayColorChanger();
-
 	}
 
 	@Override
@@ -76,33 +62,6 @@ public class PartListener2 implements IPartListener2 {
 	@Override
 	public void partVisible(IWorkbenchPartReference arg0) {
 		// TODO Auto-generated method stub
-	}
-
-	protected SourceViewerDecorationSupport getSourceViewerDecorationSupport(IEditorPart editor, ISourceViewer viewer) {
-
-		try {
-			Method getSourceViewerDecorationSupport = StatusTextEditor.class
-					.getDeclaredMethod("getSourceViewerDecorationSupport", ISourceViewer.class);
-
-			getSourceViewerDecorationSupport.setAccessible(true);
-			return (SourceViewerDecorationSupport) getSourceViewerDecorationSupport.invoke(editor, viewer);
-
-		} catch (NoSuchMethodException | SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return null;
-
 	}
 
 }

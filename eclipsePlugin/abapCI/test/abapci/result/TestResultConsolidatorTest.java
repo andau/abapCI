@@ -10,18 +10,13 @@ import org.eclipse.core.resources.IProject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.powermock.api.mockito.PowerMockito;
-import org.powermock.modules.junit4.PowerMockRunner;
-
 import abapci.activation.Activation;
 import abapci.domain.AbapPackageTestState;
 import abapci.domain.ErrorPriority;
 import abapci.domain.InvalidItem;
 import abapci.domain.TestState;
 
-@RunWith(PowerMockRunner.class)
 public class TestResultConsolidatorTest {
 
 	TestResultConsolidator testResultConsolidator;
@@ -35,14 +30,13 @@ public class TestResultConsolidatorTest {
 
 	TestResult newTestResult2;
 
-	@Mock
 	IProject project;
-
-	@Mock
 	IProject otherProject;
 
 	@Before
 	public void before() {
+		project = PowerMockito.mock(IProject.class); 
+		otherProject = PowerMockito.mock(IProject.class); 
 		PowerMockito.when(project.getName()).thenReturn("TESTPROJECT_1");
 		PowerMockito.when(otherProject.getName()).thenReturn("OTHER_TESTPROJECT");
 

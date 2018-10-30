@@ -17,8 +17,12 @@ import org.eclipse.ui.forms.widgets.Hyperlink;
 
 import abapci.Exception.AbapCiColoredProjectFileParseException;
 import abapci.Exception.ContinuousIntegrationConfigFileParseException;
+import abapci.coloredProject.colorChanger.StatusBarColorChanger;
 import abapci.coloredProject.general.WorkspaceColorProxySingleton;
 import abapci.coloredProject.model.ColoredProject;
+import abapci.coloredProject.model.projectColor.IProjectColor;
+import abapci.coloredProject.model.projectColor.IProjectColorFactory;
+import abapci.coloredProject.model.projectColor.ProjectColorFactory;
 import abapci.domain.AbapPackageTestState;
 import abapci.domain.ContinuousIntegrationConfig;
 import abapci.domain.GlobalTestState;
@@ -33,7 +37,6 @@ import abapci.result.TestResult;
 import abapci.result.TestResultConsolidator;
 import abapci.result.TestResultSummary;
 import abapci.result.TestResultType;
-import abapci.utils.BackgroundColorChanger;
 import abapci.utils.EditorHandler;
 import abapci.utils.InvalidItemUtil;
 import abapci.views.AbapCiDashboardView;
@@ -50,7 +53,8 @@ public class ContinuousIntegrationPresenter {
 	private TestResultConsolidator testResultConsolidator;
 	private SourceCodeStateEvaluator sourceCodeStateEvaluator;
 	private SourceCodeStateInfo sourceCodeStateInfo;
-	private BackgroundColorChanger backgroundColorChanger;
+	private StatusBarColorChanger statusBarColorChanger;
+	private IProjectColorFactory projectColorFactory; 
 
 	public ContinuousIntegrationPresenter(AbapCiMainView abapCiMainView,
 			IContinuousIntegrationModel continuousIntegrationModel, IProject currentProject) {
@@ -62,8 +66,8 @@ public class ContinuousIntegrationPresenter {
 		testResultConsolidator = new TestResultConsolidator();
 		sourceCodeStateEvaluator = new SourceCodeStateEvaluator();
 		sourceCodeStateInfo = new SourceCodeStateInfo();
-		backgroundColorChanger = new BackgroundColorChanger();
-
+		projectColorFactory = new ProjectColorFactory();
+		
 		loadPackages();
 		setViewerInput();
 	}
@@ -230,11 +234,7 @@ public class ContinuousIntegrationPresenter {
 
 		try {
 			if (abapCiDashboardView != null) {
-				// TODO work in progess
 				abapCiDashboardView.lblOverallTestState.setText(globalTestStateString);
-
-				// abapCiDashboardView.projectline.setText(TODO reserved for projectinfo when
-				// infoline is used for all infos);
 
 				abapCiDashboardView.infoline
 						.setText(buildInfoLine(abapPackageTestStatesForCurrentProject) + "        ");
@@ -242,16 +242,21 @@ public class ContinuousIntegrationPresenter {
 
 				rebuildHyperlink(abapCiDashboardView.getEntireContainer(), abapCiDashboardView.openErrorHyperlink);
 
+				statusBarColorChanger = new StatusBarColorChanger(Display.getCurrent().getActiveShell());
 				abapCiDashboardView.setBackgroundColor(globalTestState.getColor());
 				// abapCiDashboardView.lblOverallTestState.setForeground(globalTestState.getColor());
 			}
 
 			if (featureFacade.getSourceCodeVisualisationFeature().isChangeStatusBarBackgroundColorEnabled()) {
 				Color currentColor = globalTestState.getColor();
+				IProjectColorFactory projectColorFactory = new ProjectColorFactory(); 
+				IProjectColor projectColor = projectColorFactory.create(currentColor.getRGB()); 
 				WorkspaceColorProxySingleton.getInstance()
-						.addOrUpdate(new ColoredProject(currentProject.getName(), currentColor));
-				backgroundColorChanger.change(Display.getCurrent().getActiveShell(), globalTestState.getColor());
+						.addOrUpdate(new ColoredProject(currentProject.getName(), projectColor));
 			}
+
+			statusBarColorChanger = new StatusBarColorChanger(Display.getCurrent().getActiveShell());
+			statusBarColorChanger.change( projectColorFactory.create(globalTestState.getColor()));
 
 			if (view != null && abapPackageTestStatesForCurrentProject != null) {
 				view.setViewerInput(abapPackageTestStatesForCurrentProject);

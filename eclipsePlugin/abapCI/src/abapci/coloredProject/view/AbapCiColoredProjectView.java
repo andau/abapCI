@@ -28,6 +28,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 import abapci.AbapCiPlugin;
+import abapci.AbapCiPluginHelper;
 import abapci.coloredProject.model.ColoredProject;
 import abapci.coloredProject.presenter.ColoredProjectsPresenter;
 import abapci.lang.UiTexts;
@@ -40,15 +41,21 @@ public class AbapCiColoredProjectView extends ViewPart {
 	 */
 	public static final String ID = "abapci.views.AbapCiColoredProjectView";
 
-	public CLabel statusLabel;
+	private CLabel statusLabel;
 
 	private TableViewer viewer;
 	private Action addAction;
 	private Action updateAction;
 	private Action deleteAction;
+	private AbapCiPluginHelper abapCiPluginHelper; 
 
 	ColoredProjectsPresenter coloredProjectsPresenter;
 
+	public AbapCiColoredProjectView() 
+	{
+		abapCiPluginHelper = new AbapCiPluginHelper();
+	}
+	
 	class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
 		public String getColumnText(Object obj, int index) {
 			return getText(obj);
@@ -66,7 +73,7 @@ public class AbapCiColoredProjectView extends ViewPart {
 
 	public void createPartControl(Composite parent) {
 
-		coloredProjectsPresenter = AbapCiPlugin.getDefault().coloredProjectsPresenter;
+		coloredProjectsPresenter = abapCiPluginHelper.getColoredProjectsPresenter(); 
 		coloredProjectsPresenter.setView(this);
 
 		Composite entireContainer = new Composite(parent, SWT.NONE);
@@ -132,7 +139,7 @@ public class AbapCiColoredProjectView extends ViewPart {
 
 			public String getText(Object element) {
 				ColoredProject c = (ColoredProject) element;
-				return String.valueOf(c.suppressColoring());
+				return String.valueOf(c.isSuppressedColoring());
 			}
 		});
 
@@ -200,6 +207,14 @@ public class AbapCiColoredProjectView extends ViewPart {
 
 	public void setViewerInput(List<ColoredProject> coloredProjects) {
 		viewer.setInput(coloredProjects);
+	}
+
+	public void setStatusLabelText(String statusLabelText) {
+		statusLabel.setText(statusLabelText);
+	}
+
+	public void setStatusLabelForeground(Color color) {
+		statusLabel.setForeground(color);
 	}
 
 }

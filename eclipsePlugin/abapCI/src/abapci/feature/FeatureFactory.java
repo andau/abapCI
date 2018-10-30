@@ -56,8 +56,11 @@ public class FeatureFactory {
 	public ColoredProjectFeature createColoredProjectFeature() {
 		initPrefs();
 		ColoredProjectFeature feature = new ColoredProjectFeature();
-		feature.setChangeStatusBarActive(
-				prefs.getBoolean(PreferenceConstants.PREF_COLORED_PROJECTS_STATUS_BAR_ENABLED));
+		feature.setChangeStatusBarActive(prefs.getBoolean(PreferenceConstants.PREF_COLORED_PROJECTS_STATUS_BAR_ENABLED));
+		feature.setLeftRulerActive(prefs.getBoolean(PreferenceConstants.PREF_COLORED_PROJECTS_LEFT_RULER_ENABLED));
+		feature.setRightRulerActive(prefs.getBoolean(PreferenceConstants.PREF_COLORED_PROJECTS_RIGHT_RULER_ENABLED));
+		feature.setDialogEnabled((prefs.getBoolean(PreferenceConstants.PREF_COLORED_PROJECTS_NEW_DIALOG_ENABLED)));
+
 		return feature;
 	}
 

@@ -2,7 +2,7 @@
 <feature
       id="com.abapci.feature"
       label="ABAP Continuous Integration"
-      version="0.5.2.0"
+      version="0.5.2.6"
       provider-name="andau">
 
    <description url="http://www.example.com/description">
@@ -75,7 +75,7 @@ END OF TERMS AND CONDITIONS
    </requires>
 
    <plugin
-         id="com.abapci.core"
+         id="com.abapci.plugin"
          download-size="0"
          install-size="0"
          version="0.0.0"

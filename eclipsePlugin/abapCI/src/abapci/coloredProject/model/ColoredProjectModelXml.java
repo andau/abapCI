@@ -12,14 +12,16 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.graphics.RGB;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import abapci.Exception.AbapCiColoredProjectFileParseException;
-import abapci.Exception.ProjectColorNotDefinedException;
+import abapci.coloredProject.model.projectColor.IProjectColor;
+import abapci.coloredProject.model.projectColor.IProjectColorFactory;
+import abapci.coloredProject.model.projectColor.ProjectColorFactory;
 import abapci.xml.XmlFileLocationHelper;
 import abapci.xml.XmlWriter;
 
@@ -113,30 +115,32 @@ public class ColoredProjectModelXml {
 		xmlWriter.transformDocument(document);
 	}
 
-	public Color getColorForProject(String projectName)
-			throws AbapCiColoredProjectFileParseException, ProjectColorNotDefinedException {
+	public IProjectColor getColorForProject(String projectName)
+			throws AbapCiColoredProjectFileParseException {
 
-		Color uiColorForProject = null;
-		boolean suppressedColoring = false;
+		IProjectColor projectColor = null;
 		NodeList nodeList = getNodeListOfDocument();
 
 		for (int nodeNumber = 0; nodeNumber < nodeList.getLength(); nodeNumber++) {
 			Element coloredProjectElement = (Element) nodeList.item(nodeNumber);
 			if (coloredProjectElement.getAttribute(PROJECT_NAME_ATTRIBUTE).equals(projectName)) {
-				int red = Integer.parseInt(coloredProjectElement.getAttribute(PROJECT_COLOR_ATTRIBUTE_RED));
-				int green = Integer.parseInt(coloredProjectElement.getAttribute(PROJECT_COLOR_ATTRIBUTE_GREEN));
-				int blue = Integer.parseInt(coloredProjectElement.getAttribute(PROJECT_COLOR_ATTRIBUTE_BLUE));
-				suppressedColoring = Boolean
-						.parseBoolean(coloredProjectElement.getAttribute(PROJECT_COLOR_ATTRIBUTE_SUPPRESS_COLORING));
-				uiColorForProject = new Color(Display.getCurrent(), red, green, blue);
+				projectColor = getProjectColorForProjectElement(coloredProjectElement);
 			}
 		}
 
-		if (uiColorForProject == null || suppressedColoring) {
-			throw new ProjectColorNotDefinedException();
-		} else {
-			return uiColorForProject;
-		}
+		return projectColor; 
+	}
+
+	private IProjectColor getProjectColorForProjectElement(Element coloredProjectElement) {
+
+		int red = Integer.parseInt(coloredProjectElement.getAttribute(PROJECT_COLOR_ATTRIBUTE_RED));
+		int green = Integer.parseInt(coloredProjectElement.getAttribute(PROJECT_COLOR_ATTRIBUTE_GREEN));
+		int blue = Integer.parseInt(coloredProjectElement.getAttribute(PROJECT_COLOR_ATTRIBUTE_BLUE));
+		boolean suppressedColoring = Boolean
+				.parseBoolean(coloredProjectElement.getAttribute(PROJECT_COLOR_ATTRIBUTE_SUPPRESS_COLORING));
+
+		IProjectColorFactory projectColorFactory = new ProjectColorFactory();
+		return projectColorFactory.create(new RGB(red, green, blue), suppressedColoring);
 	}
 
 	public List<ColoredProject> getColoredProjects() throws AbapCiColoredProjectFileParseException {
@@ -151,10 +155,12 @@ public class ColoredProjectModelXml {
 				int red = Integer.parseInt(coloredProjectElement.getAttribute(PROJECT_COLOR_ATTRIBUTE_RED));
 				int green = Integer.parseInt(coloredProjectElement.getAttribute(PROJECT_COLOR_ATTRIBUTE_GREEN));
 				int blue = Integer.parseInt(coloredProjectElement.getAttribute(PROJECT_COLOR_ATTRIBUTE_BLUE));
+				ProjectColorFactory projectColorFactory = new ProjectColorFactory();
+				IProjectColor projectColor = projectColorFactory.create(new RGB(red, green, blue));
+
 				boolean suppressedColoring = Boolean
 						.parseBoolean(coloredProjectElement.getAttribute(PROJECT_COLOR_ATTRIBUTE_SUPPRESS_COLORING));
-				coloredProjects.add(new ColoredProject(name, new Color(Display.getCurrent(), red, green, blue),
-						suppressedColoring));
+				coloredProjects.add(new ColoredProject(name, projectColor, suppressedColoring));
 			}
 		}
 		return coloredProjects;

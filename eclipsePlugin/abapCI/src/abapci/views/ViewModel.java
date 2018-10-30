@@ -24,13 +24,11 @@ public enum ViewModel {
 
 	Viewer mainViewer;
 	Viewer suppressionsViewer;
-	Viewer coloredProjectsViewer;
 	Label lblOverallTestState;
 	Label lblOverallInfoline;
 
 	// private List<AbapPackageTestState> abapPackageTestStates;
 	private List<Suppression> suppressions;
-	private List<ColoredProject> coloredProjects;
 
 	private TestState overallTestState;
 	private String overallInfoline;
@@ -53,19 +51,6 @@ public enum ViewModel {
 			e.printStackTrace();
 		}
 
-		coloredProjects = new ArrayList<>();
-		IEclipsePreferences coloredProjectsPrefs = ConfigurationScope.INSTANCE.getNode("coloredProjects");
-
-		try {
-			for (String key : coloredProjectsPrefs.keys()) {
-				coloredProjects.add(new ColoredProject(coloredProjectsPrefs.get(key, "default"),
-						new Color(Display.getCurrent(), new RGB(0, 0, 255))));
-			}
-		} catch (BackingStoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 	}
 
 	// TODO Dirty but working for the beginning - observableList should make
@@ -76,10 +61,6 @@ public enum ViewModel {
 
 	public void setSuppressViewer(Viewer viewer) {
 		INSTANCE.suppressionsViewer = viewer;
-	}
-
-	public void setColoredProjectsViewer(Viewer viewer) {
-		INSTANCE.coloredProjectsViewer = viewer;
 	}
 
 	public void setPackageTestStates(List<AbapPackageTestState> abapPackageTestStates) {
@@ -139,16 +120,5 @@ public enum ViewModel {
 
 	}
 
-	public List<ColoredProject> getColoredProjects() {
-		return coloredProjects;
-	}
-
-	public void setColoredProjects(List<ColoredProject> coloredProjects) {
-		this.coloredProjects = coloredProjects;
-
-		Runnable runnable = () -> coloredProjectsViewer.setInput(coloredProjects);
-		Display.getDefault().asyncExec(runnable);
-
-	}
 
 }

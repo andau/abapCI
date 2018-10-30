@@ -52,7 +52,7 @@ public class WorkspaceColorProxySingleton {
 			coloredProjects.remove(coloredProject.getName());
 		}
 		coloredProjects.put(coloredProject.getName(),
-				new DisplayColor(coloredProject.getColor(), coloredProject.getColor()));
+				new DisplayColor(coloredProject.getColor(), coloredProject.isSuppressedColoring()));
 
 	}
 
