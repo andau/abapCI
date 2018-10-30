@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -28,28 +29,30 @@ public class FeatureProcessorTest {
 
 	FeatureProcessor featureProcessor;
 
-	@Mock
 	IPreferenceStore preferenceStore;
-	@Mock
 	FeatureFacade featureFacade;
-	@Mock
 	FeatureFactory featureFactory;
-	@Mock
 	AUnitTestManager aUnitTestManager;
-	@Mock
 	AtcTestManager atcTestManager;
-	@Mock
 	AbapCiPlugin abapCiPlugin;
-	@Mock
 	ThemeUpdateManager themeUpdateManager;
-	@Mock
 	ContinuousIntegrationPresenter continuousIntegrationPresenter;
-	@Mock
 	IProject project;
 
 	@Before
-	public void setUp() throws Exception {
+	public void before() throws Exception {
 
+		preferenceStore = Mockito.mock(IPreferenceStore.class);
+		featureFacade = Mockito.mock(FeatureFacade.class);
+		featureFactory= Mockito.mock(FeatureFactory.class);
+		aUnitTestManager= Mockito.mock(AUnitTestManager.class);
+		atcTestManager= Mockito.mock(AtcTestManager.class);
+		abapCiPlugin= Mockito.mock(AbapCiPlugin.class);
+		themeUpdateManager= Mockito.mock(ThemeUpdateManager.class);
+		continuousIntegrationPresenter= Mockito.mock(ContinuousIntegrationPresenter.class);
+		project = Mockito.mock(IProject.class);
+
+		
 		featureFacade = new FeatureFacade();
 		featureFactory = new FeatureFactory();
 		Whitebox.setInternalState(featureFactory, "prefs", preferenceStore);

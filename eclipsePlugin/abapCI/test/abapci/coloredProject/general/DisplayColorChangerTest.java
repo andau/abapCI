@@ -1,13 +1,9 @@
 package abapci.coloredProject.general;
 
-import static org.junit.Assert.*;
-
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.editors.text.TextEditor;
-import org.eclipse.ui.part.EditorPart;
 import org.junit.Ignore;
 import org.junit.Test;
 

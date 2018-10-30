@@ -8,7 +8,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -18,29 +17,31 @@ import abapci.domain.TestState;
 import abapci.feature.FeatureFacade;
 import abapci.feature.UnitFeature;
 
-@RunWith(PowerMockRunner.class)
 public class SourceCodeStateEvaluatorTest {
 
 	SourceCodeStateEvaluator sourceCodeStateEvaluator;
 	List<AbapPackageTestState> abapPackageTestStates;
 
-	@Mock
 	TestResult unitTestResult1;
-	@Mock
 	TestResult unitTestResult2;
 
-	@Mock
 	TestResult atcTestResult1;
-	@Mock
 	TestResult atcTestResult2;
 
-	@Mock
 	FeatureFacade featureFacade;
-	@Mock
 	UnitFeature unitFeature;
 
 	@Before
 	public void before() {
+		unitTestResult1 = PowerMockito.mock(TestResult.class);
+		unitTestResult2= PowerMockito.mock(TestResult.class);
+
+		atcTestResult1= PowerMockito.mock(TestResult.class);
+		atcTestResult2= PowerMockito.mock(TestResult.class);
+
+		featureFacade= PowerMockito.mock(FeatureFacade.class);
+		unitFeature= PowerMockito.mock(UnitFeature.class);
+
 		sourceCodeStateEvaluator = new SourceCodeStateEvaluator();
 		sourceCodeStateEvaluator.featureFacade = featureFacade;
 		abapPackageTestStates = new ArrayList<AbapPackageTestState>();

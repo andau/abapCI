@@ -15,7 +15,7 @@ public class StatusBarColorHelperTest {
 	
 	@Test
 	public void testStatusBarColorHelper() {
-		assertTrue(StatusBarColorHelper.getColor(null) != null);
+		assertNotNull(StatusBarColorHelper.getColor(null));
 		
 		IProjectColorFactory projectColorFactory = new ProjectColorFactory(); 
 		IProjectColor projectColor = projectColorFactory.create(TEST_RGB); 

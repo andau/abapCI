@@ -8,7 +8,6 @@ import org.eclipse.emf.common.util.BasicEList;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -31,31 +30,26 @@ public class AtcResultAnalyzerTest {
 
 	AtcResultAnalyzer atcResultAnalyzer;
 
-	@Mock
 	IAtcWorklist atcWorklist;
-
-	@Mock
 	IAtcObjectList atcObjectList;
-
-	@Mock
 	IAtcObject atcObject;
-
-	@Mock
 	IAtcFindingList atcFindingList;
-
-	@Mock
 	IAtcFinding emptyAtcFinding;
-
-	@Mock
 	IAtcFinding activeAtcFinding;
-
-	@Mock
 	IAtcFinding suppressedAtcFinding;
 
 	@Before
 	public void before() {
 		final String SUPPRESSED_FINDING_LOC = "SUPPRESSED_FINDING";
 		final String SUPPRESSED_FINDING_URI = "\test\testdetail";
+
+		atcWorklist = PowerMockito.mock(IAtcWorklist.class);
+		atcObjectList = PowerMockito.mock(IAtcObjectList.class);
+		atcObject = PowerMockito.mock(IAtcObject.class);
+		atcFindingList = PowerMockito.mock(IAtcFindingList.class);
+		emptyAtcFinding = PowerMockito.mock(IAtcFinding.class);
+		activeAtcFinding = PowerMockito.mock(IAtcFinding.class);
+		suppressedAtcFinding = PowerMockito.mock(IAtcFinding.class);
 
 		PowerMockito.when(atcWorklist.getObjects()).thenReturn(atcObjectList);
 		PowerMockito.when(atcWorklist.getObjects().getObject())

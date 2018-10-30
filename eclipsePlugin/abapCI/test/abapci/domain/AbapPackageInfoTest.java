@@ -3,9 +3,11 @@ package abapci.domain;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import org.junit.Test;
+
 public class AbapPackageInfoTest {
 
-	@org.junit.Test
+	@Test
 	public void testAbapPackageInfoInitialized() {
 		final String TEST_PACKAGE = "TEST_PACKAGE"; 
 		

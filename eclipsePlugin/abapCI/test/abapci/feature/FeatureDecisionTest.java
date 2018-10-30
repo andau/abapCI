@@ -3,16 +3,13 @@ package abapci.feature;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import abapci.AbapCiPlugin;
 import abapci.preferences.PreferenceConstants;
 
-@RunWith(PowerMockRunner.class)
 public class FeatureDecisionTest {
 
 	@Test
