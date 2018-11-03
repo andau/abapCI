@@ -33,6 +33,14 @@ public class PreferenceConstants {
 
 	public static final String PREF_COLORED_PROJECTS_STATUS_BAR_ENABLED = "coloredProjectsStatusBarEnabled";
 
+	public static final String PREF_COLORED_PROJECTS_STATUS_BAR_WIDGET_ENABLED = "coloredProjectsStatusBarWidgetEnabled";
+
+	public static final String PREF_COLORED_PROJECTS_TITLE_ICON_ENABLED = "coloredProjectsTitleIconEnabled";
+
+	public static final String PREF_COLORED_PROJECTS_TITLE_ICON_WIDTH_PERCENT = "coloredProjectsTitleIconWidthPercent";
+
+	public static final String PREF_COLORED_PROJECTS_TITLE_ICON_HEIGTH_PERCENT = "coloredProjectsTitleIconHeightPercent";
+
 	public static final String PREF_COLORED_PROJECTS_NEW_DIALOG_ENABLED = "coloredProjectsNewDialogEnabled";
 
 	public static final String PREF_SOURCE_CODE_FORMATTING_ENABLED = "sourceCodeFormattingEnabled";
@@ -67,7 +75,9 @@ public class PreferenceConstants {
 
 	public static final String PREF_TDD_MIN_REQUIRED_SECONDS = "tddMinRequiredSeconds";
 
-	public static final String PREF_CHANGE_STATUS_BAR_BACKGROUND_COLOR = "chageStatusBarBackgroundColorEnabled";
+	public static final String PREF_CHANGE_STATUS_BAR_BACKGROUND_COLOR = "changeStatusBarBackgroundColorEnabled";
+
+	public static final String PREF_TEST_VISUALISATION_STATUS_BAR_WIDGET_ENABLED = "sourceCodeStatusBarWidgetEnabled"; 
 
 	private PreferenceConstants() {
 	}

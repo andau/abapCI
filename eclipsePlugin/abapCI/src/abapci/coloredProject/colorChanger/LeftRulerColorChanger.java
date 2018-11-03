@@ -13,12 +13,13 @@ import abapci.coloredProject.model.projectColor.IProjectColor;
 
 public class LeftRulerColorChanger extends ARulerColorChanger {
 
-	public LeftRulerColorChanger(IEditorPart editorPart) {
+	public LeftRulerColorChanger(IEditorPart editorPart, IProjectColor projectColor) {
 		super(editorPart);
+		this.projectColor = projectColor; 
 	}
 
 	@Override
-	public void change(IProjectColor projectColor) throws ActiveEditorNotSetException {
+	public void change() throws ActiveEditorNotSetException {
 
 		if (getTextViewer() != null && projectColor != null && !projectColor.isSuppressed()) {
 			OverviewRuler overviewRuler = (OverviewRuler) getOverviewRuler((SourceViewer) getTextViewer());

@@ -17,7 +17,7 @@ import org.powermock.reflect.Whitebox;
 import abapci.AbapCiPlugin;
 import abapci.domain.SourcecodeState;
 import abapci.domain.TestState;
-import abapci.manager.AUnitTestManager;
+import abapci.manager.UnitTestManager;
 import abapci.manager.AtcTestManager;
 import abapci.manager.ThemeUpdateManager;
 import abapci.preferences.PreferenceConstants;
@@ -32,7 +32,7 @@ public class FeatureProcessorTest {
 	IPreferenceStore preferenceStore;
 	FeatureFacade featureFacade;
 	FeatureFactory featureFactory;
-	AUnitTestManager aUnitTestManager;
+	UnitTestManager aUnitTestManager;
 	AtcTestManager atcTestManager;
 	AbapCiPlugin abapCiPlugin;
 	ThemeUpdateManager themeUpdateManager;
@@ -45,7 +45,7 @@ public class FeatureProcessorTest {
 		preferenceStore = Mockito.mock(IPreferenceStore.class);
 		featureFacade = Mockito.mock(FeatureFacade.class);
 		featureFactory= Mockito.mock(FeatureFactory.class);
-		aUnitTestManager= Mockito.mock(AUnitTestManager.class);
+		aUnitTestManager= Mockito.mock(UnitTestManager.class);
 		atcTestManager= Mockito.mock(AtcTestManager.class);
 		abapCiPlugin= Mockito.mock(AbapCiPlugin.class);
 		themeUpdateManager= Mockito.mock(ThemeUpdateManager.class);

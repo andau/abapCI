@@ -3,22 +3,26 @@ package abapci.feature;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
 import abapci.activation.Activation;
 import abapci.domain.TestState;
-import abapci.manager.AUnitTestManager;
+import abapci.manager.UnitTestManager;
 import abapci.manager.AtcTestManager;
 import abapci.manager.DevelopmentProcessManager;
+import abapci.manager.IAtcTestManager;
+import abapci.manager.JavaSimAtcTestManager;
 import abapci.manager.ThemeUpdateManager;
 import abapci.presenter.ContinuousIntegrationPresenter;
 
 public class FeatureProcessor {
 
-	private AUnitTestManager aUnitTestManager;
-	private AtcTestManager atcTestManager;
+	private UnitTestManager aUnitTestManager;
+	private IAtcTestManager atcTestManager;
 
 	private ThemeUpdateManager themeUpdateManager;
 
@@ -30,8 +34,12 @@ public class FeatureProcessor {
 	public FeatureProcessor(ContinuousIntegrationPresenter presenter, IProject project, List<String> initialPackages) {
 
 		this.presenter = presenter;
-		aUnitTestManager = new AUnitTestManager(presenter, project, initialPackages);
-		atcTestManager = new AtcTestManager(presenter, project, initialPackages);
+		
+		aUnitTestManager = new UnitTestManager(presenter, project, initialPackages);
+		//For testing purposes 
+		atcTestManager = new JavaSimAtcTestManager(presenter, project, initialPackages);
+		// atcTestManager = new AtcTestManager(presenter, project, initialPackages);
+		
 		developmentProcessManager = new DevelopmentProcessManager();
 
 		themeUpdateManager = new ThemeUpdateManager();
@@ -46,7 +54,7 @@ public class FeatureProcessor {
 		this.inactiveObjects = inactiveObjects;
 	}
 
-	public void processEnabledFeatures() {
+	public void processEnabledFeatures() { 
 
 		try {
 			if (featureFacade.getUnitFeature().isActive()) {

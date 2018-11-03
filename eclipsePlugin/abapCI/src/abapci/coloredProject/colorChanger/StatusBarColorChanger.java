@@ -1,10 +1,8 @@
 package abapci.coloredProject.colorChanger;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import abapci.coloredProject.model.projectColor.IProjectColor;
@@ -13,11 +11,12 @@ public class StatusBarColorChanger extends ColorChanger {
 
 	private Shell shell;
 
-	public StatusBarColorChanger(Shell shell) {
+	public StatusBarColorChanger(Shell shell, IProjectColor projectColor) {
 		this.shell = shell;
+		this.projectColor = projectColor; 
 	}
 
-	public void change(IProjectColor projectColor) {
+	public void change() {
 
 		setBackgroundForChildren(shell, StatusBarColorHelper.getColor(projectColor),
 				"org.eclipse.jface.action.StatusLine", 0);

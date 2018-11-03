@@ -5,7 +5,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IProject;
-
 import com.sap.adt.atc.model.atcworklist.IAtcWorklist;
 
 import abapci.activation.Activation;
@@ -13,11 +12,11 @@ import abapci.domain.AbapPackageTestState;
 import abapci.domain.TestState;
 import abapci.handlers.AbapAtcHandler;
 import abapci.presenter.ContinuousIntegrationPresenter;
-import abapci.result.TestResult;
-import abapci.result.TestResultSummary;
+import abapci.testResult.TestResult;
+import abapci.testResult.TestResultSummary;
 import abapci.utils.AtcResultAnalyzer;
 
-public class AtcTestManager extends AbstractTestManager {
+public class AtcTestManager extends AbstractTestManager implements IAtcTestManager {
 
 	public AtcTestManager(ContinuousIntegrationPresenter continuousIntegrationPresenter, IProject project,
 			List<String> packageNames) {
@@ -26,6 +25,8 @@ public class AtcTestManager extends AbstractTestManager {
 
 	public TestState executeAllPackages(IProject project, List<AbapPackageTestState> activeAbapPackageTestStates,
 			List<Activation> inactiveObjects) {
+
+		//Method prepared for implementation with Code Mining - for now dummy implementation for E2E testing purposes  		
 
 		overallTestState = TestState.UNDEF;
 

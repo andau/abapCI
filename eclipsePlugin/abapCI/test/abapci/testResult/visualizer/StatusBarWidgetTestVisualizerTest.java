@@ -1,0 +1,14 @@
+package abapci.testResult.visualizer;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+public class StatusBarWidgetTestVisualizerTest {
+
+	@Test
+	public void test() {
+		fail("Not yet implemented");
+	}
+
+}

@@ -10,8 +10,8 @@ import abapci.activation.Activation;
 import abapci.domain.AbapPackageTestState;
 import abapci.handlers.AbapUnitHandler;
 import abapci.presenter.ContinuousIntegrationPresenter;
-import abapci.result.TestResultSummary;
-import abapci.result.TestResultSummaryFactory;
+import abapci.testResult.TestResultSummary;
+import abapci.testResult.TestResultSummaryFactory;
 
 public class AbapUnitCiAction extends AbstractCiAction {
 

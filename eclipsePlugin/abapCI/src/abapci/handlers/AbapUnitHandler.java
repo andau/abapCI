@@ -21,8 +21,8 @@ import com.sap.adt.tools.abapsource.abapunit.services.IAdtServicesFactory;
 
 import abapci.activation.Activation;
 import abapci.feature.FeatureFacade;
-import abapci.result.TestResultSummary;
-import abapci.result.TestResultSummaryFactory;
+import abapci.testResult.TestResultSummary;
+import abapci.testResult.TestResultSummaryFactory;
 
 /**
  * Our sample handler extends AbstractHandler, an IHandler base class.
@@ -30,7 +30,7 @@ import abapci.result.TestResultSummaryFactory;
  * @see org.eclipse.core.commands.IHandler
  * @see org.eclipse.core.commands.AbstractHandler
  */
-public class AbapUnitHandler extends AbstractHandler {
+public class AbapUnitHandler extends AbstractHandler implements IUnitHandler  {
 	private static final String ABAP_CLASS_TYPE = "CLAS/OC";
 
 	@Override

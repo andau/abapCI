@@ -16,6 +16,8 @@ import org.eclipse.ui.part.ViewPart;
 
 import abapci.AbapCiPlugin;
 import abapci.presenter.ContinuousIntegrationPresenter;
+import abapci.testResult.visualizer.DashboardTestResultVisualizer;
+import abapci.testResult.visualizer.ITestResultVisualizer;
 
 public class AbapCiDashboardView extends ViewPart {
 
@@ -27,16 +29,19 @@ public class AbapCiDashboardView extends ViewPart {
 	private ContinuousIntegrationPresenter presenter;
 
 	public Label projectline;
-	public Label lblOverallTestState;
+	private Label lblOverallTestState;
 	public Label infoline;
 	public Hyperlink openErrorHyperlink;
 
 	private Composite parent;
 	private Composite entireContainer;
 
+	private ITestResultVisualizer testResultVisualizer;
+
 	public AbapCiDashboardView() {
 		ViewModel.INSTANCE.getOverallTestState();
 		ViewModel.INSTANCE.getOverallInfoline();
+		testResultVisualizer = new DashboardTestResultVisualizer(this); 
 	}
 
 	public void setBackgroundColor(Color color) {
@@ -95,6 +100,14 @@ public class AbapCiDashboardView extends ViewPart {
 	@Override
 	public void setFocus() {
 		// TODO Auto-generated method stub
+	}
+
+	public ITestResultVisualizer getTestResultVisualizer() {
+		return testResultVisualizer;
+	}
+
+	public void setLabelOverallTestStateText(String text) {
+		 lblOverallTestState.setText(text); 
 	}
 
 }

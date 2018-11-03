@@ -5,7 +5,6 @@ import java.lang.reflect.Field;
 import org.eclipse.jface.text.source.CompositeRuler;
 import org.eclipse.jface.text.source.IVerticalRuler;
 import org.eclipse.jface.text.source.SourceViewer;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.IEditorPart;
 
 import abapci.Exception.ActiveEditorNotSetException;
@@ -13,12 +12,13 @@ import abapci.coloredProject.model.projectColor.IProjectColor;
 
 public class RightRulerColorChanger extends ARulerColorChanger  {
 
-	public RightRulerColorChanger(IEditorPart editorPart) {
+	public RightRulerColorChanger(IEditorPart editorPart, IProjectColor projectColor) {
 		super(editorPart);
+		this.projectColor = projectColor; 
 	}
 
 	@Override
-	public void change(IProjectColor projectColor) throws ActiveEditorNotSetException {
+	public void change() throws ActiveEditorNotSetException {
 
 		if (projectColor == null || projectColor.isSuppressed())
 			return;

@@ -4,7 +4,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.text.SimpleDateFormat;
 
-import abapci.result.TestResult;
+import abapci.testResult.TestResult;
 
 public class AbapPackageTestState {
 	private String projectName;

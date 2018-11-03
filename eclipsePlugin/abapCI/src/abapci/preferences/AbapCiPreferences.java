@@ -93,7 +93,11 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 				"Backgroundcolor for FAIL ATC State used in ABAP CI dashboard", getFieldEditorParent()));
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_CHANGE_STATUS_BAR_BACKGROUND_COLOR,
-				"&Use source code  state color as background color of the Eclipser statusbar (and annotation ruler if activated)",
+				"&Use source code  state color as background color of the Eclipse statusbar (and annotation ruler if activated)",
+				getFieldEditorParent()));
+
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_TEST_VISUALISATION_STATUS_BAR_WIDGET_ENABLED,
+				"&Show widget with test state info in  Eclipse statusbar",
 				getFieldEditorParent()));
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_CHANGE_COLOR_ON_FAILED_TESTS,
@@ -137,15 +141,30 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 	}
 
 	private void createColorChangeChapter() {
+		Label atcInfoLabel1 = new Label(getFieldEditorParent(), SWT.NONE);
+		atcInfoLabel1.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
+		atcInfoLabel1.setText("This feature adds a coloring for the selected project");
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_COLORED_PROJECTS_LEFT_RULER_ENABLED,
-				"&Change color of left ruler for colored projects", getFieldEditorParent()));
+				"&Change color of left ruler", getFieldEditorParent()));
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_COLORED_PROJECTS_RIGHT_RULER_ENABLED,
-				"&Change color of right ruler for colored projects", getFieldEditorParent()));
+				"&Change color of right ruler", getFieldEditorParent()));
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_COLORED_PROJECTS_STATUS_BAR_ENABLED,
-				"&Change color of status bar for colored projects", getFieldEditorParent()));
+				"&Change color of status bar", getFieldEditorParent()));
+
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_COLORED_PROJECTS_STATUS_BAR_WIDGET_ENABLED,
+				"&Show Widget in status bar", getFieldEditorParent()));
+
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_ENABLED,
+				"&Add a square to the left bottom edge of the editor title icon", getFieldEditorParent()));
+
+		addField(new IntegerFieldEditor(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_WIDTH_PERCENT,
+				"&Width of square in percent of full icon image width", getFieldEditorParent()));
+
+		addField(new IntegerFieldEditor(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_HEIGTH_PERCENT,
+				"&Height of square in percent of full icon image height", getFieldEditorParent()));
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_COLORED_PROJECTS_NEW_DIALOG_ENABLED,
 				"&Show dialog when a new package without a color definition is detected", getFieldEditorParent()));

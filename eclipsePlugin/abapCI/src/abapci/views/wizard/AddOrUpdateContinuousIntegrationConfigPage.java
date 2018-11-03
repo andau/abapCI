@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.RowLayout;
@@ -112,17 +114,19 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 	}
 
 	private String[] getAbapProjectsArray() {
-		ArrayList<String> abapProjectnames = new ArrayList<>();
-		IProject[] availableProjects = AdtCoreProjectServiceFactory.createCoreProjectService()
-				.getAvailableAdtCoreProjects();
+		ArrayList<String> projectNames = new ArrayList<>();
+		IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
+        IProject[] availableProjects = workspaceRoot.getProjects();
+        
+		//IProject[] availableProjects = AdtCoreProjectServiceFactory.createCoreProjectService()
+		//		.getAvailableAdtCoreProjects();
 
 		for (IProject project : availableProjects) {
-			if (AbapProjectService.getInstance().isAbapProject(project)) {
-				abapProjectnames.add(project.getName());
-			}
+		//	if (AbapProjectService.getInstance().isAbapProject(project)) {
+				projectNames.add(project.getName());
+		//	}
 		}
-		abapProjectnames.add("Testproject");
-		return abapProjectnames.toArray(new String[0]);
+		return projectNames.toArray(new String[0]);
 	}
 
 	public static String[] getElementsOfEnum(Class<? extends Enum<?>> e) {

@@ -7,14 +7,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jdt.core.JavaCore;
 
 import abapci.Exception.InactivatedObjectEvaluationException;
 import abapci.activation.Activation;
-import abapci.activation.ActivationDetector;
+import abapci.activation.ActivationPool;
 import abapci.connections.SapConnection;
 import abapci.feature.FeatureProcessor;
 import abapci.presenter.ContinuousIntegrationPresenter;
@@ -63,8 +65,13 @@ public class CiJob extends Job {
 			return Status.CANCEL_STATUS;
 		}
 
-		if (evaluateRerun()) {
-			schedule();
+		try {
+			if (!project.hasNature(JavaCore.NATURE_ID) && evaluateRerun()) {
+				schedule();
+			}
+		} catch (CoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 		if (triggerProcessor) {
@@ -79,7 +86,7 @@ public class CiJob extends Job {
 	}
 
 	private boolean evaluateRerun() {
-
+		
 		boolean rerun = true;
 		boolean timeup = false;
 
@@ -97,7 +104,7 @@ public class CiJob extends Job {
 		long timeSinceLastTrigger = new Date().getTime() - triggerDate.getTime();
 
 		if (currentInactiveObjects.size() == 0) {
-			ActivationDetector.getInstance().unregisterAllActivated();
+			ActivationPool.getInstance().unregisterAllActivated();
 			rerun = false;
 			System.out.println(String.format("Ci job - no rerun necessary"));
 		}

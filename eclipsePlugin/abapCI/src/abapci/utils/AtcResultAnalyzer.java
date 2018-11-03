@@ -16,7 +16,7 @@ import abapci.activation.Activation;
 import abapci.domain.ErrorPriority;
 import abapci.domain.InvalidItem;
 import abapci.domain.TestState;
-import abapci.result.TestResult;
+import abapci.testResult.TestResult;
 import abapci.views.ViewModel;
 
 public class AtcResultAnalyzer {

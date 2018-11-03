@@ -13,12 +13,11 @@ import com.sap.adt.tools.abapsource.abapunit.IAbapUnitAlertDetail;
 import abapci.utils.AlertDetailMessageExtractor;
 
 public class AlertDetailMessageExtractorTest {
-
-	IAbapUnitAlert unitalert;
+	
+	IAbapUnitAlert unitalert; 
 	IAbapUnitAlertDetail unitAlertDetailOne;
 	IAbapUnitAlertDetail childAlertDetailOne;
-
-
+	
 	@Before
 	public void before() {
 		
@@ -31,8 +30,8 @@ public class AlertDetailMessageExtractorTest {
 		PowerMockito.when(unitAlertDetailOne.getChildDetails()).thenReturn(Arrays.asList(childAlertDetailOne));
 		PowerMockito.when(childAlertDetailOne.getText()).thenReturn("DetailText");
 	}
-
-	@Test
+ 
+	@Test 
 	public void extractMessageForUiTest() {
 		String messageForUi = AlertDetailMessageExtractor.extractMessageForUi(unitalert);
 		assertEquals("MainText, DetailText", messageForUi);

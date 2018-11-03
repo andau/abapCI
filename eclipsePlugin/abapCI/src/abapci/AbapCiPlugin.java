@@ -77,7 +77,7 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 		initializePartChangeListener();
 
 		ICommandService service = PlatformUI.getWorkbench().getService(ICommandService.class);
-		service.addExecutionListener(new SaveFormattingListener());
+		service.addExecutionListener(new ActivationExecutionListener());
 
 	}
 
@@ -124,7 +124,7 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 
 	public void initializePartChangeListener() {
 		if (partListener == null) {
-			partListener = new PartListener2(generalThemePresenter);
+			partListener = new EditorActivationListener(generalThemePresenter);
 			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().addPartListener(partListener);
 		}
 

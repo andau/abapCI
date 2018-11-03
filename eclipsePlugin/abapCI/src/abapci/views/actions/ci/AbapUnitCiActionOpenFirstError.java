@@ -9,7 +9,7 @@ import com.sap.adt.tools.core.ui.navigation.AdtNavigationServiceFactory;
 import abapci.AbapCiPlugin;
 import abapci.domain.AbapPackageTestState;
 import abapci.presenter.ContinuousIntegrationPresenter;
-import abapci.result.TestResultSummaryFactory;
+import abapci.testResult.TestResultSummaryFactory;
 
 public class AbapUnitCiActionOpenFirstError extends AbstractCiAction {
 

@@ -7,7 +7,7 @@ import java.util.Collection;
 
 import org.junit.Test;
 
-import abapci.result.TestResult;
+import abapci.testResult.TestResult;
 
 public class AbapPackageTestStateTest {
 

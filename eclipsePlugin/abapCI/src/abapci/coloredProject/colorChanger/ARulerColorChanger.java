@@ -3,13 +3,11 @@ package abapci.coloredProject.colorChanger;
 import java.lang.reflect.Method;
 
 import org.eclipse.jface.text.ITextViewer;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 
 import abapci.Exception.ActiveEditorNotSetException;
-import abapci.coloredProject.model.projectColor.IProjectColor;
 
 public abstract class ARulerColorChanger extends ColorChanger {
 
@@ -20,7 +18,7 @@ public abstract class ARulerColorChanger extends ColorChanger {
 		this.editorPart = editorPart; 
 	}
 
-	public abstract void change(IProjectColor projectColor) throws ActiveEditorNotSetException; 
+	public abstract void change() throws ActiveEditorNotSetException; 
 
 	protected ITextViewer getTextViewer() throws ActiveEditorNotSetException 
 	{

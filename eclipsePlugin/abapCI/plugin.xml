@@ -159,9 +159,13 @@
                    ifEmpty="false"
                    operator="or">
                 <and>
+                <or>
                       property="com.sap.adt.project.hasNature"
                          value="com.sap.adt.abapnature">
-                  <or>
+ 
+                      property="com.sap.adt.project.hasNature"
+                         value="org.eclipse.jdt.core.javanature">     
+ 
                       <instanceof
                             value="com.sap.adt.tools.core.IAdtObjectReference">
                       </instanceof>

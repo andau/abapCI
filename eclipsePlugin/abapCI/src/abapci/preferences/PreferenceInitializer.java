@@ -5,13 +5,19 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceConverter;
 import org.eclipse.swt.graphics.RGB;
 
-import abapci.AbapCiPlugin;
+import abapci.AbapCiPluginHelper;
 
 public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
+	IPreferenceStore store; 
+	
+	public PreferenceInitializer()
+	{
+		AbapCiPluginHelper abapCiPluginHelper = new AbapCiPluginHelper(); 
+		store = abapCiPluginHelper.getPreferenceStore(); 		
+	}
 	public void initializeDefaultPreferences() {
-		IPreferenceStore store = AbapCiPlugin.getDefault().getPreferenceStore();
-
+	
 		store.setDefault(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE, true);
 		store.setDefault(PreferenceConstants.PREF_UNIT_RUN_ACTIVATED_OBJECTS_ONLY, false);
 
@@ -26,7 +32,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.PREF_JENKINS_BUILD_TOKEN, "PUT_YOUR_OWN_TOKEN_FOR_ABAP_CI");
 		store.setDefault(PreferenceConstants.PREF_JENKINS_RUN_AFTER_UNIT_TESTS_TURN_GREEN, false);
 		store.setDefault(PreferenceConstants.PREF_CHANGE_COLOR_ON_FAILED_TESTS, false);
-		store.setDefault(PreferenceConstants.PREF_CHANGE_STATUS_BAR_BACKGROUND_COLOR, true);
+		store.setDefault(PreferenceConstants.PREF_CHANGE_STATUS_BAR_BACKGROUND_COLOR, false);
+		store.setDefault(PreferenceConstants.PREF_TEST_VISUALISATION_STATUS_BAR_WIDGET_ENABLED, true);
 
 		store.setDefault(PreferenceConstants.PREF_SOURCE_CODE_FORMATTING_ENABLED, true);
 		store.setDefault(PreferenceConstants.PREF_SOURCE_CODE_FORMATTING_PREFIX, "#autoformat");
@@ -35,6 +42,10 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_LEFT_RULER_ENABLED, false);
 		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_RIGHT_RULER_ENABLED, false);
 		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_STATUS_BAR_ENABLED, true);
+		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_ENABLED,  true);
+		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_WIDTH_PERCENT,50);
+		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_HEIGTH_PERCENT,  50);
+		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_STATUS_BAR_WIDGET_ENABLED,  false);
 		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_NEW_DIALOG_ENABLED, true);
 
 		store.setDefault(PreferenceConstants.PREF_UNIT_RUN_CRITICAL_TESTS_ENABLED, true);

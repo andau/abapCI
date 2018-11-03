@@ -11,16 +11,34 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.menus.AbstractWorkbenchTrimWidget;
 
 import abapci.AbapCiPlugin;
+import abapci.testResult.visualizer.ITestResultVisualizer;
+import abapci.testResult.visualizer.ResultVisualizerOutput;
+import abapci.testResult.visualizer.StatusBarWidgetTestVisualizer;
 
-public class StatusBarWidget extends AbstractWorkbenchTrimWidget implements IStatusBarWidget {
+public class StatusBarWidget extends AbstractWorkbenchTrimWidget implements IStatusBarWidget, ITestResultVisualizer {
 
 	private Composite composite;
 	private Label statusLabel;
-	private String statusString = "Status not yet set";
-	private Color backgroundColor = getColor(SWT.COLOR_BLACK);
+	private String statusString = "Teststatus not yet initialized";
+	private ITestResultVisualizer testResultVisualizer; 
+	
 
 	@Override
+	public void setResultVisualizerOutput(ResultVisualizerOutput resultVisualizerOutput) {
+		setText(resultVisualizerOutput.getGlobalTestState()); 		
+		setBackgroundColor(resultVisualizerOutput.getBackgroundColor());
+	}
+
+
+	@Override
+	public ITestResultVisualizer getTestResultVisualizer() {
+		return testResultVisualizer; 
+	}
+
+	
+	@Override
 	public void init(IWorkbenchWindow workbenchWindow) {
+		testResultVisualizer = new StatusBarWidgetTestVisualizer(this); 
 		AbapCiPlugin.getDefault().attachStatusBarWidget(this);
 	}
 		
@@ -49,9 +67,8 @@ public class StatusBarWidget extends AbstractWorkbenchTrimWidget implements ISta
 	private void addStatusLabel(int newSide) {
 		statusLabel = new Label(composite, SWT.BORDER | SWT.LEFT);
 		statusLabel.setLayoutData(getRowData(newSide));
-		statusLabel.setForeground(getColor(SWT.COLOR_WHITE));
+		statusLabel.setForeground(getColor(SWT.COLOR_BLACK));
 		statusLabel.setText(statusString);
-		statusLabel.setBackground(backgroundColor);
 	}
 
 	RowData getRowData(int newSide) {
@@ -64,7 +81,6 @@ public class StatusBarWidget extends AbstractWorkbenchTrimWidget implements ISta
 
 	@Override
 	public void setBackgroundColor(final Color color) {
-		backgroundColor = color;
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
@@ -111,4 +127,15 @@ public class StatusBarWidget extends AbstractWorkbenchTrimWidget implements ISta
 		public Color getColor(int color) {
 			return Display.getCurrent().getSystemColor(color);
 		}
+
+		@Override
+		public void setVisible(boolean visible) {
+			//FeatureFacade featureFacade = new FeatureFacade(); 
+			//ColoredProjectFeature projectColorFeature = featureFacade.getColoredProjectFeature(); 
+			//composite.setVisible(projectColorFeature.isStatusBarWidgetActive()); 
+			composite.setVisible(visible);
+		}
+
+
+
 }

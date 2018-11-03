@@ -35,6 +35,7 @@ public class FeatureFactory {
 		SourceCodeVisualisationFeature feature = new SourceCodeVisualisationFeature();
 		feature.setChangeStatusBarBackgroundColorEnabled(
 				prefs.getBoolean(PreferenceConstants.PREF_CHANGE_STATUS_BAR_BACKGROUND_COLOR));
+		feature.setShowStatusBarWidgetEnabled(prefs.getBoolean(PreferenceConstants.PREF_TEST_VISUALISATION_STATUS_BAR_WIDGET_ENABLED));
 		return feature;
 
 	}
@@ -59,6 +60,10 @@ public class FeatureFactory {
 		feature.setChangeStatusBarActive(prefs.getBoolean(PreferenceConstants.PREF_COLORED_PROJECTS_STATUS_BAR_ENABLED));
 		feature.setLeftRulerActive(prefs.getBoolean(PreferenceConstants.PREF_COLORED_PROJECTS_LEFT_RULER_ENABLED));
 		feature.setRightRulerActive(prefs.getBoolean(PreferenceConstants.PREF_COLORED_PROJECTS_RIGHT_RULER_ENABLED));
+		feature.setStatusBarWidgetActive(prefs.getBoolean(PreferenceConstants.PREF_COLORED_PROJECTS_STATUS_BAR_WIDGET_ENABLED));
+		feature.setTitleIconActive(prefs.getBoolean(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_ENABLED));
+		feature.setTitleIconWidth(prefs.getInt(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_WIDTH_PERCENT)); 
+		feature.setTitleIconHeight(prefs.getInt(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_HEIGTH_PERCENT));
 		feature.setDialogEnabled((prefs.getBoolean(PreferenceConstants.PREF_COLORED_PROJECTS_NEW_DIALOG_ENABLED)));
 
 		return feature;
