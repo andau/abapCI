@@ -22,6 +22,8 @@ public class ColorChangerFactoryTest {
 	Shell shell= Mockito.mock(Shell.class);;
 	ColoredProjectFeature coloredProjectFeature= Mockito.mock(ColoredProjectFeature.class);;
 	IProjectColor projectColor = Mockito.mock(IProjectColor.class); 
+	TitleIconOverlayRectangle rectangle = Mockito.mock(TitleIconOverlayRectangle.class); 
+	
 
 	@Before
 	public void before() throws ColorChangerNotImplementedException {
@@ -62,9 +64,9 @@ public class ColorChangerFactoryTest {
 
 	@Test
 	public void testTitleIconColorChanger() throws ColorChangerNotImplementedException {
-		createAndTestColorChanger(ColorChangerType.TITLE_ICON, false, new TitleIconColorChanger(editorPart, projectColor, 0, 0));
+		createAndTestColorChanger(ColorChangerType.TITLE_ICON, false, new TitleIconColorChanger(editorPart, projectColor, rectangle));
 		Mockito.when(coloredProjectFeature.isTitleIconActive()).thenReturn(true);
-		createAndTestColorChanger(ColorChangerType.TITLE_ICON, true, new TitleIconColorChanger(editorPart, projectColor, 0, 0));
+		createAndTestColorChanger(ColorChangerType.TITLE_ICON, true, new TitleIconColorChanger(editorPart, projectColor, rectangle));
 	}
 
 	private void createAndTestColorChanger(ColorChangerType colorChangerType, boolean expectedActiveState,

@@ -12,10 +12,7 @@ public class GeneralThemePresenter {
 
 	private static final String THEME_PREFIX = "com.abapCi.custom.";
 
-	private ColoredProjectModel model;
-
 	public GeneralThemePresenter(ColoredProjectModel coloredProjectModel) {
-		this.model = coloredProjectModel;
 	}
 
 	public void updateEditorLabel(UiColor uiColor) {

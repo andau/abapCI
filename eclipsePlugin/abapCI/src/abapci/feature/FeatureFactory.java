@@ -35,7 +35,7 @@ public class FeatureFactory {
 		SourceCodeVisualisationFeature feature = new SourceCodeVisualisationFeature();
 		feature.setChangeStatusBarBackgroundColorEnabled(
 				prefs.getBoolean(PreferenceConstants.PREF_CHANGE_STATUS_BAR_BACKGROUND_COLOR));
-		feature.setShowStatusBarWidgetEnabled(prefs.getBoolean(PreferenceConstants.PREF_TEST_VISUALISATION_STATUS_BAR_WIDGET_ENABLED));
+		feature.setShowStatusBarWidgetEnabled(prefs.getBoolean(PreferenceConstants.PREF_VISUALISATION_STATUS_BAR_WIDGET_ENABLED));
 		return feature;
 
 	}

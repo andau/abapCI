@@ -81,7 +81,7 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 
 	}
 
-	private void createSourceCodeVisualisationChapter() {
+	private void createSourceCodeVisualisationChapter() { 
 
 		addField(new ColorFieldEditor(PreferenceConstants.PREF_UNIT_TEST_OK_BACKGROUND_COLOR,
 				"Backgroundcolor for OK Unit Test State used in ABAP CI dashboard", getFieldEditorParent()));
@@ -96,8 +96,8 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 				"&Use source code  state color as background color of the Eclipse statusbar (and annotation ruler if activated)",
 				getFieldEditorParent()));
 
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_TEST_VISUALISATION_STATUS_BAR_WIDGET_ENABLED,
-				"&Show widget with test state info in  Eclipse statusbar",
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_VISUALISATION_STATUS_BAR_WIDGET_ENABLED,
+				"&Show widget with test state info in Eclipse statusbar",
 				getFieldEditorParent()));
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_CHANGE_COLOR_ON_FAILED_TESTS,

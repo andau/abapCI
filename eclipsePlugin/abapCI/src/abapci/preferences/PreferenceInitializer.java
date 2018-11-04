@@ -33,7 +33,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.PREF_JENKINS_RUN_AFTER_UNIT_TESTS_TURN_GREEN, false);
 		store.setDefault(PreferenceConstants.PREF_CHANGE_COLOR_ON_FAILED_TESTS, false);
 		store.setDefault(PreferenceConstants.PREF_CHANGE_STATUS_BAR_BACKGROUND_COLOR, false);
-		store.setDefault(PreferenceConstants.PREF_TEST_VISUALISATION_STATUS_BAR_WIDGET_ENABLED, true);
+		store.setDefault(PreferenceConstants.PREF_VISUALISATION_STATUS_BAR_WIDGET_ENABLED, true);
 
 		store.setDefault(PreferenceConstants.PREF_SOURCE_CODE_FORMATTING_ENABLED, true);
 		store.setDefault(PreferenceConstants.PREF_SOURCE_CODE_FORMATTING_PREFIX, "#autoformat");
@@ -41,10 +41,10 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_LEFT_RULER_ENABLED, false);
 		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_RIGHT_RULER_ENABLED, false);
-		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_STATUS_BAR_ENABLED, true);
+		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_STATUS_BAR_ENABLED, false);
 		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_ENABLED,  true);
-		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_WIDTH_PERCENT,50);
-		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_HEIGTH_PERCENT,  50);
+		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_WIDTH_PERCENT,35);
+		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_HEIGTH_PERCENT,  100);
 		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_STATUS_BAR_WIDGET_ENABLED,  false);
 		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_NEW_DIALOG_ENABLED, true);
 

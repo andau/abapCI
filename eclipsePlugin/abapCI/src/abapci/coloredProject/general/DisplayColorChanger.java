@@ -12,6 +12,7 @@ import abapci.coloredProject.colorChanger.LeftRulerColorChanger;
 import abapci.coloredProject.colorChanger.RightRulerColorChanger;
 import abapci.coloredProject.colorChanger.StatusBarWidgetColorChanger;
 import abapci.coloredProject.colorChanger.TitleIconColorChanger;
+import abapci.coloredProject.colorChanger.TitleIconOverlayRectangle;
 import abapci.coloredProject.exeption.ProjectColorNotSetException;
 import abapci.coloredProject.model.projectColor.IProjectColor;
 import abapci.feature.ColoredProjectFeature;
@@ -40,8 +41,11 @@ public class DisplayColorChanger {
 		
 		Set<ColorChanger> activeColorChangers = new HashSet<>();
 
-		if (coloredProjectFeature.isActive() && !displayColor.isSuppressed())
-			activeColorChangers.add(new TitleIconColorChanger(editorPart, displayColor.getTitleIconColor(), coloredProjectFeature.getTitleIconWidth(), coloredProjectFeature.getTitleIconHeight()));
+		if (coloredProjectFeature.isActive() && !displayColor.isSuppressed()) 
+		{
+			TitleIconOverlayRectangle rectangle = new TitleIconOverlayRectangle(coloredProjectFeature.getTitleIconWidth(), coloredProjectFeature.getTitleIconHeight()); 
+			activeColorChangers.add(new TitleIconColorChanger(editorPart, displayColor.getTitleIconColor(), rectangle));
+		}
 
 		if (coloredProjectFeature.isChangeStatusBarActive())
 			activeColorChangers.add(new StatusBarColorChanger(Display.getCurrent().getActiveShell(), displayColor.getStatusBarColor()));

@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-Vendor: %Bundle-Vendor
 Bundle-SymbolicName: com.abapci.plugin;singleton:=true
-Bundle-Version: 0.5.2.7
+Bundle-Version: 0.5.2.72
 Bundle-Activator: abapci.AbapCiPlugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -46,7 +46,21 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.core;bundle-version="3.14.0",
  org.junit.platform.engine;bundle-version="1.1.0",
  org.junit.platform.commons;bundle-version="1.1.0",
- org.junit.platform.launcher;bundle-version="1.1.0"
+ org.junit.platform.launcher;bundle-version="1.1.0",
+ org.junit,
+ org.junit.jupiter.api,
+ org.junit.jupiter.engine,
+ org.junit.jupiter.migrationsupport,
+ org.junit.jupiter.params,
+ org.junit.platform.commons,
+ org.junit.platform.engine,
+ org.junit.platform.launcher,
+ org.junit.platform.runner,
+ org.junit.platform.suite.api,
+ org.junit.vintage.engine,
+ org.hamcrest.core,
+ org.opentest4j,
+ org.apiguardian
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: abapci,
  abapci.connections,

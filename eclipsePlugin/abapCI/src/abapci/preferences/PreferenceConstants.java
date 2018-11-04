@@ -77,7 +77,7 @@ public class PreferenceConstants {
 
 	public static final String PREF_CHANGE_STATUS_BAR_BACKGROUND_COLOR = "changeStatusBarBackgroundColorEnabled";
 
-	public static final String PREF_TEST_VISUALISATION_STATUS_BAR_WIDGET_ENABLED = "sourceCodeStatusBarWidgetEnabled"; 
+	public static final String PREF_VISUALISATION_STATUS_BAR_WIDGET_ENABLED = "sourceCodeStatusBarWidgetEnabled"; 
 
 	private PreferenceConstants() {
 	}

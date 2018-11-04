@@ -31,6 +31,11 @@ public class ResultVisualizerOutput {
 	public void setAbapPackageTestStates(List<AbapPackageTestState> abapPackageTestStatesForCurrentProject) {
 		this.abapPackageTestStatesForCurrentProject = abapPackageTestStatesForCurrentProject; 
 	}
+	
+	public List<AbapPackageTestState> getAbapPackageTestStates() 
+	{
+		return abapPackageTestStatesForCurrentProject; 
+	}
 
 	public void setCurrentProject(IProject project) 
 	{
@@ -45,7 +50,6 @@ public class ResultVisualizerOutput {
 	public String getInfoline() 
 	{
 		return visualizerInfolineBuilder.buildInfoLine(project, abapPackageTestStatesForCurrentProject, showAtcInfo); 
-		
 	}
 
 	public void setBackgroundColor(Color color) {

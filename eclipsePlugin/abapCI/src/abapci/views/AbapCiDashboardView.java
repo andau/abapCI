@@ -30,8 +30,8 @@ public class AbapCiDashboardView extends ViewPart {
 
 	public Label projectline;
 	private Label lblOverallTestState;
-	public Label infoline;
-	public Hyperlink openErrorHyperlink;
+	private Label infoline;
+	private Hyperlink openErrorHyperlink;
 
 	private Composite parent;
 	private Composite entireContainer;
@@ -108,6 +108,20 @@ public class AbapCiDashboardView extends ViewPart {
 
 	public void setLabelOverallTestStateText(String text) {
 		 lblOverallTestState.setText(text); 
+	}
+
+	public void setInfolineText(String infolineText) {
+		infoline.setText(infolineText);
+		
+	}
+
+	public void setInfolineLayoutData() {
+		infoline.setLayoutData(infoline.getLayoutData());
+	}
+
+	public Hyperlink getOpenErrorHyperlink() {
+		// TODO Auto-generated method stub
+		return openErrorHyperlink;
 	}
 
 }

@@ -1,9 +1,6 @@
 package abapci.presenter;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.stream.Collectors;
@@ -15,7 +12,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 
-import abapci.AbapCiPlugin;
 import abapci.AbapCiPluginHelper;
 import abapci.Exception.AbapCiColoredProjectFileParseException;
 import abapci.Exception.ContinuousIntegrationConfigFileParseException;
@@ -266,13 +262,6 @@ public class ContinuousIntegrationPresenter {
 				ITestResultVisualizer testResultVisualizer = abapCiDashboardView.getTestResultVisualizer();
 								
 				testResultVisualizer.setResultVisualizerOutput(resultVisualizerOutput);
-
-				abapCiDashboardView.infoline
-						.setText(buildInfoLine(abapPackageTestStatesForCurrentProject) + "        ");
-				abapCiDashboardView.infoline.setLayoutData(abapCiDashboardView.infoline.getLayoutData());
-
-				rebuildHyperlink(abapCiDashboardView.getEntireContainer(), abapCiDashboardView.openErrorHyperlink);
-				// abapCiDashboardView.lblOverallTestState.setForeground(globalTestState.getColor());
 			}
 			
 
@@ -302,35 +291,7 @@ public class ContinuousIntegrationPresenter {
 		}
 
 	}
-
-	private void rebuildHyperlink(Composite container, Hyperlink link) {
-
-		List<AbapPackageTestState> packagesWithFailedTests = getAbapPackageTestStatesForCurrentProject().stream()
-				.filter(item -> item.getFirstFailedUnitTest() != null)
-				.collect(Collectors.<AbapPackageTestState>toList());
-
-		List<AbapPackageTestState> packagesWithFailedAtc = getAbapPackageTestStatesForCurrentProject().stream()
-				.filter(item -> item.getFirstFailedAtc() != null).collect(Collectors.<AbapPackageTestState>toList());
-
-		if (packagesWithFailedTests.size() > 0) {
-			link.setVisible(true);
-			List<InvalidItem> firstFailedTests = packagesWithFailedTests.stream()
-					.map(item -> item.getFirstFailedUnitTest()).collect(Collectors.toList());
-			link.setText(InvalidItemUtil.getOutputForUnitTest(firstFailedTests));
-		} else {
-			if (packagesWithFailedAtc.size() > 0) {
-				link.setVisible(true);
-				List<InvalidItem> firstFailedTests = packagesWithFailedAtc.stream()
-						.map(item -> item.getFirstFailedAtc()).collect(Collectors.toList());
-				link.setText(InvalidItemUtil.getOutputForAtcTest(firstFailedTests));
-			} else {
-				link.setVisible(false);
-			}
-
-		}
-
-	}
-
+	
 	public void openEditorsForFailedItems() {
 		if (evalSourceCodeTestState().equals(SourcecodeState.ATC_FAIL)) {
 			openEditorsForFailedAtc();
@@ -356,36 +317,6 @@ public class ContinuousIntegrationPresenter {
 		EditorHandler.openAtc(currentProject, packagesWithFailedAtc);
 	}
 
-	private String buildInfoLine(List<AbapPackageTestState> abapPackageTestStatesForCurrentProject) {
-		int overallTests = abapPackageTestStatesForCurrentProject.stream().mapToInt(item -> item.getNumTests()).sum();
-		int overallErrors = abapPackageTestStatesForCurrentProject.stream().mapToInt(item -> item.getAUnitNumErr())
-				.sum();
-		int overallSuppressed = abapPackageTestStatesForCurrentProject.stream()
-				.mapToInt(item -> item.getAUnitNumSuppressed()).sum();
-
-		int overallAtcNum = abapPackageTestStatesForCurrentProject.stream().mapToInt(item -> item.getAtcNumFiles())
-				.sum();
-		int overallAtcErr = abapPackageTestStatesForCurrentProject.stream().mapToInt(item -> item.getAtcNumErr()).sum();
-		int overallAtcWarnings = abapPackageTestStatesForCurrentProject.stream().mapToInt(item -> item.getAtcNumWarn())
-				.sum();
-		int overallAtcInfos = abapPackageTestStatesForCurrentProject.stream().mapToInt(item -> item.getAtcNumInfo())
-				.sum();
-		int overallAtcSuppressed = abapPackageTestStatesForCurrentProject.stream()
-				.mapToInt(item -> item.getAtcNumSuppressed()).sum();
-
-		String unitTestInfoString = String.format("[%s / %s,%s]", overallTests, overallErrors, overallSuppressed);
-
-		String atcInfoString = featureFacade.getAtcFeature().isActive()
-				? String.format(" [%s / %s,%s,%s,%s]", overallAtcNum, overallAtcErr, overallAtcWarnings,
-						overallAtcInfos, overallAtcSuppressed)
-				: "";
-
-		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-		Date date = new Date();
-
-		return dateFormat.format(date) + ": " + currentProject.getName() + " " + unitTestInfoString + " "
-				+ atcInfoString;
-	}
 
 	private SourcecodeState evalSourceCodeTestState() {
 		return sourceCodeStateEvaluator.evaluate(getAbapPackageTestStatesForCurrentProject());

@@ -1,5 +1,5 @@
 package abapci.feature;
-
+ 
 import com.sap.adt.atc.AtcCheckVariantMode;
 import com.sap.adt.atc.IAtcSetting;
 

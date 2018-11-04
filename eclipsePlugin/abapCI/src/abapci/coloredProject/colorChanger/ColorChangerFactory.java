@@ -24,8 +24,9 @@ public class ColorChangerFactory {
 			colorChanger = new RightRulerColorChanger(editorPart, projectColor);
 			colorChanger.setActive(coloredProjectFeature.isRightRulerActive());
 			break;
-		case TITLE_ICON: 
-			colorChanger = new TitleIconColorChanger(editorPart, projectColor, coloredProjectFeature.getTitleIconWidth(), coloredProjectFeature.getTitleIconHeight());
+		case TITLE_ICON:
+			TitleIconOverlayRectangle rectangle = new TitleIconOverlayRectangle(coloredProjectFeature.getTitleIconWidth(), coloredProjectFeature.getTitleIconHeight()); 
+			colorChanger = new TitleIconColorChanger(editorPart, projectColor, rectangle);
 			colorChanger.setActive(coloredProjectFeature.isTitleIconActive());
 			break;
 		case STATUS_BAR_WIDGET: 

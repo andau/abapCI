@@ -11,7 +11,6 @@ import abapci.coloredProject.presenter.ColoredProjectsPresenter;
 
 public class AbapCiColoredProjectViewTest {
 
-	private Composite composite;
 	AbapCiPluginHelper abapCiPluginHelper; 
 	ColoredProjectModel coloredProjectModel; 
 	
@@ -19,7 +18,7 @@ public class AbapCiColoredProjectViewTest {
 	public void test() {
 		AbapCiColoredProjectView cut = new AbapCiColoredProjectView(); 
 
-		composite = Mockito.mock(Composite.class); 
+		Mockito.mock(Composite.class); 
 		abapCiPluginHelper = Mockito.mock(AbapCiPluginHelper.class); 
 		coloredProjectModel = Mockito.mock(ColoredProjectModel.class); 
 	
