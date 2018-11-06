@@ -1,7 +1,5 @@
 package abapci.coloredProject.general;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 import abapci.coloredProject.samples.ColoredProjectTestSample;

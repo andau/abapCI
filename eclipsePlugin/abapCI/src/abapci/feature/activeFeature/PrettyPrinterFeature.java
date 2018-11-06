@@ -1,15 +1,11 @@
-package abapci.feature;
+package abapci.feature.activeFeature;
 
-public class SourcecodeFormattingFeature extends ActiveFeature {
+public class PrettyPrinterFeature extends ActiveFeature {
 	private String prefix;
 	private boolean cleanupVariablesEnabled;
 
-	public SourcecodeFormattingFeature(String prefix) {
+	public PrettyPrinterFeature(String prefix) {
 		this.prefix = prefix;
-	}
-
-	public SourcecodeFormattingFeature() {
-		throw new UnsupportedOperationException();
 	}
 
 	public String getPrefix() {

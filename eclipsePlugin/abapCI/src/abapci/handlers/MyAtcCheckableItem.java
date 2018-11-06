@@ -16,6 +16,7 @@ class MyAtcCheckableItem implements IAtcCheckableItem {
 		this.type = type;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Object getAdapter(Class adapter) {
 		return null;
 	}

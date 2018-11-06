@@ -11,7 +11,6 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import abapci.coloredProject.general.IStatusBarWidget;
-import abapci.coloredProject.general.StatusBarWidget;
 import abapci.coloredProject.model.ColoredProjectModel;
 import abapci.coloredProject.presenter.ColoredProjectsPresenter;
 import abapci.feature.FeatureFacade;
@@ -32,14 +31,14 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 	public ContinuousIntegrationPresenter continuousIntegrationPresenter;
 	private ColoredProjectsPresenter coloredProjectsPresenter;
 
-
 	private static IResourceChangeListener resourceChangeListener;
 	private static IPartListener2 partListener;
 
 	private FeatureFacade featureFacade;
+
 	private GeneralThemePresenter generalThemePresenter;
-	
-	private IStatusBarWidget statusBarWidget; 
+
+	private IStatusBarWidget statusBarWidget;
 
 	/**
 	 * The constructor
@@ -47,17 +46,13 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 	public AbapCiPlugin() {
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.
-	 * BundleContext)
-	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
 
 		featureFacade = new FeatureFacade();
+
 		if (featureFacade.getUnitFeature().isActive() || featureFacade.getAtcFeature().isActive()
 				|| featureFacade.getAtcFeature().isRunActivatedObjects()) {
 			generalThemePresenter = new GeneralThemePresenter(new ColoredProjectModel());
@@ -65,9 +60,8 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 					null);
 
 			initializeResourceChangeListener();
-			
+
 		}
-		
 
 		try {
 			coloredProjectsPresenter = new ColoredProjectsPresenter(null, new ColoredProjectModel());
@@ -83,10 +77,11 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.
 	 * BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
@@ -105,8 +100,7 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 	 * Returns an image descriptor for the image file at the given plug-in relative
 	 * path
 	 *
-	 * @param path
-	 *            the path
+	 * @param path the path
 	 * @return the image descriptor
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
@@ -129,18 +123,16 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 		}
 
 	}
-	
-	public void attachStatusBarWidget(IStatusBarWidget statusBarWidget)
-	{
-		this.statusBarWidget = statusBarWidget; 
+
+	public void attachStatusBarWidget(IStatusBarWidget statusBarWidget) {
+		this.statusBarWidget = statusBarWidget;
 	}
-	
-	public IStatusBarWidget getStatusBarWidget() 
-	{
-		return statusBarWidget; 
+
+	public IStatusBarWidget getStatusBarWidget() {
+		return statusBarWidget;
 	}
 
 	public ColoredProjectsPresenter getColoredProjectsPresenter() {
-		return coloredProjectsPresenter; 
+		return coloredProjectsPresenter;
 	}
 }

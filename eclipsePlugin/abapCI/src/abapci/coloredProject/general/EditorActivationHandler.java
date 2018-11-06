@@ -14,8 +14,8 @@ import abapci.coloredProject.model.ColoredProject;
 import abapci.coloredProject.model.projectColor.DefaultEclipseProjectColor;
 import abapci.coloredProject.presenter.ColoredProjectsPresenter;
 import abapci.coloredProject.view.AddOrUpdateColoredProjectPage;
-import abapci.feature.ColoredProjectFeature;
 import abapci.feature.FeatureFacade;
+import abapci.feature.activeFeature.ColoredProjectFeature;
 
 public class EditorActivationHandler {
 

@@ -11,7 +11,7 @@ import org.mockito.Mockito;
 
 import abapci.coloredProject.exeption.ColorChangerNotImplementedException;
 import abapci.coloredProject.model.projectColor.IProjectColor;
-import abapci.feature.ColoredProjectFeature;
+import abapci.feature.activeFeature.ColoredProjectFeature;
 
 public class ColorChangerFactoryTest {
 

@@ -1,7 +1,5 @@
 package abapci.preferences;
 
-import static org.junit.Assert.*;
-
 import org.eclipse.swt.widgets.Composite;
 import org.junit.Ignore;
 import org.junit.Test;

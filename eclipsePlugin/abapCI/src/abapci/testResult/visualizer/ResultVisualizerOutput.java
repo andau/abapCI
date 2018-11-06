@@ -6,6 +6,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.graphics.Color;
 
 import abapci.domain.AbapPackageTestState;
+import abapci.utils.ColorChooser;
 
 public class ResultVisualizerOutput {
 
@@ -16,6 +17,8 @@ public class ResultVisualizerOutput {
 	private VisualizerInfolineBuilder visualizerInfolineBuilder;
 	private boolean showAtcInfo;
 	private IProject project; 
+	
+	private ColorChooser contrastColorDeterminer = new ColorChooser(); 
 	
 	
 	public void setGlobalTestState(String globalTestState) {		
@@ -58,6 +61,10 @@ public class ResultVisualizerOutput {
 	
 	public  Color getBackgroundColor() {
 		return backgroundColor; 
+	}
+
+	public Color getForegroundColor() {
+       return contrastColorDeterminer.getContrastColor(backgroundColor); 
 	}
 
 }

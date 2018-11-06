@@ -5,11 +5,8 @@ import java.util.Arrays;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.sap.adt.tools.abapsource.abapunit.AbapUnitAlertSeverity;
 import com.sap.adt.tools.abapsource.abapunit.IAbapUnitAlert;
@@ -17,8 +14,6 @@ import com.sap.adt.tools.abapsource.abapunit.IAbapUnitResult;
 import com.sap.adt.tools.abapsource.abapunit.IAbapUnitResultItem;
 
 import abapci.domain.TestState;
-import abapci.testResult.TestResultSummary;
-import abapci.testResult.TestResultSummaryFactory;
 
 public class TestResultSummaryFactoryTest {
 

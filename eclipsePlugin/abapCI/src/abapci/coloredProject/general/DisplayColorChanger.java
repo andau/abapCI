@@ -5,17 +5,17 @@ import java.util.Set;
 
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
-import abapci.coloredProject.colorChanger.StatusBarColorChanger;
+
 import abapci.Exception.ActiveEditorNotSetException;
 import abapci.coloredProject.colorChanger.ColorChanger;
 import abapci.coloredProject.colorChanger.LeftRulerColorChanger;
 import abapci.coloredProject.colorChanger.RightRulerColorChanger;
+import abapci.coloredProject.colorChanger.StatusBarColorChanger;
 import abapci.coloredProject.colorChanger.StatusBarWidgetColorChanger;
 import abapci.coloredProject.colorChanger.TitleIconColorChanger;
 import abapci.coloredProject.colorChanger.TitleIconOverlayRectangle;
 import abapci.coloredProject.exeption.ProjectColorNotSetException;
-import abapci.coloredProject.model.projectColor.IProjectColor;
-import abapci.feature.ColoredProjectFeature;
+import abapci.feature.activeFeature.ColoredProjectFeature;
 
 public class DisplayColorChanger {
 

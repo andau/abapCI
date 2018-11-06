@@ -59,6 +59,8 @@
 			<accessrule kind="accessible" pattern="com/sap/adt/atc/ui/internal/setting/AtcProjectSettingStore"/>
 			<accessrule kind="accessible" pattern="com/sap/adt/atc/ui/internal/IAtcWorklistService"/>
 			<accessrule kind="accessible" pattern="com/sap/adt/atc/ui/internal/launch/worklist/AtcWorklistService"/>
+			<accessrule kind="accessible" pattern="com.sap.adt.projectexplorer/ui/node/IAbapRepositoryObjectNode"/>
+			<accessrule kind="accessible" pattern="com/sap/adt/projectexplorer/ui/node/IAbapRepositoryObjectNode"/>
 		</accessrules>
 	</classpathentry>
 	<classpathentry kind="src" output="target/classes" path="src">
@@ -69,9 +71,9 @@
 	</classpathentry>
 	<classpathentry kind="src" output="target/test-classes" path="test">
 		<attributes>
+			<attribute name="test" value="true"/>
 			<attribute name="optional" value="true"/>
 			<attribute name="maven.pomderived" value="true"/>
-			<attribute name="test" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">

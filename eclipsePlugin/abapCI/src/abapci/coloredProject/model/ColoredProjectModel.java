@@ -3,7 +3,6 @@ package abapci.coloredProject.model;
 import java.util.List;
 
 import abapci.Exception.AbapCiColoredProjectFileParseException;
-import abapci.coloredProject.model.projectColor.DefaultEclipseProjectColor;
 import abapci.coloredProject.model.projectColor.IProjectColor;
 
 public class ColoredProjectModel {

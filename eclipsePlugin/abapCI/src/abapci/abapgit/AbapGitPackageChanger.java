@@ -34,6 +34,7 @@ public class AbapGitPackageChanger {
 			IQueryParameter requestParamPackage = new QueryParameter("packagename", packagename);
 			IQueryParameter requestParamUsername = new QueryParameter("username", username);
 
+			@SuppressWarnings("unused")
 			IMessageBody messageBody = (IMessageBody) resource.post(null, IMessageBody.class, requestParamPackage,
 					requestParamUsername);
 		} catch (AdtDiscoveryNotFoundException e) {

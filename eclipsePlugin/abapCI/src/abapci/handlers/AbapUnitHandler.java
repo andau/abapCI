@@ -16,7 +16,6 @@ import com.sap.adt.tools.abapsource.abapunit.IAbapUnitResult;
 import com.sap.adt.tools.abapsource.abapunit.IAbapUnitService;
 import com.sap.adt.tools.abapsource.abapunit.TestItem;
 import com.sap.adt.tools.abapsource.abapunit.TestRunException;
-import com.sap.adt.tools.abapsource.abapunit.services.AdtServicesPlugin;
 import com.sap.adt.tools.abapsource.abapunit.services.IAdtServicesFactory;
 
 import abapci.activation.Activation;
@@ -31,8 +30,17 @@ import abapci.testResult.TestResultSummaryFactory;
  * @see org.eclipse.core.commands.AbstractHandler
  */
 public class AbapUnitHandler extends AbstractHandler implements IUnitHandler  {
+	
+	private static final String ADT_OBJECT_NAME_PREFIX = "/sap/bc/adt/vit/wb/object_type/devck/object_name/";
 	private static final String ABAP_CLASS_TYPE = "CLAS/OC";
 
+	private AdtServicePluginHelper adtServicePluginHelper;  
+	public AbapUnitHandler() 
+	{
+		adtServicePluginHelper = new AdtServicePluginHelper(); 	
+	}
+	
+	
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		String packageName = event.getParameter("1");
@@ -42,11 +50,12 @@ public class AbapUnitHandler extends AbstractHandler implements IUnitHandler  {
 	public TestResultSummary executePackage(IProject project, String packageName, Set<Activation> activations) {
 
 		boolean flag = false;
-		IAdtServicesFactory servicesFactory = AdtServicesPlugin.getDefault().getFactory();
+		
+		IAdtServicesFactory servicesFactory = adtServicePluginHelper.getServiceFactory();
 		IAbapUnitService abapUnitService = servicesFactory.createAbapUnitService(project.getName(), flag);
 		AbapUnitTask task = new AbapUnitTask(packageName);
 
-		String testobjectUrl = "/sap/bc/adt/vit/wb/object_type/devck/object_name/" + packageName;
+		String testobjectUrl = ADT_OBJECT_NAME_PREFIX + packageName;
 		TestItem itemObject = new TestItem(testobjectUrl, testobjectUrl);
 		task.addTestItem(itemObject);
 
@@ -88,7 +97,7 @@ public class AbapUnitHandler extends AbstractHandler implements IUnitHandler  {
 
 	public TestResultSummary executeObjects(IProject project, String packageName, Set<Activation> activations) {
 		boolean flag = false;
-		IAdtServicesFactory servicesFactory = AdtServicesPlugin.getDefault().getFactory();
+		IAdtServicesFactory servicesFactory = adtServicePluginHelper.getServiceFactory();
 		IAbapUnitService abapUnitService = servicesFactory.createAbapUnitService(project.getName(), flag);
 		AbapUnitTask task = new AbapUnitTask(packageName);
 

@@ -1,6 +1,6 @@
-package abapci.feature;
+package abapci.feature.activeFeature;
 
-public class ColoredProjectFeature {
+public class ColoredProjectFeature extends ActiveFeature {
 
 	private boolean changeStatusBarActive;
 	private boolean leftRulerActive;
@@ -62,7 +62,7 @@ public class ColoredProjectFeature {
 
 
 	public boolean isActive() {
-		return isChangeStatusBarActive() || isRightRulerActive() || isLeftRulerActive() || isTitleIconActive();
+		return isChangeStatusBarActive() || isRightRulerActive() || isLeftRulerActive() || isTitleIconActive() || isStatusBarWidgetActive();
 	}
 	public int getTitleIconWidth() {
 		return titleIconWidth;

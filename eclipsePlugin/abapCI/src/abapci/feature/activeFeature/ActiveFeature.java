@@ -1,4 +1,4 @@
-package abapci.feature;
+package abapci.feature.activeFeature;
 
 public abstract class ActiveFeature {
     private boolean active;

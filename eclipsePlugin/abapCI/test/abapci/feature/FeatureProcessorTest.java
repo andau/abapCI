@@ -7,7 +7,6 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -17,9 +16,9 @@ import org.powermock.reflect.Whitebox;
 import abapci.AbapCiPlugin;
 import abapci.domain.SourcecodeState;
 import abapci.domain.TestState;
-import abapci.manager.UnitTestManager;
 import abapci.manager.AtcTestManager;
 import abapci.manager.ThemeUpdateManager;
+import abapci.manager.UnitTestManager;
 import abapci.preferences.PreferenceConstants;
 import abapci.presenter.ContinuousIntegrationPresenter;
 
@@ -31,7 +30,7 @@ public class FeatureProcessorTest {
 
 	IPreferenceStore preferenceStore;
 	FeatureFacade featureFacade;
-	FeatureFactory featureFactory;
+	FeatureCreator featureCreator;
 	UnitTestManager aUnitTestManager;
 	AtcTestManager atcTestManager;
 	AbapCiPlugin abapCiPlugin;
@@ -44,7 +43,7 @@ public class FeatureProcessorTest {
 
 		preferenceStore = Mockito.mock(IPreferenceStore.class);
 		featureFacade = Mockito.mock(FeatureFacade.class);
-		featureFactory= Mockito.mock(FeatureFactory.class);
+		featureCreator= Mockito.mock(FeatureCreator.class);
 		aUnitTestManager= Mockito.mock(UnitTestManager.class);
 		atcTestManager= Mockito.mock(AtcTestManager.class);
 		abapCiPlugin= Mockito.mock(AbapCiPlugin.class);
@@ -54,9 +53,9 @@ public class FeatureProcessorTest {
 
 		
 		featureFacade = new FeatureFacade();
-		featureFactory = new FeatureFactory();
-		Whitebox.setInternalState(featureFactory, "prefs", preferenceStore);
-		Whitebox.setInternalState(featureFacade, "featureFactory", featureFactory);
+		featureCreator = new FeatureCreator();
+		Whitebox.setInternalState(featureCreator, "prefs", preferenceStore);
+		Whitebox.setInternalState(featureFacade, "featureCreator", featureCreator);
 
 		ContinuousIntegrationPresenter presenter = new ContinuousIntegrationPresenter(null,
 				new ContinuousIntegrationTestModel(), null);

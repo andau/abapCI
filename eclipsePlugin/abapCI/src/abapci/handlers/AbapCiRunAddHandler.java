@@ -7,7 +7,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.window.Window;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -16,7 +15,6 @@ import com.sap.adt.projectexplorer.ui.node.AbapRepositoryBaseNode;
 import abapci.AbapCiPlugin;
 import abapci.domain.ContinuousIntegrationConfig;
 import abapci.presenter.ContinuousIntegrationPresenter;
-import abapci.views.AbapCiMainView;
 import abapci.views.wizard.AddOrUpdateContinuousIntegrationConfigPage;
 
 public class AbapCiRunAddHandler extends AbstractHandler {
@@ -37,9 +35,6 @@ public class AbapCiRunAddHandler extends AbstractHandler {
 					ContinuousIntegrationConfig ciConfig = new ContinuousIntegrationConfig(project.getName(),
 							packageNode.getPackageName(), true, true);
 
-					IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-
-					AbapCiMainView ciMainView = (AbapCiMainView) page.findView(AbapCiMainView.ID);
 					ContinuousIntegrationPresenter continuousIntegrationPresenter = AbapCiPlugin
 							.getDefault().continuousIntegrationPresenter;
 					AddOrUpdateContinuousIntegrationConfigPage addContinuousIntegrationConfigPage = new AddOrUpdateContinuousIntegrationConfigPage(

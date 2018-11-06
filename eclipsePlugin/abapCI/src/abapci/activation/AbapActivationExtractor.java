@@ -1,7 +1,5 @@
 package abapci.activation;
 
-import java.net.URI;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Adapters;
@@ -29,7 +27,7 @@ public class AbapActivationExtractor implements IActivationExtractor {
 		}
 
 		if (adtObject.getPackageName() == null && adtObject.getType().equals("FUGR/FF")) {
-			URI parentUri = adtObject.getParentUri();
+			//URI parentUri = adtObject.getParentUri();
 			// TODO how to get from function module parent URI to package?
 			// needed to run unit tests for affected package only
 		}

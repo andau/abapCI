@@ -14,6 +14,7 @@ public class StatusBarWidgetTestVisualizer implements ITestResultVisualizer {
 		String statusString = resultVisualizerOutput.getGlobalTestState() + ";     " + resultVisualizerOutput.getInfoline(); 
 		statusBarWidget.setText(statusString );
 		statusBarWidget.setBackgroundColor(resultVisualizerOutput.getBackgroundColor());
+		statusBarWidget.setTextColor(resultVisualizerOutput.getForegroundColor());
 	}
 
 }

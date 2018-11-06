@@ -7,17 +7,13 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import abapci.domain.AbapPackageTestState;
 import abapci.domain.SourcecodeState;
 import abapci.domain.TestState;
 import abapci.feature.FeatureFacade;
-import abapci.feature.UnitFeature;
-import abapci.testResult.SourceCodeStateEvaluator;
-import abapci.testResult.TestResult;
+import abapci.feature.activeFeature.UnitFeature;
 
 public class SourceCodeStateEvaluatorTest {
 

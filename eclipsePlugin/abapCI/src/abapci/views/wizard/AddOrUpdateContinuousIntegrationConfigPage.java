@@ -17,9 +17,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import com.sap.adt.project.AdtCoreProjectServiceFactory;
-import com.sap.adt.tools.core.internal.AbapProjectService;
-
 import abapci.domain.ContinuousIntegrationConfig;
 import abapci.feature.FeatureFacade;
 import abapci.presenter.ContinuousIntegrationPresenter;

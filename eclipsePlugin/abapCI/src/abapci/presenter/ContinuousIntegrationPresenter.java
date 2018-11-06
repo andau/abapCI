@@ -8,9 +8,7 @@ import java.util.stream.Collectors;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.forms.widgets.Hyperlink;
 
 import abapci.AbapCiPluginHelper;
 import abapci.Exception.AbapCiColoredProjectFileParseException;
@@ -25,10 +23,13 @@ import abapci.coloredProject.model.projectColor.ProjectColorFactory;
 import abapci.domain.AbapPackageTestState;
 import abapci.domain.ContinuousIntegrationConfig;
 import abapci.domain.GlobalTestState;
-import abapci.domain.InvalidItem;
 import abapci.domain.SourcecodeState;
 import abapci.domain.TestState;
 import abapci.feature.FeatureFacade;
+import abapci.feature.SourceCodeVisualisationFeature;
+import abapci.feature.activeFeature.AtcFeature;
+import abapci.feature.activeFeature.TddModeFeature;
+import abapci.feature.activeFeature.UnitFeature;
 import abapci.model.IContinuousIntegrationModel;
 import abapci.testResult.SourceCodeStateEvaluator;
 import abapci.testResult.SourceCodeStateInfo;
@@ -39,40 +40,62 @@ import abapci.testResult.TestResultType;
 import abapci.testResult.visualizer.ITestResultVisualizer;
 import abapci.testResult.visualizer.ResultVisualizerOutput;
 import abapci.utils.EditorHandler;
-import abapci.utils.InvalidItemUtil;
 import abapci.views.AbapCiDashboardView;
 import abapci.views.AbapCiMainView;
 
 public class ContinuousIntegrationPresenter {
 
 	private AbapCiMainView view;
-	private IContinuousIntegrationModel model;
+	private final IContinuousIntegrationModel model;
 	private IProject currentProject;
-	private List<AbapPackageTestState> abapPackageTestStates;
+	private final List<AbapPackageTestState> abapPackageTestStates;
 	private AbapCiDashboardView abapCiDashboardView;
-	private FeatureFacade featureFacade;
-	private TestResultConsolidator testResultConsolidator;
-	private SourceCodeStateEvaluator sourceCodeStateEvaluator;
-	private SourceCodeStateInfo sourceCodeStateInfo;
+	private final TestResultConsolidator testResultConsolidator;
+	private final SourceCodeStateEvaluator sourceCodeStateEvaluator;
+	private final SourceCodeStateInfo sourceCodeStateInfo;
 	private StatusBarColorChanger statusBarColorChanger;
-	private IProjectColorFactory projectColorFactory;
-	private AbapCiPluginHelper abapCiPluginHelper;
+	private final IProjectColorFactory projectColorFactory;
+	private final AbapCiPluginHelper abapCiPluginHelper;
+
+	private SourceCodeVisualisationFeature sourceCodeVisualisationFeature;
+	private UnitFeature unitFeature;
+	private TddModeFeature tddModeFeature;
+	private AtcFeature atcFeature;
 
 	public ContinuousIntegrationPresenter(AbapCiMainView abapCiMainView,
 			IContinuousIntegrationModel continuousIntegrationModel, IProject currentProject) {
+
 		this.view = abapCiMainView;
 		this.model = continuousIntegrationModel;
 		this.currentProject = currentProject;
-		this.abapPackageTestStates = new ArrayList<AbapPackageTestState>();
-		featureFacade = new FeatureFacade();
+		this.abapPackageTestStates = new ArrayList<>();
 		testResultConsolidator = new TestResultConsolidator();
 		sourceCodeStateEvaluator = new SourceCodeStateEvaluator();
 		sourceCodeStateInfo = new SourceCodeStateInfo();
 		projectColorFactory = new ProjectColorFactory();
 		abapCiPluginHelper = new AbapCiPluginHelper();
 
+		initFeatures();
+
 		loadPackages();
 		setViewerInput();
+
+		registerPropertyChangeListeners();
+	}
+
+	private void initFeatures() {
+
+		FeatureFacade featureFacade = new FeatureFacade();
+		sourceCodeVisualisationFeature = featureFacade.getSourceCodeVisualisationFeature();
+		unitFeature = featureFacade.getUnitFeature();
+		tddModeFeature = featureFacade.getTddModeFeature();
+		atcFeature = featureFacade.getAtcFeature();
+	}
+
+	private void registerPropertyChangeListeners() {
+
+		abapCiPluginHelper.getPreferenceStore().addPropertyChangeListener(event -> updateViewsAsync());
+
 	}
 
 	public void setView(AbapCiMainView abapCiMainView) {
@@ -178,6 +201,7 @@ public class ContinuousIntegrationPresenter {
 
 	private void supplementAbapPackageTestStatesForProject(IProject project)
 			throws ContinuousIntegrationConfigFileParseException {
+
 		List<ContinuousIntegrationConfig> ciConfigs = model.getAllForProjectAndGeneral(project.getName());
 		for (ContinuousIntegrationConfig ciConfig : ciConfigs) {
 			if (!abapPackageTestStates.stream().anyMatch(item -> item.getPackageName().equals(ciConfig.getPackageName())
@@ -186,6 +210,7 @@ public class ContinuousIntegrationPresenter {
 						.add(new AbapPackageTestState(ciConfig.getProjectName(), ciConfig.getPackageName()));
 			}
 		}
+
 	}
 
 	public void updatePackageTestStates(List<AbapPackageTestState> updateAbapPackageTestStates) {
@@ -225,9 +250,8 @@ public class ContinuousIntegrationPresenter {
 		List<AbapPackageTestState> abapPackageTestStatesForCurrentProject = getAbapPackageTestStatesForCurrentProject();
 
 		SourcecodeState currentSourceCodeState = evalSourceCodeTestState();
-		if (currentSourceCodeState.equals(SourcecodeState.OK)
-				&& (sourceCodeStateInfo.nextPlannedStepIsRefactorStep() || sourceCodeStateInfo
-						.refactorStepIsStillSuggested(featureFacade.getTddModeFeature().getMinimumRequiredSeconds()))) {
+		if (currentSourceCodeState.equals(SourcecodeState.OK) && (sourceCodeStateInfo.nextPlannedStepIsRefactorStep()
+				|| sourceCodeStateInfo.refactorStepIsStillSuggested(tddModeFeature.getMinimumRequiredSeconds()))) {
 			currentSourceCodeState = SourcecodeState.ATC_FAIL;
 		}
 		GlobalTestState globalTestState = new GlobalTestState(currentSourceCodeState);
@@ -238,34 +262,29 @@ public class ContinuousIntegrationPresenter {
 		try {
 
 			ResultVisualizerOutput resultVisualizerOutput = new ResultVisualizerOutput();
-			resultVisualizerOutput.setGlobalTestState(globalTestStateString); 
-			resultVisualizerOutput.setAbapPackageTestStates(abapPackageTestStatesForCurrentProject); 
-			resultVisualizerOutput.setBackgroundColor(globalTestState.getColor()); 
+			resultVisualizerOutput.setGlobalTestState(globalTestStateString);
+			resultVisualizerOutput.setAbapPackageTestStates(abapPackageTestStatesForCurrentProject);
+			resultVisualizerOutput.setBackgroundColor(globalTestState.getColor());
 			resultVisualizerOutput.setCurrentProject(currentProject);
-			resultVisualizerOutput.setShowAtcInfo(featureFacade.getAtcFeature().isActive());
+			resultVisualizerOutput.setShowAtcInfo(atcFeature.isActive());
 
-			IStatusBarWidget statusBarWidget = abapCiPluginHelper.getStatusBarWidget(); 
-			
-			if (featureFacade.getSourceCodeVisualisationFeature().isShowStatusBarWidgetEnabled()) 
-			{
+			IStatusBarWidget statusBarWidget = abapCiPluginHelper.getStatusBarWidget();
+
+			if (sourceCodeVisualisationFeature.isShowStatusBarWidgetEnabled()) {
 				statusBarWidget.setVisible(true);
-				ITestResultVisualizer statusBarWidgetVisualizer = statusBarWidget.getTestResultVisualizer();				
+				ITestResultVisualizer statusBarWidgetVisualizer = statusBarWidget.getTestResultVisualizer();
 				statusBarWidgetVisualizer.setResultVisualizerOutput(resultVisualizerOutput);
-			}
-			else 
-			{
+			} else {
 				statusBarWidget.setVisible(false);
 			}
-			
 
 			if (abapCiDashboardView != null) {
 				ITestResultVisualizer testResultVisualizer = abapCiDashboardView.getTestResultVisualizer();
-								
+
 				testResultVisualizer.setResultVisualizerOutput(resultVisualizerOutput);
 			}
-			
 
-			if (featureFacade.getSourceCodeVisualisationFeature().isChangeStatusBarBackgroundColorEnabled()) {
+			if (sourceCodeVisualisationFeature.isChangeStatusBarBackgroundColorEnabled()) {
 
 				statusBarColorChanger = new StatusBarColorChanger(Display.getCurrent().getActiveShell(),
 						projectColorFactory.create(globalTestState.getColor()));
@@ -291,7 +310,7 @@ public class ContinuousIntegrationPresenter {
 		}
 
 	}
-	
+
 	public void openEditorsForFailedItems() {
 		if (evalSourceCodeTestState().equals(SourcecodeState.ATC_FAIL)) {
 			openEditorsForFailedAtc();
@@ -317,7 +336,6 @@ public class ContinuousIntegrationPresenter {
 		EditorHandler.openAtc(currentProject, packagesWithFailedAtc);
 	}
 
-
 	private SourcecodeState evalSourceCodeTestState() {
 		return sourceCodeStateEvaluator.evaluate(getAbapPackageTestStatesForCurrentProject());
 	}
@@ -341,12 +359,12 @@ public class ContinuousIntegrationPresenter {
 
 	private void setStatusMessageInternal(String message, Color color) {
 
-		// TODO call async
 		try {
 			view.statusLabel.setText(message);
 			view.statusLabel.setForeground(color);
 		} catch (Exception ex) {
-			// if the status message can not be set we will ignore this
+			// if the status message can not be set we will not stop working as this is not
+			// critical
 			ex.printStackTrace();
 
 		}
@@ -362,10 +380,9 @@ public class ContinuousIntegrationPresenter {
 	}
 
 	public boolean runNecessary() {
-		return !featureFacade.getUnitFeature().isRunActivatedObjectsOnly()
-				&& getAbapPackageTestStatesForCurrentProject().stream()
-						.anyMatch(item -> item.getUnitTestState() == TestState.UNDEF
-								|| item.getUnitTestState() == TestState.OFFL);
+		return !unitFeature.isRunActivatedObjectsOnly() && getAbapPackageTestStatesForCurrentProject().stream()
+				.anyMatch(item -> item.getUnitTestState() == TestState.UNDEF
+						|| item.getUnitTestState() == TestState.OFFL);
 	}
 
 	public void mergeUnitTestResultSummary(TestResultSummary unitTestResultSummary) {

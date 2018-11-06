@@ -7,7 +7,7 @@ import org.eclipse.ui.IEditorPart;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import abapci.feature.ColoredProjectFeature;
+import abapci.feature.activeFeature.ColoredProjectFeature;
 
 public class DisplayColorChangerTest {
 
@@ -30,8 +30,6 @@ public class DisplayColorChangerTest {
 	@Test
 	@Ignore
 	public void testStandardChangeWithGeneralColor() {
-		DisplayColorChanger displayColorChanger = new DisplayColorChanger();
-
 		ColoredProjectFeature coloredProjectFeature = new ColoredProjectFeature();
 		coloredProjectFeature.setChangeStatusBarActive(true);
 		coloredProjectFeature.setLeftRulerActive(false);
@@ -44,14 +42,12 @@ public class DisplayColorChangerTest {
 	@Test
 	@Ignore 
 	public void testStandardChangeWithParticularColor() {
-		DisplayColorChanger displayColorChanger = new DisplayColorChanger();
+		new DisplayColorChanger();
 
 		ColoredProjectFeature coloredProjectFeature = new ColoredProjectFeature();
 		coloredProjectFeature.setChangeStatusBarActive(true);
 		coloredProjectFeature.setLeftRulerActive(true);
 		coloredProjectFeature.setRightRulerActive(true);
-
-		IEditorPart editorPart = null;
 
 		
 		//TODO change with particular colors

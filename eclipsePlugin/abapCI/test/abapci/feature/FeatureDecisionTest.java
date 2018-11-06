@@ -21,12 +21,12 @@ public class FeatureDecisionTest {
 
 		PowerMockito.when(preferenceStore.getBoolean(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE)).thenReturn(true);
 		FeatureFacade featureFacade = new FeatureFacade();
-	    FeatureFactory featureFactory = new FeatureFactory(); 
-	    Whitebox.setInternalState(featureFactory, "prefs", preferenceStore);
-	    Whitebox.setInternalState(featureFacade, "featureFactory", featureFactory);
+	    FeatureCreator featureCreator = new FeatureCreator(); 
+	    Whitebox.setInternalState(featureCreator, "prefs", preferenceStore);
+	    Whitebox.setInternalState(featureFacade, "featureCreator", featureCreator);
 	
 		PowerMockito.when(preferenceStore.getBoolean(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE)).thenReturn(false);
-	    Whitebox.setInternalState(featureFactory, "prefs", preferenceStore);
+	    Whitebox.setInternalState(featureCreator, "prefs", preferenceStore);
 		
 
 		Assert.assertFalse(featureFacade.getUnitFeature().isActive());

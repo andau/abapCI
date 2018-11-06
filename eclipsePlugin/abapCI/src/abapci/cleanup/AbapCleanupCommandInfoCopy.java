@@ -6,8 +6,11 @@ import java.util.List;
 import org.eclipse.core.runtime.Assert;
 
 public class AbapCleanupCommandInfoCopy {
+	@SuppressWarnings("unused")
 	private static final String SCOPE_ALL = "all";
+	@SuppressWarnings("unused")
 	private static final String SCOPE_SELECTION = "selection";
+	@SuppressWarnings("unused")
 	private static final String DELETE_UNUSED_VARIABLES_OPERATION = "deleteUnusedVariables";
 	private static List<AbapCleanupCommandInfoCopy> registry = new ArrayList<AbapCleanupCommandInfoCopy>();
 	private static boolean registryInitialized = false;

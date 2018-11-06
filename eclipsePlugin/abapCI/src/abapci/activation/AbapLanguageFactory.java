@@ -1,7 +1,5 @@
 package abapci.activation;
 
-import com.sap.adt.tools.abapsource.internal.abapunit.AbapUnitAlert;
-
 import abapci.handlers.AbapUnitHandler;
 import abapci.handlers.IUnitHandler;
 import abapci.prettyPrinter.AbapPrettyPrinter;

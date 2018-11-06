@@ -68,10 +68,6 @@ public class TestResultSummaryFactory {
 		return new TestResultSummary(project, packageName, true, numTests, invalidItems, activations);
 	}
 
-	private static String extractUsefulMessage(String detailMessage) {
-		return detailMessage.contains("===") ? detailMessage.substring(0, detailMessage.indexOf("===")) : detailMessage;
-	}
-
 	private static int getNumTests(IAbapUnitResultItem item) {
 		int numTests = 0;
 		for (IAbapUnitResultItem childItem : item.getChildItems()) {

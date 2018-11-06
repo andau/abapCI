@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.eclipse.core.internal.resources.Project;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
@@ -15,8 +14,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 
 import abapci.activation.Activation;
-import abapci.activation.ActivationPool;
 import abapci.activation.ActivationHelper;
+import abapci.activation.ActivationPool;
 import abapci.connections.SapConnection;
 import abapci.domain.ContinuousIntegrationConfig;
 import abapci.feature.FeatureFacade;

@@ -27,7 +27,6 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
-import abapci.AbapCiPlugin;
 import abapci.AbapCiPluginHelper;
 import abapci.coloredProject.model.ColoredProject;
 import abapci.coloredProject.presenter.ColoredProjectsPresenter;

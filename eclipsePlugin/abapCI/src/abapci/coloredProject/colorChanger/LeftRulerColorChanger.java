@@ -5,7 +5,6 @@ import java.lang.reflect.Field;
 import org.eclipse.jface.text.source.IOverviewRuler;
 import org.eclipse.jface.text.source.OverviewRuler;
 import org.eclipse.jface.text.source.SourceViewer;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.IEditorPart;
 
 import abapci.Exception.ActiveEditorNotSetException;

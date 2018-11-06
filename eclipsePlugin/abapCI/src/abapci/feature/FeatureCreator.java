@@ -2,15 +2,31 @@ package abapci.feature;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 
-import abapci.AbapCiPlugin;
+import abapci.AbapCiPluginHelper;
+import abapci.feature.activeFeature.AbapGitPackageChangeFeature;
+import abapci.feature.activeFeature.AtcFeature;
+import abapci.feature.activeFeature.ThemeColorChangerFeature;
+import abapci.feature.activeFeature.ColorFeature;
+import abapci.feature.activeFeature.ColoredProjectFeature;
+import abapci.feature.activeFeature.FeatureType;
+import abapci.feature.activeFeature.JenkinsFeature;
+import abapci.feature.activeFeature.PrettyPrinterFeature;
+import abapci.feature.activeFeature.SimpleToggleFeature;
+import abapci.feature.activeFeature.TddModeFeature;
+import abapci.feature.activeFeature.UnitFeature;
 import abapci.preferences.PreferenceConstants;
 
-public class FeatureFactory {
+public class FeatureCreator {
 
 	private IPreferenceStore prefs;
+	AbapCiPluginHelper abapCiPluginHelper; 
 
+	public FeatureCreator() 
+	{
+		abapCiPluginHelper = new AbapCiPluginHelper();  
+	}
 	private void initPrefs() {
-		prefs = (prefs == null) ? AbapCiPlugin.getDefault().getPreferenceStore() : prefs;
+		prefs = (prefs == null) ? abapCiPluginHelper.getPreferenceStore() : prefs;
 	}
 
 	public UnitFeature createUnitFeature() {
@@ -47,9 +63,9 @@ public class FeatureFactory {
 		return feature;
 	}
 
-	public ColorChangerFeature createColorChangerFeature() {
+	public ThemeColorChangerFeature createColorChangerFeature() {
 		initPrefs();
-		ColorChangerFeature feature = new ColorChangerFeature();
+		ThemeColorChangerFeature feature = new ThemeColorChangerFeature();
 		feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_CHANGE_COLOR_ON_FAILED_TESTS));
 		return feature;
 	}
@@ -76,31 +92,10 @@ public class FeatureFactory {
 		return feature;
 	}
 
-	public ColoredProjectsTabHeaderFeature createColoredProjectsTabHeaderFeature() {
-		initPrefs();
-		ColoredProjectsTabHeaderFeature feature = new ColoredProjectsTabHeaderFeature();
-		feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_COLORED_PROJECTS_TAB_HEADER_ENABLED));
-		return feature;
-	}
-
-	public ColoredProjectsLeftRulerFeature createColoredProjectsLeftRulerFeature() {
-		initPrefs();
-		ColoredProjectsLeftRulerFeature feature = new ColoredProjectsLeftRulerFeature();
-		feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_COLORED_PROJECTS_LEFT_RULER_ENABLED));
-		return feature;
-	}
-
-	public ColoredProjectsRightRulerFeature createColoredProjectsRightRulerFeature() {
-		initPrefs();
-		ColoredProjectsRightRulerFeature feature = new ColoredProjectsRightRulerFeature();
-		feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_COLORED_PROJECTS_RIGHT_RULER_ENABLED));
-		return feature;
-	}
-
-	public SourcecodeFormattingFeature createSourcecodeFormattingFeature() {
+	public PrettyPrinterFeature createSourcecodeFormattingFeature() {
 		initPrefs();
 		String prefix = prefs.getString(PreferenceConstants.PREF_SOURCE_CODE_FORMATTING_PREFIX);
-		SourcecodeFormattingFeature feature = new SourcecodeFormattingFeature(prefix);
+		PrettyPrinterFeature feature = new PrettyPrinterFeature(prefix);
 		feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_SOURCE_CODE_FORMATTING_ENABLED));
 		feature.setCleanupVariablesEnabled(
 				prefs.getBoolean(PreferenceConstants.PREF_SOURCE_CODE_CLEANUP_NOT_USED_VARIABLES));

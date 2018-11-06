@@ -1,4 +1,4 @@
-package abapci.feature;
+package abapci.feature.activeFeature;
 
 public class TddModeFeature extends ActiveFeature {
 

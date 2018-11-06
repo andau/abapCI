@@ -6,13 +6,10 @@ import java.util.List;
 import org.eclipse.core.runtime.preferences.ConfigurationScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.osgi.service.prefs.BackingStoreException;
 
-import abapci.coloredProject.model.ColoredProject;
 import abapci.domain.AbapPackageTestState;
 import abapci.domain.GlobalTestState;
 import abapci.domain.SourcecodeState;

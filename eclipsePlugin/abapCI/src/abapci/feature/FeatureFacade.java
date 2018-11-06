@@ -3,14 +3,26 @@ package abapci.feature;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import abapci.AbapCiPlugin;
+import abapci.feature.activeFeature.AbapGitPackageChangeFeature;
+import abapci.feature.activeFeature.ActiveFeature;
+import abapci.feature.activeFeature.AtcFeature;
+import abapci.feature.activeFeature.ThemeColorChangerFeature;
+import abapci.feature.activeFeature.ColorFeature;
+import abapci.feature.activeFeature.ColoredProjectFeature;
+import abapci.feature.activeFeature.FeatureType;
+import abapci.feature.activeFeature.JenkinsFeature;
+import abapci.feature.activeFeature.PrettyPrinterFeature;
+import abapci.feature.activeFeature.SimpleToggleFeature;
+import abapci.feature.activeFeature.TddModeFeature;
+import abapci.feature.activeFeature.UnitFeature;
 import abapci.preferences.PreferenceConstants;
 
 public class FeatureFacade {
 	private IPreferenceStore prefs;
-	private FeatureFactory featureFactory;
+	private FeatureCreator featureCreator;
 
 	public FeatureFacade() {
-		featureFactory = new FeatureFactory();
+		featureCreator = new FeatureCreator();
 	}
 
 	private IPreferenceStore getPrefs() {
@@ -21,59 +33,59 @@ public class FeatureFacade {
 	}
 
 	public UnitFeature getUnitFeature() {
-		return featureFactory.createUnitFeature();
+		return featureCreator.createUnitFeature();
 	}
 
 	public AtcFeature getAtcFeature() {
-		return featureFactory.createAtcFeature();
+		return featureCreator.createAtcFeature();
 	}
 
-	public ColorChangerFeature getColorChangerFeature() {
-		return featureFactory.createColorChangerFeature();
+	public ThemeColorChangerFeature getColorChangerFeature() {
+		return featureCreator.createColorChangerFeature();
 	}
 
 	public JenkinsFeature getJenkinsFeature() {
-		return featureFactory.createJenkinsFeature();
+		return featureCreator.createJenkinsFeature();
 	}
 
-	public SourcecodeFormattingFeature getSourcecodeFormattingFeature() {
-		return featureFactory.createSourcecodeFormattingFeature();
+	public PrettyPrinterFeature getSourcecodeFormattingFeature() {
+		return featureCreator.createSourcecodeFormattingFeature();
 	}
 
 	public AbapGitPackageChangeFeature getAbapGitPackageChangeFeature() {
-		return featureFactory.createAbapGitPackageChangeFeature();
+		return featureCreator.createAbapGitPackageChangeFeature();
 	}
 
 	public SimpleToggleFeature getUnitCriticalActiveFeature() {
-		return featureFactory.createSimpleToggleFeature(FeatureType.UNIT_RUN_CRITICAL_TESTS);
+		return featureCreator.createSimpleToggleFeature(FeatureType.UNIT_RUN_CRITICAL_TESTS);
 	}
 
 	public ActiveFeature getUnitDangerousActiveFeature() {
-		return featureFactory.createSimpleToggleFeature(FeatureType.UNIT_RUN_DANGEROUS_TESTS);
+		return featureCreator.createSimpleToggleFeature(FeatureType.UNIT_RUN_DANGEROUS_TESTS);
 	}
 
 	public ActiveFeature getUnitHarmlessActiveFeature() {
-		return featureFactory.createSimpleToggleFeature(FeatureType.UNIT_RUN_HARMLESS_TESTS);
+		return featureCreator.createSimpleToggleFeature(FeatureType.UNIT_RUN_HARMLESS_TESTS);
 	}
 
 	public ActiveFeature getUnitTestDurationLongFeature() {
-		return featureFactory.createSimpleToggleFeature(FeatureType.UNIT_RUN_DURATION_LONG_TESTS);
+		return featureCreator.createSimpleToggleFeature(FeatureType.UNIT_RUN_DURATION_LONG_TESTS);
 	}
 
 	public ActiveFeature getUnitTestDurationMediumFeature() {
-		return featureFactory.createSimpleToggleFeature(FeatureType.UNIT_RUN_DURATION_MEDIUM_TESTS);
+		return featureCreator.createSimpleToggleFeature(FeatureType.UNIT_RUN_DURATION_MEDIUM_TESTS);
 	}
 
 	public ActiveFeature getUnitTestDurationShortFeature() {
-		return featureFactory.createSimpleToggleFeature(FeatureType.UNIT_RUN_DURATION_SHORT_TESTS);
+		return featureCreator.createSimpleToggleFeature(FeatureType.UNIT_RUN_DURATION_SHORT_TESTS);
 	}
 
 	public ActiveFeature getShowDialogNewPackageForCiRun() {
-		return featureFactory.createSimpleToggleFeature(FeatureType.SHOW_DIALOG_NEW_PACKAGE_FOR_CI_RUN);
+		return featureCreator.createSimpleToggleFeature(FeatureType.SHOW_DIALOG_NEW_PACKAGE_FOR_CI_RUN);
 	}
 
 	public void setShowDialogNewPackageForCiRun(boolean active) {
-		SimpleToggleFeature simpleToggleFeature = featureFactory
+		SimpleToggleFeature simpleToggleFeature = featureCreator
 				.createSimpleToggleFeature(FeatureType.SHOW_DIALOG_NEW_PACKAGE_FOR_CI_RUN);
 		simpleToggleFeature.setActive(active);
 		simpleToggleFeature.writePreference();
@@ -84,26 +96,26 @@ public class FeatureFacade {
 	}
 
 	public ColorFeature getTestRunOkColorFeature() {
-		return featureFactory.createSimpleColorFeature(ColorFeatureType.PREF_UNIT_TEST_OK_BACKGROUND_COLOR);
+		return featureCreator.createSimpleColorFeature(ColorFeatureType.PREF_UNIT_TEST_OK_BACKGROUND_COLOR);
 	}
 
 	public ColorFeature getTestRunFailColorFeature() {
-		return featureFactory.createSimpleColorFeature(ColorFeatureType.PREF_UNIT_TEST_FAIL_BACKGROUND_COLOR);
+		return featureCreator.createSimpleColorFeature(ColorFeatureType.PREF_UNIT_TEST_FAIL_BACKGROUND_COLOR);
 	}
 
 	public ColorFeature getAtcRunFailColorFeature() {
-		return featureFactory.createSimpleColorFeature(ColorFeatureType.PREF_ATC_TEST_FAIL_BACKGROUND_COLOR);
+		return featureCreator.createSimpleColorFeature(ColorFeatureType.PREF_ATC_TEST_FAIL_BACKGROUND_COLOR);
 	}
 
 	public ColoredProjectFeature getColoredProjectFeature() {
-		return featureFactory.createColoredProjectFeature();
+		return featureCreator.createColoredProjectFeature();
 	}
 
 	public TddModeFeature getTddModeFeature() {
-		return featureFactory.createTddModeFeature();
+		return featureCreator.createTddModeFeature();
 	}
 
 	public SourceCodeVisualisationFeature getSourceCodeVisualisationFeature() {
-		return featureFactory.createSourceCodeVisualisationFeature();
+		return featureCreator.createSourceCodeVisualisationFeature();
 	}
 }

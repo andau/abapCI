@@ -3,20 +3,17 @@ package abapci.feature;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
 import abapci.activation.Activation;
 import abapci.domain.TestState;
-import abapci.manager.UnitTestManager;
-import abapci.manager.AtcTestManager;
 import abapci.manager.DevelopmentProcessManager;
 import abapci.manager.IAtcTestManager;
 import abapci.manager.JavaSimAtcTestManager;
 import abapci.manager.ThemeUpdateManager;
+import abapci.manager.UnitTestManager;
 import abapci.presenter.ContinuousIntegrationPresenter;
 
 public class FeatureProcessor {

@@ -4,7 +4,7 @@ import org.eclipse.ui.IEditorPart;
 
 import abapci.coloredProject.exeption.ColorChangerNotImplementedException;
 import abapci.coloredProject.model.projectColor.IProjectColor;
-import abapci.feature.ColoredProjectFeature;
+import abapci.feature.activeFeature.ColoredProjectFeature;
 
 public class ColorChangerFactory {
 	public ColorChanger create(ColorChangerType colorChangerType, IEditorPart editorPart,

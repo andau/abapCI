@@ -51,6 +51,7 @@ import com.sap.adt.tools.core.urimapping.IAdtUriMappingService;
 import com.sap.adt.tools.core.urimapping.IUriMappingContext;
 import com.sap.adt.tools.core.urimapping.UriMappingContext;
 
+@SuppressWarnings("restriction")
 public class AbapSourceCleanupHandlerCopy extends AbstractAdtEditorHandler {
 	private final IAdtSourceServicesFactory cleanUpFactory;
 	private final IAdtUriMappingService uriMappingService;
@@ -89,6 +90,7 @@ public class AbapSourceCleanupHandlerCopy extends AbstractAdtEditorHandler {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private Object execute(IAbapSourcePage adtSourcePage, String operation, String scope, String jobName)
 			throws CoreException {
 		URI sourceObjectUri;
@@ -182,7 +184,6 @@ public class AbapSourceCleanupHandlerCopy extends AbstractAdtEditorHandler {
 			throws InvocationTargetException, InterruptedException {
 		final String[] newSource = new String[1];
 		progressService.busyCursorWhile(new IRunnableWithProgress() {
-
 			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 				try {
 					try {
@@ -214,6 +215,7 @@ public class AbapSourceCleanupHandlerCopy extends AbstractAdtEditorHandler {
 	private IDestinationData getDestination(IEditorPart editor) throws CoreException {
 		IFile file;
 		IEditorInput input = editor.getEditorInput();
+		@SuppressWarnings("unused")
 		IFileEditorInput fileInput;
 		if (input instanceof IFileEditorInput && (file = (fileInput = (IFileEditorInput) input).getFile()) != null) {
 			return ((IAbapProject) file.getProject().getAdapter(IAbapProject.class)).getDestinationData();
