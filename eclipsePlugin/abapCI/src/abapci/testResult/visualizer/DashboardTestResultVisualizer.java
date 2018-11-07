@@ -3,7 +3,6 @@ package abapci.testResult.visualizer;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 
@@ -23,26 +22,23 @@ public class DashboardTestResultVisualizer implements ITestResultVisualizer {
 	public void setResultVisualizerOutput(ResultVisualizerOutput resultVisualizerOutput) {
 		if (view != null) {
 			setGlobalTestState(resultVisualizerOutput.getGlobalTestState());
-			setInfoLine(resultVisualizerOutput.getInfoline()); 
-			setBackgroundColor(resultVisualizerOutput.getBackgroundColor());
-			rebuildHyperlink(view.getEntireContainer(), view.getOpenErrorHyperlink(), resultVisualizerOutput.getAbapPackageTestStates()); 
+			setInfoLine(resultVisualizerOutput.getInfoline());
+			view.setBackgroundColor(resultVisualizerOutput.getBackgroundColor());
+			view.setForegroundColor(resultVisualizerOutput.getForegroundColor());
+			rebuildHyperlink(view.getEntireContainer(), view.getOpenErrorHyperlink(),
+					resultVisualizerOutput.getAbapPackageTestStates());
 		}
 	}
 
 	private void setInfoLine(String infoline) {
-	
+
 		view.setInfolineText(infoline);
 		view.setInfolineLayoutData();
-		
+
 	}
 
 	private void setGlobalTestState(String globalTestStateString) {
 		view.setLabelOverallTestStateText(globalTestStateString);
-	}
-
-	private void setBackgroundColor(Color backgroundColor) {
-		view.setBackgroundColor(backgroundColor);
-
 	}
 
 	private void rebuildHyperlink(Composite container, Hyperlink link,

@@ -35,7 +35,7 @@ public class CiJob extends Job {
 
 	private static final long MAX_PROCESSING_DELAY = 20000;
 
-	private FeatureProcessor featureProcessor;
+	private final FeatureProcessor featureProcessor;
 	private SapConnection sapConnection;
 
 	private CiJob(ContinuousIntegrationPresenter continuousIntegrationPresenter) {
@@ -86,7 +86,7 @@ public class CiJob extends Job {
 	}
 
 	private boolean evaluateRerun() {
-		
+
 		boolean rerun = true;
 		boolean timeup = false;
 
@@ -128,7 +128,7 @@ public class CiJob extends Job {
 		triggerDate = new Date();
 		triggerProcessor = true;
 		sapConnection = new SapConnection();
-		currentInactiveObjects = new ArrayList<Activation>();
+		currentInactiveObjects = new ArrayList<>();
 	}
 
 	public void setTriggerPackages(IProject project, List<String> triggerPackages,

@@ -5,27 +5,27 @@ import java.util.List;
 import abapci.domain.AbapPackageTestState;
 import abapci.domain.SourcecodeState;
 import abapci.domain.TestState;
-import abapci.feature.FeatureFacade;
+import abapci.feature.activeFeature.UnitFeature;
 import abapci.manager.DevelopmentProcessManager;
 
 public class SourceCodeStateEvaluator {
-	FeatureFacade featureFacade;
-	private DevelopmentProcessManager developmentProcessManager;
+	private final DevelopmentProcessManager developmentProcessManager;
 
 	public SourceCodeStateEvaluator() {
-		featureFacade = new FeatureFacade();
+
 		developmentProcessManager = new DevelopmentProcessManager();
 	}
 
-	public SourcecodeState evaluate(List<AbapPackageTestState> abapPackageTestStates) {
+	public SourcecodeState evaluate(List<AbapPackageTestState> abapPackageTestStates, UnitFeature unitFeature) {
 
 		TestState currentUnitTestState;
-		if (!featureFacade.getUnitFeature().isActive()) {
+
+		if (!unitFeature.isActive()) {
 			currentUnitTestState = TestState.DEACT;
 		} else if (abapPackageTestStates.stream().anyMatch(item -> item.getUnitTestState().equals(TestState.NOK))) {
 			currentUnitTestState = TestState.NOK;
-		} else if (abapPackageTestStates.stream().anyMatch(item -> item.getUnitTestState().equals(TestState.OFFL)
-				&& !featureFacade.getUnitFeature().isRunActivatedObjectsOnly())) {
+		} else if (abapPackageTestStates.stream().anyMatch(
+				item -> item.getUnitTestState().equals(TestState.OFFL) && !unitFeature.isRunActivatedObjectsOnly())) {
 			currentUnitTestState = TestState.OFFL;
 		} else if (abapPackageTestStates.stream().anyMatch(item -> item.getUnitTestState().equals(TestState.OK))) {
 			currentUnitTestState = TestState.OK;

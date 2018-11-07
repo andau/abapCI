@@ -28,6 +28,7 @@ import abapci.coloredProject.model.projectColor.IProjectColorFactory;
 import abapci.coloredProject.model.projectColor.ProjectColorFactory;
 import abapci.coloredProject.presenter.ColoredProjectsPresenter;
 import abapci.feature.FeatureFacade;
+import abapci.feature.activeFeature.ColoredProjectFeature;
 import abapci.preferences.PreferenceConstants;
 
 public class AddOrUpdateColoredProjectPage extends Dialog {
@@ -48,6 +49,7 @@ public class AddOrUpdateColoredProjectPage extends Dialog {
 		this.showPopUpButton = showPopUpButton;
 	}
 
+	@Override
 	protected void configureShell(Shell shell) {
 		super.configureShell(shell);
 		shell.setText("Assignment of a color to an ABAP project");
@@ -146,20 +148,29 @@ public class AddOrUpdateColoredProjectPage extends Dialog {
 
 	@Override
 	protected void okPressed() {
-		FeatureFacade featureFacade = new FeatureFacade();
-		featureFacade.getColoredProjectFeature().setDialogEnabled(showPopUpYes.getSelection());
+
+		ColoredProjectFeature coloredProjectFeature = createColoredProjectFeature();
+
+		coloredProjectFeature.setDialogEnabled(showPopUpYes.getSelection());
+
 		IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore();
 		prefs.setValue(PreferenceConstants.PREF_COLORED_PROJECTS_NEW_DIALOG_ENABLED, showPopUpYes.getSelection());
 
 		RGB selectedRgb = colorSelector.getColorValue();
 		if (comboColoredProject.getText() != null && !comboColoredProject.getText().equals("") && selectedRgb != null) {
-			IProjectColorFactory projectColorFactory = new ProjectColorFactory(); 
-			IProjectColor projectColor =projectColorFactory.create(selectedRgb, btnSuppressColoring.getSelection()); 
-			presenter.addColoredProject(new ColoredProject(comboColoredProject.getText(),
-					projectColor, btnSuppressColoring.getSelection()));
+			IProjectColorFactory projectColorFactory = new ProjectColorFactory();
+			IProjectColor projectColor = projectColorFactory.create(selectedRgb, btnSuppressColoring.getSelection());
+			presenter.addColoredProject(new ColoredProject(comboColoredProject.getText(), projectColor,
+					btnSuppressColoring.getSelection()));
 			presenter.setViewerInput();
 		}
 		super.okPressed();
+	}
+
+	private ColoredProjectFeature createColoredProjectFeature() {
+		FeatureFacade featureFacade = new FeatureFacade();
+		ColoredProjectFeature coloredProjectFeature = featureFacade.getColoredProjectFeature();
+		return coloredProjectFeature;
 	}
 
 	@Override

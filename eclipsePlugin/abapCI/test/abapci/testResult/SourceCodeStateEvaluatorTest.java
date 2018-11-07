@@ -7,12 +7,12 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 
 import abapci.domain.AbapPackageTestState;
 import abapci.domain.SourcecodeState;
 import abapci.domain.TestState;
-import abapci.feature.FeatureFacade;
 import abapci.feature.activeFeature.UnitFeature;
 
 public class SourceCodeStateEvaluatorTest {
@@ -26,39 +26,36 @@ public class SourceCodeStateEvaluatorTest {
 	TestResult atcTestResult1;
 	TestResult atcTestResult2;
 
-	FeatureFacade featureFacade;
 	UnitFeature unitFeature;
 
 	@Before
 	public void before() {
 		unitTestResult1 = PowerMockito.mock(TestResult.class);
-		unitTestResult2= PowerMockito.mock(TestResult.class);
+		unitTestResult2 = PowerMockito.mock(TestResult.class);
 
-		atcTestResult1= PowerMockito.mock(TestResult.class);
-		atcTestResult2= PowerMockito.mock(TestResult.class);
+		atcTestResult1 = PowerMockito.mock(TestResult.class);
+		atcTestResult2 = PowerMockito.mock(TestResult.class);
 
-		featureFacade= PowerMockito.mock(FeatureFacade.class);
-		unitFeature= PowerMockito.mock(UnitFeature.class);
+		unitFeature = PowerMockito.mock(UnitFeature.class);
+		Mockito.when(unitFeature.isActive()).thenReturn(true);
 
 		sourceCodeStateEvaluator = new SourceCodeStateEvaluator();
-		sourceCodeStateEvaluator.featureFacade = featureFacade;
-		abapPackageTestStates = new ArrayList<AbapPackageTestState>();
-		PowerMockito.when(featureFacade.getUnitFeature()).thenReturn(unitFeature);
+		abapPackageTestStates = new ArrayList<>();
 	}
 
 	@Test
 	public void evaluateEmptyPackagesTest() {
 		PowerMockito.when(unitFeature.isActive()).thenReturn(true);
-		SourcecodeState sourcecodeState = sourceCodeStateEvaluator.evaluate(abapPackageTestStates);
+		SourcecodeState sourcecodeState = sourceCodeStateEvaluator.evaluate(abapPackageTestStates, unitFeature);
 		assertEquals(SourcecodeState.UNDEF, sourcecodeState);
 	}
 
 	@Test
 	public void evalutateOneAbapPackageTest() {
+
 		abapPackageTestStates.add(
 				new AbapPackageTestState("TESTPROJECT", "TESTPACKAGE", "jenkinsInfo", unitTestResult1, atcTestResult1));
 
-		PowerMockito.when(featureFacade.getUnitFeature().isActive()).thenReturn(true);
 		assertOnePackage(new TestStateTuple(TestState.OK, TestState.OK), SourcecodeState.OK);
 		assertOnePackage(new TestStateTuple(TestState.OK, TestState.OK), SourcecodeState.OK);
 		assertOnePackage(new TestStateTuple(TestState.NOK, TestState.OK), SourcecodeState.UT_FAIL);
@@ -110,7 +107,7 @@ public class SourceCodeStateEvaluatorTest {
 		PowerMockito.when(unitTestResult1.getTestState()).thenReturn(testStateTuple.getUnitTestState());
 		PowerMockito.when(atcTestResult1.getTestState()).thenReturn(testStateTuple.getAtcTestState());
 
-		assertEquals(sourcecodeTestState, sourceCodeStateEvaluator.evaluate(abapPackageTestStates));
+		assertEquals(sourcecodeTestState, sourceCodeStateEvaluator.evaluate(abapPackageTestStates, unitFeature));
 
 	}
 
@@ -122,12 +119,12 @@ public class SourceCodeStateEvaluatorTest {
 		PowerMockito.when(unitTestResult2.getTestState()).thenReturn(testStateTuple2.getUnitTestState());
 		PowerMockito.when(atcTestResult2.getTestState()).thenReturn(testStateTuple2.getAtcTestState());
 
-		assertEquals(sourcecodeTestState, sourceCodeStateEvaluator.evaluate(abapPackageTestStates));
+		assertEquals(sourcecodeTestState, sourceCodeStateEvaluator.evaluate(abapPackageTestStates, unitFeature));
 	}
 
 	private class TestStateTuple {
-		private TestState unitTestState;
-		private TestState atcTestState;
+		private final TestState unitTestState;
+		private final TestState atcTestState;
 
 		public TestStateTuple(TestState unitTestState, TestState atcTestState) {
 			this.unitTestState = unitTestState;

@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IProject;
+
 import com.sap.adt.atc.model.atcworklist.IAtcWorklist;
 
 import abapci.activation.Activation;
@@ -23,10 +24,12 @@ public class AtcTestManager extends AbstractTestManager implements IAtcTestManag
 		super(continuousIntegrationPresenter, project, packageNames);
 	}
 
+	@Override
 	public TestState executeAllPackages(IProject project, List<AbapPackageTestState> activeAbapPackageTestStates,
 			List<Activation> inactiveObjects) {
 
-		//Method prepared for implementation with Code Mining - for now dummy implementation for E2E testing purposes  		
+		// Method prepared for implementation with Code Mining - for now dummy
+		// implementation for E2E testing purposes
 
 		overallTestState = TestState.UNDEF;
 
@@ -36,7 +39,8 @@ public class AtcTestManager extends AbstractTestManager implements IAtcTestManag
 			IAtcWorklist atcWorklist = null;
 
 			if (abapPackageTestState.getAtcTestState() == TestState.OFFL && inactiveObjects == null) {
-				atcWorklist = new AbapAtcHandler().executePackage(project, abapPackageTestState.getPackageName());
+				atcWorklist = new AbapAtcHandler(continuousIntegrationPresenter.getAtcFeature()).executePackage(project,
+						abapPackageTestState.getPackageName());
 			}
 
 			else if (inactiveObjects.stream()
@@ -47,7 +51,8 @@ public class AtcTestManager extends AbstractTestManager implements IAtcTestManag
 						.collect(Collectors.toSet());
 
 				if (inactiveObjectsForPackage.size() > 0) {
-					atcWorklist = new AbapAtcHandler().executeObjects(project, inactiveObjectsForPackage);
+					atcWorklist = new AbapAtcHandler(continuousIntegrationPresenter.getAtcFeature())
+							.executeObjects(project, inactiveObjectsForPackage);
 				}
 
 				if (atcWorklist != null) {

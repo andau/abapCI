@@ -18,18 +18,17 @@ import abapci.activation.ActivationHelper;
 import abapci.activation.ActivationPool;
 import abapci.connections.SapConnection;
 import abapci.domain.ContinuousIntegrationConfig;
-import abapci.feature.FeatureFacade;
 import abapci.jobs.CiJob;
 import abapci.presenter.ContinuousIntegrationPresenter;
 import abapci.views.wizard.AddOrUpdateContinuousIntegrationConfigPage;
 
 public class GeneralResourceChangeListener implements IResourceChangeListener {
 
-	private SapConnection sapConnection;
+	private final SapConnection sapConnection;
 	private boolean initialRun;
-	private CiJob job;
-	private ContinuousIntegrationPresenter continuousIntegrationPresenter;
-	private ActivationPool activationPool;
+	private final CiJob job;
+	private final ContinuousIntegrationPresenter continuousIntegrationPresenter;
+	private final ActivationPool activationPool;
 
 	public GeneralResourceChangeListener(ContinuousIntegrationPresenter continuousIntegrationPresenter) {
 		sapConnection = new SapConnection();
@@ -37,15 +36,16 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 		this.continuousIntegrationPresenter = continuousIntegrationPresenter;
 		job = CiJob.getInstance(continuousIntegrationPresenter);
 		activationPool = ActivationPool.getInstance();
-		new FeatureFacade();
 	}
 
+	@Override
 	public void resourceChanged(IResourceChangeEvent event) {
 
 		if (event.getType() == IResourceChangeEvent.POST_CHANGE) {
 			IResourceDelta delta = event.getDelta();
-			if (delta == null)
+			if (delta == null) {
 				return;
+			}
 
 			IResourceDelta[] resourceDeltas = delta.getAffectedChildren(IResourceDelta.CHANGED);
 
@@ -60,7 +60,8 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 						currentProject = continuousIntegrationPresenter.getCurrentProject();
 					}
 
-					if (currentProject != null && (currentProject.hasNature(JavaCore.NATURE_ID) || sapConnection.isConnected(currentProject.getName()))) {
+					if (currentProject != null && (currentProject.hasNature(JavaCore.NATURE_ID)
+							|| sapConnection.isConnected(currentProject.getName()))) {
 
 						List<String> selectedPackages = new ArrayList<>();
 						List<Activation> activatedInactiveObjects = new ArrayList<>();
@@ -76,21 +77,21 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 						if (!initialRun || continuousIntegrationPresenter.runNecessary()) {
 							initialRun = true;
 							continuousIntegrationPresenter.setCurrentProject(currentProject);
-							activatedInactiveObjects = (currentProject.hasNature(JavaCore.NATURE_ID)) ?   
-								activationPool.findAllActive() : null;
-							
+							activatedInactiveObjects = (currentProject.hasNature(JavaCore.NATURE_ID))
+									? activationPool.findAllActive()
+									: null;
+
 							job.setTriggerPackages(continuousIntegrationPresenter.getCurrentProject(),
 									continuousIntegrationPresenter.getAbapPackageTestStatesForCurrentProject().stream()
 											.map(item -> item.getPackageName()).distinct()
 											.collect(Collectors.<String>toList()),
 									activatedInactiveObjects);
 							job.start(true);
-						} else if (!activations.isEmpty() && ( activationPool.hasUnprocessedActivationClicks() || currentProject.hasNature(JavaCore.NATURE_ID)))
-						{
+						} else if (!activations.isEmpty() && (activationPool.hasUnprocessedActivationClicks()
+								|| currentProject.hasNature(JavaCore.NATURE_ID))) {
 							IProject activatedProject = activationPool.getCurrentProject();
 							if (activatedProject != null) {
-								continuousIntegrationPresenter
-										.setCurrentProject(activationPool.getCurrentProject());
+								continuousIntegrationPresenter.setCurrentProject(activationPool.getCurrentProject());
 							}
 							job.setTriggerPackages(continuousIntegrationPresenter.getCurrentProject(), selectedPackages,
 									activatedInactiveObjects);

@@ -46,20 +46,21 @@ public class AbapCiColoredProjectView extends ViewPart {
 	private Action addAction;
 	private Action updateAction;
 	private Action deleteAction;
-	private AbapCiPluginHelper abapCiPluginHelper; 
+	private final AbapCiPluginHelper abapCiPluginHelper;
 
 	ColoredProjectsPresenter coloredProjectsPresenter;
 
-	public AbapCiColoredProjectView() 
-	{
+	public AbapCiColoredProjectView() {
 		abapCiPluginHelper = new AbapCiPluginHelper();
 	}
-	
+
 	class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
+		@Override
 		public String getColumnText(Object obj, int index) {
 			return getText(obj);
 		}
 
+		@Override
 		public Image getColumnImage(Object obj, int index) {
 			return getImage(obj);
 		}
@@ -70,9 +71,10 @@ public class AbapCiColoredProjectView extends ViewPart {
 		}
 	}
 
+	@Override
 	public void createPartControl(Composite parent) {
 
-		coloredProjectsPresenter = abapCiPluginHelper.getColoredProjectsPresenter(); 
+		coloredProjectsPresenter = abapCiPluginHelper.getColoredProjectsPresenter();
 		coloredProjectsPresenter.setView(this);
 
 		Composite entireContainer = new Composite(parent, SWT.NONE);
@@ -85,7 +87,7 @@ public class AbapCiColoredProjectView extends ViewPart {
 		statusLabel = new CLabel(entireContainer, SWT.BOTTOM);
 		statusLabel.setBounds(0, 10, 200, 10);
 		statusLabel.setText(
-				"By adding a project and assigning a color most development objects of this project are colored with the selected color");
+				"By adding a project and assigning a color the development objects of this project are colored with the assigned color");
 
 		viewer.setContentProvider(ArrayContentProvider.getInstance());
 		getSite().setSelectionProvider(viewer);
@@ -127,6 +129,7 @@ public class AbapCiColoredProjectView extends ViewPart {
 				return c.getColor();
 			}
 
+			@Override
 			public String getText(Object element) {
 				ColoredProject c = (ColoredProject) element;
 				return c.getColor().toString();
@@ -136,6 +139,7 @@ public class AbapCiColoredProjectView extends ViewPart {
 		TableViewerColumn col2 = createTableViewerColumn(titles[2], bounds[2], 2);
 		col2.setLabelProvider(new ColumnLabelProvider() {
 
+			@Override
 			public String getText(Object element) {
 				ColoredProject c = (ColoredProject) element;
 				return String.valueOf(c.isSuppressedColoring());

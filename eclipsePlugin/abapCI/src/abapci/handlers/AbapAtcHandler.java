@@ -21,14 +21,14 @@ import com.sap.adt.tools.core.internal.AbapProjectService;
 import com.sap.adt.tools.core.project.IAbapProject;
 
 import abapci.activation.Activation;
-import abapci.feature.FeatureFacade;
+import abapci.feature.activeFeature.AtcFeature;
 
 public class AbapAtcHandler extends AbstractHandler {
 
-	private FeatureFacade featureFacade;
+	private final AtcFeature atcFeature;
 
-	public AbapAtcHandler() {
-		featureFacade = new FeatureFacade();
+	public AbapAtcHandler(AtcFeature atcFeature) {
+		this.atcFeature = atcFeature;
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class AbapAtcHandler extends AbstractHandler {
 		IProgressMonitor progressMonitor = new NullProgressMonitor();
 		IAbapProject abapProject = AbapProjectService.getInstance().createFromProjectUnchecked(project);
 
-		String atcVariant = featureFacade.getAtcFeature().getVariant();
+		String atcVariant = atcFeature.getVariant();
 		String worklistId = worklistBackendAccess.createWorklist(abapProject, atcVariant, progressMonitor);
 		checkableItems.add(new MyAtcCheckableItem(createAtcUri(packageName), packageName, "DEVC/K"));
 		IAtcWorklistRun worklistRun = worklistBackendAccess.startAtcRunForWorklist(abapProject, checkableItems,
@@ -64,7 +64,7 @@ public class AbapAtcHandler extends AbstractHandler {
 		List<IAtcCheckableItem> checkableItems = new ArrayList<>();
 
 		IProgressMonitor progressMonitor = new NullProgressMonitor();
-		String atcVariant = featureFacade.getAtcFeature().getVariant();
+		String atcVariant = atcFeature.getVariant();
 		String worklistId = worklistBackendAccess.createWorklist(abapProject, atcVariant, progressMonitor);
 		for (Activation activation : inactiveObjects) {
 			checkableItems.add(
@@ -80,7 +80,7 @@ public class AbapAtcHandler extends AbstractHandler {
 
 		/**
 		 * try {
-		 * 
+		 *
 		 * launchInNewThread(project, getProjectSetting(abapProject), new
 		 * HashSet<IAtcCheckableItem>(checkableItems)); } catch
 		 * (InvocationTargetException | InterruptedException | CoreException e) { //

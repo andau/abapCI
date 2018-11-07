@@ -28,7 +28,6 @@ public class AbapCiDashboardView extends ViewPart {
 
 	private ContinuousIntegrationPresenter presenter;
 
-	public Label projectline;
 	private Label lblOverallTestState;
 	private Label infoline;
 	private Hyperlink openErrorHyperlink;
@@ -36,18 +35,26 @@ public class AbapCiDashboardView extends ViewPart {
 	private Composite parent;
 	private Composite entireContainer;
 
-	private ITestResultVisualizer testResultVisualizer;
+	private final ITestResultVisualizer testResultVisualizer;
 
 	public AbapCiDashboardView() {
 		ViewModel.INSTANCE.getOverallTestState();
 		ViewModel.INSTANCE.getOverallInfoline();
-		testResultVisualizer = new DashboardTestResultVisualizer(this); 
+		testResultVisualizer = new DashboardTestResultVisualizer(this);
 	}
 
 	public void setBackgroundColor(Color color) {
 		parent.setBackground(color);
 	}
 
+	public void setForegroundColor(Color foregroundColor) {
+		lblOverallTestState.setForeground(foregroundColor);
+		infoline.setForeground(foregroundColor);
+		openErrorHyperlink.setForeground(foregroundColor);
+
+	}
+
+	@Override
 	public void createPartControl(Composite parent) {
 
 		this.parent = parent;
@@ -75,6 +82,7 @@ public class AbapCiDashboardView extends ViewPart {
 				"                                                                                                                ");
 		openErrorHyperlink.setLayoutData(new GridData(SWT.LEFT, SWT.WRAP, true, true));
 		openErrorHyperlink.addHyperlinkListener(new HyperlinkAdapter() {
+			@Override
 			public void linkActivated(HyperlinkEvent e) {
 				presenter.openEditorsForFailedItems();
 			}
@@ -107,12 +115,12 @@ public class AbapCiDashboardView extends ViewPart {
 	}
 
 	public void setLabelOverallTestStateText(String text) {
-		 lblOverallTestState.setText(text); 
+		lblOverallTestState.setText(text);
 	}
 
 	public void setInfolineText(String infolineText) {
 		infoline.setText(infolineText);
-		
+
 	}
 
 	public void setInfolineLayoutData() {

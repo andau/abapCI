@@ -7,8 +7,12 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
+import abapci.AbapCiPluginHelper;
 import abapci.activation.Activation;
 import abapci.domain.TestState;
+import abapci.feature.activeFeature.AtcFeature;
+import abapci.feature.activeFeature.ThemeColorChangerFeature;
+import abapci.feature.activeFeature.UnitFeature;
 import abapci.manager.DevelopmentProcessManager;
 import abapci.manager.IAtcTestManager;
 import abapci.manager.JavaSimAtcTestManager;
@@ -18,30 +22,51 @@ import abapci.presenter.ContinuousIntegrationPresenter;
 
 public class FeatureProcessor {
 
-	private UnitTestManager aUnitTestManager;
-	private IAtcTestManager atcTestManager;
+	private final UnitTestManager aUnitTestManager;
+	private final IAtcTestManager atcTestManager;
 
-	private ThemeUpdateManager themeUpdateManager;
+	private final ThemeUpdateManager themeUpdateManager;
 
-	private FeatureFacade featureFacade;
-	private ContinuousIntegrationPresenter presenter;
+	private final ContinuousIntegrationPresenter presenter;
 	private List<Activation> inactiveObjects;
-	private DevelopmentProcessManager developmentProcessManager;
+	private final DevelopmentProcessManager developmentProcessManager;
+	private UnitFeature unitFeature;
+	private AtcFeature atcFeature;
+	private ThemeColorChangerFeature themeColorChangerFeature;
 
 	public FeatureProcessor(ContinuousIntegrationPresenter presenter, IProject project, List<String> initialPackages) {
 
 		this.presenter = presenter;
-		
+
 		aUnitTestManager = new UnitTestManager(presenter, project, initialPackages);
-		//For testing purposes 
+		// For testing purposes
 		atcTestManager = new JavaSimAtcTestManager(presenter, project, initialPackages);
 		// atcTestManager = new AtcTestManager(presenter, project, initialPackages);
-		
+
 		developmentProcessManager = new DevelopmentProcessManager();
 
 		themeUpdateManager = new ThemeUpdateManager();
 
-		featureFacade = new FeatureFacade();
+		initFeatures();
+
+		registerPreferencePropertyChangeListener();
+	}
+
+	private void initFeatures() {
+
+		FeatureFacade featureFacade = new FeatureFacade();
+		unitFeature = featureFacade.getUnitFeature();
+		atcFeature = featureFacade.getAtcFeature();
+		themeColorChangerFeature = featureFacade.getColorChangerFeature();
+
+	}
+
+	private void registerPreferencePropertyChangeListener() {
+
+		AbapCiPluginHelper abapCiPluginHelper = new AbapCiPluginHelper();
+		abapCiPluginHelper.getPreferenceStore().addPropertyChangeListener(event -> {
+			initFeatures();
+		});
 
 	}
 
@@ -51,13 +76,13 @@ public class FeatureProcessor {
 		this.inactiveObjects = inactiveObjects;
 	}
 
-	public void processEnabledFeatures() { 
+	public void processEnabledFeatures() {
 
 		try {
-			if (featureFacade.getUnitFeature().isActive()) {
+			if (unitFeature.isActive()) {
 
 				TestState unitTestState = TestState.UNDEF;
-				if (featureFacade.getUnitFeature().isRunActivatedObjectsOnly()) {
+				if (unitFeature.isRunActivatedObjectsOnly()) {
 					if (inactiveObjects != null) {
 						unitTestState = aUnitTestManager.executeAllPackages(presenter.getCurrentProject(),
 								presenter.getAbapPackageTestStatesForCurrentProject(), inactiveObjects);
@@ -68,13 +93,16 @@ public class FeatureProcessor {
 				}
 
 				developmentProcessManager.setUnitTeststate(unitTestState);
-				themeUpdateManager.updateTheme(developmentProcessManager.getSourcecodeState());
+
+				if (themeColorChangerFeature.isActive()) {
+					themeUpdateManager.updateTheme(developmentProcessManager.getSourcecodeState());
+				}
 
 			}
 
-			if (featureFacade.getAtcFeature().isActive()) {
+			if (atcFeature.isActive()) {
 				TestState atcTestState = null;
-				if (featureFacade.getAtcFeature().isRunActivatedObjects() && inactiveObjects != null) {
+				if (atcFeature.isRunActivatedObjects() && inactiveObjects != null) {
 
 					atcTestState = atcTestManager.executeAllPackages(presenter.getCurrentProject(),
 							presenter.getAbapPackageTestStatesForCurrentProject(), inactiveObjects);

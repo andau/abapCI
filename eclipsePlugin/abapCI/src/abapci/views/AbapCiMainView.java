@@ -44,8 +44,12 @@ import org.eclipse.ui.part.ViewPart;
 import com.sap.adt.project.AdtCoreProjectServiceFactory;
 
 import abapci.AbapCiPlugin;
+import abapci.AbapCiPluginHelper;
 import abapci.domain.AbapPackageTestState;
 import abapci.feature.FeatureFacade;
+import abapci.feature.activeFeature.AtcFeature;
+import abapci.feature.activeFeature.JenkinsFeature;
+import abapci.feature.activeFeature.UnitFeature;
 import abapci.lang.UiTexts;
 import abapci.presenter.ContinuousIntegrationPresenter;
 import abapci.utils.EditorHandler;
@@ -67,7 +71,9 @@ public class AbapCiMainView extends ViewPart {
 	 */
 	public static final String ID = "abapci.views.AbapCiMainView";
 
-	private TableViewer viewer;
+	Composite entireContainer;
+	private TableViewer tableViewer;
+
 	private Action jenkinsAction;
 	private Action aUnitAction;
 	private Action aUnitActionOpenFirstError;
@@ -82,13 +88,31 @@ public class AbapCiMainView extends ViewPart {
 	public CLabel statusLabel;
 
 	ContinuousIntegrationPresenter continuousIntegrationPresenter;
-	FeatureFacade featureFacade;
+
+	private UnitFeature unitFeature;
+	private AtcFeature atcFeature;
+	private JenkinsFeature jenkinsFeature;
+
+	public AbapCiMainView() {
+		registerPreferencePropertyChangeListener();
+	}
+
+	private void registerPreferencePropertyChangeListener() {
+		AbapCiPluginHelper abapCiPluginHelper = new AbapCiPluginHelper();
+		abapCiPluginHelper.getPreferenceStore().addPropertyChangeListener(event -> {
+			initFeatures();
+			createTableColumns();
+		});
+
+	}
 
 	class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
+		@Override
 		public String getColumnText(Object obj, int index) {
 			return getText(obj);
 		}
 
+		@Override
 		public Image getColumnImage(Object obj, int index) {
 			return getImage(obj);
 		}
@@ -99,31 +123,26 @@ public class AbapCiMainView extends ViewPart {
 		}
 	}
 
+	@Override
 	public void createPartControl(Composite parent) {
-		featureFacade = new FeatureFacade();
+		initFeatures();
 
-		Composite entireContainer = new Composite(parent, SWT.NONE);
+		entireContainer = new Composite(parent, SWT.NONE);
 		entireContainer.setLayout(new GridLayout(1, false));
 
-		viewer = new TableViewer(entireContainer, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
-		createColumns(viewer);
-		viewer.getTable().setHeaderVisible(true);
+		tableViewer = new TableViewer(entireContainer, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
+		tableViewer.getTable().setHeaderVisible(true);
+		tableViewer.setContentProvider(ArrayContentProvider.getInstance());
+
+		createTableColumns();
 
 		statusLabel = new CLabel(entireContainer, SWT.BOTTOM);
 		statusLabel.setBounds(0, 10, 500, 10);
 
-		viewer.setContentProvider(ArrayContentProvider.getInstance());
-
-		// TODO Viewer is needed because ViewModel is not yet implemented with
-		// full functionality
-		// ViewModel.INSTANCE.setMainViewer(viewer);
-
-		// getSite().setSelectionProvider(viewer);
-
 		continuousIntegrationPresenter = AbapCiPlugin.getDefault().continuousIntegrationPresenter;
 		if (continuousIntegrationPresenter != null) {
 			continuousIntegrationPresenter.setView(this);
-			viewer.setInput(continuousIntegrationPresenter.getAbapPackageTestStatesForCurrentProject());
+			tableViewer.setInput(continuousIntegrationPresenter.getAbapPackageTestStatesForCurrentProject());
 			statusLabel.setText("View inititialised, waiting for first ABAP object activation...");
 		} else {
 			statusLabel.setText(
@@ -136,13 +155,21 @@ public class AbapCiMainView extends ViewPart {
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.grabExcessVerticalSpace = true;
 		gridData.horizontalAlignment = GridData.FILL;
-		viewer.getControl().setLayoutData(gridData);
+		tableViewer.getControl().setLayoutData(gridData);
 
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "abapCI.viewer");
-		getSite().setSelectionProvider(viewer);
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(tableViewer.getControl(), "abapCI.viewer");
+		getSite().setSelectionProvider(tableViewer);
 		makeActions();
 		hookContextMenu();
 		contributeToActionBars();
+
+	}
+
+	private void initFeatures() {
+		FeatureFacade featureFacade = new FeatureFacade();
+		unitFeature = featureFacade.getUnitFeature();
+		atcFeature = featureFacade.getAtcFeature();
+		jenkinsFeature = featureFacade.getJenkinsFeature();
 
 	}
 
@@ -151,9 +178,9 @@ public class AbapCiMainView extends ViewPart {
 		menuMgr.setRemoveAllWhenShown(true);
 		IMenuListener menuListener = manager -> this.fillContextMenu(manager);
 		menuMgr.addMenuListener(menuListener);
-		Menu menu = menuMgr.createContextMenu(viewer.getControl());
-		viewer.getControl().setMenu(menu);
-		getSite().registerContextMenu(menuMgr, viewer);
+		Menu menu = menuMgr.createContextMenu(tableViewer.getControl());
+		tableViewer.getControl().setMenu(menu);
+		getSite().registerContextMenu(menuMgr, tableViewer);
 	}
 
 	private void contributeToActionBars() {
@@ -209,7 +236,11 @@ public class AbapCiMainView extends ViewPart {
 		abapGitAction = new AbapGitCiAction(continuousIntegrationPresenter, "Open abapGIT", "Open abapGIT in SAP GUI");
 	}
 
-	private void createColumns(final TableViewer viewer) {
+	private void createTableColumns() {
+
+		for (TableColumn column : tableViewer.getTable().getColumns()) {
+			column.dispose();
+		}
 
 		int colNumber = 0;
 
@@ -232,60 +263,62 @@ public class AbapCiMainView extends ViewPart {
 			}
 		});
 
-		colNumber++;
-		col = createTableViewerColumn("Unit tests", 90, colNumber);
-		col.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				AbapPackageTestState p = (AbapPackageTestState) element;
-				return p.getUnitTestState().toString();
-			}
-		});
+		if (unitFeature.isActive()) {
+			colNumber++;
+			col = createTableViewerColumn("Unit tests", 90, colNumber);
+			col.setLabelProvider(new ColumnLabelProvider() {
+				@Override
+				public String getText(Object element) {
+					AbapPackageTestState p = (AbapPackageTestState) element;
+					return p.getUnitTestState().toString();
+				}
+			});
 
-		colNumber++;
-		col = createTableViewerColumn("#", 40, colNumber);
-		col.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				AbapPackageTestState p = (AbapPackageTestState) element;
-				return StringUtils.IsNullOrEmpty(p.getAUnitLastRun()) ? StringUtils.EMPTY
-						: Integer.toString(p.getNumTests());
-			}
-		});
+			colNumber++;
+			col = createTableViewerColumn("#", 40, colNumber);
+			col.setLabelProvider(new ColumnLabelProvider() {
+				@Override
+				public String getText(Object element) {
+					AbapPackageTestState p = (AbapPackageTestState) element;
+					return StringUtils.IsNullOrEmpty(p.getAUnitLastRun()) ? StringUtils.EMPTY
+							: Integer.toString(p.getNumTests());
+				}
+			});
 
-		colNumber++;
-		col = createTableViewerColumn("Err", 40, colNumber);
-		col.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				AbapPackageTestState p = (AbapPackageTestState) element;
-				return StringUtils.IsNullOrEmpty(p.getAUnitLastRun()) ? StringUtils.EMPTY
-						: Integer.toString(p.getAUnitNumErr());
-			}
-		});
+			colNumber++;
+			col = createTableViewerColumn("Err", 40, colNumber);
+			col.setLabelProvider(new ColumnLabelProvider() {
+				@Override
+				public String getText(Object element) {
+					AbapPackageTestState p = (AbapPackageTestState) element;
+					return StringUtils.IsNullOrEmpty(p.getAUnitLastRun()) ? StringUtils.EMPTY
+							: Integer.toString(p.getAUnitNumErr());
+				}
+			});
 
-		colNumber++;
-		col = createTableViewerColumn("Sup", 40, colNumber);
-		col.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				AbapPackageTestState p = (AbapPackageTestState) element;
-				return StringUtils.IsNullOrEmpty(p.getAUnitLastRun()) ? StringUtils.EMPTY
-						: Integer.toString(p.getAUnitNumSuppressed());
-			}
-		});
+			colNumber++;
+			col = createTableViewerColumn("Sup", 40, colNumber);
+			col.setLabelProvider(new ColumnLabelProvider() {
+				@Override
+				public String getText(Object element) {
+					AbapPackageTestState p = (AbapPackageTestState) element;
+					return StringUtils.IsNullOrEmpty(p.getAUnitLastRun()) ? StringUtils.EMPTY
+							: Integer.toString(p.getAUnitNumSuppressed());
+				}
+			});
 
-		colNumber++;
-		col = createTableViewerColumn("Last run", 70, colNumber);
-		col.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(Object element) {
-				AbapPackageTestState p = (AbapPackageTestState) element;
-				return p.getAUnitLastRun();
-			}
-		});
+			colNumber++;
+			col = createTableViewerColumn("Last run", 70, colNumber);
+			col.setLabelProvider(new ColumnLabelProvider() {
+				@Override
+				public String getText(Object element) {
+					AbapPackageTestState p = (AbapPackageTestState) element;
+					return p.getAUnitLastRun();
+				}
+			});
+		}
 
-		if (featureFacade.getAtcFeature().isActive()) {
+		if (atcFeature.isActive()) {
 			colNumber++;
 			col = createTableViewerColumn("ATC state", 90, colNumber);
 			col.setLabelProvider(new ColumnLabelProvider() {
@@ -362,7 +395,7 @@ public class AbapCiMainView extends ViewPart {
 			});
 		}
 
-		if (featureFacade.getJenkinsFeature().isActive()) {
+		if (jenkinsFeature.isActive()) {
 			colNumber++;
 			col = createTableViewerColumn("Jenkins state", 100, colNumber);
 			col.setLabelProvider(new ColumnLabelProvider() {
@@ -385,7 +418,7 @@ public class AbapCiMainView extends ViewPart {
 	}
 
 	private TableViewerColumn createTableViewerColumn(String title, int bound, final int colNumber) {
-		final TableViewerColumn viewerColumn = new TableViewerColumn(viewer, SWT.NONE);
+		final TableViewerColumn viewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
 		final TableColumn column = viewerColumn.getColumn();
 		column.setText(title);
 		column.setWidth(bound);
@@ -394,12 +427,13 @@ public class AbapCiMainView extends ViewPart {
 		return viewerColumn;
 	}
 
+	@Override
 	public void setFocus() {
-		viewer.getControl().setFocus();
+		tableViewer.getControl().setFocus();
 	}
 
 	public void setViewerInput(List<AbapPackageTestState> allForProject) {
-		viewer.setInput(allForProject);
+		tableViewer.setInput(allForProject);
 	}
 
 	private final class MyHyperlinkLabelProvider extends StyledCellLabelProvider {
@@ -417,9 +451,9 @@ public class AbapCiMainView extends ViewPart {
 			IProject[] availableProjects = AdtCoreProjectServiceFactory.createCoreProjectService()
 					.getAvailableAdtCoreProjects();
 
-			for (int position = 0; position < availableProjects.length; position++) {
-				if (availableProjects[position].getName() == p.getProjectName()) {
-					project = availableProjects[position];
+			for (IProject availableProject : availableProjects) {
+				if (availableProject.getName() == p.getProjectName()) {
+					project = availableProject;
 				}
 			}
 
@@ -427,12 +461,13 @@ public class AbapCiMainView extends ViewPart {
 			m_control.setText(
 					uriToFirstError != null ? InvalidItemUtil.getOutputForUnitTest(p.getFirstFailedUnitTest()) : "");
 
-			if (featureFacade.getAtcFeature().isActive() && uriToFirstError == null) {
+			if (atcFeature.isActive() && uriToFirstError == null) {
 				uriToFirstError = p.getFirstFailedAtc() != null ? p.getFirstFailedAtc().getUriToError() : null;
 				m_control.setText(
 						uriToFirstError != null ? InvalidItemUtil.getOutputForAtcTest(p.getFirstFailedAtc()) : "");
 			}
 			m_control.addHyperlinkListener(new HyperlinkAdapter() {
+				@Override
 				public void linkActivated(HyperlinkEvent e) {
 					EditorHandler.open(project, uriToFirstError);
 				}
@@ -452,6 +487,7 @@ public class AbapCiMainView extends ViewPart {
 			this.setUnderlined(true);
 		}
 
+		@Override
 		public void paintText(GC gc, Rectangle bounds) {
 			super.paintText(gc, bounds);
 		}

@@ -7,6 +7,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -16,6 +17,8 @@ import org.powermock.reflect.Whitebox;
 import abapci.AbapCiPlugin;
 import abapci.domain.SourcecodeState;
 import abapci.domain.TestState;
+import abapci.feature.activeFeature.AtcFeature;
+import abapci.feature.activeFeature.UnitFeature;
 import abapci.manager.AtcTestManager;
 import abapci.manager.ThemeUpdateManager;
 import abapci.manager.UnitTestManager;
@@ -38,21 +41,27 @@ public class FeatureProcessorTest {
 	ContinuousIntegrationPresenter continuousIntegrationPresenter;
 	IProject project;
 
+	private UnitFeature unitFeature;
+	private AtcFeature atcFeature;
+
 	@Before
 	public void before() throws Exception {
 
 		preferenceStore = Mockito.mock(IPreferenceStore.class);
 		featureFacade = Mockito.mock(FeatureFacade.class);
-		featureCreator= Mockito.mock(FeatureCreator.class);
-		aUnitTestManager= Mockito.mock(UnitTestManager.class);
-		atcTestManager= Mockito.mock(AtcTestManager.class);
-		abapCiPlugin= Mockito.mock(AbapCiPlugin.class);
-		themeUpdateManager= Mockito.mock(ThemeUpdateManager.class);
-		continuousIntegrationPresenter= Mockito.mock(ContinuousIntegrationPresenter.class);
+		featureCreator = Mockito.mock(FeatureCreator.class);
+		aUnitTestManager = Mockito.mock(UnitTestManager.class);
+		atcTestManager = Mockito.mock(AtcTestManager.class);
+		abapCiPlugin = Mockito.mock(AbapCiPlugin.class);
+		themeUpdateManager = Mockito.mock(ThemeUpdateManager.class);
+		continuousIntegrationPresenter = Mockito.mock(ContinuousIntegrationPresenter.class);
 		project = Mockito.mock(IProject.class);
 
-		
-		featureFacade = new FeatureFacade();
+		PowerMockito.mockStatic(AbapCiPlugin.class);
+		BDDMockito.given(AbapCiPlugin.getDefault()).willReturn(abapCiPlugin);
+		Mockito.when(abapCiPlugin.getPreferenceStore()).thenReturn(preferenceStore);
+
+		featureFacade = Mockito.mock(FeatureFacade.class);
 		featureCreator = new FeatureCreator();
 		Whitebox.setInternalState(featureCreator, "prefs", preferenceStore);
 		Whitebox.setInternalState(featureFacade, "featureCreator", featureCreator);
@@ -60,7 +69,11 @@ public class FeatureProcessorTest {
 		ContinuousIntegrationPresenter presenter = new ContinuousIntegrationPresenter(null,
 				new ContinuousIntegrationTestModel(), null);
 		featureProcessor = new FeatureProcessor(presenter, project, new ArrayList<String>());
-		Whitebox.setInternalState(featureProcessor, "featureFacade", featureFacade);
+
+		unitFeature = new UnitFeature();
+		atcFeature = new AtcFeature();
+		Whitebox.setInternalState(featureProcessor, "unitFeature", unitFeature);
+		Whitebox.setInternalState(featureProcessor, "atcFeature", atcFeature);
 		Whitebox.setInternalState(featureProcessor, "aUnitTestManager", aUnitTestManager);
 		Whitebox.setInternalState(featureProcessor, "atcTestManager", atcTestManager);
 		Whitebox.setInternalState(featureProcessor, "themeUpdateManager", themeUpdateManager);

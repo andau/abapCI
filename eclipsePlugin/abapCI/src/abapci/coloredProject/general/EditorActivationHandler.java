@@ -19,12 +19,20 @@ import abapci.feature.activeFeature.ColoredProjectFeature;
 
 public class EditorActivationHandler {
 
-	private DisplayColorChanger displayColorChanger;
-	private FeatureFacade featureFacade;
+	private final DisplayColorChanger displayColorChanger;
+	private ColoredProjectFeature coloredProjectFeature;
 
 	public EditorActivationHandler() {
+
 		this.displayColorChanger = new DisplayColorChanger();
-		featureFacade = new FeatureFacade();
+		initFeatures();
+
+	}
+
+	private void initFeatures() {
+		FeatureFacade featureFacade = new FeatureFacade();
+		coloredProjectFeature = featureFacade.getColoredProjectFeature();
+
 	}
 
 	public void updateDisplayColoring() {
@@ -38,8 +46,6 @@ public class EditorActivationHandler {
 
 			try {
 
-				ColoredProjectFeature coloredProjectFeature = featureFacade.getColoredProjectFeature();
-
 				if (coloredProjectFeature.isActive()) {
 					WorkspaceColorProxySingleton colorProxy = WorkspaceColorProxySingleton.getInstance();
 					if (!colorProxy.isConfigured(currentProject)) {
@@ -48,8 +54,8 @@ public class EditorActivationHandler {
 
 					DisplayColor displayColoring = WorkspaceColorProxySingleton.getInstance()
 							.getColoring(currentProject);
-				    
-					displayColorChanger.change(activeEditor, displayColoring, coloredProjectFeature );
+
+					displayColorChanger.change(activeEditor, displayColoring, coloredProjectFeature);
 
 				}
 
@@ -63,18 +69,19 @@ public class EditorActivationHandler {
 
 	private void showDialogForProject(IProject currentProject) {
 		Runnable runnable = () -> handleNewColoredProject(currentProject);
-		// dialog is called asynchronously to not stop UI processing 
-		// this means especially for a new added project that it is not colored directly after adding 
+		// dialog is called asynchronously to not stop UI processing
+		// this means especially for a new added project that it is not colored directly
+		// after adding
 		Display.getDefault().asyncExec(runnable);
 	}
 
 	private void handleNewColoredProject(IProject project) {
 
-		AbapCiPluginHelper abapCiPluginHelper = new AbapCiPluginHelper(); 
-		
+		AbapCiPluginHelper abapCiPluginHelper = new AbapCiPluginHelper();
+
 		ColoredProjectsPresenter coloredProjectPresenter = abapCiPluginHelper.getColoredProjectsPresenter();
 		ColoredProject coloredProject = new ColoredProject(project.getName(), new DefaultEclipseProjectColor());
-		if (featureFacade.getColoredProjectFeature().isDialogEnabled()) {
+		if (coloredProjectFeature.isDialogEnabled()) {
 			AddOrUpdateColoredProjectPage addOrUpdateColoredProjectPage = new AddOrUpdateColoredProjectPage(
 					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), coloredProjectPresenter,
 					coloredProject, true);

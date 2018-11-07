@@ -24,7 +24,6 @@ import abapci.presenter.ContinuousIntegrationPresenter;
 public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 
 	ContinuousIntegrationPresenter presenter;
-	FeatureFacade featureFacade;
 	Combo cbProjectContent;
 	Text packageText;
 	ContinuousIntegrationConfig ciConfig;
@@ -40,9 +39,9 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 		this.ciConfig = ciConfig;
 		this.showPopUpButton = showPopUpButton;
 
-		featureFacade = new FeatureFacade();
 	}
 
+	@Override
 	protected void configureShell(Shell shell) {
 		super.configureShell(shell);
 		shell.setText("ABAP package configuration for CI Job");
@@ -113,15 +112,16 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 	private String[] getAbapProjectsArray() {
 		ArrayList<String> projectNames = new ArrayList<>();
 		IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
-        IProject[] availableProjects = workspaceRoot.getProjects();
-        
-		//IProject[] availableProjects = AdtCoreProjectServiceFactory.createCoreProjectService()
-		//		.getAvailableAdtCoreProjects();
+		IProject[] availableProjects = workspaceRoot.getProjects();
+
+		// IProject[] availableProjects =
+		// AdtCoreProjectServiceFactory.createCoreProjectService()
+		// .getAvailableAdtCoreProjects();
 
 		for (IProject project : availableProjects) {
-		//	if (AbapProjectService.getInstance().isAbapProject(project)) {
-				projectNames.add(project.getName());
-		//	}
+			// if (AbapProjectService.getInstance().isAbapProject(project)) {
+			projectNames.add(project.getName());
+			// }
 		}
 		return projectNames.toArray(new String[0]);
 	}
@@ -133,7 +133,7 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 	@Override
 	protected void okPressed() {
 		if (!showPopUpYes.getSelection()) {
-			featureFacade = new FeatureFacade();
+			FeatureFacade featureFacade = new FeatureFacade();
 			featureFacade.setShowDialogNewPackageForCiRun(showPopUpYes.getSelection());
 		}
 		presenter.addContinousIntegrationConfig(new ContinuousIntegrationConfig(cbProjectContent.getText(),

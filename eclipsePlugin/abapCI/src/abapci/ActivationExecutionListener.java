@@ -20,16 +20,24 @@ import abapci.activation.ILanguageFactory;
 import abapci.activation.JavaActivationExtractor;
 import abapci.activation.ProgLanguageFactorySelector;
 import abapci.feature.FeatureFacade;
+import abapci.feature.activeFeature.PrettyPrinterFeature;
 import abapci.prettyPrinter.IPrettyPrinter;
 
 public class ActivationExecutionListener implements IExecutionListener {
 
-	private FeatureFacade featureFacade;
-	private ActivationPool activationPool;
+	private final ActivationPool activationPool;
+	private PrettyPrinterFeature sourcecodeFormattingFeature;
 
 	public ActivationExecutionListener() {
-		featureFacade = new FeatureFacade();
 		activationPool = ActivationPool.getInstance();
+
+		initFeatures();
+	}
+
+	private void initFeatures() {
+		FeatureFacade featureFacade = new FeatureFacade();
+		sourcecodeFormattingFeature = featureFacade.getSourcecodeFormattingFeature();
+
 	}
 
 	@Override
@@ -58,19 +66,19 @@ public class ActivationExecutionListener implements IExecutionListener {
 
 			IEditorReference[] editorReferences = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 					.getEditorReferences();
-			
-			ILanguageFactory languageFactory = getProgLanguageFactory(arg0, editorReferences); 
-			
+
+			ILanguageFactory languageFactory = getProgLanguageFactory(arg0, editorReferences);
+
 			IPrettyPrinter prettyPrinter = languageFactory.createPrettyPrinter();
-			String sourcecodePrefix = featureFacade.getSourcecodeFormattingFeature().getPrefix();
+			String sourcecodePrefix = sourcecodeFormattingFeature.getPrefix();
 
 			for (IEditorReference editorReference : editorReferences) {
 
 				if (editorReference.isDirty()) {
-					if (featureFacade.getSourcecodeFormattingFeature().isActive() && prettyPrinter
-							.isAutoformatEnabled(editorReference.getEditor(true), sourcecodePrefix)) {
+					if (sourcecodeFormattingFeature.isActive()
+							&& prettyPrinter.isAutoformatEnabled(editorReference.getEditor(true), sourcecodePrefix)) {
 						prettyPrinter.formatEditor(editorReference.getEditor(true));
-						if (featureFacade.getSourcecodeFormattingFeature().isCleanupVariablesEnabled()) {
+						if (sourcecodeFormattingFeature.isCleanupVariablesEnabled()) {
 							prettyPrinter.deleteUnusedVariables(editorReference.getEditor(true));
 						}
 					}
@@ -79,14 +87,13 @@ public class ActivationExecutionListener implements IExecutionListener {
 							|| ActivationAction.ACTION_ABAP_SINGLE_ACTIVATION.equals(arg0)
 							|| ActivationAction.ACTION_ABAP_MULTI_ACTIVATION.equals(arg0)) {
 
-						IActivationExtractor activationExtractor = languageFactory.createActivationExtractor(); 						
+						IActivationExtractor activationExtractor = languageFactory.createActivationExtractor();
 						Activation activation = activationExtractor.extractFrom(editorReference);
 
 						if (activation != null) {
 							activationPool.registerModified(activation);
-							if (activationExtractor instanceof JavaActivationExtractor) 
-							{
-								activationPool.setActivated(activation.getObjectName());								
+							if (activationExtractor instanceof JavaActivationExtractor) {
+								activationPool.setActivated(activation.getObjectName());
 							}
 						}
 					}
@@ -106,7 +113,7 @@ public class ActivationExecutionListener implements IExecutionListener {
 						.collect(Collectors.toList());
 
 				if (!activeEditorReferences.isEmpty()) {
-					IActivationExtractor activationExtractor = languageFactory.createActivationExtractor(); 						
+					IActivationExtractor activationExtractor = languageFactory.createActivationExtractor();
 					Activation activation = activationExtractor.extractFrom(activeEditorReferences.get(0));
 					activationPool.registerModified(activation);
 					activationPool.setActivated(activeEditorReferences.get(0).getName());
@@ -118,9 +125,8 @@ public class ActivationExecutionListener implements IExecutionListener {
 
 	}
 
-	
 	private ILanguageFactory getProgLanguageFactory(String uiAction, IEditorReference[] editorReferences) {
-		ProgLanguageFactorySelector progLanguageFactorySelector = new ProgLanguageFactorySelector(); 
+		ProgLanguageFactorySelector progLanguageFactorySelector = new ProgLanguageFactorySelector();
 		return progLanguageFactorySelector.determine(uiAction, editorReferences);
 	}
 

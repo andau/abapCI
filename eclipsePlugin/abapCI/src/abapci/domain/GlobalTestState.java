@@ -5,6 +5,8 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
 import abapci.feature.FeatureFacade;
+import abapci.feature.activeFeature.ColorFeature;
+import abapci.feature.activeFeature.TddModeFeature;
 
 public class GlobalTestState {
 
@@ -13,20 +15,29 @@ public class GlobalTestState {
 	public static final String WRITE_TEST = "WRITE TEST";
 	public static final String WRITE_CODE = "WRITE CODE";
 	private SourcecodeState sourcecodeState;
-	private FeatureFacade featureFacade;
 
-	public GlobalTestState() {
-	}
+	private ColorFeature testRunFailColorFeature;
+	private ColorFeature atcRunFailColorFeature;
+	private ColorFeature testRunOkColorFeature;
+	private TddModeFeature tddModeFeature;
 
 	public GlobalTestState(SourcecodeState sourcecodeState) {
 		this.sourcecodeState = sourcecodeState;
-		featureFacade = new FeatureFacade();
+		initFeatures();
+	}
+
+	private void initFeatures() {
+		FeatureFacade featureFacade = new FeatureFacade();
+		testRunFailColorFeature = featureFacade.getTestRunFailColorFeature();
+		atcRunFailColorFeature = featureFacade.getAtcRunFailColorFeature();
+		testRunOkColorFeature = featureFacade.getTestRunOkColorFeature();
+		tddModeFeature = featureFacade.getTddModeFeature();
 	}
 
 	public String getTestStateOutputForDashboard() {
 
 		String testStateOutput = "";
-		if (featureFacade.getTddModeFeature().isActive()) {
+		if (tddModeFeature.isActive()) {
 			switch (this.sourcecodeState) {
 			case UT_FAIL:
 				testStateOutput = WRITE_CODE;
@@ -72,18 +83,18 @@ public class GlobalTestState {
 	}
 
 	public Color getColor() {
-		
+
 		RGB rgbColor = new RGB(211, 211, 211);
 
 		switch (this.sourcecodeState) {
 		case UT_FAIL:
-			rgbColor = featureFacade.getTestRunFailColorFeature().getColor();
+			rgbColor = testRunFailColorFeature.getColor();
 			break;
 		case ATC_FAIL:
-			rgbColor = featureFacade.getAtcRunFailColorFeature().getColor();
+			rgbColor = atcRunFailColorFeature.getColor();
 			break;
 		case OK:
-			rgbColor = featureFacade.getTestRunOkColorFeature().getColor();
+			rgbColor = testRunOkColorFeature.getColor();
 			break;
 		case UNDEF:
 		case OFFL:

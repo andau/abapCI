@@ -69,18 +69,19 @@ public class ContinuousIntegrationPresenter {
 		this.model = continuousIntegrationModel;
 		this.currentProject = currentProject;
 		this.abapPackageTestStates = new ArrayList<>();
+
 		testResultConsolidator = new TestResultConsolidator();
 		sourceCodeStateEvaluator = new SourceCodeStateEvaluator();
 		sourceCodeStateInfo = new SourceCodeStateInfo();
 		projectColorFactory = new ProjectColorFactory();
 		abapCiPluginHelper = new AbapCiPluginHelper();
 
-		initFeatures();
-
 		loadPackages();
 		setViewerInput();
 
-		registerPropertyChangeListeners();
+		initFeatures();
+		registerPreferencePropertyChangeListener();
+
 	}
 
 	private void initFeatures() {
@@ -92,9 +93,12 @@ public class ContinuousIntegrationPresenter {
 		atcFeature = featureFacade.getAtcFeature();
 	}
 
-	private void registerPropertyChangeListeners() {
+	private void registerPreferencePropertyChangeListener() {
 
-		abapCiPluginHelper.getPreferenceStore().addPropertyChangeListener(event -> updateViewsAsync());
+		abapCiPluginHelper.getPreferenceStore().addPropertyChangeListener(event -> {
+			initFeatures();
+			updateViewsAsync();
+		});
 
 	}
 
@@ -337,7 +341,7 @@ public class ContinuousIntegrationPresenter {
 	}
 
 	private SourcecodeState evalSourceCodeTestState() {
-		return sourceCodeStateEvaluator.evaluate(getAbapPackageTestStatesForCurrentProject());
+		return sourceCodeStateEvaluator.evaluate(getAbapPackageTestStatesForCurrentProject(), unitFeature);
 	}
 
 	public IProject getCurrentProject() {
@@ -408,5 +412,9 @@ public class ContinuousIntegrationPresenter {
 				getAbapPackageTestStatesForCurrentProject(), TestResultType.UNIT);
 
 		updateViewsAsync();
+	}
+
+	public AtcFeature getAtcFeature() {
+		return atcFeature;
 	}
 }

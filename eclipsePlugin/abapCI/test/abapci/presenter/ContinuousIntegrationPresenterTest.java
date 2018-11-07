@@ -1,14 +1,20 @@
 package abapci.presenter;
 
 import org.eclipse.core.resources.IProject;
-import org.junit.Before;
-import org.junit.Test;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
+import abapci.AbapCiPlugin;
 import abapci.domain.ContinuousIntegrationConfig;
 import abapci.model.IContinuousIntegrationModel;
 import abapci.views.AbapCiMainView;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(AbapCiPlugin.class)
 public class ContinuousIntegrationPresenterTest {
 
 	private static final String TEST_PROJECT_NAME = "TEST_PROJECT_NAME";
@@ -20,8 +26,16 @@ public class ContinuousIntegrationPresenterTest {
 	IContinuousIntegrationModel continousIntegrationModel;
 	IProject currentProject;
 
-	@Before
 	public void before() {
+
+		AbapCiPlugin abapCiPlugin = Mockito.mock(AbapCiPlugin.class);
+		PowerMockito.spy(AbapCiPlugin.class);
+		Mockito.when(AbapCiPlugin.getDefault()).thenReturn(abapCiPlugin);
+		PowerMockito.mockStatic(AbapCiPlugin.class);
+		Mockito.when(AbapCiPlugin.getDefault()).thenReturn(abapCiPlugin);
+
+		IPreferenceStore preferenceStore = Mockito.mock(IPreferenceStore.class);
+		Mockito.when(abapCiPlugin.getPreferenceStore()).thenReturn(preferenceStore);
 
 		AbapCiMainView abapCiMainView = Mockito.mock(AbapCiMainView.class);
 		continousIntegrationModel = Mockito.mock(IContinuousIntegrationModel.class);
@@ -31,7 +45,6 @@ public class ContinuousIntegrationPresenterTest {
 		cut = new ContinuousIntegrationPresenter(abapCiMainView, continousIntegrationModel, currentProject);
 	}
 
-	@Test
 	public void testAddAndRemoveContinousIntegrationConfig() {
 		ContinuousIntegrationConfig ciConfig = new ContinuousIntegrationConfig(currentProject.getName(), TEST_PACKAGE,
 				false, false);
