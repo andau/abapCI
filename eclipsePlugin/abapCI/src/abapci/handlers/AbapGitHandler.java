@@ -20,7 +20,7 @@ import com.sap.adt.projectexplorer.ui.node.AbapRepositoryBaseNode;
 import com.sap.adt.sapgui.ui.editors.AdtSapGuiEditorUtilityFactory;
 import com.sap.adt.sapgui.ui.internal.editors.GuiEditorInput;
 
-import abapci.AbapProjectUtil;
+import abapci.GeneralProjectUtil;
 import abapci.abapgit.AbapGitPackageChanger;
 import abapci.feature.FeatureFacade;
 
@@ -62,10 +62,10 @@ public class AbapGitHandler extends AbstractHandler {
 			}
 		}
 
-		if (projectname == null && AbapProjectUtil.getCurrentProject() != null)
+		if (projectname == null && GeneralProjectUtil.getCurrentProject() != null)
 
 		{
-			projectname = AbapProjectUtil.getCurrentProject().getName();
+			projectname = GeneralProjectUtil.getCurrentProject().getName();
 		}
 
 		execute(projectname);

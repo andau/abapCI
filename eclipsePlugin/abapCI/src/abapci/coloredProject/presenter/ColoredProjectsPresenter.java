@@ -8,8 +8,8 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
+import abapci.AbapCiPluginHelper;
 import abapci.Exception.AbapCiColoredProjectFileParseException;
-import abapci.coloredProject.general.WorkspaceColorProxySingleton;
 import abapci.coloredProject.model.ColoredProject;
 import abapci.coloredProject.model.ColoredProjectModel;
 import abapci.coloredProject.model.projectColor.DefaultEclipseProjectColor;
@@ -20,12 +20,14 @@ public class ColoredProjectsPresenter {
 
 	private static final String PARSING_COLORED_PROJECT_XML_FAILED_MESSAGE = "Parsing the coloredProjectModel.xml file failed, for help see  https://github.com/andau/abapCI/issues/4";
 	private AbapCiColoredProjectView view;
-	private ColoredProjectModel model;
+	private final ColoredProjectModel model;
+	private final AbapCiPluginHelper abapCiPluginHelper;
 
 	public ColoredProjectsPresenter(AbapCiColoredProjectView abapCiColoredProjectView,
 			ColoredProjectModel coloredProjectModel) {
 		this.view = abapCiColoredProjectView;
 		this.model = coloredProjectModel;
+		this.abapCiPluginHelper = new AbapCiPluginHelper();
 		setViewerInput();
 	}
 
@@ -37,7 +39,8 @@ public class ColoredProjectsPresenter {
 			}
 
 			model.addColoredProject(coloredProject);
-			WorkspaceColorProxySingleton.destroyInstance();
+			abapCiPluginHelper.resetWorkspaceColorConfiguration();
+
 			setViewerInput();
 		} catch (AbapCiColoredProjectFileParseException e) {
 			setStatusMessage(String.format("Parsing error of XML file when handling the coloring for project %s",
@@ -54,7 +57,7 @@ public class ColoredProjectsPresenter {
 	public void removeColoredProject(ColoredProject coloredProject) {
 		try {
 			model.removeColoredProject(coloredProject);
-			WorkspaceColorProxySingleton.destroyInstance();
+			abapCiPluginHelper.resetWorkspaceColorConfiguration();
 			setViewerInput();
 		} catch (AbapCiColoredProjectFileParseException e) {
 			setStatusMessageParsingColoredProjectXmlFailed();
@@ -70,12 +73,7 @@ public class ColoredProjectsPresenter {
 		try {
 			if (view != null) {
 
-				Comparator<ColoredProject> compareByName = new Comparator<ColoredProject>() {
-					@Override
-					public int compare(ColoredProject o1, ColoredProject o2) {
-						return o1.getName().compareTo(o2.getName());
-					}
-				};
+				Comparator<ColoredProject> compareByName = (o1, o2) -> o1.getName().compareTo(o2.getName());
 
 				List<ColoredProject> coloredProjects = model.getColoredProjects();
 				coloredProjects.sort(compareByName);

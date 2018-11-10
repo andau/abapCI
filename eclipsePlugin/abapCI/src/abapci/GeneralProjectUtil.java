@@ -11,9 +11,9 @@ import org.eclipse.ui.internal.ViewReference;
 
 import com.sap.adt.project.AdtCoreProjectServiceFactory;
 
-public class AbapProjectUtil {
+public class GeneralProjectUtil {
 
-	private AbapProjectUtil() {
+	private GeneralProjectUtil() {
 	}
 
 	public static IProject getCurrentProject() {
@@ -26,7 +26,7 @@ public class AbapProjectUtil {
 			IEditorPart activeEditor = activePage.getActiveEditor();
 			IWorkbenchPartReference partReference = activePage.getActivePartReference();
 			if (!partReference.getClass().equals(ViewReference.class) && (activeEditor != null)) {
-				currentProject = getCurrentProject(activeEditor);
+				currentProject = getProject(activeEditor);
 			}
 
 		} catch (Exception ex) {
@@ -36,7 +36,7 @@ public class AbapProjectUtil {
 		return currentProject;
 	}
 
-	public static IProject getCurrentProject(IEditorPart editorPart) {
+	public static IProject getProject(IEditorPart editorPart) {
 		IProject currentProject = null;
 
 		if (editorPart != null) {

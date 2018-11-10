@@ -5,7 +5,7 @@ import java.util.HashSet;
 import org.eclipse.core.resources.IProject;
 
 import abapci.AbapCiPlugin;
-import abapci.AbapProjectUtil;
+import abapci.GeneralProjectUtil;
 import abapci.activation.Activation;
 import abapci.domain.AbapPackageTestState;
 import abapci.handlers.AbapUnitHandler;
@@ -29,7 +29,7 @@ public class AbapUnitCiAction extends AbstractCiAction {
 		for (AbapPackageTestState abapPackageTestState : getSelectedAbapPackageTestStates()) {
 
 			try {
-				IProject project = AbapProjectUtil.getAbapProjectByProjectName(abapPackageTestState.getProjectName());
+				IProject project = GeneralProjectUtil.getAbapProjectByProjectName(abapPackageTestState.getProjectName());
 				TestResultSummary unitTestResultSummary = new AbapUnitHandler().executePackage(project,
 						abapPackageTestState.getPackageName(), new HashSet<Activation>());
 				continuousIntegrationPresenter.mergeUnitTestResultSummary(unitTestResultSummary);

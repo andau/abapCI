@@ -1,6 +1,6 @@
 package abapci.coloredProject.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.eclipse.swt.graphics.RGB;
 import org.junit.Test;
@@ -14,25 +14,25 @@ import abapci.coloredProject.samples.ColoredProjectTestSample;
 public class ColoredProjectTest {
 
 	private static final String TEST_PROJECT = "TEST_PROJECT";
-	private static final RGB COLOR_RED = new RGB(255, 0, 0);
+	private static final RGB COLOR_GREEN = new RGB(0, 255, 0);
 
 	@Test
 	public void standardProjectColorTest() {
-		IProjectColor projectColor = ColoredProjectTestSample.getRedProjectColor(); 
+		IProjectColor projectColor = ColoredProjectTestSample.getGreenProjectColor();
 		ColoredProject coloredProject = new ColoredProject(TEST_PROJECT, projectColor, false);
 		assertEquals(TEST_PROJECT, coloredProject.getName());
-		assertEquals(COLOR_RED, coloredProject.getColor().getRGB());
-		assertEquals(false, coloredProject.isSuppressedColoring()); 
+		assertEquals(COLOR_GREEN, coloredProject.getColor().getRGB());
+		assertEquals(false, coloredProject.isSuppressedColoring());
 	}
 
 	@Test
 	public void standardReducedProjectColorTest() {
 		IProjectColorFactory projectColorFactory = new ProjectColorFactory();
-		IProjectColor projectColor = projectColorFactory.create(COLOR_RED);
+		IProjectColor projectColor = projectColorFactory.create(COLOR_GREEN);
 		ColoredProject coloredProject = new ColoredProject(TEST_PROJECT, projectColor);
 		assertEquals(TEST_PROJECT, coloredProject.getName());
-		assertEquals(COLOR_RED, coloredProject.getColor().getRGB());
-		assertEquals(false, coloredProject.isSuppressedColoring()); 
+		assertEquals(COLOR_GREEN, coloredProject.getColor().getRGB());
+		assertEquals(false, coloredProject.isSuppressedColoring());
 	}
 
 	@Test

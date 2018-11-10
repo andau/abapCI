@@ -10,7 +10,7 @@ import abapci.views.wizard.AddOrUpdateContinuousIntegrationConfigPage;
 
 public class AddAction extends Action {
 
-	private ContinuousIntegrationPresenter presenter;
+	private final ContinuousIntegrationPresenter presenter;
 
 	public AddAction(ContinuousIntegrationPresenter presenter, String label) {
 		this.setText(label);
@@ -20,6 +20,7 @@ public class AddAction extends Action {
 
 	}
 
+	@Override
 	public void run() {
 
 		AddOrUpdateContinuousIntegrationConfigPage ciConfigPage = new AddOrUpdateContinuousIntegrationConfigPage(

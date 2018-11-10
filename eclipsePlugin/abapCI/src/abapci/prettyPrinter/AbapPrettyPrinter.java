@@ -16,7 +16,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 import com.sap.adt.tools.abapsource.ui.internal.sources.cleanup.AbapSourceCleanupHandler;
 import com.sap.adt.tools.abapsource.ui.sources.prettyprinter.PrettyPrintHandler;
 
-import abapci.cleanup.AbapSourceCleanupHandlerCopy;
+import abapci.prettyPrinter.cleanup.AbapSourceCleanupHandlerCopy;
 
 public class AbapPrettyPrinter implements IPrettyPrinter {
 

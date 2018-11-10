@@ -8,7 +8,7 @@ import org.eclipse.ui.IEditorReference;
 import com.sap.adt.tools.core.IAdtObjectReference;
 import com.sap.adt.tools.core.ui.editors.IAdtFormEditor;
 
-import abapci.AbapProjectUtil;
+import abapci.GeneralProjectUtil;
 
 public class AbapActivationExtractor implements IActivationExtractor {
 
@@ -33,7 +33,7 @@ public class AbapActivationExtractor implements IActivationExtractor {
 		}
 
 		if (adtObject != null) {
-			IProject project = AbapProjectUtil.getCurrentProject(editorReference.getEditor(false));
+			IProject project = GeneralProjectUtil.getProject(editorReference.getEditor(false));
 
 			activation = new Activation(editorReference.getName(), adtObject.getPackageName(), project,
 					adtObject.getUri(), adtObject.getType());

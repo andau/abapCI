@@ -6,14 +6,24 @@ import org.eclipse.swt.widgets.Display;
 
 public class ColorChooser {
 
-	RGB blackRGB = new RGB(0,0,0); 
-	RGB whiteRGB = new RGB(255,255,255); 
+	RGB blackRGB = new RGB(0, 0, 0);
+	RGB whiteRGB = new RGB(255, 255, 255);
+
 	public Color getContrastColor(Color backgroundColor) {
-		RGB contrastRGB = getBrightness(backgroundColor) < 0.5  ? whiteRGB : blackRGB;   
-		return new Color(Display.getCurrent(), contrastRGB); 
+		RGB contrastRGB = getLightness(backgroundColor) < 127 ? whiteRGB : blackRGB;
+		return new Color(Display.getCurrent(), contrastRGB);
 	}
-	private float getBrightness(Color backgroundColor) {
-		return  backgroundColor.getRGB().getHSB()[2]; 
+
+	private float getLightness(Color backgroundColor) {
+		return (minRgbValue(backgroundColor.getRGB()) + maxRgbValue(backgroundColor.getRGB())) / 2;
+	}
+
+	private int maxRgbValue(RGB rgb) {
+		return Math.max(rgb.red, Math.max(rgb.green, rgb.blue));
+	}
+
+	private int minRgbValue(RGB rgb) {
+		return Math.min(rgb.red, Math.min(rgb.green, rgb.blue));
 	}
 
 }

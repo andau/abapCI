@@ -9,17 +9,26 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.preference.ColorSelector;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.dialogs.PreferencesUtil;
 
 import abapci.AbapCiPlugin;
 import abapci.coloredProject.model.ColoredProject;
@@ -32,6 +41,8 @@ import abapci.feature.activeFeature.ColoredProjectFeature;
 import abapci.preferences.PreferenceConstants;
 
 public class AddOrUpdateColoredProjectPage extends Dialog {
+
+	final static Color HEADER_COLOR = new Color(Display.getCurrent(), 0, 0, 255);
 
 	ColoredProjectsPresenter presenter;
 	Combo comboColoredProject;
@@ -52,7 +63,7 @@ public class AddOrUpdateColoredProjectPage extends Dialog {
 	@Override
 	protected void configureShell(Shell shell) {
 		super.configureShell(shell);
-		shell.setText("Assignment of a color to an ABAP project");
+		shell.setText("Colored Projects: Assignment of a coloring to a project");
 	}
 
 	@Override
@@ -61,24 +72,47 @@ public class AddOrUpdateColoredProjectPage extends Dialog {
 
 		addEmptyLine(container);
 
-		Label headerText1 = new Label(container, SWT.READ_ONLY);
-		headerText1.setText(
-				"Assign a color to a project. The color will be used to indicate the current selected project by coloring specific UI components.");
-		Label headerText2 = new Label(container, SWT.READ_ONLY);
-		headerText2.setText("See Preferences - section ABAP CI for details.");
+		addProjectChooser(container);
+
+		addColorChooser(container);
+
+		addSuppressColoringButton(container);
 
 		addEmptyLine(container);
 
+		addCheckBoxForDialogPopUp(container, showPopUpButton);
+		addEmptyLine(container);
+
+		addDescriptionPart(parent, container);
+
+		try {
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+					.showView("abapci.views.AbapCiColoredProjectView");
+		} catch (PartInitException e) {
+			// if project color view can not be opened we keep on going as this is not
+			// critical
+			e.printStackTrace();
+		}
+
+		return container;
+	}
+
+	private void addProjectChooser(Composite container) {
 		Label coloredProjectLabel = new Label(container, SWT.READ_ONLY);
 		coloredProjectLabel.setText("Project:");
-		coloredProjectLabel.setToolTipText("Select a ABAP project");
-		// coloredProjectLabel.setBounds(10, 50, 25, 10);
+		coloredProjectLabel.setToolTipText("Select the project which should be colored");
+		coloredProjectLabel.setForeground(HEADER_COLOR);
+
 		comboColoredProject = new Combo(container, SWT.READ_ONLY);
 		comboColoredProject.setItems(getProjectNames());
+	}
 
+	private void addColorChooser(Composite container) {
 		Label colorLabel = new Label(container, SWT.READ_ONLY);
-		colorLabel.setToolTipText("Select a predefined color");
+		colorLabel.setToolTipText(
+				"Select the color which should be used to color the development objects of the choosen project");
 		colorLabel.setText("Color:");
+		colorLabel.setForeground(HEADER_COLOR);
 
 		colorSelector = new ColorSelector(container);
 
@@ -94,34 +128,66 @@ public class AddOrUpdateColoredProjectPage extends Dialog {
 				colorSelector.setColorValue(new RGB(255, 255, 255));
 			}
 		}
+	}
 
+	private void addSuppressColoringButton(Composite container) {
 		btnSuppressColoring = new Button(container, SWT.CHECK);
 		btnSuppressColoring.setText("Do not color this project");
 		btnSuppressColoring.setSelection(coloredProject != null ? coloredProject.isSuppressedColoring() : false);
+		btnSuppressColoring.setToolTipText("Check this checkbox if the selected project should not be colored");
+	}
+
+	private void addDescriptionPart(Composite parent, Composite container) {
+		Label lblDescriptionHeader = new Label(container, SWT.NULL);
+		lblDescriptionHeader.setText("Description:");
+		lblDescriptionHeader.setForeground(HEADER_COLOR);
+
+		Text description = new Text(container, SWT.WRAP | SWT.MULTI | SWT.BORDER);
+
+		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_FILL);
+		gridData.horizontalSpan = 3;
+		gridData.grabExcessVerticalSpace = true;
+
+		StringBuilder descriptionTextBuilder = new StringBuilder();
+		descriptionTextBuilder.append(
+				"Assign a color to a project. The color will be used to indicate the current selected project by coloring specific UI components.");
+		descriptionTextBuilder.append(System.lineSeparator() + System.lineSeparator());
+		descriptionTextBuilder.append("The recommended standard configuration for a DEV, QAS, PRD system is: ");
+		descriptionTextBuilder.append(System.lineSeparator());
+		descriptionTextBuilder.append("   DEV: Check checkbox 'Do not color this project' ");
+		descriptionTextBuilder.append(System.lineSeparator());
+		descriptionTextBuilder.append("   QAS: Choose for example the color 'orange'");
+		descriptionTextBuilder.append(System.lineSeparator());
+		descriptionTextBuilder.append("   PRD: Choose for example the color 'red'");
+		descriptionTextBuilder.append(System.lineSeparator());
+
+		description.setLayoutData(gridData);
+		description.setText(descriptionTextBuilder.toString());
+		description.setEnabled(false);
 
 		addEmptyLine(container);
 
-		showCheckBoxForPopUp(container, showPopUpButton);
+		Link link = new Link(container, SWT.NONE);
+		link.setText("The details can be configured in the <a>Eclipse preference</a>");
 
-		try {
-			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-					.showView("abapci.views.AbapCiColoredProjectView");
-		} catch (PartInitException e) {
-			// if project color view can not be opened we keep on going as this is not
-			// critical
-			e.printStackTrace();
-		}
+		link.addSelectionListener(new SelectionAdapter() {
 
-		return container;
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				final PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(parent.getShell(),
+						"abapci.preferences.abapCiPreferences", null, null);
+				dialog.open();
+			}
+		});
 	}
 
 	private void addEmptyLine(Composite container) {
 		new Label(container, SWT.READ_ONLY);
 	}
 
-	private void showCheckBoxForPopUp(Composite container, boolean showPopUpCheckBox) {
+	private void addCheckBoxForDialogPopUp(Composite container, boolean showPopUpCheckBox) {
 		Label lblShowPopUpAgain = new Label(container, SWT.READ_ONLY);
-		lblShowPopUpAgain.setText("Show this popup again, when an project without an color assignment is detected?");
+		lblShowPopUpAgain.setText("Show this dialog again, when a project without an color assignment is opened?");
 
 		Composite compShowPopUp = new Composite(container, SWT.NULL);
 		compShowPopUp.setLayout(new RowLayout());

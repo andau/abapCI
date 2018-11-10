@@ -14,6 +14,7 @@ public class ColoredProjectFeature extends ActiveFeature {
 	public boolean isChangeStatusBarActive() {
 		return changeStatusBarActive;
 	}
+
 	public void setChangeStatusBarActive(boolean active) {
 		this.changeStatusBarActive = active;
 	}
@@ -34,7 +35,7 @@ public class ColoredProjectFeature extends ActiveFeature {
 		this.rightRulerActive = rightRulerActive;
 	}
 
-	public boolean isTitleIconActive() {
+	public boolean coloredProjectFeature() {
 		// TODO Auto-generated method stub
 		return titleIconActive;
 	}
@@ -60,16 +61,18 @@ public class ColoredProjectFeature extends ActiveFeature {
 		return dialogEnabled;
 	}
 
-
+	@Override
 	public boolean isActive() {
-		return isChangeStatusBarActive() || isRightRulerActive() || isLeftRulerActive() || isTitleIconActive() || isStatusBarWidgetActive();
+		return isChangeStatusBarActive() || isRightRulerActive() || isLeftRulerActive() || isTitleIconActive()
+				|| isStatusBarWidgetActive();
 	}
+
 	public int getTitleIconWidth() {
 		return titleIconWidth;
 	}
 
 	public void setTitleIconWidth(int width) {
-		this.titleIconWidth = width; 	
+		this.titleIconWidth = width;
 	}
 
 	public void setTitleIconHeight(int heigth) {
@@ -80,5 +83,9 @@ public class ColoredProjectFeature extends ActiveFeature {
 		return titleIconHeight;
 	}
 
+	public boolean isTitleIconActive() {
+		return titleIconActive;
+
+	}
 
 }

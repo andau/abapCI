@@ -8,8 +8,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 
 import abapci.AbapCiPluginHelper;
-import abapci.AbapProjectUtil;
-import abapci.Exception.AbapCiColoredProjectFileParseException;
+import abapci.GeneralProjectUtil;
 import abapci.coloredProject.model.ColoredProject;
 import abapci.coloredProject.model.projectColor.DefaultEclipseProjectColor;
 import abapci.coloredProject.presenter.ColoredProjectsPresenter;
@@ -21,8 +20,11 @@ public class EditorActivationHandler {
 
 	private final DisplayColorChanger displayColorChanger;
 	private ColoredProjectFeature coloredProjectFeature;
+	private final AbapCiPluginHelper abapCiPluginHelper;
 
 	public EditorActivationHandler() {
+
+		abapCiPluginHelper = new AbapCiPluginHelper();
 
 		this.displayColorChanger = new DisplayColorChanger();
 		initFeatures();
@@ -37,32 +39,24 @@ public class EditorActivationHandler {
 
 	public void updateDisplayColoring() {
 
-		IProject currentProject = AbapProjectUtil.getCurrentProject();
+		IProject currentProject = GeneralProjectUtil.getCurrentProject();
 
 		IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		IEditorPart activeEditor = activePage.getActiveEditor();
 
 		if (activeEditor != null && currentProject != null) {
 
-			try {
+			if (coloredProjectFeature.isActive()) {
 
-				if (coloredProjectFeature.isActive()) {
-					WorkspaceColorProxySingleton colorProxy = WorkspaceColorProxySingleton.getInstance();
-					if (!colorProxy.isConfigured(currentProject)) {
-						showDialogForProject(currentProject);
-					}
-
-					DisplayColor displayColoring = WorkspaceColorProxySingleton.getInstance()
-							.getColoring(currentProject);
-
-					displayColorChanger.change(activeEditor, displayColoring, coloredProjectFeature);
-
+				WorkspaceColorConfiguration colorProxy = abapCiPluginHelper.getWorkspaceColorConfiguration();
+				if (!colorProxy.isConfigured(currentProject)) {
+					showDialogForProject(currentProject);
 				}
 
-			} catch (AbapCiColoredProjectFileParseException e) {
-				// if there was an error retrieving the color we skip this feature,
-				// the user should already got an info message in the ABAP Colored Projects view
-				e.printStackTrace();
+				DisplayColor displayColoring = colorProxy.getColoring(currentProject);
+
+				displayColorChanger.change(activeEditor, displayColoring, coloredProjectFeature);
+
 			}
 		}
 	}
@@ -76,8 +70,6 @@ public class EditorActivationHandler {
 	}
 
 	private void handleNewColoredProject(IProject project) {
-
-		AbapCiPluginHelper abapCiPluginHelper = new AbapCiPluginHelper();
 
 		ColoredProjectsPresenter coloredProjectPresenter = abapCiPluginHelper.getColoredProjectsPresenter();
 		ColoredProject coloredProject = new ColoredProject(project.getName(), new DefaultEclipseProjectColor());

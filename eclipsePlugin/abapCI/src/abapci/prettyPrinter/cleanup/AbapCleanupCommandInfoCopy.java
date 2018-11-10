@@ -1,4 +1,4 @@
-package abapci.cleanup;
+package abapci.prettyPrinter.cleanup;
 
 import java.util.ArrayList;
 import java.util.List;

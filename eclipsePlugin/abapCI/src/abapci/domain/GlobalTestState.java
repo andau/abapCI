@@ -53,7 +53,7 @@ public class GlobalTestState {
 				break;
 			case UNDEF:
 			default:
-				testStateOutput = "State n/a";
+				testStateOutput = "State N/A";
 				break;
 			}
 
@@ -61,20 +61,20 @@ public class GlobalTestState {
 
 			switch (this.sourcecodeState) {
 			case UT_FAIL:
-				testStateOutput = "Tests fail";
+				testStateOutput = "TESTS FAIL";
 				break;
 			case ATC_FAIL:
-				testStateOutput = "ATC errors";
+				testStateOutput = "ATC ERRORS";
 				break;
 			case OK:
-				testStateOutput = "-      OK     -";
+				testStateOutput = "OK";
 				break;
 			case OFFL:
 				testStateOutput = "No connection";
 				break;
 			case UNDEF:
 			default:
-				testStateOutput = "Tests n/a";
+				testStateOutput = "State n/a";
 				break;
 			}
 

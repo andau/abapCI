@@ -4,16 +4,28 @@ import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IPartListener2;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import abapci.Exception.AbapCiColoredProjectFileParseException;
+import abapci.Exception.ActiveEditorNotSetException;
+import abapci.coloredProject.colorChanger.ColorChanger;
+import abapci.coloredProject.colorChanger.ColorChangerFactory;
+import abapci.coloredProject.colorChanger.ColorChangerType;
+import abapci.coloredProject.exeption.ColorChangerNotImplementedException;
+import abapci.coloredProject.exeption.ProjectColorNotSetException;
+import abapci.coloredProject.general.DisplayColor;
 import abapci.coloredProject.general.IStatusBarWidget;
+import abapci.coloredProject.general.WorkspaceColorConfiguration;
 import abapci.coloredProject.model.ColoredProjectModel;
 import abapci.coloredProject.presenter.ColoredProjectsPresenter;
 import abapci.feature.FeatureFacade;
+import abapci.feature.activeFeature.ColoredProjectFeature;
 import abapci.model.ContinuousIntegrationModel;
 import abapci.presenter.ContinuousIntegrationPresenter;
 import abapci.presenter.GeneralThemePresenter;
@@ -33,6 +45,7 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 
 	private static IResourceChangeListener resourceChangeListener;
 	private static IPartListener2 partListener;
+	private static WorkspaceColorConfiguration workspaceColorConfiguration;
 
 	private FeatureFacade featureFacade;
 
@@ -64,9 +77,14 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 		}
 
 		try {
+			workspaceColorConfiguration = new WorkspaceColorConfiguration(true);
+
 			coloredProjectsPresenter = new ColoredProjectsPresenter(null, new ColoredProjectModel());
+			updateProjectColors();
+			registerPreferencePropertyChangeListener();
 		} catch (Exception ex) {
-			// if here is a problem we will go on as this is no critical feature
+			ex.printStackTrace();
+			// if here is a problem we will go on as these are no critical feature
 		}
 		initializePartChangeListener();
 
@@ -75,34 +93,52 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.
-	 * BundleContext)
-	 */
+	private void registerPreferencePropertyChangeListener() {
+
+		getPreferenceStore().addPropertyChangeListener(event -> {
+			try {
+				workspaceColorConfiguration = new WorkspaceColorConfiguration(true);
+			} catch (AbapCiColoredProjectFileParseException e) {
+				// if here is a problem we will go on as these are no critical feature
+				e.printStackTrace();
+			}
+		});
+	}
+
+	private void updateProjectColors() throws ColorChangerNotImplementedException,
+			AbapCiColoredProjectFileParseException, ActiveEditorNotSetException, ProjectColorNotSetException {
+
+		ColoredProjectFeature coloredProjectFeature = featureFacade.getColoredProjectFeature();
+		if (coloredProjectFeature.isTitleIconActive()) {
+			IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			activePage.getActiveEditor();
+
+			IEditorReference[] editorReferences = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+					.getEditorReferences();
+
+			ColorChangerFactory colorChangerFactory = new ColorChangerFactory();
+
+			for (IEditorReference editorReference : editorReferences) {
+				DisplayColor displayColor = workspaceColorConfiguration
+						.getColoring(GeneralProjectUtil.getProject(editorReference.getEditor(true)));
+				ColorChanger colorChanger = colorChangerFactory.create(ColorChangerType.TITLE_ICON,
+						editorReference.getEditor(true), coloredProjectFeature, displayColor.getTitleIconColor());
+				colorChanger.change();
+			}
+		}
+
+	}
+
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
 	}
 
-	/**
-	 * Returns the shared instance
-	 *
-	 * @return the shared instance
-	 */
 	public static AbapCiPlugin getDefault() {
 		return plugin;
 	}
 
-	/**
-	 * Returns an image descriptor for the image file at the given plug-in relative
-	 * path
-	 *
-	 * @param path the path
-	 * @return the image descriptor
-	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
 	}
@@ -134,5 +170,13 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 
 	public ColoredProjectsPresenter getColoredProjectsPresenter() {
 		return coloredProjectsPresenter;
+	}
+
+	public static void resetWorkspaceColorConfiguration() throws AbapCiColoredProjectFileParseException {
+		workspaceColorConfiguration = new WorkspaceColorConfiguration(true);
+	}
+
+	public static WorkspaceColorConfiguration getWorkspaceColorConfiguration() {
+		return workspaceColorConfiguration;
 	}
 }

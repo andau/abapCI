@@ -1,7 +1,7 @@
 package abapci.activation;
 
 import abapci.handlers.IUnitHandler;
-import abapci.handlers.JavaUnitHandler;
+import abapci.handlers.JavaUnitSimuHandler;
 import abapci.prettyPrinter.IPrettyPrinter;
 import abapci.prettyPrinter.NoAutoformatPrettyPrinter;
 
@@ -19,7 +19,7 @@ public class JavaLanguageFactory implements ILanguageFactory {
 
 	@Override
 	public IUnitHandler createUnitHandler() {
-		return new JavaUnitHandler(); 
+		return new JavaUnitSimuHandler(); 
 	}
 
 }

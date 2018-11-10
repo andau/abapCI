@@ -11,6 +11,8 @@ import abapci.feature.activeFeature.ColoredProjectFeature;
 
 public class DisplayColorChangerTest {
 
+	private static final Color RED_COLOR = new Color(Display.getCurrent(), new RGB(255, 0, 0));
+
 	@Test
 	public void testStandardChangeWithGeneralColorAndEditorNull() {
 		DisplayColorChanger displayColorChanger = new DisplayColorChanger();
@@ -22,7 +24,7 @@ public class DisplayColorChangerTest {
 
 		IEditorPart editorPart = null;
 
-		DisplayColor displayColor = new DisplayColor(new Color(Display.getCurrent(), new RGB(0, 0, 0)), false);
+		DisplayColor displayColor = new DisplayColor(RED_COLOR, coloredProjectFeature);
 
 		displayColorChanger.change(editorPart, displayColor, coloredProjectFeature);
 	}
@@ -35,12 +37,10 @@ public class DisplayColorChangerTest {
 		coloredProjectFeature.setLeftRulerActive(false);
 		coloredProjectFeature.setRightRulerActive(false);
 
-		//DisplayColor displayColor = new DisplayColor(new Color(Display.getCurrent(), new RGB(0, 0, 0)));
-		//displayColorChanger.change(editorPart, displayColor, coloredProjectFeature);
 	}
 
 	@Test
-	@Ignore 
+	@Ignore
 	public void testStandardChangeWithParticularColor() {
 		new DisplayColorChanger();
 
@@ -49,12 +49,6 @@ public class DisplayColorChangerTest {
 		coloredProjectFeature.setLeftRulerActive(true);
 		coloredProjectFeature.setRightRulerActive(true);
 
-		
-		//TODO change with particular colors
-		//DisplayColor displayColor = new DisplayColor(new Color(Display.getCurrent(), new RGB(0, 0, 0)));
-		//displayColorChanger.change(editorPart, displayColor, coloredProjectFeature);
 	}
-
-	
 
 }

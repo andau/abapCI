@@ -1,4 +1,4 @@
-package abapci.cleanup;
+package abapci.prettyPrinter.cleanup;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;

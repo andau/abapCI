@@ -26,7 +26,7 @@ public class ColoredProjectModelTest {
 	@Test
 	public void testAddColoredProject() {
 
-		ColoredProject redColoredProject = ColoredProjectTestSample.getRedColoredProject();
+		ColoredProject redColoredProject = ColoredProjectTestSample.getGreenColoredProject();
 		cut.addColoredProject(redColoredProject);
 		Mockito.verify(coloredProjectModelXml).addColoredProjectToXML(redColoredProject.getName(),
 				redColoredProject.getColor(), redColoredProject.isSuppressedColoring());
@@ -40,14 +40,14 @@ public class ColoredProjectModelTest {
 
 	@Test
 	public void testRemoveColoredProject() throws AbapCiColoredProjectFileParseException {
-		ColoredProject redColoredProject = ColoredProjectTestSample.getRedColoredProject();
+		ColoredProject redColoredProject = ColoredProjectTestSample.getGreenColoredProject();
 		cut.removeColoredProject(redColoredProject);
 		Mockito.verify(coloredProjectModelXml).removeColoredProject(redColoredProject);
 	}
 
 	@Test
 	public void testSaveColoredProjects() throws AbapCiColoredProjectFileParseException {
-		ColoredProject sampleProject = ColoredProjectTestSample.getRedColoredProject(); 
+		ColoredProject sampleProject = ColoredProjectTestSample.getGreenColoredProject(); 
 		List<ColoredProject> coloredProjects = Collections.singletonList(sampleProject); 
 		cut.saveColoredProjects(coloredProjects);
 		Mockito.verify(coloredProjectModelXml).clear();
@@ -62,9 +62,9 @@ public class ColoredProjectModelTest {
 
 	@Test
 	public void testGetColorForProject() throws AbapCiColoredProjectFileParseException {
-		cut.getColorForProject(ColoredProjectTestSample.getRedColoredProject().getName());
+		cut.getColorForProject(ColoredProjectTestSample.getGreenColoredProject().getName());
 		Mockito.verify(coloredProjectModelXml)
-				.getColorForProject(ColoredProjectTestSample.getRedColoredProject().getName());
+				.getColorForProject(ColoredProjectTestSample.getGreenColoredProject().getName());
 	}
 
 }

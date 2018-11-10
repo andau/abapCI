@@ -4,25 +4,22 @@ import org.eclipse.swt.graphics.Color;
 
 public class DefaultEclipseProjectColor implements IProjectColor {
 
-	private boolean suppressed;
+	public DefaultEclipseProjectColor() {
 
-	public DefaultEclipseProjectColor() 
-	{
-		
 	}
-	
+
+	@Override
 	public Color getColor() {
-		return null; 
+		return null;
 	}
 
 	@Override
 	public boolean isSuppressed() {
-		// TODO Auto-generated method stub
-		return suppressed;
+		return true;
 	}
 
 	@Override
 	public void setSuppressed() {
-		suppressed = true;  
+		// Default color is suppressed by default
 	}
 }

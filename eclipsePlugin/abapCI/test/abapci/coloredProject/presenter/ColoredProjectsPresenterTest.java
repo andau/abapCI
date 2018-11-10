@@ -10,7 +10,9 @@ import org.eclipse.swt.graphics.RGB;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.powermock.reflect.Whitebox;
 
+import abapci.AbapCiPluginHelper;
 import abapci.Exception.AbapCiColoredProjectFileParseException;
 import abapci.coloredProject.model.ColoredProject;
 import abapci.coloredProject.model.ColoredProjectModel;
@@ -36,6 +38,7 @@ public class ColoredProjectsPresenterTest {
 
 	ColoredProjectModel coloredProjectModel;
 	AbapCiColoredProjectView coloredProjectView;
+	AbapCiPluginHelper abapCiPluginHelper = Mockito.mock(AbapCiPluginHelper.class);
 
 	@Before
 	public void before() throws AbapCiColoredProjectFileParseException {
@@ -45,11 +48,12 @@ public class ColoredProjectsPresenterTest {
 		Mockito.when(coloredProjectModel.getColoredProjects()).thenReturn(new ArrayList<ColoredProject>());
 
 		IProjectColorFactory projectColorFactory = new ProjectColorFactory();
-		sampleProjectColor = ColoredProjectTestSample.getRedProjectColor();
+		sampleProjectColor = ColoredProjectTestSample.getGreenProjectColor();
 		projectColorFactory.create(COLOR_RED);
 		sampleColoredProject = new ColoredProject(TESTPROJECT_1_NAME, sampleProjectColor);
 
 		cutColoredProjectPresenter = new ColoredProjectsPresenter(coloredProjectView, coloredProjectModel);
+		Whitebox.setInternalState(cutColoredProjectPresenter, "abapCiPluginHelper", abapCiPluginHelper);
 	}
 
 	@Test
@@ -66,6 +70,7 @@ public class ColoredProjectsPresenterTest {
 		cutColoredProjectPresenter.addColoredProject(sampleColoredProject);
 		Mockito.verify(coloredProjectModel).removeColoredProject(sampleColoredProject);
 		Mockito.verify(coloredProjectModel).addColoredProject(sampleColoredProject);
+		Mockito.verify(abapCiPluginHelper).resetWorkspaceColorConfiguration();
 	}
 
 	@Test
@@ -82,12 +87,13 @@ public class ColoredProjectsPresenterTest {
 
 		cutColoredProjectPresenter.removeColoredProject(sampleColoredProject);
 		Mockito.verify(coloredProjectModel).removeColoredProject(sampleColoredProject);
+		Mockito.verify(abapCiPluginHelper).resetWorkspaceColorConfiguration();
 	}
 
 	@Test
 	public void testGetProjectColor() throws AbapCiColoredProjectFileParseException {
 		Mockito.when(coloredProjectModel.getColorForProject(sampleColoredProject.getName()))
-				.thenReturn(ColoredProjectTestSample.getRedProjectColor());
+				.thenReturn(ColoredProjectTestSample.getGreenProjectColor());
 
 		IProjectColor projectColor = cutColoredProjectPresenter.getProjectColor(sampleColoredProject.getName());
 		assertTrue(projectColor instanceof StandardProjectColor);

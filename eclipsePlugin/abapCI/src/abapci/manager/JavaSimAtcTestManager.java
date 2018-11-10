@@ -8,18 +8,18 @@ import org.eclipse.core.resources.IProject;
 import abapci.activation.Activation;
 import abapci.domain.AbapPackageTestState;
 import abapci.domain.TestState;
-import abapci.handlers.JavaAtcHandler;
+import abapci.handlers.JavaAtcSimuHandler;
 import abapci.presenter.ContinuousIntegrationPresenter;
 import abapci.testResult.TestResultSummary;
 
 public class JavaSimAtcTestManager extends AbstractTestManager implements IAtcTestManager {
 	
-	JavaAtcHandler javaAtcHandler; 
+	JavaAtcSimuHandler javaAtcHandler; 
 	
 	public JavaSimAtcTestManager(ContinuousIntegrationPresenter continuousIntegrationPresenter, IProject project,
 			List<String> packageNames) {
 		super(continuousIntegrationPresenter, project, packageNames);
-		javaAtcHandler = new JavaAtcHandler(); 
+		javaAtcHandler = new JavaAtcSimuHandler(); 
 	}
 
 	public TestState executeAllPackages(IProject project, List<AbapPackageTestState> activeAbapPackageTestStates,

@@ -5,7 +5,7 @@ import org.eclipse.core.resources.IProject;
 import com.sap.adt.atc.model.atcworklist.IAtcWorklist;
 
 import abapci.AbapCiPlugin;
-import abapci.AbapProjectUtil;
+import abapci.GeneralProjectUtil;
 import abapci.domain.AbapPackageTestState;
 import abapci.handlers.AbapAtcHandler;
 import abapci.presenter.ContinuousIntegrationPresenter;
@@ -28,7 +28,7 @@ public class AtcCiAction extends AbstractCiAction {
 		for (AbapPackageTestState abapPackageTestState : getSelectedAbapPackageTestStates()) {
 
 			try {
-				IProject project = AbapProjectUtil.getAbapProjectByProjectName(abapPackageTestState.getProjectName());
+				IProject project = GeneralProjectUtil.getAbapProjectByProjectName(abapPackageTestState.getProjectName());
 				IAtcWorklist atcWorklist = new AbapAtcHandler(continuousIntegrationPresenter.getAtcFeature())
 						.executePackage(project, abapPackageTestState.getPackageName());
 				TestResultSummary atcTestResultSummary = new TestResultSummary(project,

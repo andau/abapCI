@@ -11,8 +11,7 @@ import abapci.utils.ColorChooser;
 public class StatusBarColorChanger extends ColorChanger {
 
 	private final Shell shell;
-
-	ColorChooser colorChooser;
+	private final ColorChooser colorChooser;
 
 	public StatusBarColorChanger(Shell shell, IProjectColor projectColor) {
 		this.shell = shell;
@@ -38,7 +37,7 @@ public class StatusBarColorChanger extends ColorChanger {
 
 					if (child.getClass().getName().equals(classname)) {
 						child.getParent().setBackground(backgroundColor);
-						child.getParent().setForeground(foregroundColor);
+						// child.getParent().setForeground(foregroundColor);
 					} else {
 						if (child instanceof Composite) {
 							setBackgroundForChildren((Composite) child, backgroundColor, foregroundColor, classname,

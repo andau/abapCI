@@ -12,9 +12,9 @@ public class StatusBarWidgetTest {
 	@Test
 	public void test() {
 		StatusBarWidget statusBarWidget = new StatusBarWidget(); 
-		statusBarWidget.setBackgroundColor(ColoredProjectTestSample.getRedProjectColor().getColor());
+		statusBarWidget.setBackgroundColor(ColoredProjectTestSample.getGreenProjectColor().getColor());
 		statusBarWidget.setText(SAMPLE_TEXT);
-		statusBarWidget.setTextColor(ColoredProjectTestSample.getRedProjectColor().getColor());
+		statusBarWidget.setTextColor(ColoredProjectTestSample.getGreenProjectColor().getColor());
 		statusBarWidget.setToolTip(SAMPLE_TOOLTIP);
 	}
 

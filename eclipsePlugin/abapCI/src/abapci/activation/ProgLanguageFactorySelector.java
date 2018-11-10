@@ -5,7 +5,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.ui.IEditorReference;
 
-import abapci.AbapProjectUtil;
+import abapci.GeneralProjectUtil;
 
 public class ProgLanguageFactorySelector {
 
@@ -19,7 +19,7 @@ public class ProgLanguageFactorySelector {
 		} else {
 			for (IEditorReference editorReference : editorReferences) {
 				if (editorReference.isDirty()) {
-					IProject project = AbapProjectUtil.getCurrentProject(editorReference.getEditor(false));
+					IProject project = GeneralProjectUtil.getProject(editorReference.getEditor(false));
 					languageFactory = determine(project); 
 				}
 			}

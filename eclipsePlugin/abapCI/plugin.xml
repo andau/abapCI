@@ -267,7 +267,8 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            name="ABAP CI"
+            category="com.sap.adt.tools.core.ui.preferencePages.ABAP"
+            name="Continuous Integration (ABAP CI Plugin)"
             class="abapci.preferences.AbapCiPreferences"
             id="abapci.preferences.abapCiPreferences">
       </page>

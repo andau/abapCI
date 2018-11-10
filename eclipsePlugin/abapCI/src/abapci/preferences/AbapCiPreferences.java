@@ -122,10 +122,10 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 	}
 
 	private void addHeaderLabel(Composite fieldEditorParent, String headerText) {
-		Label emptyLabel0 = new Label(fieldEditorParent, SWT.NONE);
-		emptyLabel0.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
-		emptyLabel0.setText(headerText);
-		emptyLabel0.setForeground(HEADER_COLOR);
+		Label headerLabel = new Label(fieldEditorParent, SWT.NONE);
+		headerLabel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
+		headerLabel.setText(headerText);
+		headerLabel.setForeground(HEADER_COLOR);
 
 	}
 

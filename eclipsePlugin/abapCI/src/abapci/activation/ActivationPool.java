@@ -9,11 +9,11 @@ import org.eclipse.core.resources.IProject;
 public class ActivationPool {
 
 	private static ActivationPool instance;
-	private List<Activation> activations;
+	private final List<Activation> activations;
 	private boolean unprocessedActivationClick;
 
 	private ActivationPool() {
-		activations = new ArrayList<Activation>();
+		activations = new ArrayList<>();
 	}
 
 	public static ActivationPool getInstance() {
@@ -41,14 +41,6 @@ public class ActivationPool {
 				activation.setActivated();
 			}
 		}
-	}
-
-	@Deprecated
-	public List<Activation> findActivationsAssignedToProject() {
-
-		return findAllActiveOrIncludedInJob().stream()
-				.filter(item -> item.getPackageName() != null || !item.getPackageName().isEmpty())
-				.collect(Collectors.toList());
 	}
 
 	public List<Activation> findActiveActivationsAssignedToProject() {

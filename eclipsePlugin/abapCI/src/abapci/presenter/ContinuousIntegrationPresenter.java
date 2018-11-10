@@ -11,11 +11,12 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
 import abapci.AbapCiPluginHelper;
-import abapci.Exception.AbapCiColoredProjectFileParseException;
 import abapci.Exception.ContinuousIntegrationConfigFileParseException;
 import abapci.coloredProject.colorChanger.StatusBarColorChanger;
+import abapci.coloredProject.config.IColoringConfig;
+import abapci.coloredProject.config.IColoringConfigFactory;
+import abapci.coloredProject.config.TestStateColoringConfigFactory;
 import abapci.coloredProject.general.IStatusBarWidget;
-import abapci.coloredProject.general.WorkspaceColorProxySingleton;
 import abapci.coloredProject.model.ColoredProject;
 import abapci.coloredProject.model.projectColor.IProjectColor;
 import abapci.coloredProject.model.projectColor.IProjectColorFactory;
@@ -265,6 +266,16 @@ public class ContinuousIntegrationPresenter {
 
 		try {
 
+			Color currentColor = globalTestState.getColor();
+			IProjectColorFactory projectColorFactory = new ProjectColorFactory();
+			IColoringConfigFactory coloringConfigFatory = new TestStateColoringConfigFactory(
+					sourceCodeVisualisationFeature);
+			IProjectColor projectColor = projectColorFactory.create(currentColor.getRGB());
+
+			ColoredProject coloredProject = new ColoredProject(currentProject.getName(), projectColor);
+			IColoringConfig testStateConfig = coloringConfigFatory.create(coloredProject);
+			abapCiPluginHelper.getWorkspaceColorConfiguration().addOrUpdateTestStateColoring(testStateConfig);
+
 			ResultVisualizerOutput resultVisualizerOutput = new ResultVisualizerOutput();
 			resultVisualizerOutput.setGlobalTestState(globalTestStateString);
 			resultVisualizerOutput.setAbapPackageTestStates(abapPackageTestStatesForCurrentProject);
@@ -293,12 +304,6 @@ public class ContinuousIntegrationPresenter {
 				statusBarColorChanger = new StatusBarColorChanger(Display.getCurrent().getActiveShell(),
 						projectColorFactory.create(globalTestState.getColor()));
 				statusBarColorChanger.change();
-
-				Color currentColor = globalTestState.getColor();
-				IProjectColorFactory projectColorFactory = new ProjectColorFactory();
-				IProjectColor projectColor = projectColorFactory.create(currentColor.getRGB());
-				WorkspaceColorProxySingleton.getInstance()
-						.addOrUpdate(new ColoredProject(currentProject.getName(), projectColor));
 			}
 
 			if (view != null && abapPackageTestStatesForCurrentProject != null) {
@@ -306,8 +311,6 @@ public class ContinuousIntegrationPresenter {
 				view.statusLabel.setText("CI run package summary updated");
 			}
 
-		} catch (AbapCiColoredProjectFileParseException e) {
-			view.statusLabel.setText("File with project coloring could not be loaded");
 		} catch (Exception ex) {
 			// ABAP CI dashoard UI state update failed, lets go on
 			// typically happens if CI Dashboard was closed during runtime

@@ -91,7 +91,12 @@ public class ActivationExecutionListener implements IExecutionListener {
 						Activation activation = activationExtractor.extractFrom(editorReference);
 
 						if (activation != null) {
+							if (activationExtractor instanceof JavaActivationExtractor) {
+								activationPool.unregisterAllActivated();
+							}
+
 							activationPool.registerModified(activation);
+
 							if (activationExtractor instanceof JavaActivationExtractor) {
 								activationPool.setActivated(activation.getObjectName());
 							}
@@ -101,7 +106,7 @@ public class ActivationExecutionListener implements IExecutionListener {
 			}
 
 			if (ActivationAction.ACTION_ABAP_MULTI_ACTIVATION.equals(arg0)) {
-				activationPool.setActivatedEntireProject(AbapProjectUtil.getCurrentProject());
+				activationPool.setActivatedEntireProject(GeneralProjectUtil.getCurrentProject());
 				activationPool.activationClickDetected();
 			}
 
