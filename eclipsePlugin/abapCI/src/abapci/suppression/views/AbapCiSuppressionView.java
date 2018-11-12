@@ -1,4 +1,4 @@
-package abapci.views;
+package abapci.suppression.views;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.part.ViewPart;
 
+import abapci.ci.views.ViewModel;
 import abapci.domain.Suppression;
 import abapci.lang.UiTexts;
 import abapci.views.actions.ui.AddSuppressionAction;

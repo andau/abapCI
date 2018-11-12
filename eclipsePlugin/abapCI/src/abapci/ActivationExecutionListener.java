@@ -20,6 +20,7 @@ import abapci.activation.ILanguageFactory;
 import abapci.activation.JavaActivationExtractor;
 import abapci.activation.ProgLanguageFactorySelector;
 import abapci.feature.FeatureFacade;
+import abapci.feature.activeFeature.DeveloperFeature;
 import abapci.feature.activeFeature.PrettyPrinterFeature;
 import abapci.prettyPrinter.IPrettyPrinter;
 
@@ -27,16 +28,28 @@ public class ActivationExecutionListener implements IExecutionListener {
 
 	private final ActivationPool activationPool;
 	private PrettyPrinterFeature sourcecodeFormattingFeature;
+	private DeveloperFeature developerFeature;
 
 	public ActivationExecutionListener() {
 		activationPool = ActivationPool.getInstance();
 
 		initFeatures();
+		registerPreferencePropertyChangeListener();
+
+	}
+
+	private void registerPreferencePropertyChangeListener() {
+		AbapCiPlugin abapCiPlugin = new AbapCiPlugin();
+		abapCiPlugin.getPreferenceStore().addPropertyChangeListener(event -> {
+			initFeatures();
+		});
+
 	}
 
 	private void initFeatures() {
 		FeatureFacade featureFacade = new FeatureFacade();
 		sourcecodeFormattingFeature = featureFacade.getSourcecodeFormattingFeature();
+		developerFeature = featureFacade.getDeveloperFeature();
 
 	}
 
@@ -93,13 +106,14 @@ public class ActivationExecutionListener implements IExecutionListener {
 						if (activation != null) {
 							if (activationExtractor instanceof JavaActivationExtractor) {
 								activationPool.unregisterAllActivated();
+								if (developerFeature.isJavaSimuModeEnabled()) {
+									activationPool.registerModified(activation);
+									activationPool.setActivated(activation.getObjectName());
+								}
+							} else {
+								activationPool.registerModified(activation);
 							}
 
-							activationPool.registerModified(activation);
-
-							if (activationExtractor instanceof JavaActivationExtractor) {
-								activationPool.setActivated(activation.getObjectName());
-							}
 						}
 					}
 				}

@@ -7,10 +7,10 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
+import abapci.ci.presenter.ContinuousIntegrationPresenter;
+import abapci.ci.views.AddOrUpdateContinuousIntegrationConfigPage;
 import abapci.domain.AbapPackageTestState;
 import abapci.domain.ContinuousIntegrationConfig;
-import abapci.presenter.ContinuousIntegrationPresenter;
-import abapci.views.wizard.AddOrUpdateContinuousIntegrationConfigPage;
 
 public class UpdateAction extends Action {
 

@@ -1,4 +1,4 @@
-package abapci.presenter;
+package abapci.ci.presenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,12 +12,17 @@ import org.eclipse.swt.widgets.Display;
 
 import abapci.AbapCiPluginHelper;
 import abapci.Exception.ContinuousIntegrationConfigFileParseException;
+import abapci.ci.model.IContinuousIntegrationModel;
+import abapci.ci.views.AbapCiDashboardView;
+import abapci.ci.views.AbapCiMainView;
 import abapci.coloredProject.colorChanger.StatusBarColorChanger;
 import abapci.coloredProject.config.IColoringConfig;
 import abapci.coloredProject.config.IColoringConfigFactory;
 import abapci.coloredProject.config.TestStateColoringConfigFactory;
 import abapci.coloredProject.general.IStatusBarWidget;
+import abapci.coloredProject.general.WorkspaceColorConfiguration;
 import abapci.coloredProject.model.ColoredProject;
+import abapci.coloredProject.model.projectColor.DefaultEclipseProjectColor;
 import abapci.coloredProject.model.projectColor.IProjectColor;
 import abapci.coloredProject.model.projectColor.IProjectColorFactory;
 import abapci.coloredProject.model.projectColor.ProjectColorFactory;
@@ -31,7 +36,6 @@ import abapci.feature.SourceCodeVisualisationFeature;
 import abapci.feature.activeFeature.AtcFeature;
 import abapci.feature.activeFeature.TddModeFeature;
 import abapci.feature.activeFeature.UnitFeature;
-import abapci.model.IContinuousIntegrationModel;
 import abapci.testResult.SourceCodeStateEvaluator;
 import abapci.testResult.SourceCodeStateInfo;
 import abapci.testResult.TestResult;
@@ -41,8 +45,6 @@ import abapci.testResult.TestResultType;
 import abapci.testResult.visualizer.ITestResultVisualizer;
 import abapci.testResult.visualizer.ResultVisualizerOutput;
 import abapci.utils.EditorHandler;
-import abapci.views.AbapCiDashboardView;
-import abapci.views.AbapCiMainView;
 
 public class ContinuousIntegrationPresenter {
 
@@ -55,7 +57,6 @@ public class ContinuousIntegrationPresenter {
 	private final SourceCodeStateEvaluator sourceCodeStateEvaluator;
 	private final SourceCodeStateInfo sourceCodeStateInfo;
 	private StatusBarColorChanger statusBarColorChanger;
-	private final IProjectColorFactory projectColorFactory;
 	private final AbapCiPluginHelper abapCiPluginHelper;
 
 	private SourceCodeVisualisationFeature sourceCodeVisualisationFeature;
@@ -74,7 +75,7 @@ public class ContinuousIntegrationPresenter {
 		testResultConsolidator = new TestResultConsolidator();
 		sourceCodeStateEvaluator = new SourceCodeStateEvaluator();
 		sourceCodeStateInfo = new SourceCodeStateInfo();
-		projectColorFactory = new ProjectColorFactory();
+		new ProjectColorFactory();
 		abapCiPluginHelper = new AbapCiPluginHelper();
 
 		loadPackages();
@@ -266,20 +267,31 @@ public class ContinuousIntegrationPresenter {
 
 		try {
 
-			Color currentColor = globalTestState.getColor();
 			IProjectColorFactory projectColorFactory = new ProjectColorFactory();
+			IProjectColor projectColor;
+
+			if (globalTestState.getColor() == null) {
+				projectColor = new DefaultEclipseProjectColor();
+			} else {
+				Color currentColor = globalTestState.getColor();
+				projectColor = projectColorFactory.create(currentColor.getRGB());
+			}
+
 			IColoringConfigFactory coloringConfigFatory = new TestStateColoringConfigFactory(
 					sourceCodeVisualisationFeature);
-			IProjectColor projectColor = projectColorFactory.create(currentColor.getRGB());
-
 			ColoredProject coloredProject = new ColoredProject(currentProject.getName(), projectColor);
 			IColoringConfig testStateConfig = coloringConfigFatory.create(coloredProject);
-			abapCiPluginHelper.getWorkspaceColorConfiguration().addOrUpdateTestStateColoring(testStateConfig);
+
+			WorkspaceColorConfiguration workspaceColorConfiguration = abapCiPluginHelper
+					.getWorkspaceColorConfiguration();
+			workspaceColorConfiguration.addOrUpdateTestStateColoring(testStateConfig,
+					currentProject.getName() + ": " + globalTestStateString);
 
 			ResultVisualizerOutput resultVisualizerOutput = new ResultVisualizerOutput();
 			resultVisualizerOutput.setGlobalTestState(globalTestStateString);
 			resultVisualizerOutput.setAbapPackageTestStates(abapPackageTestStatesForCurrentProject);
-			resultVisualizerOutput.setBackgroundColor(globalTestState.getColor());
+			resultVisualizerOutput.setBackgroundColor(workspaceColorConfiguration.getColoring(currentProject)
+					.getStatusWidgetBackgroundColor().getColor());
 			resultVisualizerOutput.setCurrentProject(currentProject);
 			resultVisualizerOutput.setShowAtcInfo(atcFeature.isActive());
 
@@ -302,7 +314,8 @@ public class ContinuousIntegrationPresenter {
 			if (sourceCodeVisualisationFeature.isChangeStatusBarBackgroundColorEnabled()) {
 
 				statusBarColorChanger = new StatusBarColorChanger(Display.getCurrent().getActiveShell(),
-						projectColorFactory.create(globalTestState.getColor()));
+						projectColorFactory.create(workspaceColorConfiguration.getColoring(currentProject)
+								.getStatusBarColor().getColor()));
 				statusBarColorChanger.change();
 			}
 

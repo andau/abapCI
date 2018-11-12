@@ -20,6 +20,9 @@ public class SourceCodeStateEvaluator {
 
 		TestState currentUnitTestState;
 
+		if (abapPackageTestStates.isEmpty()) {
+			currentUnitTestState = TestState.NO_CONFIG;
+		}
 		if (!unitFeature.isActive()) {
 			currentUnitTestState = TestState.DEACT;
 		} else if (abapPackageTestStates.stream().anyMatch(item -> item.getUnitTestState().equals(TestState.NOK))) {
@@ -35,7 +38,7 @@ public class SourceCodeStateEvaluator {
 
 		developmentProcessManager.setUnitTeststate(currentUnitTestState);
 
-		TestState currentAtcState = TestState.UNDEF;
+		TestState currentAtcState = TestState.NO_CONFIG;
 
 		for (AbapPackageTestState testState : abapPackageTestStates) {
 			switch (currentAtcState) {
@@ -50,6 +53,9 @@ public class SourceCodeStateEvaluator {
 			case DEACT:
 				currentAtcState = testState.getAtcTestState() != TestState.DEACT ? testState.getAtcTestState()
 						: currentAtcState;
+				break;
+			case NO_CONFIG:
+				currentAtcState = testState.getAtcTestState();
 				break;
 			}
 		}

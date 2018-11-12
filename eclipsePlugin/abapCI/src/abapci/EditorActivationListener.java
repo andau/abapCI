@@ -2,13 +2,12 @@ package abapci;
 
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPartReference;
+
 import abapci.coloredProject.general.EditorActivationHandler;
-import abapci.presenter.GeneralThemePresenter;
 
 public class EditorActivationListener implements IPartListener2 {
 
-
-	public EditorActivationListener(GeneralThemePresenter generalThemePresenter) {
+	public EditorActivationListener() {
 	}
 
 	@Override

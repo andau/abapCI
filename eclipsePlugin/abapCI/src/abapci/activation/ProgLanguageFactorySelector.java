@@ -20,7 +20,7 @@ public class ProgLanguageFactorySelector {
 			for (IEditorReference editorReference : editorReferences) {
 				if (editorReference.isDirty()) {
 					IProject project = GeneralProjectUtil.getProject(editorReference.getEditor(false));
-					languageFactory = determine(project); 
+					languageFactory = determine(project);
 				}
 			}
 		}
@@ -37,12 +37,15 @@ public class ProgLanguageFactorySelector {
 				languageFactory = new JavaLanguageFactory();
 			} else if (project.hasNature("com.sap.adt.abapnature")) {
 				languageFactory = new AbapLanguageFactory();
+			} else {
+				languageFactory = new DefaultLanguageFactory();
 			}
 		} catch (CoreException e) {
-			// in case the language could not be determined we stay with the default language 
+			// in case the language could not be determined we stay with the default
+			// language
 		}
-		
-		return languageFactory; 
+
+		return languageFactory;
 	}
 
 }

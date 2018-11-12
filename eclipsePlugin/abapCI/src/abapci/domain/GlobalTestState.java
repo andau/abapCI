@@ -103,7 +103,7 @@ public class GlobalTestState {
 			break;
 		}
 
-		return new Color(Display.getCurrent(), rgbColor);
+		return sourcecodeState == SourcecodeState.NO_CONFIG ? null : new Color(Display.getCurrent(), rgbColor);
 	}
 
 	public void setSourcecodeState(SourcecodeState testState) {

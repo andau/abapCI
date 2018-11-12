@@ -273,6 +273,17 @@
             id="abapci.preferences.abapCiPreferences">
       </page>
    </extension>
+
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="com.sap.adt.tools.core.ui.preferencePages.ABAP"
+            name="Colored Projects (ABAP CI Plugin)"
+            class="abapci.preferences.ColoredProjectsPreferences"
+            id="abapci.preferences.coloredProjectsPreferences">
+      </page>
+   </extension>
+
   
    <extension
          point="org.eclipse.core.runtime.preferences">
@@ -291,29 +302,29 @@
             name="ABAP Continuous Integration"
             icon="icons/abapci_logo.ico"
             category="abapCI"
-            class="abapci.views.AbapCiMainView"
-            id="abapci.views.AbapCiMainView">
+            class="abapci.ci.views.AbapCiMainView"
+            id="abapci.ci.views.AbapCiMainView">
       </view>
       <view
             name="ABAP CI Dashboard"
             icon="icons/abapci_logo.ico"
             category="abapCI"
-            class="abapci.views.AbapCiDashboardView"
-            id="abapci.views.AbapCiDashboardView">
+            class="abapci.ci.views.AbapCiDashboardView"
+            id="abapci.ci.views.AbapCiDashboardView">
       </view>
       <view
             name="ABAP CI Suppressions"
             icon="icons/abapci_logo.ico"
             category="abapCI"
-            class="abapci.views.AbapCiSuppressionView"
-            id="abapci.views.AbapCiSuppressionView">
+            class="abapci.suppression.views.AbapCiSuppressionView"
+            id="abapci.suppression.views.AbapCiSuppressionView">
       </view>
       <view
             name="ABAP Colored Projects"
             icon="icons/abapci_logo.ico"
             category="abapCI"
             class="abapci.coloredProject.view.AbapCiColoredProjectView"
-            id="abapci.views.AbapCiColoredProjectView">
+            id="abapci.coloredProject.views.AbapCiColoredProjectView">
       </view>
 
    </extension>
@@ -326,7 +337,7 @@
                ratio="0.5"
                relative="org.eclipse.ui.views.ProblemView"
                relationship="right"
-               id="abapci.views.AbapCiMainView">
+               id="abapci.ci.views.AbapCiMainView">
          </view>
       </perspectiveExtension>
    </extension>

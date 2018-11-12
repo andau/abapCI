@@ -14,6 +14,8 @@ import org.osgi.framework.BundleContext;
 
 import abapci.Exception.AbapCiColoredProjectFileParseException;
 import abapci.Exception.ActiveEditorNotSetException;
+import abapci.ci.model.ContinuousIntegrationModel;
+import abapci.ci.presenter.ContinuousIntegrationPresenter;
 import abapci.coloredProject.colorChanger.ColorChanger;
 import abapci.coloredProject.colorChanger.ColorChangerFactory;
 import abapci.coloredProject.colorChanger.ColorChangerType;
@@ -26,9 +28,6 @@ import abapci.coloredProject.model.ColoredProjectModel;
 import abapci.coloredProject.presenter.ColoredProjectsPresenter;
 import abapci.feature.FeatureFacade;
 import abapci.feature.activeFeature.ColoredProjectFeature;
-import abapci.model.ContinuousIntegrationModel;
-import abapci.presenter.ContinuousIntegrationPresenter;
-import abapci.presenter.GeneralThemePresenter;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -40,16 +39,14 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 	// The shared instance
 	private static AbapCiPlugin plugin;
 
-	public ContinuousIntegrationPresenter continuousIntegrationPresenter;
-	private ColoredProjectsPresenter coloredProjectsPresenter;
+	private static ContinuousIntegrationPresenter continuousIntegrationPresenter;
+	private static ColoredProjectsPresenter coloredProjectsPresenter;
 
 	private static IResourceChangeListener resourceChangeListener;
 	private static IPartListener2 partListener;
 	private static WorkspaceColorConfiguration workspaceColorConfiguration;
 
 	private FeatureFacade featureFacade;
-
-	private GeneralThemePresenter generalThemePresenter;
 
 	private IStatusBarWidget statusBarWidget;
 
@@ -68,7 +65,6 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 
 		if (featureFacade.getUnitFeature().isActive() || featureFacade.getAtcFeature().isActive()
 				|| featureFacade.getAtcFeature().isRunActivatedObjects()) {
-			generalThemePresenter = new GeneralThemePresenter(new ColoredProjectModel());
 			continuousIntegrationPresenter = new ContinuousIntegrationPresenter(null, new ContinuousIntegrationModel(),
 					null);
 
@@ -154,7 +150,7 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 
 	public void initializePartChangeListener() {
 		if (partListener == null) {
-			partListener = new EditorActivationListener(generalThemePresenter);
+			partListener = new EditorActivationListener();
 			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().addPartListener(partListener);
 		}
 
@@ -178,5 +174,9 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 
 	public static WorkspaceColorConfiguration getWorkspaceColorConfiguration() {
 		return workspaceColorConfiguration;
+	}
+
+	public static ContinuousIntegrationPresenter getContinuousIntegrationPresenter() {
+		return continuousIntegrationPresenter;
 	}
 }

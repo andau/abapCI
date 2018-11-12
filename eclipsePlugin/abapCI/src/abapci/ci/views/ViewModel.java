@@ -1,4 +1,4 @@
-package abapci.views;
+package abapci.ci.views;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +16,7 @@ import abapci.domain.SourcecodeState;
 import abapci.domain.Suppression;
 import abapci.domain.TestState;
 
+@Deprecated
 public enum ViewModel {
 	INSTANCE;
 
@@ -116,6 +117,5 @@ public enum ViewModel {
 		INSTANCE.lblOverallInfoline = infoline;
 
 	}
-
 
 }

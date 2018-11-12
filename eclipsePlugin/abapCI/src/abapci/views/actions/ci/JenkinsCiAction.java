@@ -1,9 +1,9 @@
 package abapci.views.actions.ci;
 
 import abapci.AbapCiPlugin;
+import abapci.ci.presenter.ContinuousIntegrationPresenter;
 import abapci.domain.AbapPackageTestState;
 import abapci.handlers.JenkinsHandler;
-import abapci.presenter.ContinuousIntegrationPresenter;
 
 public class JenkinsCiAction extends AbstractCiAction {
 

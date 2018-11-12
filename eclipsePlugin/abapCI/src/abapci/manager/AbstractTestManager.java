@@ -4,10 +4,9 @@ import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 
+import abapci.ci.presenter.ContinuousIntegrationPresenter;
 import abapci.domain.AbapPackageTestState;
 import abapci.domain.TestState;
-import abapci.presenter.ContinuousIntegrationPresenter;
-import abapci.views.ViewModel;
 
 abstract class AbstractTestManager {
 
@@ -48,6 +47,7 @@ abstract class AbstractTestManager {
 
 	}
 
+	@Deprecated
 	protected void calculateOverallTestState(List<AbapPackageTestState> packageTestStates,
 			TestStateType teststateType) {
 
@@ -67,18 +67,6 @@ abstract class AbstractTestManager {
 			} else {
 				overallTestState = TestState.OK;
 			}
-		}
-	}
-
-	protected void setAbapPackagesTestState(List<AbapPackageTestState> packageTestStates, TestState testState,
-			TestStateType teststateType) {
-
-		// continuousIntegrationPresenter.updatePackageTestStates(packageTestStates);
-
-		if (teststateType == TestStateType.UNIT) {
-			ViewModel.INSTANCE.setUnitState(testState);
-		} else {
-			ViewModel.INSTANCE.setAtcState(testState);
 		}
 	}
 

@@ -5,9 +5,9 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import abapci.AbapCiPluginHelper;
 import abapci.feature.activeFeature.AbapGitPackageChangeFeature;
 import abapci.feature.activeFeature.AtcFeature;
-import abapci.feature.activeFeature.ThemeColorChangerFeature;
 import abapci.feature.activeFeature.ColorFeature;
 import abapci.feature.activeFeature.ColoredProjectFeature;
+import abapci.feature.activeFeature.DeveloperFeature;
 import abapci.feature.activeFeature.FeatureType;
 import abapci.feature.activeFeature.JenkinsFeature;
 import abapci.feature.activeFeature.PrettyPrinterFeature;
@@ -19,12 +19,12 @@ import abapci.preferences.PreferenceConstants;
 public class FeatureCreator {
 
 	private IPreferenceStore prefs;
-	AbapCiPluginHelper abapCiPluginHelper; 
+	AbapCiPluginHelper abapCiPluginHelper;
 
-	public FeatureCreator() 
-	{
-		abapCiPluginHelper = new AbapCiPluginHelper();  
+	public FeatureCreator() {
+		abapCiPluginHelper = new AbapCiPluginHelper();
 	}
+
 	private void initPrefs() {
 		prefs = (prefs == null) ? abapCiPluginHelper.getPreferenceStore() : prefs;
 	}
@@ -51,7 +51,8 @@ public class FeatureCreator {
 		SourceCodeVisualisationFeature feature = new SourceCodeVisualisationFeature();
 		feature.setChangeStatusBarBackgroundColorEnabled(
 				prefs.getBoolean(PreferenceConstants.PREF_CHANGE_STATUS_BAR_BACKGROUND_COLOR));
-		feature.setShowStatusBarWidgetEnabled(prefs.getBoolean(PreferenceConstants.PREF_VISUALISATION_STATUS_BAR_WIDGET_ENABLED));
+		feature.setShowStatusBarWidgetEnabled(
+				prefs.getBoolean(PreferenceConstants.PREF_VISUALISATION_STATUS_BAR_WIDGET_ENABLED));
 		return feature;
 
 	}
@@ -63,22 +64,17 @@ public class FeatureCreator {
 		return feature;
 	}
 
-	public ThemeColorChangerFeature createColorChangerFeature() {
-		initPrefs();
-		ThemeColorChangerFeature feature = new ThemeColorChangerFeature();
-		feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_CHANGE_COLOR_ON_FAILED_TESTS));
-		return feature;
-	}
-
 	public ColoredProjectFeature createColoredProjectFeature() {
 		initPrefs();
 		ColoredProjectFeature feature = new ColoredProjectFeature();
-		feature.setChangeStatusBarActive(prefs.getBoolean(PreferenceConstants.PREF_COLORED_PROJECTS_STATUS_BAR_ENABLED));
+		feature.setChangeStatusBarActive(
+				prefs.getBoolean(PreferenceConstants.PREF_COLORED_PROJECTS_STATUS_BAR_ENABLED));
 		feature.setLeftRulerActive(prefs.getBoolean(PreferenceConstants.PREF_COLORED_PROJECTS_LEFT_RULER_ENABLED));
 		feature.setRightRulerActive(prefs.getBoolean(PreferenceConstants.PREF_COLORED_PROJECTS_RIGHT_RULER_ENABLED));
-		feature.setStatusBarWidgetActive(prefs.getBoolean(PreferenceConstants.PREF_COLORED_PROJECTS_STATUS_BAR_WIDGET_ENABLED));
+		feature.setStatusBarWidgetActive(
+				prefs.getBoolean(PreferenceConstants.PREF_COLORED_PROJECTS_STATUS_BAR_WIDGET_ENABLED));
 		feature.setTitleIconActive(prefs.getBoolean(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_ENABLED));
-		feature.setTitleIconWidth(prefs.getInt(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_WIDTH_PERCENT)); 
+		feature.setTitleIconWidth(prefs.getInt(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_WIDTH_PERCENT));
 		feature.setTitleIconHeight(prefs.getInt(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_HEIGTH_PERCENT));
 		feature.setDialogEnabled((prefs.getBoolean(PreferenceConstants.PREF_COLORED_PROJECTS_NEW_DIALOG_ENABLED)));
 
@@ -166,6 +162,15 @@ public class FeatureCreator {
 		}
 
 		return colorFeature;
+	}
+
+	public DeveloperFeature createDeveloperFeature() {
+		DeveloperFeature developerFeature = new DeveloperFeature();
+		developerFeature
+				.setJavaSimuModeEnabled(prefs.getBoolean(PreferenceConstants.PREF_DEVELOPER_JAVA_SIMU_MODE_ENABLED));
+		developerFeature.setTracingEnabled(prefs.getBoolean(PreferenceConstants.PREF_DEVELOPER_TRACING_ENABLED));
+
+		return developerFeature;
 	}
 
 }

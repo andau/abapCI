@@ -39,7 +39,7 @@ public class AbapCiColoredProjectView extends ViewPart {
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
-	public static final String ID = "abapci.views.AbapCiColoredProjectView";
+	public static final String ID = "abapci.coloredProject.views.AbapCiColoredProjectView";
 
 	private CLabel statusLabel;
 
@@ -86,7 +86,7 @@ public class AbapCiColoredProjectView extends ViewPart {
 		viewer.getTable().setHeaderVisible(true);
 
 		statusLabel = new CLabel(entireContainer, SWT.BOTTOM);
-		statusLabel.setBounds(0, 10, 200, 10);
+		statusLabel.setBounds(0, 10, viewer.getTable().getBounds().width, 10);
 		statusLabel.setText(
 				"By adding a project and assigning a color the development objects of this project are colored with the assigned color");
 

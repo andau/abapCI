@@ -9,10 +9,10 @@ import org.eclipse.core.resources.IProject;
 
 import abapci.activation.Activation;
 import abapci.activation.ProgLanguageFactorySelector;
+import abapci.ci.presenter.ContinuousIntegrationPresenter;
 import abapci.domain.AbapPackageTestState;
 import abapci.domain.TestState;
 import abapci.handlers.IUnitHandler;
-import abapci.presenter.ContinuousIntegrationPresenter;
 import abapci.testResult.TestResultSummary;
 
 public class UnitTestManager extends AbstractTestManager {

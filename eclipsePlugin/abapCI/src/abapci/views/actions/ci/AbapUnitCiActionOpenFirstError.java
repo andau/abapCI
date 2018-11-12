@@ -7,8 +7,8 @@ import com.sap.adt.tools.core.model.util.AdtObjectReferenceAdapterFactory;
 import com.sap.adt.tools.core.ui.navigation.AdtNavigationServiceFactory;
 
 import abapci.AbapCiPlugin;
+import abapci.ci.presenter.ContinuousIntegrationPresenter;
 import abapci.domain.AbapPackageTestState;
-import abapci.presenter.ContinuousIntegrationPresenter;
 import abapci.testResult.TestResultSummaryFactory;
 
 public class AbapUnitCiActionOpenFirstError extends AbstractCiAction {

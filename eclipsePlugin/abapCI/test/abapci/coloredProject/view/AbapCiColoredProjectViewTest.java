@@ -1,34 +1,42 @@
 package abapci.coloredProject.view;
 
-import org.eclipse.swt.widgets.Composite;
+import static org.junit.Assert.assertFalse;
+
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchPartSite;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.powermock.reflect.Whitebox;
 
 import abapci.AbapCiPluginHelper;
-import abapci.coloredProject.model.ColoredProjectModel;
 import abapci.coloredProject.presenter.ColoredProjectsPresenter;
+import abapci.preferences.UiItemsTestHelper;
 
 public class AbapCiColoredProjectViewTest {
 
-	AbapCiPluginHelper abapCiPluginHelper; 
-	ColoredProjectModel coloredProjectModel; 
-	
-	@Test
-	public void test() {
-		AbapCiColoredProjectView cut = new AbapCiColoredProjectView(); 
+	AbapCiColoredProjectView cut;
 
-		Mockito.mock(Composite.class); 
-		abapCiPluginHelper = Mockito.mock(AbapCiPluginHelper.class); 
-		coloredProjectModel = Mockito.mock(ColoredProjectModel.class); 
-	
+	Shell shell = new Shell();
+
+	private final AbapCiPluginHelper abapCiPluginHelper = Mockito.mock(AbapCiPluginHelper.class);
+	private final ColoredProjectsPresenter coloredProjectsPresenter = Mockito.mock(ColoredProjectsPresenter.class);
+	private final IWorkbenchPartSite partSite = Mockito.mock(IWorkbenchPartSite.class);
+
+	@Before
+	public void before() {
+		cut = new AbapCiColoredProjectView();
 		Whitebox.setInternalState(cut, "abapCiPluginHelper", abapCiPluginHelper);
+		Whitebox.setInternalState(cut, "partSite", partSite);
 
-		ColoredProjectsPresenter coloredProjectsPresenter = new ColoredProjectsPresenter(null, coloredProjectModel);
-		Mockito.when(abapCiPluginHelper.getColoredProjectsPresenter()).thenReturn(coloredProjectsPresenter ); 
-		
-		//TODO further tests if not too much work 
-		
+		Mockito.when(abapCiPluginHelper.getColoredProjectsPresenter()).thenReturn(coloredProjectsPresenter);
+
+	}
+
+	@Test(expected = NoClassDefFoundError.class)
+	public void createPartControl() {
+		cut.createPartControl(shell);
+		assertFalse(UiItemsTestHelper.findDuplicates(shell.getChildren()));
 	}
 
 }

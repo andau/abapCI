@@ -1,6 +1,7 @@
 package abapci.coloredProject.colorChanger;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
@@ -17,20 +18,19 @@ public class ColorChangerFactoryTest {
 
 	ColorChangerFactory cut;
 
-	IEditorPart editorPart = Mockito.mock(IEditorPart.class);;	
+	IEditorPart editorPart = Mockito.mock(IEditorPart.class);;
 	IWorkbenchPartSite site = Mockito.mock(IWorkbenchPartSite.class);;
-	Shell shell= Mockito.mock(Shell.class);;
-	ColoredProjectFeature coloredProjectFeature= Mockito.mock(ColoredProjectFeature.class);;
-	IProjectColor projectColor = Mockito.mock(IProjectColor.class); 
-	TitleIconOverlayRectangle rectangle = Mockito.mock(TitleIconOverlayRectangle.class); 
-	
+	Shell shell = Mockito.mock(Shell.class);;
+	ColoredProjectFeature coloredProjectFeature = Mockito.mock(ColoredProjectFeature.class);;
+	IProjectColor projectColor = Mockito.mock(IProjectColor.class);
+	TitleIconOverlayRectangle rectangle = Mockito.mock(TitleIconOverlayRectangle.class);
 
 	@Before
 	public void before() throws ColorChangerNotImplementedException {
 		cut = new ColorChangerFactory();
 
-		Mockito.when(editorPart.getSite()).thenReturn(site); 
-		Mockito.when(site.getShell()).thenReturn(shell); 
+		Mockito.when(editorPart.getSite()).thenReturn(site);
+		Mockito.when(site.getShell()).thenReturn(shell);
 
 	}
 
@@ -43,30 +43,38 @@ public class ColorChangerFactoryTest {
 
 	@Test
 	public void testLeftRulerColorChanger() throws ColorChangerNotImplementedException {
-		createAndTestColorChanger(ColorChangerType.LEFT_RULER, false, new LeftRulerColorChanger(editorPart, projectColor));
+		createAndTestColorChanger(ColorChangerType.LEFT_RULER, false,
+				new LeftRulerColorChanger(editorPart, projectColor));
 		Mockito.when(coloredProjectFeature.isLeftRulerActive()).thenReturn(true);
-		createAndTestColorChanger(ColorChangerType.LEFT_RULER, true, new LeftRulerColorChanger(editorPart, projectColor));
+		createAndTestColorChanger(ColorChangerType.LEFT_RULER, true,
+				new LeftRulerColorChanger(editorPart, projectColor));
 	}
 
 	@Test
 	public void testRightRulerColorChanger() throws ColorChangerNotImplementedException {
-		createAndTestColorChanger(ColorChangerType.RIGHT_RULER, false, new RightRulerColorChanger(editorPart, projectColor));
+		createAndTestColorChanger(ColorChangerType.RIGHT_RULER, false,
+				new RightRulerColorChanger(editorPart, projectColor));
 		Mockito.when(coloredProjectFeature.isRightRulerActive()).thenReturn(true);
-		createAndTestColorChanger(ColorChangerType.RIGHT_RULER, true, new RightRulerColorChanger(editorPart, projectColor));
+		createAndTestColorChanger(ColorChangerType.RIGHT_RULER, true,
+				new RightRulerColorChanger(editorPart, projectColor));
 	}
 
 	@Test
 	public void testStatusBarWidgetColorChanger() throws ColorChangerNotImplementedException {
-		createAndTestColorChanger(ColorChangerType.STATUS_BAR_WIDGET, false, new StatusBarWidgetColorChanger(projectColor));
+		createAndTestColorChanger(ColorChangerType.STATUS_BAR_WIDGET, false,
+				new StatusBarWidgetColorChanger(projectColor, null));
 		Mockito.when(coloredProjectFeature.isStatusBarWidgetActive()).thenReturn(true);
-		createAndTestColorChanger(ColorChangerType.STATUS_BAR_WIDGET, true, new StatusBarWidgetColorChanger(projectColor));
+		createAndTestColorChanger(ColorChangerType.STATUS_BAR_WIDGET, true,
+				new StatusBarWidgetColorChanger(projectColor, null));
 	}
 
 	@Test
 	public void testTitleIconColorChanger() throws ColorChangerNotImplementedException {
-		createAndTestColorChanger(ColorChangerType.TITLE_ICON, false, new TitleIconColorChanger(editorPart, projectColor, rectangle));
+		createAndTestColorChanger(ColorChangerType.TITLE_ICON, false,
+				new TitleIconColorChanger(editorPart, projectColor, rectangle));
 		Mockito.when(coloredProjectFeature.isTitleIconActive()).thenReturn(true);
-		createAndTestColorChanger(ColorChangerType.TITLE_ICON, true, new TitleIconColorChanger(editorPart, projectColor, rectangle));
+		createAndTestColorChanger(ColorChangerType.TITLE_ICON, true,
+				new TitleIconColorChanger(editorPart, projectColor, rectangle));
 	}
 
 	private void createAndTestColorChanger(ColorChangerType colorChangerType, boolean expectedActiveState,

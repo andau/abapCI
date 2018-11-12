@@ -9,18 +9,18 @@ import org.eclipse.swt.graphics.Color;
 import abapci.Exception.AbapCiColoredProjectFileParseException;
 import abapci.coloredProject.config.ColoredProjectConfig;
 import abapci.coloredProject.config.IColoringConfig;
-import abapci.coloredProject.config.IColoringConfigFactory;
 import abapci.coloredProject.config.ProjectColoringConfigFactory;
 import abapci.coloredProject.model.ColoredProject;
 import abapci.coloredProject.model.ColoredProjectModel;
 import abapci.coloredProject.model.projectColor.DefaultEclipseProjectColor;
 import abapci.feature.FeatureFacade;
+import abapci.utils.StringUtils;
 
 public class WorkspaceColorConfiguration {
 
 	private final HashMap<String, ColoredProjectConfigs> coloredProjectConfigProjects;
 	private FeatureFacade featureFacade;
-	private IColoringConfigFactory coloringConfigFactory;
+	private ProjectColoringConfigFactory coloringConfigFactory;
 
 	public WorkspaceColorConfiguration(boolean initialize) throws AbapCiColoredProjectFileParseException {
 		coloredProjectConfigProjects = new HashMap<>();
@@ -37,24 +37,31 @@ public class WorkspaceColorConfiguration {
 
 		ColoredProjectModel model = new ColoredProjectModel();
 		List<ColoredProject> coloredProjects = model.getColoredProjects();
+
 		for (ColoredProject coloredProject : coloredProjects) {
-			IColoringConfig coloredProjectConfig = coloringConfigFactory.create(coloredProject);
+			IColoringConfig coloredProjectConfig;
+			coloredProjectConfig = coloredProject.isSuppressedColoring()
+					? coloringConfigFactory.createDefault(coloredProject.getName())
+					: coloringConfigFactory.create(coloredProject);
+
 			addOrUpdateProjectColoringConfig(coloredProjectConfig);
+
 		}
 
 	}
 
-	public void addOrUpdateTestStateColoring(IColoringConfig testStateConfig) {
+	public void addOrUpdateTestStateColoring(IColoringConfig testStateConfig, String testStateOutput) {
 
-		if (coloredProjectConfigProjects.containsKey(testStateConfig.getProjectName())) {
-			ColoredProjectConfigs testStateColor = coloredProjectConfigProjects.get(testStateConfig.getProjectName());
-			testStateColor.setTestStateColoring(testStateConfig);
-		} else {
+		if (!coloredProjectConfigProjects.containsKey(testStateConfig.getProjectName())) {
 			ColoredProjectConfig projectConfig = new ColoredProjectConfig(testStateConfig.getProjectName(), null,
 					false);
 			coloredProjectConfigProjects.put(testStateConfig.getProjectName(),
 					new ColoredProjectConfigs(projectConfig, testStateConfig));
 		}
+
+		ColoredProjectConfigs testStateColor = coloredProjectConfigProjects.get(testStateConfig.getProjectName());
+		testStateColor.setTestStateColoring(testStateConfig);
+		testStateColor.setTestStateOutput(testStateOutput);
 	}
 
 	public void addOrUpdateProjectColoringConfig(IColoringConfig projectConfig) {
@@ -106,8 +113,11 @@ public class WorkspaceColorConfiguration {
 		statusWidgetProjectBackgroundColor = replaceStatusWidgetNullColorWithStatusColor(statusBarProjectColor,
 				statusWidgetProjectBackgroundColor);
 
-		DisplayColor colorForEntireProject = new DisplayColor(statusBarProjectColor, leftAnnotationBarProjectColor,
-				rightAnnotationBarProjectColor, titleIconProjectColor, statusWidgetProjectBackgroundColor);
+		String testStateColorsAreConfigured = coloredProjectConfigs.getTestStateOutput();
+
+		DisplayColor colorForEntireProject = new DisplayColor(project, statusBarProjectColor,
+				leftAnnotationBarProjectColor, rightAnnotationBarProjectColor, titleIconProjectColor,
+				statusWidgetProjectBackgroundColor, testStateColorsAreConfigured);
 
 		return colorForEntireProject;
 	}
@@ -130,9 +140,18 @@ public class WorkspaceColorConfiguration {
 		return coloredProjectConfigProjects.containsKey(project.getName());
 	}
 
+	public String getTestStateOutput(IProject project) {
+		if (coloredProjectConfigProjects.containsKey(project.getName())) {
+			return coloredProjectConfigProjects.get(project.getName()).getTestStateOutput();
+		} else {
+			return StringUtils.EMPTY;
+		}
+	}
+
 	private class ColoredProjectConfigs {
 		private IColoringConfig projectColoringConfig;
 		private IColoringConfig testStateColoringConfig;
+		private String testStateOutput;
 
 		public ColoredProjectConfigs(IColoringConfig projectColoringConfig, IColoringConfig testStateColoringConfig) {
 			this.projectColoringConfig = projectColoringConfig;
@@ -162,6 +181,14 @@ public class WorkspaceColorConfiguration {
 
 		public void setTestStateColoring(IColoringConfig projectColorConfig) {
 			this.testStateColoringConfig = projectColorConfig;
+		}
+
+		public String getTestStateOutput() {
+			return testStateOutput;
+		}
+
+		public void setTestStateOutput(String testStateOutput) {
+			this.testStateOutput = testStateOutput;
 		}
 
 	}

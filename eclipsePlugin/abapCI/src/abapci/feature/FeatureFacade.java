@@ -6,9 +6,9 @@ import abapci.AbapCiPlugin;
 import abapci.feature.activeFeature.AbapGitPackageChangeFeature;
 import abapci.feature.activeFeature.ActiveFeature;
 import abapci.feature.activeFeature.AtcFeature;
-import abapci.feature.activeFeature.ThemeColorChangerFeature;
 import abapci.feature.activeFeature.ColorFeature;
 import abapci.feature.activeFeature.ColoredProjectFeature;
+import abapci.feature.activeFeature.DeveloperFeature;
 import abapci.feature.activeFeature.FeatureType;
 import abapci.feature.activeFeature.JenkinsFeature;
 import abapci.feature.activeFeature.PrettyPrinterFeature;
@@ -19,7 +19,7 @@ import abapci.preferences.PreferenceConstants;
 
 public class FeatureFacade {
 	private IPreferenceStore prefs;
-	private FeatureCreator featureCreator;
+	private final FeatureCreator featureCreator;
 
 	public FeatureFacade() {
 		featureCreator = new FeatureCreator();
@@ -38,10 +38,6 @@ public class FeatureFacade {
 
 	public AtcFeature getAtcFeature() {
 		return featureCreator.createAtcFeature();
-	}
-
-	public ThemeColorChangerFeature getColorChangerFeature() {
-		return featureCreator.createColorChangerFeature();
 	}
 
 	public JenkinsFeature getJenkinsFeature() {
@@ -117,5 +113,9 @@ public class FeatureFacade {
 
 	public SourceCodeVisualisationFeature getSourceCodeVisualisationFeature() {
 		return featureCreator.createSourceCodeVisualisationFeature();
+	}
+
+	public DeveloperFeature getDeveloperFeature() {
+		return featureCreator.createDeveloperFeature();
 	}
 }

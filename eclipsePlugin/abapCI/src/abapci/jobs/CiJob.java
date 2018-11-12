@@ -17,9 +17,9 @@ import org.eclipse.jdt.core.JavaCore;
 import abapci.Exception.InactivatedObjectEvaluationException;
 import abapci.activation.Activation;
 import abapci.activation.ActivationPool;
+import abapci.ci.presenter.ContinuousIntegrationPresenter;
 import abapci.connections.SapConnection;
 import abapci.feature.FeatureProcessor;
-import abapci.presenter.ContinuousIntegrationPresenter;
 
 public class CiJob extends Job {
 

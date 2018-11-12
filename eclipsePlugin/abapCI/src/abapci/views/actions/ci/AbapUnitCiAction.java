@@ -7,9 +7,9 @@ import org.eclipse.core.resources.IProject;
 import abapci.AbapCiPlugin;
 import abapci.GeneralProjectUtil;
 import abapci.activation.Activation;
+import abapci.ci.presenter.ContinuousIntegrationPresenter;
 import abapci.domain.AbapPackageTestState;
 import abapci.handlers.AbapUnitHandler;
-import abapci.presenter.ContinuousIntegrationPresenter;
 import abapci.testResult.TestResultSummary;
 import abapci.testResult.TestResultSummaryFactory;
 

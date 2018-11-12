@@ -6,9 +6,9 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
+import abapci.ci.presenter.ContinuousIntegrationPresenter;
 import abapci.domain.AbapPackageTestState;
 import abapci.domain.ContinuousIntegrationConfig;
-import abapci.presenter.ContinuousIntegrationPresenter;
 
 public class DeleteAction extends Action {
 

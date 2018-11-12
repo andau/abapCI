@@ -1,8 +1,8 @@
 package abapci.views.actions.ci;
 
 import abapci.AbapCiPlugin;
+import abapci.ci.presenter.ContinuousIntegrationPresenter;
 import abapci.handlers.AbapGitHandler;
-import abapci.presenter.ContinuousIntegrationPresenter;
 
 public class AbapGitCiAction extends AbstractCiAction {
 

@@ -1,4 +1,4 @@
-package abapci.presenter;
+package abapci.ci.presenter;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -9,9 +9,10 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import abapci.AbapCiPlugin;
+import abapci.ci.model.IContinuousIntegrationModel;
+import abapci.ci.presenter.ContinuousIntegrationPresenter;
+import abapci.ci.views.AbapCiMainView;
 import abapci.domain.ContinuousIntegrationConfig;
-import abapci.model.IContinuousIntegrationModel;
-import abapci.views.AbapCiMainView;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(AbapCiPlugin.class)

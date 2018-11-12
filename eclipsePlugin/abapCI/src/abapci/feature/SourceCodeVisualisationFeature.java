@@ -4,7 +4,7 @@ public class SourceCodeVisualisationFeature {
 
 	private boolean changeStatusBarBackgroundColorEnabled;
 	private boolean showStatusBarWidgetEnabled;
-
+	private boolean themeUpdateEnabled;
 
 	public boolean isChangeStatusBarBackgroundColorEnabled() {
 		return changeStatusBarBackgroundColorEnabled;
@@ -15,11 +15,19 @@ public class SourceCodeVisualisationFeature {
 	}
 
 	public boolean isShowStatusBarWidgetEnabled() {
-		return showStatusBarWidgetEnabled; 
+		return showStatusBarWidgetEnabled;
 	}
 
 	public void setShowStatusBarWidgetEnabled(boolean enabled) {
-		showStatusBarWidgetEnabled = enabled; 
+		showStatusBarWidgetEnabled = enabled;
+	}
+
+	public boolean isThemeUpdateEnabled() {
+		return themeUpdateEnabled;
+	}
+
+	public void setThemeUpdateEnabled(boolean themeUpdateEnabled) {
+		this.themeUpdateEnabled = themeUpdateEnabled;
 	}
 
 }

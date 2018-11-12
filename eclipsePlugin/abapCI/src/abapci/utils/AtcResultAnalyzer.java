@@ -13,11 +13,11 @@ import com.sap.adt.atc.model.atcobject.IAtcObject;
 import com.sap.adt.atc.model.atcworklist.IAtcWorklist;
 
 import abapci.activation.Activation;
+import abapci.ci.views.ViewModel;
 import abapci.domain.ErrorPriority;
 import abapci.domain.InvalidItem;
 import abapci.domain.TestState;
 import abapci.testResult.TestResult;
-import abapci.views.ViewModel;
 
 public class AtcResultAnalyzer {
 

@@ -1,5 +1,5 @@
 package abapci.domain;
 
 public enum TestState {
-	UNDEF, OK, NOK, OFFL, DEACT,
+	NO_CONFIG, UNDEF, OK, NOK, OFFL, DEACT,
 }

@@ -8,7 +8,6 @@ import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbench;
@@ -26,27 +25,31 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 
 	@Override
 	public void createFieldEditors() {
+		PreferencesUiHelper preferencesUiHelper = new PreferencesUiHelper();
 
-		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "1. Automatic Unit test run");
+		preferencesUiHelper.addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "1. Automatic Unit test run");
 		createUnitTestChapter();
 
-		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "2. Automatic ATC run");
+		preferencesUiHelper.addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "2. Automatic ATC run");
 		createAtcChapter();
 
-		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "3. Visualisation of SourceCode State on UI");
+		preferencesUiHelper.addHeaderLabelWithSpaceBefore(getFieldEditorParent(),
+				"3. Visualisation of SourceCode State on UI");
 		createSourceCodeVisualisationChapter();
 
-		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "4. Different coloring for each ABAP project");
-		createColorChangeChapter();
-
-		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "5. Automatic source code formatting");
+		preferencesUiHelper.addHeaderLabelWithSpaceBefore(getFieldEditorParent(),
+				"4. Automatic source code formatting");
 		createSourceCodeFormattingChapter();
 
-		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "6. Shortcut for abapGit");
+		preferencesUiHelper.addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "5. Shortcut for abapGit");
 		createAbapGitChapter();
 
-		addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "7. Trigger Jenkins from Eclipse (experimental)");
+		preferencesUiHelper.addHeaderLabelWithSpaceBefore(getFieldEditorParent(),
+				"6. Trigger Jenkins from Eclipse (experimental)");
 		createJenkinsChapter();
+
+		preferencesUiHelper.addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "6. Developer configuration");
+		createDeveloperChapter();
 
 		// Unit test level selection seems currently not supported ( at least with 7.50)
 		// - therefore its deactived for the moment
@@ -100,8 +103,8 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_VISUALISATION_STATUS_BAR_WIDGET_ENABLED,
 				"&Show widget with test state info in Eclipse statusbar", getFieldEditorParent()));
 
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_CHANGE_COLOR_ON_FAILED_TESTS,
-				"&Change Theme layout on failed tests (do not use with dark theme)", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_VISUALISATION_STATUS_CHANGE_THEME_ENABLED,
+				"&Change theme layout  - red for Unit Tests, blue for ATC errors", getFieldEditorParent()));
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_TDD_MODE,
 				"&Show TDD Labels for source code state output", getFieldEditorParent()));
@@ -116,19 +119,6 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 
 	}
 
-	private void addHeaderLabelWithSpaceBefore(Composite fieldEditorParent, String headerText) {
-		addHeaderLabel(fieldEditorParent, "");
-		addHeaderLabel(fieldEditorParent, headerText);
-	}
-
-	private void addHeaderLabel(Composite fieldEditorParent, String headerText) {
-		Label headerLabel = new Label(fieldEditorParent, SWT.NONE);
-		headerLabel.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
-		headerLabel.setText(headerText);
-		headerLabel.setForeground(HEADER_COLOR);
-
-	}
-
 	private void createSourceCodeFormattingChapter() {
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_SOURCE_CODE_FORMATTING_ENABLED,
@@ -137,34 +127,6 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 				"&Mandatory prefix in source code to enable formatter", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_SOURCE_CODE_CLEANUP_NOT_USED_VARIABLES,
 				"&Automatically cleanup not used variabels (when formatting)", getFieldEditorParent()));
-
-	}
-
-	private void createColorChangeChapter() {
-		Label atcInfoLabel1 = new Label(getFieldEditorParent(), SWT.NONE);
-		atcInfoLabel1.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
-		atcInfoLabel1.setText("This feature adds a coloring for the selected project");
-
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_COLORED_PROJECTS_LEFT_RULER_ENABLED,
-				"&Change color of left ruler", getFieldEditorParent()));
-
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_COLORED_PROJECTS_RIGHT_RULER_ENABLED,
-				"&Change color of right ruler", getFieldEditorParent()));
-
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_COLORED_PROJECTS_STATUS_BAR_ENABLED,
-				"&Change color of status bar", getFieldEditorParent()));
-
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_ENABLED,
-				"&Add a square to the left bottom edge of the editor title icon", getFieldEditorParent()));
-
-		addField(new IntegerFieldEditor(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_WIDTH_PERCENT,
-				"&Width of square in percent of full icon image width", getFieldEditorParent()));
-
-		addField(new IntegerFieldEditor(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_HEIGTH_PERCENT,
-				"&Height of square in percent of full icon image height", getFieldEditorParent()));
-
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_COLORED_PROJECTS_NEW_DIALOG_ENABLED,
-				"&Show dialog when a new package without a color definition is detected", getFieldEditorParent()));
 
 	}
 
@@ -195,11 +157,14 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 				"&Show a dialog when a new package for the CI Run is detected", getFieldEditorParent()));
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
-	 */
+	private void createDeveloperChapter() {
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_DEVELOPER_JAVA_SIMU_MODE_ENABLED,
+				"&Activate Java Simulation mode", getFieldEditorParent()));
+
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_DEVELOPER_TRACING_ENABLED, "&Enable tracing",
+				getFieldEditorParent()));
+	}
+
 	@Override
 	public void init(IWorkbench workbench) {
 		setPreferenceStore(AbapCiPlugin.getDefault().getPreferenceStore());

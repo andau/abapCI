@@ -6,10 +6,10 @@ import java.util.stream.Collectors;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 
+import abapci.ci.views.AbapCiDashboardView;
 import abapci.domain.AbapPackageTestState;
 import abapci.domain.InvalidItem;
 import abapci.utils.InvalidItemUtil;
-import abapci.views.AbapCiDashboardView;
 
 public class DashboardTestResultVisualizer implements ITestResultVisualizer {
 	AbapCiDashboardView view;

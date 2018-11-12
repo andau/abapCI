@@ -6,9 +6,9 @@ import com.sap.adt.atc.model.atcworklist.IAtcWorklist;
 
 import abapci.AbapCiPlugin;
 import abapci.GeneralProjectUtil;
+import abapci.ci.presenter.ContinuousIntegrationPresenter;
 import abapci.domain.AbapPackageTestState;
 import abapci.handlers.AbapAtcHandler;
-import abapci.presenter.ContinuousIntegrationPresenter;
 import abapci.testResult.TestResultSummary;
 import abapci.testResult.TestResultSummaryFactory;
 import abapci.utils.AtcResultAnalyzer;

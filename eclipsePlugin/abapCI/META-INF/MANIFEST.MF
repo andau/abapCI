@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-Vendor: %Bundle-Vendor
 Bundle-SymbolicName: com.abapci.plugin;singleton:=true
-Bundle-Version: 0.5.3
+Bundle-Version: 0.5.3.12
 Bundle-Activator: abapci.AbapCiPlugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -63,10 +63,10 @@ Require-Bundle: org.eclipse.ui,
  org.apiguardian
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: abapci,
+ abapci.ci.views,
  abapci.connections,
  abapci.handlers,
- abapci.preferences,
- abapci.views
+ abapci.preferences
 Bundle-ActivationPolicy: lazy
 Import-Package: com.sap.adt.sapgui.ui.editors,
  com.sap.adt.sapgui.ui.internal.editors,

@@ -23,8 +23,6 @@ public class PreferenceConstants {
 
 	public static final String PREF_JENKINS_RUN_AFTER_UNIT_TESTS_TURN_GREEN = "jenkinsRunAfterUnitTestsTurnGreenPreference";
 
-	public static final String PREF_CHANGE_COLOR_ON_FAILED_TESTS = "changeColorOnFailedTestsPreference";
-
 	public static final String PREF_COLORED_PROJECTS_LEFT_RULER_ENABLED = "coloredProjectsLeftRulerEnabled";
 
 	public static final String PREF_COLORED_PROJECTS_RIGHT_RULER_ENABLED = "coloredProjectsRightRulerEnabled";
@@ -77,7 +75,12 @@ public class PreferenceConstants {
 
 	public static final String PREF_CHANGE_STATUS_BAR_BACKGROUND_COLOR = "changeStatusBarBackgroundColorEnabled";
 
-	public static final String PREF_VISUALISATION_STATUS_BAR_WIDGET_ENABLED = "sourceCodeStatusBarWidgetEnabled"; 
+	public static final String PREF_VISUALISATION_STATUS_BAR_WIDGET_ENABLED = "sourceCodeStatusBarWidgetEnabled";
+
+	public static final String PREF_VISUALISATION_STATUS_CHANGE_THEME_ENABLED = "visualisationStatusChangeThemeEnabled";
+
+	public static final String PREF_DEVELOPER_JAVA_SIMU_MODE_ENABLED = "developerJavaSimuModeEnabled";
+	public static final String PREF_DEVELOPER_TRACING_ENABLED = "developerTracingEnabled";
 
 	private PreferenceConstants() {
 	}

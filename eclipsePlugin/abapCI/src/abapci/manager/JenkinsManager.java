@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 
-import abapci.presenter.ContinuousIntegrationPresenter;
+import abapci.ci.presenter.ContinuousIntegrationPresenter;
 
 public class JenkinsManager {
 

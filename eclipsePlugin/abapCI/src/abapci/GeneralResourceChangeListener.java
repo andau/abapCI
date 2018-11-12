@@ -16,11 +16,11 @@ import org.eclipse.ui.PlatformUI;
 import abapci.activation.Activation;
 import abapci.activation.ActivationHelper;
 import abapci.activation.ActivationPool;
+import abapci.ci.presenter.ContinuousIntegrationPresenter;
+import abapci.ci.views.AddOrUpdateContinuousIntegrationConfigPage;
 import abapci.connections.SapConnection;
 import abapci.domain.ContinuousIntegrationConfig;
 import abapci.jobs.CiJob;
-import abapci.presenter.ContinuousIntegrationPresenter;
-import abapci.views.wizard.AddOrUpdateContinuousIntegrationConfigPage;
 
 public class GeneralResourceChangeListener implements IResourceChangeListener {
 

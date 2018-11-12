@@ -9,10 +9,10 @@ import org.eclipse.core.resources.IProject;
 import com.sap.adt.atc.model.atcworklist.IAtcWorklist;
 
 import abapci.activation.Activation;
+import abapci.ci.presenter.ContinuousIntegrationPresenter;
 import abapci.domain.AbapPackageTestState;
 import abapci.domain.TestState;
 import abapci.handlers.AbapAtcHandler;
-import abapci.presenter.ContinuousIntegrationPresenter;
 import abapci.testResult.TestResult;
 import abapci.testResult.TestResultSummary;
 import abapci.utils.AtcResultAnalyzer;

@@ -15,11 +15,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import abapci.ci.views.AbapCiDashboardView;
 import abapci.domain.AbapPackageTestState;
 import abapci.domain.ErrorPriority;
 import abapci.domain.InvalidItem;
 import abapci.testResult.TestResult;
-import abapci.views.AbapCiDashboardView;
 
 public class DashboardTestResultVisualizerTest {
 

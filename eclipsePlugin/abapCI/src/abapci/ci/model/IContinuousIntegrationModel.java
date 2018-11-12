@@ -1,4 +1,4 @@
-package abapci.model;
+package abapci.ci.model;
 
 import java.util.List;
 

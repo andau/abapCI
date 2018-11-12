@@ -19,6 +19,7 @@ import abapci.coloredProject.model.projectColor.DefaultEclipseProjectColor;
 import abapci.coloredProject.samples.ColoredProjectTestSample;
 import abapci.feature.SourceCodeVisualisationFeature;
 import abapci.feature.activeFeature.ColoredProjectFeature;
+import abapci.utils.StringUtils;
 
 public class WorkspaceColorConfigurationTest {
 
@@ -64,8 +65,12 @@ public class WorkspaceColorConfigurationTest {
 
 		sourceCodeVisualisationFeature.setChangeStatusBarBackgroundColorEnabled(true);
 		IColoringConfig coloredProjectConfig = testStateColoringConfigFactory.create(greenColoredProject);
+		Mockito.when(project.getName()).thenReturn(greenColoredProject.getName());
+		assertEquals(StringUtils.EMPTY, cut.getTestStateOutput(project));
 
-		cut.addOrUpdateTestStateColoring(coloredProjectConfig);
+		cut.addOrUpdateTestStateColoring(coloredProjectConfig, "Testoutput");
+
+		assertEquals("Testoutput", cut.getTestStateOutput(project));
 
 		assertEquals(1, cut.getNumColoredProjects());
 		assertEquals(true, cut.isConfigured(project));
@@ -78,7 +83,7 @@ public class WorkspaceColorConfigurationTest {
 
 		sourceCodeVisualisationFeature.setChangeStatusBarBackgroundColorEnabled(true);
 		IColoringConfig testStateColoringConfig = testStateColoringConfigFactory.create(greenColoredProject);
-		cut.addOrUpdateTestStateColoring(testStateColoringConfig);
+		cut.addOrUpdateTestStateColoring(testStateColoringConfig, StringUtils.EMPTY);
 
 		coloredProjectFeature.setTitleIconActive(true);
 		IColoringConfig projectColoringConfig = projectColoringConfigFactory.create(blueColoredProject);
@@ -102,7 +107,7 @@ public class WorkspaceColorConfigurationTest {
 
 		sourceCodeVisualisationFeature.setChangeStatusBarBackgroundColorEnabled(true);
 		IColoringConfig testStateColoringConfig = testStateColoringConfigFactory.create(greenColoredProject);
-		cut.addOrUpdateTestStateColoring(testStateColoringConfig);
+		cut.addOrUpdateTestStateColoring(testStateColoringConfig, StringUtils.EMPTY);
 
 		assertEquals(greenColoredProject.getColor().getRGB(),
 				cut.getColoring(project).getStatusBarColor().getColor().getRGB());

@@ -15,11 +15,11 @@ import com.sap.adt.tools.abapsource.abapunit.IAbapUnitResult;
 import com.sap.adt.tools.abapsource.abapunit.IAbapUnitResultItem;
 
 import abapci.activation.Activation;
+import abapci.ci.views.ViewModel;
 import abapci.domain.ErrorPriority;
 import abapci.domain.InvalidItem;
 import abapci.utils.AlertDetailMessageExtractor;
 import abapci.utils.InvalidItemUtil;
-import abapci.views.ViewModel;
 
 public class TestResultSummaryFactory {
 	private static final IProject UNDEFINED_PROJECT = null;

@@ -37,4 +37,9 @@ public class ProjectColoringConfigFactory implements IColoringConfigFactory {
 
 	}
 
+	public IColoringConfig createDefault(String projectName) {
+		return new ColoredProjectConfig(projectName, new DefaultEclipseProjectColor(), new DefaultEclipseProjectColor(),
+				new DefaultEclipseProjectColor(), new DefaultEclipseProjectColor(), new DefaultEclipseProjectColor());
+	}
+
 }

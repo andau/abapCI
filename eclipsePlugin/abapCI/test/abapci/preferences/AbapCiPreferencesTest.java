@@ -1,21 +1,25 @@
 package abapci.preferences;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.eclipse.swt.widgets.Composite;
-import org.junit.Ignore;
+import org.eclipse.swt.widgets.Shell;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.powermock.reflect.Whitebox;
 
 public class AbapCiPreferencesTest {
 
-	Composite fieldEditorParent = Mockito.mock(Composite.class); 
+	private static final int MINIMUM_EXPECTED_UI_ITEMS = 50;
+	Composite fieldEditorParent = new Shell();
+
 	@Test
-	@Ignore 
 	public void testCreateFieldEditors() {
-		AbapCiPreferences cut = new AbapCiPreferences(); 
-		//TODO mocking the composite parent 
-		Whitebox.setInternalState(cut, "fieldEditorParent" , fieldEditorParent);
-		cut.createFieldEditors(); 
+		AbapCiPreferences cut = new AbapCiPreferences();
+		Whitebox.setInternalState(cut, "fieldEditorParent", fieldEditorParent);
+		cut.createFieldEditors();
+		assertTrue(fieldEditorParent.getChildren().length > MINIMUM_EXPECTED_UI_ITEMS);
+		assertFalse(UiItemsTestHelper.findDuplicates(fieldEditorParent.getChildren()));
 	}
 
 }

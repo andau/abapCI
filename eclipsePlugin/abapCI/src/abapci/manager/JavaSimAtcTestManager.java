@@ -6,10 +6,10 @@ import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IProject;
 import abapci.activation.Activation;
+import abapci.ci.presenter.ContinuousIntegrationPresenter;
 import abapci.domain.AbapPackageTestState;
 import abapci.domain.TestState;
 import abapci.handlers.JavaAtcSimuHandler;
-import abapci.presenter.ContinuousIntegrationPresenter;
 import abapci.testResult.TestResultSummary;
 
 public class JavaSimAtcTestManager extends AbstractTestManager implements IAtcTestManager {

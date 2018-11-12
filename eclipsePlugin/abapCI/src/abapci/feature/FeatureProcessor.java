@@ -9,16 +9,15 @@ import org.eclipse.swt.widgets.Display;
 
 import abapci.AbapCiPluginHelper;
 import abapci.activation.Activation;
+import abapci.ci.presenter.ContinuousIntegrationPresenter;
 import abapci.domain.TestState;
 import abapci.feature.activeFeature.AtcFeature;
-import abapci.feature.activeFeature.ThemeColorChangerFeature;
 import abapci.feature.activeFeature.UnitFeature;
 import abapci.manager.DevelopmentProcessManager;
 import abapci.manager.IAtcTestManager;
 import abapci.manager.JavaSimAtcTestManager;
 import abapci.manager.ThemeUpdateManager;
 import abapci.manager.UnitTestManager;
-import abapci.presenter.ContinuousIntegrationPresenter;
 
 public class FeatureProcessor {
 
@@ -32,7 +31,7 @@ public class FeatureProcessor {
 	private final DevelopmentProcessManager developmentProcessManager;
 	private UnitFeature unitFeature;
 	private AtcFeature atcFeature;
-	private ThemeColorChangerFeature themeColorChangerFeature;
+	private SourceCodeVisualisationFeature sourceCodeVisualisationFeature;
 
 	public FeatureProcessor(ContinuousIntegrationPresenter presenter, IProject project, List<String> initialPackages) {
 
@@ -57,7 +56,7 @@ public class FeatureProcessor {
 		FeatureFacade featureFacade = new FeatureFacade();
 		unitFeature = featureFacade.getUnitFeature();
 		atcFeature = featureFacade.getAtcFeature();
-		themeColorChangerFeature = featureFacade.getColorChangerFeature();
+		sourceCodeVisualisationFeature = featureFacade.getSourceCodeVisualisationFeature();
 
 	}
 
@@ -94,7 +93,7 @@ public class FeatureProcessor {
 
 				developmentProcessManager.setUnitTeststate(unitTestState);
 
-				if (themeColorChangerFeature.isActive()) {
+				if (sourceCodeVisualisationFeature.isThemeUpdateEnabled()) {
 					themeUpdateManager.updateTheme(developmentProcessManager.getSourcecodeState());
 				}
 
@@ -110,7 +109,9 @@ public class FeatureProcessor {
 
 				if (atcTestState != null) {
 					developmentProcessManager.setAtcTeststate(atcTestState);
-					themeUpdateManager.updateTheme(developmentProcessManager.getSourcecodeState());
+					if (sourceCodeVisualisationFeature.isThemeUpdateEnabled()) {
+						themeUpdateManager.updateTheme(developmentProcessManager.getSourcecodeState());
+					}
 				}
 			}
 

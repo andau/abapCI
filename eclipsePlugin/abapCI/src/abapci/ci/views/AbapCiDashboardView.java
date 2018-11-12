@@ -1,4 +1,4 @@
-package abapci.views;
+package abapci.ci.views;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -14,8 +14,8 @@ import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.part.ViewPart;
 
-import abapci.AbapCiPlugin;
-import abapci.presenter.ContinuousIntegrationPresenter;
+import abapci.AbapCiPluginHelper;
+import abapci.ci.presenter.ContinuousIntegrationPresenter;
 import abapci.testResult.visualizer.DashboardTestResultVisualizer;
 import abapci.testResult.visualizer.ITestResultVisualizer;
 
@@ -24,7 +24,7 @@ public class AbapCiDashboardView extends ViewPart {
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
-	public static final String ID = "abapci.views.AbapCiDashboardView";
+	public static final String ID = "abapci.ci.views.AbapCiDashboardView";
 
 	private ContinuousIntegrationPresenter presenter;
 
@@ -38,8 +38,6 @@ public class AbapCiDashboardView extends ViewPart {
 	private final ITestResultVisualizer testResultVisualizer;
 
 	public AbapCiDashboardView() {
-		ViewModel.INSTANCE.getOverallTestState();
-		ViewModel.INSTANCE.getOverallInfoline();
 		testResultVisualizer = new DashboardTestResultVisualizer(this);
 	}
 
@@ -51,14 +49,14 @@ public class AbapCiDashboardView extends ViewPart {
 		lblOverallTestState.setForeground(foregroundColor);
 		infoline.setForeground(foregroundColor);
 		openErrorHyperlink.setForeground(foregroundColor);
-
 	}
 
 	@Override
 	public void createPartControl(Composite parent) {
 
 		this.parent = parent;
-		presenter = AbapCiPlugin.getDefault().continuousIntegrationPresenter;
+		AbapCiPluginHelper abapCiPluginHelper = new AbapCiPluginHelper();
+		presenter = abapCiPluginHelper.getContinousIntegrationPresenter();
 
 		entireContainer = new Composite(parent, SWT.NONE);
 		entireContainer.setLayout(new GridLayout(1, false));
@@ -95,19 +93,14 @@ public class AbapCiDashboardView extends ViewPart {
 		if (presenter != null) {
 			presenter.registerDashboardView(this);
 		} else {
-			lblOverallTestState.setText("Unit testrun deactivated");
-			infoline.setText("Activate 'Run Unit tests after an ABAP object' and restart");
+			lblOverallTestState.setText("No active test run found");
+			infoline.setText("Activate Unit testrun or ATC testrun and restart");
 		}
 
 	}
 
 	public Composite getEntireContainer() {
 		return entireContainer;
-	}
-
-	@Override
-	public void setFocus() {
-		// TODO Auto-generated method stub
 	}
 
 	public ITestResultVisualizer getTestResultVisualizer() {
@@ -128,8 +121,11 @@ public class AbapCiDashboardView extends ViewPart {
 	}
 
 	public Hyperlink getOpenErrorHyperlink() {
-		// TODO Auto-generated method stub
 		return openErrorHyperlink;
+	}
+
+	@Override
+	public void setFocus() {
 	}
 
 }

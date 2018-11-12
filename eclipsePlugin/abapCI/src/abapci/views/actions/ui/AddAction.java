@@ -5,8 +5,8 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
-import abapci.presenter.ContinuousIntegrationPresenter;
-import abapci.views.wizard.AddOrUpdateContinuousIntegrationConfigPage;
+import abapci.ci.presenter.ContinuousIntegrationPresenter;
+import abapci.ci.views.AddOrUpdateContinuousIntegrationConfigPage;
 
 public class AddAction extends Action {
 

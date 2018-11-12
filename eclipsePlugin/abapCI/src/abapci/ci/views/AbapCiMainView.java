@@ -1,4 +1,4 @@
-package abapci.views;
+package abapci.ci.views;
 
 import java.net.URI;
 import java.util.List;
@@ -43,15 +43,14 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.sap.adt.project.AdtCoreProjectServiceFactory;
 
-import abapci.AbapCiPlugin;
 import abapci.AbapCiPluginHelper;
+import abapci.ci.presenter.ContinuousIntegrationPresenter;
 import abapci.domain.AbapPackageTestState;
 import abapci.feature.FeatureFacade;
 import abapci.feature.activeFeature.AtcFeature;
 import abapci.feature.activeFeature.JenkinsFeature;
 import abapci.feature.activeFeature.UnitFeature;
 import abapci.lang.UiTexts;
-import abapci.presenter.ContinuousIntegrationPresenter;
 import abapci.utils.EditorHandler;
 import abapci.utils.InvalidItemUtil;
 import abapci.utils.StringUtils;
@@ -69,7 +68,7 @@ public class AbapCiMainView extends ViewPart {
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
-	public static final String ID = "abapci.views.AbapCiMainView";
+	public static final String ID = "abapci.ci.views.AbapCiMainView";
 
 	Composite entireContainer;
 	private TableViewer tableViewer;
@@ -94,7 +93,12 @@ public class AbapCiMainView extends ViewPart {
 	private JenkinsFeature jenkinsFeature;
 
 	public AbapCiMainView() {
+		initFeatures();
 		registerPreferencePropertyChangeListener();
+	}
+
+	public AbapCiMainView(boolean forTest) {
+
 	}
 
 	private void registerPreferencePropertyChangeListener() {
@@ -125,7 +129,6 @@ public class AbapCiMainView extends ViewPart {
 
 	@Override
 	public void createPartControl(Composite parent) {
-		initFeatures();
 
 		entireContainer = new Composite(parent, SWT.NONE);
 		entireContainer.setLayout(new GridLayout(1, false));
@@ -137,9 +140,9 @@ public class AbapCiMainView extends ViewPart {
 		createTableColumns();
 
 		statusLabel = new CLabel(entireContainer, SWT.BOTTOM);
-		statusLabel.setBounds(0, 10, 500, 10);
 
-		continuousIntegrationPresenter = AbapCiPlugin.getDefault().continuousIntegrationPresenter;
+		AbapCiPluginHelper abapCiPluginHelper = new AbapCiPluginHelper();
+		continuousIntegrationPresenter = abapCiPluginHelper.getContinousIntegrationPresenter();
 		if (continuousIntegrationPresenter != null) {
 			continuousIntegrationPresenter.setView(this);
 			tableViewer.setInput(continuousIntegrationPresenter.getAbapPackageTestStatesForCurrentProject());
@@ -157,11 +160,12 @@ public class AbapCiMainView extends ViewPart {
 		gridData.horizontalAlignment = GridData.FILL;
 		tableViewer.getControl().setLayoutData(gridData);
 
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(tableViewer.getControl(), "abapCI.viewer");
-		getSite().setSelectionProvider(tableViewer);
 		makeActions();
 		hookContextMenu();
 		contributeToActionBars();
+
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(tableViewer.getControl(), "abapCI.viewer");
+		getSite().setSelectionProvider(tableViewer);
 
 	}
 
@@ -220,8 +224,6 @@ public class AbapCiMainView extends ViewPart {
 	}
 
 	private void makeActions() {
-
-		// TODO set Images for actions
 
 		jenkinsAction = new JenkinsCiAction(continuousIntegrationPresenter, "Run jenkins",
 				"Run jenkins for selected packages");

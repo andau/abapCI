@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.preference.ColorSelector;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -39,10 +38,13 @@ import abapci.coloredProject.presenter.ColoredProjectsPresenter;
 import abapci.feature.FeatureFacade;
 import abapci.feature.activeFeature.ColoredProjectFeature;
 import abapci.preferences.PreferenceConstants;
+import abapci.utils.ResourcePluginHelper;
 
 public class AddOrUpdateColoredProjectPage extends Dialog {
 
 	final static Color HEADER_COLOR = new Color(Display.getCurrent(), 0, 0, 255);
+
+	ResourcePluginHelper resourcePluginHelper;
 
 	ColoredProjectsPresenter presenter;
 	Combo comboColoredProject;
@@ -58,6 +60,7 @@ public class AddOrUpdateColoredProjectPage extends Dialog {
 		this.presenter = presenter;
 		this.coloredProject = coloredProject;
 		this.showPopUpButton = showPopUpButton;
+		resourcePluginHelper = new ResourcePluginHelper();
 	}
 
 	@Override
@@ -72,7 +75,7 @@ public class AddOrUpdateColoredProjectPage extends Dialog {
 
 		addEmptyLine(container);
 
-		addProjectChooser(container);
+		addProjectComboBox(container);
 
 		addColorChooser(container);
 
@@ -97,7 +100,7 @@ public class AddOrUpdateColoredProjectPage extends Dialog {
 		return container;
 	}
 
-	private void addProjectChooser(Composite container) {
+	private void addProjectComboBox(Composite container) {
 		Label coloredProjectLabel = new Label(container, SWT.READ_ONLY);
 		coloredProjectLabel.setText("Project:");
 		coloredProjectLabel.setToolTipText("Select the project which should be colored");
@@ -138,9 +141,10 @@ public class AddOrUpdateColoredProjectPage extends Dialog {
 	}
 
 	private void addDescriptionPart(Composite parent, Composite container) {
-		Label lblDescriptionHeader = new Label(container, SWT.NULL);
-		lblDescriptionHeader.setText("Description:");
-		lblDescriptionHeader.setForeground(HEADER_COLOR);
+		Label descriptionLabel = new Label(container, SWT.NONE);
+
+		descriptionLabel.setText("Description");
+		descriptionLabel.setForeground(HEADER_COLOR);
 
 		Text description = new Text(container, SWT.WRAP | SWT.MULTI | SWT.BORDER);
 
@@ -168,14 +172,14 @@ public class AddOrUpdateColoredProjectPage extends Dialog {
 		addEmptyLine(container);
 
 		Link link = new Link(container, SWT.NONE);
-		link.setText("The details can be configured in the <a>Eclipse preference</a>");
+		link.setText("The details can be configured in the <a>Eclipse preferences</a>");
 
 		link.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				final PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(parent.getShell(),
-						"abapci.preferences.abapCiPreferences", null, null);
+						"abapci.preferences.coloredProjectsPreferences", null, null);
 				dialog.open();
 			}
 		});
@@ -203,7 +207,8 @@ public class AddOrUpdateColoredProjectPage extends Dialog {
 	}
 
 	private String[] getProjectNames() {
-		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+		IProject[] projects = resourcePluginHelper.getProjects();
+
 		List<String> projectNames = Arrays.stream(projects).map(item -> item.getName()).collect(Collectors.toList());
 		return projectNames.toArray(new String[0]);
 	}

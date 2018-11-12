@@ -17,13 +17,14 @@ import abapci.coloredProject.model.projectColor.IProjectColor;
 
 public class TitleIconColorChanger extends ColorChanger {
 
-	private IEditorPart editorPart;
-	private TitleIconOverlayRectangle rectangle; 
+	private final IEditorPart editorPart;
+	private final TitleIconOverlayRectangle rectangle;
 
-	public TitleIconColorChanger(IEditorPart editorPart, IProjectColor projectColor, TitleIconOverlayRectangle rectangle) {
+	public TitleIconColorChanger(IEditorPart editorPart, IProjectColor projectColor,
+			TitleIconOverlayRectangle rectangle) {
 		this.editorPart = editorPart;
 		this.projectColor = projectColor;
-		this.rectangle = rectangle; 
+		this.rectangle = rectangle;
 	}
 
 	@Override
@@ -41,15 +42,16 @@ public class TitleIconColorChanger extends ColorChanger {
 
 			try {
 
-				Image currentTitleImage = (Image) getTitleIcon(editorPart);
-				
-                Image newTitleImage =  new Image(Display.getCurrent(), currentTitleImage, SWT.IMAGE_COPY);
- 
+				Image currentTitleImage = getTitleIcon(editorPart);
+
+				Image newTitleImage = new Image(Display.getCurrent(), currentTitleImage, SWT.IMAGE_COPY);
+				newTitleImage.setBackground(projectColor.getColor());
+
 				Field f = Image.class.getDeclaredField("transparentPixel");
 				f.setAccessible(true);
 				f.set(newTitleImage, 100);
 
-     			GC gc = new GC(newTitleImage);
+				GC gc = new GC(newTitleImage);
 				gc.setForeground(projectColor.getColor());
 				int imageWidth = newTitleImage.getBounds().width;
 
@@ -61,15 +63,15 @@ public class TitleIconColorChanger extends ColorChanger {
 						yDrawingLineCenterPosition);
 				gc.dispose();
 
-				WorkbenchPart workbenchPart = (WorkbenchPart) editorPart;				
+				WorkbenchPart workbenchPart = (WorkbenchPart) editorPart;
 				Method m = WorkbenchPart.class.getDeclaredMethod("setTitleImage", Image.class);
-			    m.setAccessible(true);
+				m.setAccessible(true);
 				m.invoke(workbenchPart, newTitleImage);
 
-				//Field titleImage = WorkbenchPart.class.getDeclaredField("titleImage");
-				//titleImage.setAccessible(true);
-				//titleImage.set(workbenchPart, newTitleImage);
-				
+				// Field titleImage = WorkbenchPart.class.getDeclaredField("titleImage");
+				// titleImage.setAccessible(true);
+				// titleImage.set(workbenchPart, newTitleImage);
+
 			} catch (IllegalArgumentException | IllegalAccessException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

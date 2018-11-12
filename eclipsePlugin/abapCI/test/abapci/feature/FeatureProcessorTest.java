@@ -15,6 +15,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
 import abapci.AbapCiPlugin;
+import abapci.ci.presenter.ContinuousIntegrationPresenter;
 import abapci.domain.SourcecodeState;
 import abapci.domain.TestState;
 import abapci.feature.activeFeature.AtcFeature;
@@ -23,7 +24,6 @@ import abapci.manager.AtcTestManager;
 import abapci.manager.ThemeUpdateManager;
 import abapci.manager.UnitTestManager;
 import abapci.preferences.PreferenceConstants;
-import abapci.presenter.ContinuousIntegrationPresenter;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(AbapCiPlugin.class)

@@ -12,8 +12,8 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.osgi.service.prefs.BackingStoreException;
 
+import abapci.ci.views.ViewModel;
 import abapci.domain.Suppression;
-import abapci.views.ViewModel;
 
 public class DeleteSuppressionAction extends Action {
 

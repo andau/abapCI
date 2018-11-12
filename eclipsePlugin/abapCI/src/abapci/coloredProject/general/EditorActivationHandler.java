@@ -14,12 +14,14 @@ import abapci.coloredProject.model.projectColor.DefaultEclipseProjectColor;
 import abapci.coloredProject.presenter.ColoredProjectsPresenter;
 import abapci.coloredProject.view.AddOrUpdateColoredProjectPage;
 import abapci.feature.FeatureFacade;
+import abapci.feature.SourceCodeVisualisationFeature;
 import abapci.feature.activeFeature.ColoredProjectFeature;
 
 public class EditorActivationHandler {
 
 	private final DisplayColorChanger displayColorChanger;
 	private ColoredProjectFeature coloredProjectFeature;
+	private SourceCodeVisualisationFeature sourceCodeVisualisationFeature;
 	private final AbapCiPluginHelper abapCiPluginHelper;
 
 	public EditorActivationHandler() {
@@ -34,7 +36,7 @@ public class EditorActivationHandler {
 	private void initFeatures() {
 		FeatureFacade featureFacade = new FeatureFacade();
 		coloredProjectFeature = featureFacade.getColoredProjectFeature();
-
+		sourceCodeVisualisationFeature = featureFacade.getSourceCodeVisualisationFeature();
 	}
 
 	public void updateDisplayColoring() {
@@ -48,14 +50,15 @@ public class EditorActivationHandler {
 
 			if (coloredProjectFeature.isActive()) {
 
-				WorkspaceColorConfiguration colorProxy = abapCiPluginHelper.getWorkspaceColorConfiguration();
-				if (!colorProxy.isConfigured(currentProject)) {
+				WorkspaceColorConfiguration colorConfiguration = abapCiPluginHelper.getWorkspaceColorConfiguration();
+				if (!colorConfiguration.isConfigured(currentProject)) {
 					showDialogForProject(currentProject);
 				}
 
-				DisplayColor displayColoring = colorProxy.getColoring(currentProject);
+				DisplayColor displayColoring = colorConfiguration.getColoring(currentProject);
 
-				displayColorChanger.change(activeEditor, displayColoring, coloredProjectFeature);
+				displayColorChanger.change(activeEditor, displayColoring, coloredProjectFeature,
+						sourceCodeVisualisationFeature);
 
 			}
 		}

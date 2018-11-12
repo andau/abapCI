@@ -15,13 +15,16 @@ import abapci.coloredProject.colorChanger.StatusBarWidgetColorChanger;
 import abapci.coloredProject.colorChanger.TitleIconColorChanger;
 import abapci.coloredProject.colorChanger.TitleIconOverlayRectangle;
 import abapci.coloredProject.exeption.ProjectColorNotSetException;
+import abapci.feature.SourceCodeVisualisationFeature;
 import abapci.feature.activeFeature.ColoredProjectFeature;
 
 public class DisplayColorChanger {
 
-	public void change(IEditorPart editorPart, DisplayColor displayColor, ColoredProjectFeature coloredProjectFeature) {
+	public void change(IEditorPart editorPart, DisplayColor displayColor, ColoredProjectFeature coloredProjectFeature,
+			SourceCodeVisualisationFeature sourceCodeVisualisationFeature) {
 
-		Set<ColorChanger> activeColorChangers = getActiveColorChangers(editorPart, coloredProjectFeature, displayColor);
+		Set<ColorChanger> activeColorChangers = getActiveColorChangers(editorPart, coloredProjectFeature,
+				sourceCodeVisualisationFeature, displayColor);
 
 		for (ColorChanger colorChanger : activeColorChangers) {
 			try {
@@ -36,7 +39,8 @@ public class DisplayColorChanger {
 	}
 
 	private Set<ColorChanger> getActiveColorChangers(IEditorPart editorPart,
-			ColoredProjectFeature coloredProjectFeature, DisplayColor displayColor) {
+			ColoredProjectFeature coloredProjectFeature, SourceCodeVisualisationFeature sourceCodeVisualisationFeature,
+			DisplayColor displayColor) {
 
 		Set<ColorChanger> activeColorChangers = new HashSet<>();
 
@@ -46,13 +50,15 @@ public class DisplayColorChanger {
 			activeColorChangers.add(new TitleIconColorChanger(editorPart, displayColor.getTitleIconColor(), rectangle));
 		}
 
-		if (!displayColor.getStatusBarColor().isSuppressed()) {
+		if (coloredProjectFeature.isChangeStatusBarActive()) {
 			activeColorChangers.add(
 					new StatusBarColorChanger(Display.getCurrent().getActiveShell(), displayColor.getStatusBarColor()));
 		}
 
-		if (!displayColor.getStatusWidgetBackgroundColor().isSuppressed()) {
-			activeColorChangers.add(new StatusBarWidgetColorChanger(displayColor.getStatusWidgetBackgroundColor()));
+		if (coloredProjectFeature.isStatusBarWidgetActive()
+				|| sourceCodeVisualisationFeature.isShowStatusBarWidgetEnabled()) {
+			activeColorChangers.add(new StatusBarWidgetColorChanger(displayColor.getStatusWidgetBackgroundColor(),
+					displayColor.getTestStateOutput()));
 		}
 
 		if (!displayColor.getLeftAnnotationBarColor().isSuppressed()) {

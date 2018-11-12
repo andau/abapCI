@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import abapci.Exception.ContinuousIntegrationConfigFileParseException;
+import abapci.ci.model.IContinuousIntegrationModel;
 import abapci.domain.ContinuousIntegrationConfig;
-import abapci.model.IContinuousIntegrationModel;
 
 public class ContinuousIntegrationTestModel implements IContinuousIntegrationModel {
 
