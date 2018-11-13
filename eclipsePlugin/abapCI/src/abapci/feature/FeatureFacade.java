@@ -80,13 +80,6 @@ public class FeatureFacade {
 		return featureCreator.createSimpleToggleFeature(FeatureType.SHOW_DIALOG_NEW_PACKAGE_FOR_CI_RUN);
 	}
 
-	public void setShowDialogNewPackageForCiRun(boolean active) {
-		SimpleToggleFeature simpleToggleFeature = featureCreator
-				.createSimpleToggleFeature(FeatureType.SHOW_DIALOG_NEW_PACKAGE_FOR_CI_RUN);
-		simpleToggleFeature.setActive(active);
-		simpleToggleFeature.writePreference();
-	}
-
 	public void setAtcFeatureVariant(String variant) {
 		getPrefs().setValue(PreferenceConstants.PREF_ATC_VARIANT, variant);
 	}

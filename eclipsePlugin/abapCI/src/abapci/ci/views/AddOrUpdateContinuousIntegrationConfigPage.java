@@ -7,6 +7,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -25,9 +26,10 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.PreferencesUtil;
 
+import abapci.AbapCiPlugin;
 import abapci.ci.presenter.ContinuousIntegrationPresenter;
 import abapci.domain.ContinuousIntegrationConfig;
-import abapci.feature.FeatureFacade;
+import abapci.preferences.PreferenceConstants;
 
 public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 
@@ -67,6 +69,10 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 		addPackageTextfield(container);
 
 		addActivatedCheckbox(container);
+
+		addEmptyLine(container);
+
+		addEmptyLine(container);
 
 		addShowAgainCheckbox(container);
 
@@ -111,7 +117,8 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 		addEmptyLine(container);
 
 		Link link = new Link(container, SWT.NONE);
-		link.setText("The details can be configured in the <a>Eclipse preferences</a>");
+		link.setText(
+				"Unit test and ATC runs and the type of visualisation of the test run results can be configured in the <a>Eclipse preferences</a>");
 
 		link.addSelectionListener(new SelectionAdapter() {
 
@@ -217,11 +224,25 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 	@Override
 	protected void okPressed() {
 		if (!showPopUpYes.getSelection()) {
-			FeatureFacade featureFacade = new FeatureFacade();
-			featureFacade.setShowDialogNewPackageForCiRun(showPopUpYes.getSelection());
+
+			setDialogPreference();
 		}
+
 		presenter.addContinousIntegrationConfig(new ContinuousIntegrationConfig(cbProjectContent.getText(),
 				packageText.getText(), activated.getSelection(), activated.getSelection()));
+
 		super.okPressed();
+	}
+
+	private void setDialogPreference() {
+		IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore();
+		prefs.setValue(PreferenceConstants.PREF_DIALOG_NEW_PACKAGE_FOR_CI_RUN_ENABLED, showPopUpYes.getSelection());
+	}
+
+	@Override
+	protected void cancelPressed() {
+
+		setDialogPreference();
+		super.cancelPressed();
 	}
 }

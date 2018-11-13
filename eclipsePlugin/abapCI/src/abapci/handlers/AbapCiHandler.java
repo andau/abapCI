@@ -8,7 +8,7 @@ import org.eclipse.ui.PlatformUI;
 
 /**
  * Our sample handler extends AbstractHandler, an IHandler base class.
- * 
+ *
  * @see org.eclipse.core.commands.IHandler
  * @see org.eclipse.core.commands.AbstractHandler
  */
@@ -18,7 +18,7 @@ public class AbapCiHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		try {
 			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-					.showView("abapci.views.AbapCiMainView");
+					.showView("abapci.ci.views.AbapCiMainView");
 		} catch (PartInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -26,9 +26,8 @@ public class AbapCiHandler extends AbstractHandler {
 
 		return null;
 	}
-	
-	public boolean isSuppressed() 
-	{
-		return false; 
+
+	public boolean isSuppressed() {
+		return false;
 	}
 }

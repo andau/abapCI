@@ -90,7 +90,7 @@ public class AddOrUpdateColoredProjectPage extends Dialog {
 
 		try {
 			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-					.showView("abapci.views.AbapCiColoredProjectView");
+					.showView("abapci.coloredProject.views.AbapCiColoredProjectView");
 		} catch (PartInitException e) {
 			// if project color view can not be opened we keep on going as this is not
 			// critical
