@@ -1,7 +1,12 @@
 package abapci;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IProject;
@@ -13,6 +18,9 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 
+import com.sap.adt.atc.IAtcCheckableItem;
+import com.sap.adt.atc.ui.internal.launch.AtcLaunchShortcut;
+
 import abapci.activation.Activation;
 import abapci.activation.ActivationHelper;
 import abapci.activation.ActivationPool;
@@ -20,6 +28,7 @@ import abapci.ci.presenter.ContinuousIntegrationPresenter;
 import abapci.ci.views.AddOrUpdateContinuousIntegrationConfigPage;
 import abapci.connections.SapConnection;
 import abapci.domain.ContinuousIntegrationConfig;
+import abapci.handlers.MyAtcCheckableItem;
 import abapci.jobs.CiJob;
 
 public class GeneralResourceChangeListener implements IResourceChangeListener {
@@ -89,7 +98,10 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 							job.start(true);
 						} else if (!activations.isEmpty() && (activationPool.hasUnprocessedActivationClicks()
 								|| currentProject.hasNature(JavaCore.NATURE_ID))) {
+
 							IProject activatedProject = activationPool.getCurrentProject();
+							executeAtcShortcut(activatedProject, activatedInactiveObjects);
+
 							if (activatedProject != null) {
 								continuousIntegrationPresenter.setCurrentProject(activationPool.getCurrentProject());
 							}
@@ -138,4 +150,47 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 		}
 
 	}
+
+	// EXPERIMENTAL
+
+	private void executeAtcShortcut(IProject project, Collection<Activation> inactiveObjects) {
+		List<IAtcCheckableItem> checkableItems = new ArrayList<>();
+
+		String atcVariant = "ZVAR_GAUTSCH"; // atcFeature
+		for (Activation activation : inactiveObjects) {
+			checkableItems.add(
+					new MyAtcCheckableItem(activation.getUri(), activation.getClass().getName(), activation.getType()));
+		}
+
+		try {
+			runAtcLaunchShortcut(project, checkableItems);
+		} catch (Exception e) {
+			// currently this is only an experimental function therefore we log the
+			// exception and go on
+			e.printStackTrace();
+		}
+
+	}
+
+	private void runAtcLaunchShortcut(IProject project, List<IAtcCheckableItem> checkableItems)
+			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException,
+			SecurityException {
+
+		try {
+
+			Set<IAtcCheckableItem> adtItems = new HashSet<>(checkableItems);
+
+			AtcLaunchShortcut atcLaunchShortcut = new AtcLaunchShortcut();
+			Method launchShortcut = AtcLaunchShortcut.class.getDeclaredMethod("runAtcForSelectedItems", Set.class,
+					IProject.class);
+			launchShortcut.setAccessible(true);
+			launchShortcut.invoke(atcLaunchShortcut, adtItems, project);
+
+		} catch (Exception e) {
+			// currently this is only an experimental function therefore we log the
+			// exception and go on
+			e.printStackTrace();
+		}
+	}
+
 }

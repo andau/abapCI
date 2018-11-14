@@ -13,9 +13,9 @@ import abapci.ci.presenter.ContinuousIntegrationPresenter;
 import abapci.domain.TestState;
 import abapci.feature.activeFeature.AtcFeature;
 import abapci.feature.activeFeature.UnitFeature;
+import abapci.manager.AtcTestManager;
 import abapci.manager.DevelopmentProcessManager;
 import abapci.manager.IAtcTestManager;
-import abapci.manager.JavaSimAtcTestManager;
 import abapci.manager.ThemeUpdateManager;
 import abapci.manager.UnitTestManager;
 
@@ -39,8 +39,9 @@ public class FeatureProcessor {
 
 		aUnitTestManager = new UnitTestManager(presenter, project, initialPackages);
 		// For testing purposes
-		atcTestManager = new JavaSimAtcTestManager(presenter, project, initialPackages);
-		// atcTestManager = new AtcTestManager(presenter, project, initialPackages);
+		// atcTestManager = new JavaSimAtcTestManager(presenter, project,
+		// initialPackages);
+		atcTestManager = new AtcTestManager(presenter, project, initialPackages);
 
 		developmentProcessManager = new DevelopmentProcessManager();
 
