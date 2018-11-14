@@ -28,7 +28,8 @@ public class AtcCiAction extends AbstractCiAction {
 		for (AbapPackageTestState abapPackageTestState : getSelectedAbapPackageTestStates()) {
 
 			try {
-				IProject project = GeneralProjectUtil.getAbapProjectByProjectName(abapPackageTestState.getProjectName());
+				IProject project = GeneralProjectUtil
+						.getAbapProjectByProjectName(abapPackageTestState.getProjectName());
 				IAtcWorklist atcWorklist = new AbapAtcHandler(continuousIntegrationPresenter.getAtcFeature())
 						.executePackage(project, abapPackageTestState.getPackageName());
 				TestResultSummary atcTestResultSummary = new TestResultSummary(project,

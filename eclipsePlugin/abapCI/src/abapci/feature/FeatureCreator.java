@@ -41,6 +41,8 @@ public class FeatureCreator {
 		initPrefs();
 		AtcFeature feature = new AtcFeature();
 		feature.setRunActivatedObjects(prefs.getBoolean(PreferenceConstants.PREF_ATC_RUN_ACTIVATED_OBJECTS_ONLY));
+		feature.setAnnotationhandlingEnabled(
+				prefs.getBoolean(PreferenceConstants.PREF_ATC_ANNOTATION_HANDLING_ENABLED));
 		feature.setActive(feature.isRunActivatedObjects());
 		feature.setVariant(prefs.getString(PreferenceConstants.PREF_ATC_VARIANT));
 		return feature;

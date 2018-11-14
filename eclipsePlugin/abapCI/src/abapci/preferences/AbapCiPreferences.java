@@ -83,6 +83,9 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 		addField(new StringFieldEditor(PreferenceConstants.PREF_ATC_VARIANT, "&Run ATC with variant:",
 				getFieldEditorParent()));
 
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ATC_ANNOTATION_HANDLING_ENABLED,
+				"&Dynamically update annotations (experimental)", getFieldEditorParent()));
+
 	}
 
 	private void createSourceCodeVisualisationChapter() {

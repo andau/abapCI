@@ -28,8 +28,23 @@ public class TitleIconColorChanger extends ColorChanger {
 	}
 
 	@Override
-	public void change() throws ActiveEditorNotSetException, ProjectColorNotSetException {
+	public void change() {
+		Runnable task = () -> {
+			try {
+				changeWithShortDelay();
+			} catch (ActiveEditorNotSetException | ProjectColorNotSetException | InterruptedException e) {
+				// if an error happens while coloring the editor icons, we go on as this feature
+				// is not critical
+				e.printStackTrace();
+			}
+		};
+		Display.getDefault().asyncExec(task);
+	}
 
+	public void changeWithShortDelay()
+			throws ActiveEditorNotSetException, ProjectColorNotSetException, InterruptedException {
+
+		waitSmallDelayUntilEditorIsLoaded();
 		if (editorPart == null) {
 			throw new ActiveEditorNotSetException();
 		}
@@ -89,6 +104,10 @@ public class TitleIconColorChanger extends ColorChanger {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	private void waitSmallDelayUntilEditorIsLoaded() throws InterruptedException {
+		Thread.sleep(100);
 	}
 
 	private Image getTitleIcon(IEditorPart editorPart) {

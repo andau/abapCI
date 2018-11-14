@@ -82,6 +82,8 @@ public class PreferenceConstants {
 	public static final String PREF_DEVELOPER_JAVA_SIMU_MODE_ENABLED = "developerJavaSimuModeEnabled";
 	public static final String PREF_DEVELOPER_TRACING_ENABLED = "developerTracingEnabled";
 
+	public static final String PREF_ATC_ANNOTATION_HANDLING_ENABLED = "atcAnnotationHandlingEnabled";
+
 	private PreferenceConstants() {
 	}
 

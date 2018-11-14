@@ -81,5 +81,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="com.sap.adt.atc.ui_2.102.0.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
