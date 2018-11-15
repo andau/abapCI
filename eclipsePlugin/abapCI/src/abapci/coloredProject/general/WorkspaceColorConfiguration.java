@@ -35,10 +35,10 @@ public class WorkspaceColorConfiguration {
 
 		coloringConfigFactory = new ProjectColoringConfigFactory(featureFacade.getColoredProjectFeature());
 
-		ColoredProjectModel model = new ColoredProjectModel();
-		List<ColoredProject> coloredProjects = model.getColoredProjects();
+		final ColoredProjectModel model = new ColoredProjectModel();
+		final List<ColoredProject> coloredProjects = model.getColoredProjects();
 
-		for (ColoredProject coloredProject : coloredProjects) {
+		for (final ColoredProject coloredProject : coloredProjects) {
 			IColoringConfig coloredProjectConfig;
 			coloredProjectConfig = coloredProject.isSuppressedColoring()
 					? coloringConfigFactory.createDefault(coloredProject.getName())
@@ -53,13 +53,13 @@ public class WorkspaceColorConfiguration {
 	public void addOrUpdateTestStateColoring(IColoringConfig testStateConfig, String testStateOutput) {
 
 		if (!coloredProjectConfigProjects.containsKey(testStateConfig.getProjectName())) {
-			ColoredProjectConfig projectConfig = new ColoredProjectConfig(testStateConfig.getProjectName(), null,
+			final ColoredProjectConfig projectConfig = new ColoredProjectConfig(testStateConfig.getProjectName(), null,
 					false);
 			coloredProjectConfigProjects.put(testStateConfig.getProjectName(),
 					new ColoredProjectConfigs(projectConfig, testStateConfig));
 		}
 
-		ColoredProjectConfigs testStateColor = coloredProjectConfigProjects.get(testStateConfig.getProjectName());
+		final ColoredProjectConfigs testStateColor = coloredProjectConfigProjects.get(testStateConfig.getProjectName());
 		testStateColor.setTestStateColoring(testStateConfig);
 		testStateColor.setTestStateOutput(testStateOutput);
 	}
@@ -67,10 +67,11 @@ public class WorkspaceColorConfiguration {
 	public void addOrUpdateProjectColoringConfig(IColoringConfig projectConfig) {
 
 		if (coloredProjectConfigProjects.containsKey(projectConfig.getProjectName())) {
-			ColoredProjectConfigs displayColors = coloredProjectConfigProjects.get(projectConfig.getProjectName());
+			final ColoredProjectConfigs displayColors = coloredProjectConfigProjects
+					.get(projectConfig.getProjectName());
 			displayColors.setProjectColoring(projectConfig);
 		} else {
-			ColoredProjectConfig testStateConfig = new ColoredProjectConfig(projectConfig.getProjectName(), null,
+			final ColoredProjectConfig testStateConfig = new ColoredProjectConfig(projectConfig.getProjectName(), null,
 					false);
 			coloredProjectConfigProjects.put(projectConfig.getProjectName(),
 					new ColoredProjectConfigs(projectConfig, testStateConfig));
@@ -90,19 +91,19 @@ public class WorkspaceColorConfiguration {
 			coloredProjectConfigs = new ColoredProjectConfigs(project.getName());
 		}
 
-		Color statusBarProjectColor = takeFirstConfiguredColor(
+		final Color statusBarProjectColor = takeFirstConfiguredColor(
 				coloredProjectConfigs.getTestStateColoredProjectConfig().getStatusBarColor(),
 				coloredProjectConfigs.getProjectColoredProjectConfig().getStatusBarColor());
 
-		Color leftAnnotationBarProjectColor = takeFirstConfiguredColor(
+		final Color leftAnnotationBarProjectColor = takeFirstConfiguredColor(
 				coloredProjectConfigs.getTestStateColoredProjectConfig().getLeftAnnotationBarColor(),
 				coloredProjectConfigs.getProjectColoredProjectConfig().getLeftAnnotationBarColor());
 
-		Color rightAnnotationBarProjectColor = takeFirstConfiguredColor(
+		final Color rightAnnotationBarProjectColor = takeFirstConfiguredColor(
 				coloredProjectConfigs.getTestStateColoredProjectConfig().getRightAnnotationBarColor(),
 				coloredProjectConfigs.getProjectColoredProjectConfig().getRightAnnotationBarColor());
 
-		Color titleIconProjectColor = takeFirstConfiguredColor(
+		final Color titleIconProjectColor = takeFirstConfiguredColor(
 				coloredProjectConfigs.getTestStateColoredProjectConfig().getTitleColor(),
 				coloredProjectConfigs.getProjectColoredProjectConfig().getTitleColor());
 
@@ -113,11 +114,11 @@ public class WorkspaceColorConfiguration {
 		statusWidgetProjectBackgroundColor = replaceStatusWidgetNullColorWithStatusColor(statusBarProjectColor,
 				statusWidgetProjectBackgroundColor);
 
-		String testStateColorsAreConfigured = coloredProjectConfigs.getTestStateOutput();
+		final String testStateOutput = coloredProjectConfigs.getTestStateOutput();
 
-		DisplayColor colorForEntireProject = new DisplayColor(project, statusBarProjectColor,
+		final DisplayColor colorForEntireProject = new DisplayColor(project, statusBarProjectColor,
 				leftAnnotationBarProjectColor, rightAnnotationBarProjectColor, titleIconProjectColor,
-				statusWidgetProjectBackgroundColor, testStateColorsAreConfigured);
+				statusWidgetProjectBackgroundColor, testStateOutput);
 
 		return colorForEntireProject;
 	}
@@ -176,11 +177,11 @@ public class WorkspaceColorConfiguration {
 		}
 
 		public void setProjectColoring(IColoringConfig projectColorConfig) {
-			this.projectColoringConfig = projectColorConfig;
+			projectColoringConfig = projectColorConfig;
 		}
 
 		public void setTestStateColoring(IColoringConfig projectColorConfig) {
-			this.testStateColoringConfig = projectColorConfig;
+			testStateColoringConfig = projectColorConfig;
 		}
 
 		public String getTestStateOutput() {

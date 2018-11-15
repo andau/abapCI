@@ -41,6 +41,7 @@ import abapci.feature.FeatureFacade;
 import abapci.feature.activeFeature.ColoredProjectFeature;
 import abapci.preferences.PreferenceConstants;
 import abapci.utils.ResourcePluginHelper;
+import abapci.utils.StringUtils;
 
 public class AddOrUpdateColoredProjectPage extends Dialog {
 
@@ -134,6 +135,11 @@ public class AddOrUpdateColoredProjectPage extends Dialog {
 			}
 		}
 
+		if (colorSelector.getColorValue() == null) 
+		{
+		colorSelector.setColorValue(new RGB(255, 255, 255));
+		}
+		
 		boolean isSuppressed = coloredProject == null ? true : coloredProject.isSuppressedColoring();
 		colorSelector.setEnabled(!isSuppressed);
 	}
@@ -237,15 +243,24 @@ public class AddOrUpdateColoredProjectPage extends Dialog {
 
 		handleShowPopUpCheckbox();
 		
-		RGB selectedRgb = colorSelector.getColorValue();
-		if (comboColoredProject.getText() != null && !comboColoredProject.getText().equals("") && selectedRgb != null) {
+		if (inputIsComplete()) {
 			IProjectColorFactory projectColorFactory = new ProjectColorFactory();
-			IProjectColor projectColor = projectColorFactory.create(selectedRgb, btnSuppressColoring.getSelection());
+			IProjectColor projectColor = projectColorFactory.create(colorSelector.getColorValue(), btnSuppressColoring.getSelection());
 			presenter.addColoredProject(new ColoredProject(comboColoredProject.getText(), projectColor,
 					btnSuppressColoring.getSelection()));
 			presenter.setViewerInput();
+			super.okPressed();
 		}
-		super.okPressed();
+		else {
+			presenter.setStatusErrorMessage("Eingaben sind nicht korrekt");
+		}
+	}
+
+	private boolean inputIsComplete() {
+		boolean projectValid = comboColoredProject.getText() != null && !comboColoredProject.getText().equals(StringUtils.EMPTY);
+		boolean rgbValid = colorSelector.getColorValue() != null;
+		
+		return  (projectValid  &&  rgbValid);
 	}
 	
 	@Override

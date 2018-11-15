@@ -55,25 +55,24 @@ public class AbapCiDashboardView extends ViewPart {
 	public void createPartControl(Composite parent) {
 
 		this.parent = parent;
-		AbapCiPluginHelper abapCiPluginHelper = new AbapCiPluginHelper();
+		final AbapCiPluginHelper abapCiPluginHelper = new AbapCiPluginHelper();
 		presenter = abapCiPluginHelper.getContinousIntegrationPresenter();
 
 		entireContainer = new Composite(parent, SWT.NONE);
 		entireContainer.setLayout(new GridLayout(1, false));
 
 		lblOverallTestState = new Label(entireContainer, SWT.CENTER);
-		FontData[] fontData = lblOverallTestState.getFont().getFontData();
+		final FontData[] fontData = lblOverallTestState.getFont().getFontData();
 		fontData[0].setHeight(16);
 		lblOverallTestState.setText("Status not yet defined");
 
 		lblOverallTestState.setFont(new Font(Display.getCurrent(), fontData[0]));
-		lblOverallTestState.setLayoutData(new GridData(SWT.CENTER, SWT.FILL, true, true));
+		lblOverallTestState.setLayoutData(new GridData(SWT.CENTER, GridData.FILL_HORIZONTAL, true, true));
 		lblOverallTestState.setBounds(entireContainer.getBounds());
 
 		infoline = new Label(entireContainer, SWT.FILL);
-		infoline.setText(
-				"Initialized                                                                                        ");
-		infoline.setLayoutData(new GridData(SWT.LEFT, SWT.WRAP, true, true));
+		infoline.setText("Initialized");
+		infoline.setLayoutData(new GridData(SWT.LEFT, GridData.FILL_HORIZONTAL, true, true));
 
 		openErrorHyperlink = new Hyperlink(entireContainer, SWT.FILL);
 		openErrorHyperlink.setText(
@@ -114,10 +113,6 @@ public class AbapCiDashboardView extends ViewPart {
 	public void setInfolineText(String infolineText) {
 		infoline.setText(infolineText);
 
-	}
-
-	public void setInfolineLayoutData() {
-		infoline.setLayoutData(infoline.getLayoutData());
 	}
 
 	public Hyperlink getOpenErrorHyperlink() {

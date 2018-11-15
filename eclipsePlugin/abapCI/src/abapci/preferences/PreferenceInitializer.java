@@ -22,7 +22,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE, true);
 		store.setDefault(PreferenceConstants.PREF_UNIT_RUN_ACTIVATED_OBJECTS_ONLY, false);
 
-		store.setDefault(PreferenceConstants.PREF_ATC_RUN_ACTIVATED_OBJECTS_ONLY, false);
+		store.setDefault(PreferenceConstants.PREF_ATC_RUN_ACTIVATED_OBJECTS_ONLY, true);
 		store.setDefault(PreferenceConstants.PREF_ATC_VARIANT, "DEFAULT");
 		store.setDefault(PreferenceConstants.PREF_TDD_MODE, false);
 		store.setDefault(PreferenceConstants.PREF_TDD_MIN_REQUIRED_SECONDS, 30);

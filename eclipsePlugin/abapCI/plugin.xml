@@ -100,49 +100,8 @@
          </command>
       </menuContribution>
       
-          <menuContribution
-            locationURI="toolbar:com.sap.adt.tools.core.ui.toolbar">
-         <command
-             commandId="com.abapci.abapgit.open"
-             label="abapGit"
-             icon="icons/git.ico"
-             style="push"
-             tooltip="Open abapGit with SAP Transaction">
-           <visibleWhen checkEnabled="false">
-             <iterate
-                   ifEmpty="false"
-                   operator="or">
-                     <or>
-                        <instanceof
-                              value="com.sap.adt.projectexplorer.ui.node.IAbapRepositoryObjectNode">
-                        </instanceof>
-                        
-					   	<with variable="activeShell">
-					        <test
-					              forcePluginActivation="true"
-					              property="com.sap.adt.tools.core.ui.testers.isAieEditor"
-					              value="true">
-					        </test>
-					   	</with>                     
-	                 </or>
-               </iterate>
-            </visibleWhen>
-         </command>
-      </menuContribution>
 
     
-      <menuContribution
-            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
-         <toolbar
-               id="abapci.toolbars.abapCiToolbar">
-            <command
-                  commandId="abapci.commands.abapCiViewCommand"
-                  icon="icons/abapci_logo.ico"
-                  tooltip="Open View for Continuous integration"
-                  id="abapci.toolbars.abapCiViewCommand">
-            </command>
-         </toolbar>
-      </menuContribution>
       
         <menuContribution          
           locationURI="popup:org.eclipse.ui.navigator.ProjectExplorer#PopupMenu?before=additions">

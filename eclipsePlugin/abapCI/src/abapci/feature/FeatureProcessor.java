@@ -3,6 +3,8 @@ package abapci.feature;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
@@ -12,17 +14,19 @@ import abapci.activation.Activation;
 import abapci.ci.presenter.ContinuousIntegrationPresenter;
 import abapci.domain.TestState;
 import abapci.feature.activeFeature.AtcFeature;
+import abapci.feature.activeFeature.DeveloperFeature;
 import abapci.feature.activeFeature.UnitFeature;
 import abapci.manager.AtcTestManager;
 import abapci.manager.DevelopmentProcessManager;
 import abapci.manager.IAtcTestManager;
+import abapci.manager.JavaSimAtcTestManager;
 import abapci.manager.ThemeUpdateManager;
 import abapci.manager.UnitTestManager;
 
 public class FeatureProcessor {
 
 	private final UnitTestManager aUnitTestManager;
-	private final IAtcTestManager atcTestManager;
+	private IAtcTestManager atcTestManager;
 
 	private final ThemeUpdateManager themeUpdateManager;
 
@@ -32,16 +36,13 @@ public class FeatureProcessor {
 	private UnitFeature unitFeature;
 	private AtcFeature atcFeature;
 	private SourceCodeVisualisationFeature sourceCodeVisualisationFeature;
+	private DeveloperFeature developerFeature;
 
 	public FeatureProcessor(ContinuousIntegrationPresenter presenter, IProject project, List<String> initialPackages) {
 
 		this.presenter = presenter;
 
 		aUnitTestManager = new UnitTestManager(presenter, project, initialPackages);
-		// For testing purposes
-		// atcTestManager = new JavaSimAtcTestManager(presenter, project,
-		// initialPackages);
-		atcTestManager = new AtcTestManager(presenter, project, initialPackages);
 
 		developmentProcessManager = new DevelopmentProcessManager();
 
@@ -50,6 +51,12 @@ public class FeatureProcessor {
 		initFeatures();
 
 		registerPreferencePropertyChangeListener();
+		
+			if (developerFeature.isJavaSimuModeEnabled()) {
+				atcTestManager = new JavaSimAtcTestManager(presenter, project, initialPackages);
+			} else {
+				atcTestManager = new AtcTestManager(presenter, project, initialPackages);
+			}
 	}
 
 	private void initFeatures() {
@@ -58,6 +65,7 @@ public class FeatureProcessor {
 		unitFeature = featureFacade.getUnitFeature();
 		atcFeature = featureFacade.getAtcFeature();
 		sourceCodeVisualisationFeature = featureFacade.getSourceCodeVisualisationFeature();
+		developerFeature = featureFacade.getDeveloperFeature(); 
 
 	}
 

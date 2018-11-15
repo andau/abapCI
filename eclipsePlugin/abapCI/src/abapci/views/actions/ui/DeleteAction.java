@@ -35,7 +35,7 @@ public class DeleteAction extends Action {
 			presenter.removeContinousIntegrationConfig(ciConfig);
 			presenter.updateViewsAsync();
 		} else {
-			presenter.setStatusMessage("Deletion of the package entry failed");
+			presenter.setStatusMessage("Deletion failed - please select one entry by clicking on the first column!");
 		}
 
 	}

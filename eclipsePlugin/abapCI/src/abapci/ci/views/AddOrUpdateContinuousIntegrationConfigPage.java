@@ -29,6 +29,8 @@ import org.eclipse.ui.dialogs.PreferencesUtil;
 import abapci.AbapCiPlugin;
 import abapci.ci.presenter.ContinuousIntegrationPresenter;
 import abapci.domain.ContinuousIntegrationConfig;
+import abapci.feature.activeFeature.AtcFeature;
+import abapci.feature.activeFeature.UnitFeature;
 import abapci.preferences.PreferenceConstants;
 
 public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
@@ -40,9 +42,14 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 	Text packageText;
 	ContinuousIntegrationConfig ciConfig;
 
-	Button activated;
+	Button unitTestsEnabled;
+	Button atcEnabled; 
 	Button showPopUpYes;
 	boolean showPopUpButton;
+	
+	AtcFeature atcFeature; 
+	UnitFeature unitFeature; 
+
 
 	public AddOrUpdateContinuousIntegrationConfigPage(Shell parentShell, ContinuousIntegrationPresenter presenter,
 			ContinuousIntegrationConfig ciConfig, boolean showPopUpButton) {
@@ -50,6 +57,9 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 		this.presenter = presenter;
 		this.ciConfig = ciConfig;
 		this.showPopUpButton = showPopUpButton;
+		
+		atcFeature = presenter.getAtcFeature(); 
+		unitFeature = presenter.getUnitFeature(); 
 
 	}
 
@@ -68,7 +78,9 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 
 		addPackageTextfield(container);
 
-		addActivatedCheckbox(container);
+		addUnitTestsCheckbox(container, unitFeature.isActive());
+		
+		addAtcCheckbox(container, atcFeature.isActive());
 
 		addEmptyLine(container);
 
@@ -152,20 +164,40 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 		compShowPopUp.setVisible(showPopUpButton);
 	}
 
-	private void addActivatedCheckbox(Composite container) {
+	private void addUnitTestsCheckbox(Composite container, boolean featureActivated) {
 		Label lblActivated = new Label(container, SWT.READ_ONLY);
-		lblActivated.setText("Include the Package in the CI Run?");
+		lblActivated.setText("Include package into Unit testrun?");
 		lblActivated.setForeground(HEADER_COLOR);
 
-		boolean isActivated = ciConfig == null ? true : ciConfig.getUtActivated();
+		boolean isActivated = ciConfig == null ? featureActivated : ciConfig.getUtActivated();
+
 		Composite compActivated = new Composite(container, SWT.NULL);
 		compActivated.setLayout(new RowLayout());
-		activated = new Button(compActivated, SWT.RADIO);
-		activated.setSelection(isActivated);
-		activated.setText("Yes");
+		unitTestsEnabled = new Button(compActivated, SWT.RADIO);
+		unitTestsEnabled.setSelection(isActivated);
+		unitTestsEnabled.setText("Yes");
 		Button deactivated = new Button(compActivated, SWT.RADIO);
 		deactivated.setSelection(!isActivated);
 		deactivated.setText("No");
+	
+	}
+
+	private void addAtcCheckbox(Composite container, boolean featureActivated) {
+		Label lblActivated = new Label(container, SWT.READ_ONLY);
+		lblActivated.setText("Include package into ATC run?");
+		lblActivated.setForeground(HEADER_COLOR);
+
+		boolean isActivated = ciConfig == null ? featureActivated : ciConfig.getUtActivated();
+
+		Composite compActivated = new Composite(container, SWT.NULL);
+		compActivated.setLayout(new RowLayout());
+		atcEnabled = new Button(compActivated, SWT.RADIO);
+		atcEnabled.setSelection(isActivated);
+		atcEnabled.setText("Yes");
+		Button deactivated = new Button(compActivated, SWT.RADIO);
+		deactivated.setSelection(!isActivated);
+		deactivated.setText("No");
+
 	}
 
 	private void addPackageTextfield(Composite container) {
@@ -227,7 +259,7 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 		handleShowPopUpCheckbox();
 
 		presenter.addContinousIntegrationConfig(new ContinuousIntegrationConfig(cbProjectContent.getText(),
-				packageText.getText(), activated.getSelection(), activated.getSelection()));
+				packageText.getText(), unitTestsEnabled.getSelection(), atcEnabled.getSelection()));
 
 		super.okPressed();
 	}

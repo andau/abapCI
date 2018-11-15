@@ -67,10 +67,10 @@ public class ContinuousIntegrationPresenter {
 	public ContinuousIntegrationPresenter(AbapCiMainView abapCiMainView,
 			IContinuousIntegrationModel continuousIntegrationModel, IProject currentProject) {
 
-		this.view = abapCiMainView;
-		this.model = continuousIntegrationModel;
+		view = abapCiMainView;
+		model = continuousIntegrationModel;
 		this.currentProject = currentProject;
-		this.abapPackageTestStates = new ArrayList<>();
+		abapPackageTestStates = new ArrayList<>();
 
 		testResultConsolidator = new TestResultConsolidator();
 		sourceCodeStateEvaluator = new SourceCodeStateEvaluator();
@@ -88,7 +88,7 @@ public class ContinuousIntegrationPresenter {
 
 	private void initFeatures() {
 
-		FeatureFacade featureFacade = new FeatureFacade();
+		final FeatureFacade featureFacade = new FeatureFacade();
 		sourceCodeVisualisationFeature = featureFacade.getSourceCodeVisualisationFeature();
 		unitFeature = featureFacade.getUnitFeature();
 		tddModeFeature = featureFacade.getTddModeFeature();
@@ -105,14 +105,14 @@ public class ContinuousIntegrationPresenter {
 	}
 
 	public void setView(AbapCiMainView abapCiMainView) {
-		this.view = abapCiMainView;
+		view = abapCiMainView;
 	}
 
 	public void removeContinousIntegrationConfig(ContinuousIntegrationConfig ciConfig) {
 		try {
 			model.remove(ciConfig);
 			deleteAbapPackage(ciConfig);
-		} catch (ContinuousIntegrationConfigFileParseException e) {
+		} catch (final ContinuousIntegrationConfigFileParseException e) {
 			setStatusMessage("Parsing of xml file failed");
 			e.printStackTrace();
 		}
@@ -129,10 +129,10 @@ public class ContinuousIntegrationPresenter {
 			model.add(ciConfig);
 			addOrUpdateAbapPackage(ciConfig);
 			updateViewsAsync();
-		} catch (ContinuousIntegrationConfigFileParseException e) {
+		} catch (final ContinuousIntegrationConfigFileParseException e) {
 			setStatusMessage("Parsing error when updating project",
 					new Color(Display.getCurrent(), new RGB(255, 0, 0)));
-		} catch (Exception ex) {
+		} catch (final Exception ex) {
 			setStatusMessage(String.format("General error when updating project, errormessage %s", ex.getMessage()),
 					new Color(Display.getCurrent(), new RGB(255, 0, 0)));
 		}
@@ -142,13 +142,13 @@ public class ContinuousIntegrationPresenter {
 	private void addOrUpdateAbapPackage(ContinuousIntegrationConfig ciConfig) {
 		boolean updated = false;
 
-		AbapPackageTestState packageForCiConfig = new AbapPackageTestState(ciConfig.getProjectName(),
+		final AbapPackageTestState packageForCiConfig = new AbapPackageTestState(ciConfig.getProjectName(),
 				ciConfig.getPackageName(), "UNDEF", new TestResult(ciConfig.getUtActivated()),
 				new TestResult(ciConfig.getAtcActivated()));
 
-		ListIterator<AbapPackageTestState> iterator = abapPackageTestStates.listIterator();
+		final ListIterator<AbapPackageTestState> iterator = abapPackageTestStates.listIterator();
 		while (iterator.hasNext()) {
-			AbapPackageTestState abapPackageTestState = iterator.next();
+			final AbapPackageTestState abapPackageTestState = iterator.next();
 			if (abapPackageTestState.getProjectName().equals(ciConfig.getProjectName())
 					&& abapPackageTestState.getPackageName().equals(ciConfig.getPackageName())) {
 				iterator.set(packageForCiConfig);
@@ -163,9 +163,9 @@ public class ContinuousIntegrationPresenter {
 	}
 
 	private void deleteAbapPackage(ContinuousIntegrationConfig ciConfig) {
-		ListIterator<AbapPackageTestState> iterator = abapPackageTestStates.listIterator();
+		final ListIterator<AbapPackageTestState> iterator = abapPackageTestStates.listIterator();
 		while (iterator.hasNext()) {
-			AbapPackageTestState abapPackageTestState = iterator.next();
+			final AbapPackageTestState abapPackageTestState = iterator.next();
 			if (abapPackageTestState.getProjectName().equals(ciConfig.getProjectName())
 					&& abapPackageTestState.getPackageName().equals(ciConfig.getPackageName())) {
 				iterator.remove();
@@ -182,7 +182,7 @@ public class ContinuousIntegrationPresenter {
 					view.setViewerInput(getAbapPackageTestStatesForCurrentProject());
 				}
 			}
-		} catch (ContinuousIntegrationConfigFileParseException e) {
+		} catch (final ContinuousIntegrationConfigFileParseException e) {
 			setStatusMessage("Parsing of xml file failed");
 			e.printStackTrace();
 		}
@@ -194,12 +194,12 @@ public class ContinuousIntegrationPresenter {
 			abapPackageTestStates.clear();
 			List<ContinuousIntegrationConfig> ciConfigs;
 			ciConfigs = model.getAll();
-			for (ContinuousIntegrationConfig ciConfig : ciConfigs) {
+			for (final ContinuousIntegrationConfig ciConfig : ciConfigs) {
 				abapPackageTestStates
 						.add(new AbapPackageTestState(ciConfig.getProjectName(), ciConfig.getPackageName(), "UNDEF",
 								new TestResult(ciConfig.getUtActivated()), new TestResult(ciConfig.getAtcActivated())));
 			}
-		} catch (ContinuousIntegrationConfigFileParseException e) {
+		} catch (final ContinuousIntegrationConfigFileParseException e) {
 			setStatusMessage("Parsing of xml file failed");
 		}
 
@@ -208,8 +208,8 @@ public class ContinuousIntegrationPresenter {
 	private void supplementAbapPackageTestStatesForProject(IProject project)
 			throws ContinuousIntegrationConfigFileParseException {
 
-		List<ContinuousIntegrationConfig> ciConfigs = model.getAllForProjectAndGeneral(project.getName());
-		for (ContinuousIntegrationConfig ciConfig : ciConfigs) {
+		final List<ContinuousIntegrationConfig> ciConfigs = model.getAllForProjectAndGeneral(project.getName());
+		for (final ContinuousIntegrationConfig ciConfig : ciConfigs) {
 			if (!abapPackageTestStates.stream().anyMatch(item -> item.getPackageName().equals(ciConfig.getPackageName())
 					&& item.getProjectName().equals(ciConfig.getProjectName()))) {
 				abapPackageTestStates
@@ -221,7 +221,7 @@ public class ContinuousIntegrationPresenter {
 
 	public void updatePackageTestStates(List<AbapPackageTestState> updateAbapPackageTestStates) {
 		for (AbapPackageTestState packageTestState : abapPackageTestStates) {
-			for (AbapPackageTestState updatedPackageTestState : updateAbapPackageTestStates) {
+			for (final AbapPackageTestState updatedPackageTestState : updateAbapPackageTestStates) {
 				if (updatedPackageTestState.getProjectName().equals(packageTestState.getProjectName())
 						&& updatedPackageTestState.getPackageName().equals(packageTestState.getPackageName())) {
 					packageTestState = updatedPackageTestState;
@@ -233,8 +233,8 @@ public class ContinuousIntegrationPresenter {
 	}
 
 	public List<AbapPackageTestState> getAbapPackageTestStatesForCurrentProject() {
-		List<AbapPackageTestState> abapPackageTestStatesForCurrentProject = new ArrayList<>();
-		for (AbapPackageTestState abapPackageTestState : abapPackageTestStates) {
+		final List<AbapPackageTestState> abapPackageTestStatesForCurrentProject = new ArrayList<>();
+		for (final AbapPackageTestState abapPackageTestState : abapPackageTestStates) {
 			if (currentProject == null || currentProject.getName().equals(abapPackageTestState.getProjectName())) {
 				abapPackageTestStatesForCurrentProject.add(abapPackageTestState);
 			}
@@ -247,47 +247,45 @@ public class ContinuousIntegrationPresenter {
 	}
 
 	public void updateViewsAsync(SourcecodeState sourcecodeState) {
-		Runnable task = () -> updateViews();
+		final Runnable task = () -> updateViews();
 		Display.getDefault().asyncExec(task);
 	}
 
 	private void updateViews() {
 
-		List<AbapPackageTestState> abapPackageTestStatesForCurrentProject = getAbapPackageTestStatesForCurrentProject();
+		final List<AbapPackageTestState> abapPackageTestStatesForCurrentProject = getAbapPackageTestStatesForCurrentProject();
 
 		SourcecodeState currentSourceCodeState = evalSourceCodeTestState();
 		if (currentSourceCodeState.equals(SourcecodeState.OK) && (sourceCodeStateInfo.nextPlannedStepIsRefactorStep()
 				|| sourceCodeStateInfo.refactorStepIsStillSuggested(tddModeFeature.getMinimumRequiredSeconds()))) {
 			currentSourceCodeState = SourcecodeState.ATC_FAIL;
 		}
-		GlobalTestState globalTestState = new GlobalTestState(currentSourceCodeState);
-		String globalTestStateString = globalTestState.getTestStateOutputForDashboard();
+		final GlobalTestState globalTestState = new GlobalTestState(currentSourceCodeState);
+		final String globalTestStateString = globalTestState.getTestStateOutputForDashboard();
 
 		sourceCodeStateInfo.setSourceCodeState(globalTestStateString);
 
 		try {
 
-			IProjectColorFactory projectColorFactory = new ProjectColorFactory();
+			final IProjectColorFactory projectColorFactory = new ProjectColorFactory();
 			IProjectColor projectColor;
 
 			if (globalTestState.getColor() == null) {
 				projectColor = new DefaultEclipseProjectColor();
 			} else {
-				Color currentColor = globalTestState.getColor();
+				final Color currentColor = globalTestState.getColor();
 				projectColor = projectColorFactory.create(currentColor.getRGB());
 			}
 
-			IColoringConfigFactory coloringConfigFatory = new TestStateColoringConfigFactory(
+			final IColoringConfigFactory coloringConfigFatory = new TestStateColoringConfigFactory(
 					sourceCodeVisualisationFeature);
-			ColoredProject coloredProject = new ColoredProject(currentProject.getName(), projectColor, false);
-			IColoringConfig testStateConfig = coloringConfigFatory.create(coloredProject);
+			final ColoredProject coloredProject = new ColoredProject(currentProject.getName(), projectColor, false);
+			final IColoringConfig testStateConfig = coloringConfigFatory.create(coloredProject);
 
-			WorkspaceColorConfiguration workspaceColorConfiguration = abapCiPluginHelper
+			final WorkspaceColorConfiguration workspaceColorConfiguration = abapCiPluginHelper
 					.getWorkspaceColorConfiguration();
-			workspaceColorConfiguration.addOrUpdateTestStateColoring(testStateConfig,
-					currentProject.getName() + ": " + globalTestStateString);
 
-			ResultVisualizerOutput resultVisualizerOutput = new ResultVisualizerOutput();
+			final ResultVisualizerOutput resultVisualizerOutput = new ResultVisualizerOutput();
 			resultVisualizerOutput.setGlobalTestState(globalTestStateString);
 			resultVisualizerOutput.setAbapPackageTestStates(abapPackageTestStatesForCurrentProject);
 			resultVisualizerOutput.setBackgroundColor(workspaceColorConfiguration.getColoring(currentProject)
@@ -295,18 +293,21 @@ public class ContinuousIntegrationPresenter {
 			resultVisualizerOutput.setCurrentProject(currentProject);
 			resultVisualizerOutput.setShowAtcInfo(atcFeature.isActive());
 
-			IStatusBarWidget statusBarWidget = abapCiPluginHelper.getStatusBarWidget();
+			workspaceColorConfiguration.addOrUpdateTestStateColoring(testStateConfig,
+					resultVisualizerOutput.getInfoline());
+
+			final IStatusBarWidget statusBarWidget = abapCiPluginHelper.getStatusBarWidget();
 
 			if (sourceCodeVisualisationFeature.isShowStatusBarWidgetEnabled()) {
 				statusBarWidget.setVisible(true);
-				ITestResultVisualizer statusBarWidgetVisualizer = statusBarWidget.getTestResultVisualizer();
+				final ITestResultVisualizer statusBarWidgetVisualizer = statusBarWidget.getTestResultVisualizer();
 				statusBarWidgetVisualizer.setResultVisualizerOutput(resultVisualizerOutput);
 			} else {
 				statusBarWidget.setVisible(false);
 			}
 
 			if (abapCiDashboardView != null) {
-				ITestResultVisualizer testResultVisualizer = abapCiDashboardView.getTestResultVisualizer();
+				final ITestResultVisualizer testResultVisualizer = abapCiDashboardView.getTestResultVisualizer();
 
 				testResultVisualizer.setResultVisualizerOutput(resultVisualizerOutput);
 			}
@@ -324,7 +325,7 @@ public class ContinuousIntegrationPresenter {
 				view.statusLabel.setText("CI run package summary updated");
 			}
 
-		} catch (Exception ex) {
+		} catch (final Exception ex) {
 			// ABAP CI dashoard UI state update failed, lets go on
 			// typically happens if CI Dashboard was closed during runtime
 		}
@@ -341,7 +342,7 @@ public class ContinuousIntegrationPresenter {
 
 	private void openEditorsForFailedTests() {
 
-		List<AbapPackageTestState> packagesWithFailedTests = getAbapPackageTestStatesForCurrentProject().stream()
+		final List<AbapPackageTestState> packagesWithFailedTests = getAbapPackageTestStatesForCurrentProject().stream()
 				.filter(item -> item.getFirstFailedUnitTest() != null)
 				.collect(Collectors.<AbapPackageTestState>toList());
 
@@ -350,7 +351,7 @@ public class ContinuousIntegrationPresenter {
 
 	private void openEditorsForFailedAtc() {
 
-		List<AbapPackageTestState> packagesWithFailedAtc = getAbapPackageTestStatesForCurrentProject().stream()
+		final List<AbapPackageTestState> packagesWithFailedAtc = getAbapPackageTestStatesForCurrentProject().stream()
 				.filter(item -> item.getFirstFailedAtc() != null).collect(Collectors.<AbapPackageTestState>toList());
 
 		EditorHandler.openAtc(currentProject, packagesWithFailedAtc);
@@ -373,7 +374,7 @@ public class ContinuousIntegrationPresenter {
 	}
 
 	public void setStatusMessage(String message, Color color) {
-		Runnable task = () -> setStatusMessageInternal(message, color);
+		final Runnable task = () -> setStatusMessageInternal(message, color);
 		Display.getDefault().asyncExec(task);
 	}
 
@@ -382,7 +383,7 @@ public class ContinuousIntegrationPresenter {
 		try {
 			view.statusLabel.setText(message);
 			view.statusLabel.setForeground(color);
-		} catch (Exception ex) {
+		} catch (final Exception ex) {
 			// if the status message can not be set we will not stop working as this is not
 			// critical
 			ex.printStackTrace();
@@ -407,7 +408,7 @@ public class ContinuousIntegrationPresenter {
 
 	public void mergeUnitTestResultSummary(TestResultSummary unitTestResultSummary) {
 
-		for (AbapPackageTestState testState : getAbapPackageTestStatesForCurrentProject()) {
+		for (final AbapPackageTestState testState : getAbapPackageTestStatesForCurrentProject()) {
 			if (testState.getPackageName().equals(unitTestResultSummary.getPackageName())) {
 				testState.setUnitTestResult(unitTestResultSummary.getTestResult());
 			}
@@ -432,5 +433,9 @@ public class ContinuousIntegrationPresenter {
 
 	public AtcFeature getAtcFeature() {
 		return atcFeature;
+	}
+
+	public UnitFeature getUnitFeature() {
+		return unitFeature;
 	}
 }

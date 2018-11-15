@@ -82,11 +82,12 @@ public class AbapCiColoredProjectView extends ViewPart {
 		Composite entireContainer = new Composite(parent, SWT.NONE);
 		entireContainer.setLayout(new GridLayout(1, false));
 
-		viewer = new TableViewer(entireContainer, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
+		viewer = new TableViewer(entireContainer, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		createColumns(viewer);
 		viewer.getTable().setHeaderVisible(true);
 
 		statusLabel = new CLabel(entireContainer, SWT.BOTTOM);
+		statusLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		statusLabel.setBounds(0, 10, viewer.getTable().getBounds().width, 10);
 		statusLabel.setText(
 				"By adding a project and assigning a color the development objects of this project are colored with the assigned color");

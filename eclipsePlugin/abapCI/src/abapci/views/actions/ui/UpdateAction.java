@@ -42,7 +42,7 @@ public class UpdateAction extends Action {
 						firstAbapPackageTestState.getPackageName()));
 			}
 		} else {
-			presenter.setStatusMessage("Update of the package entry failed");
+			presenter.setStatusMessage("Update failed - please select one entry by clicking on the first column!");
 		}
 
 	}

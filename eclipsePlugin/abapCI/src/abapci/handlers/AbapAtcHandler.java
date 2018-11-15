@@ -94,15 +94,6 @@ public class AbapAtcHandler extends AbstractHandler {
 		boolean includeExemptedFindings = false;
 		String objectSetName = "TODO";
 
-		/**
-		 * try {
-		 *
-		 * launchInNewThread(project, getProjectSetting(abapProject), new
-		 * HashSet<IAtcCheckableItem>(checkableItems)); } catch
-		 * (InvocationTargetException | InterruptedException | CoreException e) { //
-		 * TODO Auto-generated catch block e.printStackTrace(); }
-		 **/
-
 		return worklistBackendAccess.getWorklist(abapProject, worklistRun.getWorklistId(),
 				worklistRun.getWorklistTimestamp().toString(), objectSetName, forceObjectSet, includeExemptedFindings,
 				progressMonitor);

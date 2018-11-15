@@ -1,6 +1,8 @@
 package abapci.coloredProject.general;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
@@ -11,6 +13,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.menus.AbstractWorkbenchTrimWidget;
 
 import abapci.AbapCiPlugin;
+import abapci.AbapCiPluginHelper;
 import abapci.testResult.visualizer.ITestResultVisualizer;
 import abapci.testResult.visualizer.ResultVisualizerOutput;
 import abapci.testResult.visualizer.StatusBarWidgetTestVisualizer;
@@ -18,7 +21,6 @@ import abapci.testResult.visualizer.StatusBarWidgetTestVisualizer;
 public class StatusBarWidget extends AbstractWorkbenchTrimWidget implements IStatusBarWidget, ITestResultVisualizer {
 
 	private Composite composite;
-	// private Label statusLabel;
 	private String statusString = "Teststatus not yet initialized";
 	private ITestResultVisualizer testResultVisualizer;
 	private Button statusButton;
@@ -52,7 +54,7 @@ public class StatusBarWidget extends AbstractWorkbenchTrimWidget implements ISta
 	public void fill(Composite parent, int oldSide, int newSide) {
 		composite = new Composite(parent, SWT.NONE);
 
-		RowLayout layout = new RowLayout();
+		final RowLayout layout = new RowLayout();
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
 		layout.center = true;
@@ -69,6 +71,13 @@ public class StatusBarWidget extends AbstractWorkbenchTrimWidget implements ISta
 		statusButton.setForeground(getColor(SWT.COLOR_BLACK));
 		statusButton.setText(statusString);
 
+		statusButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				final AbapCiPluginHelper abapCiHelper = new AbapCiPluginHelper();
+				abapCiHelper.getContinousIntegrationPresenter().openEditorsForFailedItems();
+			}
+		});
 	}
 
 	/**
@@ -79,7 +88,7 @@ public class StatusBarWidget extends AbstractWorkbenchTrimWidget implements ISta
 	 **/
 
 	RowData getRowData(int newSide) {
-		RowData rowData = new RowData();
+		final RowData rowData = new RowData();
 		if ((newSide == SWT.BOTTOM) || (newSide == SWT.TOP)) {
 			rowData.width = 400;
 		}

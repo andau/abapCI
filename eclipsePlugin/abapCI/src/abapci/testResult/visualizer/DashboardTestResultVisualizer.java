@@ -15,7 +15,7 @@ public class DashboardTestResultVisualizer implements ITestResultVisualizer {
 	AbapCiDashboardView view;
 
 	public DashboardTestResultVisualizer(AbapCiDashboardView abapCiDashboardView) {
-		this.view = abapCiDashboardView;
+		view = abapCiDashboardView;
 	}
 
 	@Override
@@ -31,10 +31,7 @@ public class DashboardTestResultVisualizer implements ITestResultVisualizer {
 	}
 
 	private void setInfoLine(String infoline) {
-
 		view.setInfolineText(infoline);
-		view.setInfolineLayoutData();
-
 	}
 
 	private void setGlobalTestState(String globalTestStateString) {
@@ -44,22 +41,22 @@ public class DashboardTestResultVisualizer implements ITestResultVisualizer {
 	private void rebuildHyperlink(Composite container, Hyperlink link,
 			List<AbapPackageTestState> abapPackageTestStates) {
 
-		List<AbapPackageTestState> packagesWithFailedTests = abapPackageTestStates.stream()
+		final List<AbapPackageTestState> packagesWithFailedTests = abapPackageTestStates.stream()
 				.filter(item -> item.getFirstFailedUnitTest() != null)
 				.collect(Collectors.<AbapPackageTestState>toList());
 
-		List<AbapPackageTestState> packagesWithFailedAtc = abapPackageTestStates.stream()
+		final List<AbapPackageTestState> packagesWithFailedAtc = abapPackageTestStates.stream()
 				.filter(item -> item.getFirstFailedAtc() != null).collect(Collectors.<AbapPackageTestState>toList());
 
 		if (packagesWithFailedTests.size() > 0) {
 			link.setVisible(true);
-			List<InvalidItem> firstFailedTests = packagesWithFailedTests.stream()
+			final List<InvalidItem> firstFailedTests = packagesWithFailedTests.stream()
 					.map(item -> item.getFirstFailedUnitTest()).collect(Collectors.toList());
 			link.setText(InvalidItemUtil.getOutputForUnitTest(firstFailedTests));
 		} else {
 			if (packagesWithFailedAtc.size() > 0) {
 				link.setVisible(true);
-				List<InvalidItem> firstFailedTests = packagesWithFailedAtc.stream()
+				final List<InvalidItem> firstFailedTests = packagesWithFailedAtc.stream()
 						.map(item -> item.getFirstFailedAtc()).collect(Collectors.toList());
 				link.setText(InvalidItemUtil.getOutputForAtcTest(firstFailedTests));
 			} else {

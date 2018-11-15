@@ -28,6 +28,8 @@ import abapci.ci.presenter.ContinuousIntegrationPresenter;
 import abapci.ci.views.AddOrUpdateContinuousIntegrationConfigPage;
 import abapci.connections.SapConnection;
 import abapci.domain.ContinuousIntegrationConfig;
+import abapci.feature.FeatureFacade;
+import abapci.feature.activeFeature.AtcFeature;
 import abapci.handlers.MyAtcCheckableItem;
 import abapci.jobs.CiJob;
 
@@ -38,6 +40,8 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 	private final CiJob job;
 	private final ContinuousIntegrationPresenter continuousIntegrationPresenter;
 	private final ActivationPool activationPool;
+	
+	private AtcFeature atcFeature; 
 
 	public GeneralResourceChangeListener(ContinuousIntegrationPresenter continuousIntegrationPresenter) {
 		sapConnection = new SapConnection();
@@ -45,6 +49,9 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 		this.continuousIntegrationPresenter = continuousIntegrationPresenter;
 		job = CiJob.getInstance(continuousIntegrationPresenter);
 		activationPool = ActivationPool.getInstance();
+		
+		FeatureFacade featureFacade = new FeatureFacade(); 
+		atcFeature = featureFacade.getAtcFeature(); 
 	}
 
 	@Override
@@ -100,8 +107,11 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 								|| currentProject.hasNature(JavaCore.NATURE_ID))) {
 
 							IProject activatedProject = activationPool.getCurrentProject();
-							executeAtcShortcut(activatedProject, activatedInactiveObjects);
-
+							
+							if (atcFeature.isAnnotationHandlingEnabled()) 
+							{
+							   executeAtcShortcut(activatedProject, activatedInactiveObjects);
+							}
 							if (activatedProject != null) {
 								continuousIntegrationPresenter.setCurrentProject(activationPool.getCurrentProject());
 							}

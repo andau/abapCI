@@ -3,6 +3,7 @@ package abapci;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IPartListener2;
@@ -28,6 +29,7 @@ import abapci.coloredProject.model.ColoredProjectModel;
 import abapci.coloredProject.presenter.ColoredProjectsPresenter;
 import abapci.feature.FeatureFacade;
 import abapci.feature.activeFeature.ColoredProjectFeature;
+import abapci.preferences.PreferenceConstants;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -60,6 +62,9 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+
+		IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore();
+		prefs.setValue(PreferenceConstants.PREF_COLORED_PROJECTS_STATUS_BAR_WIDGET_ENABLED, true);
 
 		featureFacade = new FeatureFacade();
 

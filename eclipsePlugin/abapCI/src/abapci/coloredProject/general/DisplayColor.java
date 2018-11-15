@@ -23,7 +23,7 @@ public class DisplayColor {
 			Color rightAnnotationBarColor, Color titleIconColor, Color statusWidgetBackgroundColor,
 			String testStateOutput) {
 
-		IProjectColorFactory projectColorFactory = new ProjectColorFactory();
+		final IProjectColorFactory projectColorFactory = new ProjectColorFactory();
 
 		this.project = project;
 		this.statusBarColor = projectColorFactory.create(statusBarColor);
@@ -36,30 +36,30 @@ public class DisplayColor {
 
 	public DisplayColor(IProject project, boolean suppressed) {
 
-		IProjectColorFactory projectColorFactory = new ProjectColorFactory();
+		final IProjectColorFactory projectColorFactory = new ProjectColorFactory();
 
 		this.project = project;
-		this.statusBarColor = projectColorFactory.createStandardColor();
-		this.leftAnnotationBarColor = projectColorFactory.createStandardColor();
-		this.rightAnnotationBarColor = projectColorFactory.createStandardColor();
-		this.titleIconColor = projectColorFactory.createStandardColor();
-		this.statusWidgetBackgroundColor = projectColorFactory.createStandardColor();
+		statusBarColor = projectColorFactory.createStandardColor();
+		leftAnnotationBarColor = projectColorFactory.createStandardColor();
+		rightAnnotationBarColor = projectColorFactory.createStandardColor();
+		titleIconColor = projectColorFactory.createStandardColor();
+		statusWidgetBackgroundColor = projectColorFactory.createStandardColor();
 	}
 
 	public DisplayColor(IProject project, Color color, ColoredProjectFeature coloredProjectFeature) {
-		IProjectColorFactory projectColorFactory = new ProjectColorFactory();
+		final IProjectColorFactory projectColorFactory = new ProjectColorFactory();
 
 		this.project = project;
 
-		this.statusBarColor = coloredProjectFeature.isChangeStatusBarActive() ? projectColorFactory.create(color)
+		statusBarColor = coloredProjectFeature.isChangeStatusBarActive() ? projectColorFactory.create(color)
 				: projectColorFactory.createStandardColor();
-		this.leftAnnotationBarColor = coloredProjectFeature.isLeftRulerActive() ? projectColorFactory.create(color)
+		leftAnnotationBarColor = coloredProjectFeature.isLeftRulerActive() ? projectColorFactory.create(color)
 				: projectColorFactory.createStandardColor();
-		this.rightAnnotationBarColor = coloredProjectFeature.isRightRulerActive() ? projectColorFactory.create(color)
+		rightAnnotationBarColor = coloredProjectFeature.isRightRulerActive() ? projectColorFactory.create(color)
 				: projectColorFactory.createStandardColor();
-		this.titleIconColor = coloredProjectFeature.isTitleIconActive() ? projectColorFactory.create(color)
+		titleIconColor = coloredProjectFeature.isTitleIconActive() ? projectColorFactory.create(color)
 				: projectColorFactory.createStandardColor();
-		this.statusWidgetBackgroundColor = coloredProjectFeature.isStatusBarWidgetActive()
+		statusWidgetBackgroundColor = coloredProjectFeature.isStatusBarWidgetActive()
 				? projectColorFactory.create(color)
 				: projectColorFactory.createStandardColor();
 
@@ -87,6 +87,10 @@ public class DisplayColor {
 
 	public boolean isSuppressed() {
 		return suppressed;
+	}
+
+	public void setTestStateOutput(String testStateOutput) {
+		this.testStateOutput = testStateOutput;
 	}
 
 	public String getTestStateOutput() {
