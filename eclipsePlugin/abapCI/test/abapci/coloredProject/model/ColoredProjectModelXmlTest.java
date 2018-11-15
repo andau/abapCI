@@ -52,7 +52,7 @@ public class ColoredProjectModelXmlTest {
 		coloredProjects = coloredProjectModelXml.getColoredProjects();
 		assertEquals(2, coloredProjects.size());
 
-		coloredProjectModelXml.removeColoredProject(new ColoredProject(TEST_PROJECT_2, projectColor));
+		coloredProjectModelXml.removeColoredProject(new ColoredProject(TEST_PROJECT_2, projectColor, false));
 		coloredProjects = coloredProjectModelXml.getColoredProjects();
 		assertEquals(1, coloredProjects.size());
 	}

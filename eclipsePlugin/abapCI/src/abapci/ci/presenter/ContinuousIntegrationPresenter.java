@@ -279,7 +279,7 @@ public class ContinuousIntegrationPresenter {
 
 			IColoringConfigFactory coloringConfigFatory = new TestStateColoringConfigFactory(
 					sourceCodeVisualisationFeature);
-			ColoredProject coloredProject = new ColoredProject(currentProject.getName(), projectColor);
+			ColoredProject coloredProject = new ColoredProject(currentProject.getName(), projectColor, false);
 			IColoringConfig testStateConfig = coloringConfigFatory.create(coloredProject);
 
 			WorkspaceColorConfiguration workspaceColorConfiguration = abapCiPluginHelper

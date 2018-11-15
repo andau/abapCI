@@ -10,9 +10,6 @@ public class ColoredProject {
 	private IProjectColor projectColor;
 	private boolean suppressColoring;
 
-	public ColoredProject(String name, IProjectColor projectColor) {
-		this(name, projectColor, false);
-	}
 
 	public ColoredProject(String name, IProjectColor projectColor, boolean suppressColoring) {
 		this.name = name;

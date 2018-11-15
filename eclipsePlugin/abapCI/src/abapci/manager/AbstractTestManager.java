@@ -38,6 +38,7 @@ abstract class AbstractTestManager {
 		case NOK:
 		case OFFL:
 		case DEACT:
+		case NO_CONFIG: 
 			overallTestState = packageTestState;
 			break;
 		case OK:

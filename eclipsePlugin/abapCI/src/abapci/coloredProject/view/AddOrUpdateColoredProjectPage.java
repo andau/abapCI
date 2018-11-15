@@ -21,8 +21,10 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PartInitException;
@@ -131,13 +133,26 @@ public class AddOrUpdateColoredProjectPage extends Dialog {
 				colorSelector.setColorValue(new RGB(255, 255, 255));
 			}
 		}
+
+		boolean isSuppressed = coloredProject == null ? true : coloredProject.isSuppressedColoring();
+		colorSelector.setEnabled(!isSuppressed);
 	}
 
 	private void addSuppressColoringButton(Composite container) {
 		btnSuppressColoring = new Button(container, SWT.CHECK);
 		btnSuppressColoring.setText("Do not color this project");
-		btnSuppressColoring.setSelection(coloredProject != null ? coloredProject.isSuppressedColoring() : false);
+		btnSuppressColoring.setSelection(coloredProject != null ? coloredProject.isSuppressedColoring() : true);
 		btnSuppressColoring.setToolTipText("Check this checkbox if the selected project should not be colored");
+
+		btnSuppressColoring.addListener(SWT.Selection, new Listener() {
+			public void handleEvent(Event e) {
+				switch (e.type) {
+				case SWT.Selection:
+					colorSelector.setEnabled(!btnSuppressColoring.getSelection());
+					break;
+				}
+			}
+		});
 	}
 
 	private void addDescriptionPart(Composite parent, Composite container) {
@@ -220,13 +235,8 @@ public class AddOrUpdateColoredProjectPage extends Dialog {
 	@Override
 	protected void okPressed() {
 
-		ColoredProjectFeature coloredProjectFeature = createColoredProjectFeature();
-
-		coloredProjectFeature.setDialogEnabled(showPopUpYes.getSelection());
-
-		IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore();
-		prefs.setValue(PreferenceConstants.PREF_COLORED_PROJECTS_NEW_DIALOG_ENABLED, showPopUpYes.getSelection());
-
+		handleShowPopUpCheckbox();
+		
 		RGB selectedRgb = colorSelector.getColorValue();
 		if (comboColoredProject.getText() != null && !comboColoredProject.getText().equals("") && selectedRgb != null) {
 			IProjectColorFactory projectColorFactory = new ProjectColorFactory();
@@ -237,18 +247,23 @@ public class AddOrUpdateColoredProjectPage extends Dialog {
 		}
 		super.okPressed();
 	}
-
-	private ColoredProjectFeature createColoredProjectFeature() {
-		FeatureFacade featureFacade = new FeatureFacade();
-		ColoredProjectFeature coloredProjectFeature = featureFacade.getColoredProjectFeature();
-		return coloredProjectFeature;
-	}
-
+	
 	@Override
 	protected void cancelPressed() {
-		IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore();
-		prefs.setValue(PreferenceConstants.PREF_COLORED_PROJECTS_NEW_DIALOG_ENABLED, showPopUpYes.getSelection());
+		handleShowPopUpCheckbox();
 
 		super.cancelPressed();
 	}
+	
+	private void handleShowPopUpCheckbox() {
+		if (!showPopUpYes.getSelection()) {
+			disableNewConfigurationDialog();
+		}
+	}
+
+	private void disableNewConfigurationDialog() {
+		IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore();
+		prefs.setValue(PreferenceConstants.PREF_COLORED_PROJECTS_NEW_DIALOG_ENABLED, false);
+	}
+
 }

@@ -75,7 +75,7 @@ public class EditorActivationHandler {
 	private void handleNewColoredProject(IProject project) {
 
 		ColoredProjectsPresenter coloredProjectPresenter = abapCiPluginHelper.getColoredProjectsPresenter();
-		ColoredProject coloredProject = new ColoredProject(project.getName(), new DefaultEclipseProjectColor());
+		ColoredProject coloredProject = new ColoredProject(project.getName(), new DefaultEclipseProjectColor(), true);
 		if (coloredProjectFeature.isDialogEnabled()) {
 			AddOrUpdateColoredProjectPage addOrUpdateColoredProjectPage = new AddOrUpdateColoredProjectPage(
 					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), coloredProjectPresenter,

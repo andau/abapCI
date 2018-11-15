@@ -2,15 +2,15 @@ package abapci.coloredProject.colorChanger;
 
 import java.lang.reflect.Field;
 
-import org.eclipse.jface.text.source.CompositeRuler;
-import org.eclipse.jface.text.source.IVerticalRuler;
+import org.eclipse.jface.text.source.IOverviewRuler;
+import org.eclipse.jface.text.source.OverviewRuler;
 import org.eclipse.jface.text.source.SourceViewer;
 import org.eclipse.ui.IEditorPart;
 
 import abapci.Exception.ActiveEditorNotSetException;
 import abapci.coloredProject.model.projectColor.IProjectColor;
 
-public class RightRulerColorChanger extends ARulerColorChanger  {
+public class RightRulerColorChanger extends ARulerColorChanger {
 
 	public RightRulerColorChanger(IEditorPart editorPart, IProjectColor projectColor) {
 		super(editorPart);
@@ -20,24 +20,21 @@ public class RightRulerColorChanger extends ARulerColorChanger  {
 	@Override
 	public void change() throws ActiveEditorNotSetException {
 
-		if (projectColor == null || projectColor.isSuppressed())
-			return;
+		if (getTextViewer() != null && projectColor != null && !projectColor.isSuppressed()) {
+			OverviewRuler overviewRuler = (OverviewRuler) getOverviewRuler((SourceViewer) getTextViewer());
 
-		if (getTextViewer() != null) {
-
-			CompositeRuler verticalRuler = (CompositeRuler) getVerticalRuler((SourceViewer) getTextViewer());
-
-			if (verticalRuler != null) {
-				verticalRuler.getControl().setBackground(projectColor.getColor());
+			if (overviewRuler != null) {
+				overviewRuler.getHeaderControl().setBackground(projectColor.getColor());
+				overviewRuler.getControl().setBackground(projectColor.getColor());
 			}
 		}
 	}
 
-	private IVerticalRuler getVerticalRuler(SourceViewer viewer) {
+	private IOverviewRuler getOverviewRuler(SourceViewer viewer) {
 		try {
-			Field f = SourceViewer.class.getDeclaredField("fVerticalRuler"); //$NON-NLS-1$
+			Field f = SourceViewer.class.getDeclaredField("fOverviewRuler"); //$NON-NLS-1$
 			f.setAccessible(true);
-			return (IVerticalRuler) f.get(viewer);
+			return (IOverviewRuler) f.get(viewer);
 		} catch (Exception err) {
 			return null;
 		}

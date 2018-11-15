@@ -16,7 +16,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.part.ViewPart;
 
-import abapci.ci.views.ViewModel;
+import abapci.ci.views.ViewModel; 
 import abapci.domain.Suppression;
 import abapci.lang.UiTexts;
 import abapci.views.actions.ui.AddSuppressionAction;

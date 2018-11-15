@@ -29,7 +29,7 @@ public class ColoredProjectTest {
 	public void standardReducedProjectColorTest() {
 		IProjectColorFactory projectColorFactory = new ProjectColorFactory();
 		IProjectColor projectColor = projectColorFactory.create(COLOR_GREEN);
-		ColoredProject coloredProject = new ColoredProject(TEST_PROJECT, projectColor);
+		ColoredProject coloredProject = new ColoredProject(TEST_PROJECT, projectColor, false);
 		assertEquals(TEST_PROJECT, coloredProject.getName());
 		assertEquals(COLOR_GREEN, coloredProject.getColor().getRGB());
 		assertEquals(false, coloredProject.isSuppressedColoring());

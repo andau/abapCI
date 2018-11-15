@@ -32,6 +32,7 @@ import abapci.coloredProject.model.ColoredProject;
 import abapci.coloredProject.presenter.ColoredProjectsPresenter;
 import abapci.lang.UiTexts;
 import abapci.utils.ColorChooser;
+import abapci.utils.StringUtils;
 import abapci.views.actions.ui.DeleteColoredProjectAction;
 
 public class AbapCiColoredProjectView extends ViewPart {
@@ -120,19 +121,7 @@ public class AbapCiColoredProjectView extends ViewPart {
 				ColoredProject c = (ColoredProject) element;
 				return c.getName();
 			}
-
-			@Override
-			public Color getBackground(Object element) {
-				ColoredProject c = (ColoredProject) element;
-				return c.getColor();
-			}
-
-			@Override
-			public Color getForeground(Object element) {
-				ColoredProject coloredProject = (ColoredProject) element;
-				ColorChooser colorChooser = new ColorChooser();
-				return colorChooser.getContrastColor(coloredProject.getColor());
-			}
+			
 
 		});
 
@@ -148,14 +137,15 @@ public class AbapCiColoredProjectView extends ViewPart {
 			@Override
 			public Color getBackground(Object element) {
 				ColoredProject c = (ColoredProject) element;
-				return c.getColor();
+				return c.isSuppressedColoring() ? super.getBackground(element) : c.getColor();
 			}
 
 			@Override
 			public Color getForeground(Object element) {
 				ColoredProject coloredProject = (ColoredProject) element;
 				ColorChooser colorChooser = new ColorChooser();
-				return colorChooser.getContrastColor(coloredProject.getColor());
+				Color contrastColor = colorChooser.getContrastColor(coloredProject.getColor());
+				return coloredProject.isSuppressedColoring() ? super.getForeground(element) : contrastColor;
 			}
 
 		});
@@ -166,20 +156,21 @@ public class AbapCiColoredProjectView extends ViewPart {
 			@Override
 			public String getText(Object element) {
 				ColoredProject c = (ColoredProject) element;
-				return String.valueOf(c.isSuppressedColoring());
+				return c.isSuppressedColoring() ? "yes" : StringUtils.EMPTY;
 			}
 
 			@Override
 			public Color getBackground(Object element) {
 				ColoredProject c = (ColoredProject) element;
-				return c.getColor();
+				return c.isSuppressedColoring() ? super.getBackground(element) : c.getColor();
 			}
 
 			@Override
 			public Color getForeground(Object element) {
 				ColoredProject coloredProject = (ColoredProject) element;
 				ColorChooser colorChooser = new ColorChooser();
-				return colorChooser.getContrastColor(coloredProject.getColor());
+				Color contrastColor = colorChooser.getContrastColor(coloredProject.getColor());
+				return coloredProject.isSuppressedColoring() ? super.getForeground(element) : contrastColor;
 			}
 
 		});

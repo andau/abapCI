@@ -156,7 +156,6 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 	private void executeAtcShortcut(IProject project, Collection<Activation> inactiveObjects) {
 		List<IAtcCheckableItem> checkableItems = new ArrayList<>();
 
-		String atcVariant = "ZVAR_GAUTSCH"; // atcFeature
 		for (Activation activation : inactiveObjects) {
 			checkableItems.add(
 					new MyAtcCheckableItem(activation.getUri(), activation.getClass().getName(), activation.getType()));

@@ -41,7 +41,7 @@ public class FeatureCreatorTest {
 
 		cut.createAtcFeature();
 		Mockito.verify(prefs, times(1)).getBoolean(PreferenceConstants.PREF_ATC_RUN_ACTIVATED_OBJECTS_ONLY);
-		Mockito.verify(prefs, times(1)).getBoolean(Mockito.any(String.class));
+		Mockito.verify(prefs, times(2)).getBoolean(Mockito.any(String.class));
 
 	}
 

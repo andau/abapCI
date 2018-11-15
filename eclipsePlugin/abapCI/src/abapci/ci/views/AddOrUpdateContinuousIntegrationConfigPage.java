@@ -223,10 +223,8 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 
 	@Override
 	protected void okPressed() {
-		if (!showPopUpYes.getSelection()) {
 
-			setDialogPreference();
-		}
+		handleShowPopUpCheckbox();
 
 		presenter.addContinousIntegrationConfig(new ContinuousIntegrationConfig(cbProjectContent.getText(),
 				packageText.getText(), activated.getSelection(), activated.getSelection()));
@@ -234,15 +232,23 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 		super.okPressed();
 	}
 
-	private void setDialogPreference() {
-		IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore();
-		prefs.setValue(PreferenceConstants.PREF_DIALOG_NEW_PACKAGE_FOR_CI_RUN_ENABLED, showPopUpYes.getSelection());
-	}
-
 	@Override
 	protected void cancelPressed() {
 
-		setDialogPreference();
+		handleShowPopUpCheckbox();
+
 		super.cancelPressed();
 	}
+
+	private void handleShowPopUpCheckbox() {
+		if (!showPopUpYes.getSelection()) {
+			disableNewConfigurationDialog();
+		}
+	}
+
+	private void disableNewConfigurationDialog() {
+		IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore();
+		prefs.setValue(PreferenceConstants.PREF_DIALOG_NEW_PACKAGE_FOR_CI_RUN_ENABLED, false);
+	}
+
 }

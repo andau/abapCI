@@ -25,11 +25,11 @@ public class ColoredProjectTestSample {
 	}
 
 	public static ColoredProject getGreenColoredProject() {
-		return new ColoredProject(SAMPLE_PROJECT, getGreenProjectColor());
+		return new ColoredProject(SAMPLE_PROJECT, getGreenProjectColor(), false);
 	}
 
 	public static ColoredProject getBlueColoredProject() {
-		return new ColoredProject(SAMPLE_PROJECT, getBlueProjectColor());
+		return new ColoredProject(SAMPLE_PROJECT, getBlueProjectColor(), false);
 	}
 
 	public static ColoredProject getSuppressedColoredProject() {

@@ -50,7 +50,7 @@ public class ColoredProjectsPresenterTest {
 		IProjectColorFactory projectColorFactory = new ProjectColorFactory();
 		sampleProjectColor = ColoredProjectTestSample.getGreenProjectColor();
 		projectColorFactory.create(COLOR_RED);
-		sampleColoredProject = new ColoredProject(TESTPROJECT_1_NAME, sampleProjectColor);
+		sampleColoredProject = new ColoredProject(TESTPROJECT_1_NAME, sampleProjectColor, false);
 
 		cutColoredProjectPresenter = new ColoredProjectsPresenter(coloredProjectView, coloredProjectModel);
 		Whitebox.setInternalState(cutColoredProjectPresenter, "abapCiPluginHelper", abapCiPluginHelper);
