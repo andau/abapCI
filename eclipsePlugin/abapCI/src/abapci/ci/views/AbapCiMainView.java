@@ -148,7 +148,7 @@ public class AbapCiMainView extends ViewPart {
 		if (continuousIntegrationPresenter != null) {
 			continuousIntegrationPresenter.setView(this);
 			tableViewer.setInput(continuousIntegrationPresenter.getAbapPackageTestStatesForCurrentProject());
-			statusLabel.setText("View inititialised, waiting for first ABAP object activation...");
+			statusLabel.setText("View inititialised, waiting for first activation...");
 		} else {
 			statusLabel.setText(
 					"View was not initialised, please check if the option 'Run Unit tests after an ABAP object is activated' is checked and restart");

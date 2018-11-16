@@ -5,11 +5,8 @@ import org.eclipse.jface.preference.ColorFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.preference.StringFieldEditor;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -18,19 +15,21 @@ import abapci.AbapCiPlugin;
 public class AbapCiPreferences extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	final static Color HEADER_COLOR = new Color(Display.getCurrent(), 0, 0, 255);
+	PreferencesUiHelper preferencesUiHelper;
 
 	public AbapCiPreferences() {
 		super(GRID);
+		preferencesUiHelper = new PreferencesUiHelper();
 	}
 
 	@Override
 	public void createFieldEditors() {
-		PreferencesUiHelper preferencesUiHelper = new PreferencesUiHelper();
 
 		preferencesUiHelper.addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "1. Automatic Unit test run");
 		createUnitTestChapter();
 
-		preferencesUiHelper.addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "2. Automatic ATC run");
+		preferencesUiHelper.addHeaderLabelWithSpaceBefore(getFieldEditorParent(),
+				"2. Automatic ATC run (! Reorganize table SATC_AC_RESULTVT continously !)");
 		createAtcChapter();
 
 		preferencesUiHelper.addHeaderLabelWithSpaceBefore(getFieldEditorParent(),
@@ -48,7 +47,7 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 				"6. Trigger Jenkins from Eclipse (experimental)");
 		createJenkinsChapter();
 
-		preferencesUiHelper.addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "6. Developer configuration");
+		preferencesUiHelper.addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "7. Developer configuration");
 		createDeveloperChapter();
 
 		// Unit test level selection seems currently not supported ( at least with 7.50)
@@ -69,45 +68,47 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 
 	private void createAtcChapter() {
 
-		Label atcInfoLabel1 = new Label(getFieldEditorParent(), SWT.NONE);
-		atcInfoLabel1.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
-		atcInfoLabel1.setText("    This feature writes data into the table SATC_AC_RESULTVT,");
-
-		Label atcInfoLabel2 = new Label(getFieldEditorParent(), SWT.NONE);
-		atcInfoLabel2.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
-		atcInfoLabel2.setText("    reorganize the table with program SATC_AC_CLEANUP continuously!");
+		// final Label atcInfoLabel1 = new Label(getFieldEditorParent(), SWT.NONE);
+		// atcInfoLabel1.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3,
+		// 1));
+		// atcInfoLabel1.setText("! Reorganize table SATC_AC_RESULTVT continously !");
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ATC_RUN_ACTIVATED_OBJECTS_ONLY,
-				"&Run ATC check for activated ABAP objects", getFieldEditorParent()));
+				"&Run ABAP Test Cockpit for activated ABAP objects", getFieldEditorParent()));
 
 		addField(new StringFieldEditor(PreferenceConstants.PREF_ATC_VARIANT, "&Run ATC with variant:",
 				getFieldEditorParent()));
 
+		preferencesUiHelper.addEmptyLabel(getFieldEditorParent());
+
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ATC_ANNOTATION_HANDLING_ENABLED,
-				"&Dynamically update annotations (experimental)", getFieldEditorParent()));
+				"&Update editor annotations for ATC findings on each activation (experimental)",
+				getFieldEditorParent()));
 
 	}
 
 	private void createSourceCodeVisualisationChapter() {
 
 		addField(new ColorFieldEditor(PreferenceConstants.PREF_UNIT_TEST_OK_BACKGROUND_COLOR,
-				"Backgroundcolor for OK Unit Test State", getFieldEditorParent()));
+				"Backgroundcolor for 'OK' Sourcecode State", getFieldEditorParent()));
 
 		addField(new ColorFieldEditor(PreferenceConstants.PREF_UNIT_TEST_FAIL_BACKGROUND_COLOR,
-				"Backgroundcolor for FAIL Unit Test State", getFieldEditorParent()));
+				"Backgroundcolor for 'UNIT TESTS FAIL' Sourcecode State", getFieldEditorParent()));
 
 		addField(new ColorFieldEditor(PreferenceConstants.PREF_ATC_TEST_FAIL_BACKGROUND_COLOR,
-				"Backgroundcolor for FAIL ATC State", getFieldEditorParent()));
+				"Backgroundcolor for 'ATC ERRORS' Sourcecode State", getFieldEditorParent()));
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_CHANGE_STATUS_BAR_BACKGROUND_COLOR,
-				"&Use source code  state color as background color of the Eclipse statusbar (and annotation ruler if activated)",
-				getFieldEditorParent()));
+				"&Change background color of the Eclipse statusbar", getFieldEditorParent()));
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_VISUALISATION_STATUS_BAR_WIDGET_ENABLED,
-				"&Show widget with test state info in Eclipse statusbar", getFieldEditorParent()));
+				"&Show widget with source code state and info in Eclipse statusbar", getFieldEditorParent()));
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_VISUALISATION_STATUS_CHANGE_THEME_ENABLED,
-				"&Change theme layout  - red for Unit Tests, blue for ATC errors", getFieldEditorParent()));
+				"&Change theme layout (do not use with Dark Theme, works only with some Eclipse versions)",
+				getFieldEditorParent()));
+
+		preferencesUiHelper.addEmptyLabel(getFieldEditorParent());
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_TDD_MODE,
 				"&Show TDD Labels for source code state output", getFieldEditorParent()));
@@ -115,8 +116,7 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 		addField(new IntegerFieldEditor(PreferenceConstants.PREF_TDD_MIN_REQUIRED_SECONDS,
 				"&Minimal time the TDD cycle will remain in the refactor state", getFieldEditorParent()));
 
-		Label emptyLabelAbapUnitDetails1 = new Label(getFieldEditorParent(), SWT.NONE);
-		emptyLabelAbapUnitDetails1.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
+		preferencesUiHelper.addEmptyLabel(getFieldEditorParent());
 
 		createHelperDialogsChapter();
 
@@ -129,7 +129,7 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 		addField(new StringFieldEditor(PreferenceConstants.PREF_SOURCE_CODE_FORMATTING_PREFIX,
 				"&Mandatory prefix in source code to enable formatter", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_SOURCE_CODE_CLEANUP_NOT_USED_VARIABLES,
-				"&Automatically cleanup not used variabels (when formatting)", getFieldEditorParent()));
+				"&Automatically cleanup not used variabels (when formatting enabled)", getFieldEditorParent()));
 
 	}
 

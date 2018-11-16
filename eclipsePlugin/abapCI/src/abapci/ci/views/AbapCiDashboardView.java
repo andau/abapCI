@@ -71,7 +71,7 @@ public class AbapCiDashboardView extends ViewPart {
 		lblOverallTestState.setBounds(entireContainer.getBounds());
 
 		infoline = new Label(entireContainer, SWT.FILL);
-		infoline.setText("Initialized");
+		infoline.setText("Initialized                                                                  ");
 		infoline.setLayoutData(new GridData(SWT.LEFT, GridData.FILL_HORIZONTAL, true, true));
 
 		openErrorHyperlink = new Hyperlink(entireContainer, SWT.FILL);

@@ -13,9 +13,9 @@ public class EditorActivationListener implements IPartListener2 {
 	@Override
 	public void partActivated(IWorkbenchPartReference arg0) {
 		try {
-			EditorActivationHandler editorActivationHandler = new EditorActivationHandler();
+			final EditorActivationHandler editorActivationHandler = new EditorActivationHandler();
 			editorActivationHandler.updateDisplayColoring();
-		} catch (Exception ex) {
+		} catch (final Exception ex) {
 			// if there happens any error while formatting the editor, we skip it as this
 			// function is not mandatory
 			// but at least write the trace
@@ -54,8 +54,15 @@ public class EditorActivationListener implements IPartListener2 {
 
 	@Override
 	public void partOpened(IWorkbenchPartReference arg0) {
-		// TODO Auto-generated method stub
-
+		try {
+			final EditorActivationHandler editorActivationHandler = new EditorActivationHandler();
+			editorActivationHandler.updateDisplayColoring();
+		} catch (final Exception ex) {
+			// if there happens any error while formatting the editor, we skip it as this
+			// function is not mandatory
+			// but at least write the trace
+			ex.printStackTrace();
+		}
 	}
 
 	@Override

@@ -28,12 +28,9 @@ public class AtcTestManager extends AbstractTestManager implements IAtcTestManag
 	public TestState executeAllPackages(IProject project, List<AbapPackageTestState> activeAbapPackageTestStates,
 			List<Activation> inactiveObjects) {
 
-		// Method prepared for implementation with Code Mining - for now dummy
-		// implementation for E2E testing purposes
-
 		overallTestState = TestState.UNDEF;
 
-		for (AbapPackageTestState abapPackageTestState : activeAbapPackageTestStates.stream()
+		for (final AbapPackageTestState abapPackageTestState : activeAbapPackageTestStates.stream()
 				.filter(item -> !item.getAtcTestState().equals(TestState.DEACT)).collect(Collectors.toList())) {
 
 			IAtcWorklist atcWorklist = null;
@@ -46,7 +43,7 @@ public class AtcTestManager extends AbstractTestManager implements IAtcTestManag
 			else if (inactiveObjects.stream()
 					.anyMatch(item -> item.getPackageName().equals(abapPackageTestState.getPackageName()))) {
 
-				Set<Activation> inactiveObjectsForPackage = inactiveObjects.stream()
+				final Set<Activation> inactiveObjectsForPackage = inactiveObjects.stream()
 						.filter(item -> item.getPackageName().equals(abapPackageTestState.getPackageName()))
 						.collect(Collectors.toSet());
 
@@ -57,8 +54,9 @@ public class AtcTestManager extends AbstractTestManager implements IAtcTestManag
 
 				if (atcWorklist != null) {
 
-					TestResult testResult = AtcResultAnalyzer.getTestResult(atcWorklist, inactiveObjectsForPackage);
-					TestResultSummary testResultSummary = new TestResultSummary(project,
+					final TestResult testResult = AtcResultAnalyzer.getTestResult(atcWorklist,
+							inactiveObjectsForPackage);
+					final TestResultSummary testResultSummary = new TestResultSummary(project,
 							abapPackageTestState.getPackageName(),
 							AtcResultAnalyzer.getTestResult(atcWorklist, inactiveObjectsForPackage));
 					continuousIntegrationPresenter.mergeAtcWorklist(testResultSummary);

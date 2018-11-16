@@ -15,7 +15,7 @@ public class AbapCiPreferencesTest {
 
 	@Test
 	public void testCreateFieldEditors() {
-		AbapCiPreferences cut = new AbapCiPreferences();
+		final AbapCiPreferences cut = new AbapCiPreferences();
 		Whitebox.setInternalState(cut, "fieldEditorParent", fieldEditorParent);
 		cut.createFieldEditors();
 		assertTrue(fieldEditorParent.getChildren().length > MINIMUM_EXPECTED_UI_ITEMS);

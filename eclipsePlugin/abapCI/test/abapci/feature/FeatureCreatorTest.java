@@ -65,8 +65,8 @@ public class FeatureCreatorTest {
 	@Test
 	@Ignore
 	public void testSimpleColorFeature() {
-		AbapCiPluginHelper abapCiPluginHelper = Mockito.mock(AbapCiPluginHelper.class);
-		IPreferenceStore preferenceStore = Mockito.mock(IPreferenceStore.class);
+		final AbapCiPluginHelper abapCiPluginHelper = Mockito.mock(AbapCiPluginHelper.class);
+		final IPreferenceStore preferenceStore = Mockito.mock(IPreferenceStore.class);
 		Mockito.when(abapCiPluginHelper.getPreferenceStore()).thenReturn(preferenceStore);
 
 		Whitebox.setInternalState(cut, "abapCiPluginHelper", abapCiPluginHelper);
@@ -89,7 +89,7 @@ public class FeatureCreatorTest {
 		Mockito.verify(prefs, times(1)).getBoolean(PreferenceConstants.PREF_CHANGE_STATUS_BAR_BACKGROUND_COLOR);
 		Mockito.verify(prefs, times(1)).getBoolean(PreferenceConstants.PREF_VISUALISATION_STATUS_BAR_WIDGET_ENABLED);
 
-		Mockito.verify(prefs, times(2)).getBoolean(Mockito.any(String.class));
+		Mockito.verify(prefs, times(3)).getBoolean(Mockito.any(String.class));
 	}
 
 	@Test

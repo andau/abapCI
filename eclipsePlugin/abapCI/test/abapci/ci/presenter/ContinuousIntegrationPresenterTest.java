@@ -10,7 +10,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import abapci.AbapCiPlugin;
 import abapci.ci.model.IContinuousIntegrationModel;
-import abapci.ci.presenter.ContinuousIntegrationPresenter;
 import abapci.ci.views.AbapCiMainView;
 import abapci.domain.ContinuousIntegrationConfig;
 
@@ -29,16 +28,16 @@ public class ContinuousIntegrationPresenterTest {
 
 	public void before() {
 
-		AbapCiPlugin abapCiPlugin = Mockito.mock(AbapCiPlugin.class);
+		final AbapCiPlugin abapCiPlugin = Mockito.mock(AbapCiPlugin.class);
 		PowerMockito.spy(AbapCiPlugin.class);
 		Mockito.when(AbapCiPlugin.getDefault()).thenReturn(abapCiPlugin);
 		PowerMockito.mockStatic(AbapCiPlugin.class);
 		Mockito.when(AbapCiPlugin.getDefault()).thenReturn(abapCiPlugin);
 
-		IPreferenceStore preferenceStore = Mockito.mock(IPreferenceStore.class);
+		final IPreferenceStore preferenceStore = Mockito.mock(IPreferenceStore.class);
 		Mockito.when(abapCiPlugin.getPreferenceStore()).thenReturn(preferenceStore);
 
-		AbapCiMainView abapCiMainView = Mockito.mock(AbapCiMainView.class);
+		final AbapCiMainView abapCiMainView = Mockito.mock(AbapCiMainView.class);
 		continousIntegrationModel = Mockito.mock(IContinuousIntegrationModel.class);
 		currentProject = Mockito.mock(IProject.class);
 		Mockito.when(currentProject.getName()).thenReturn(TEST_PROJECT_NAME);
@@ -47,8 +46,8 @@ public class ContinuousIntegrationPresenterTest {
 	}
 
 	public void testAddAndRemoveContinousIntegrationConfig() {
-		ContinuousIntegrationConfig ciConfig = new ContinuousIntegrationConfig(currentProject.getName(), TEST_PACKAGE,
-				false, false);
+		final ContinuousIntegrationConfig ciConfig = new ContinuousIntegrationConfig(currentProject.getName(),
+				TEST_PACKAGE, false, false);
 		cut.addContinousIntegrationConfig(ciConfig);
 		cut.removeContinousIntegrationConfig(ciConfig);
 	}

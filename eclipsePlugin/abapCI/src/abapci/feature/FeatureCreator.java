@@ -31,7 +31,7 @@ public class FeatureCreator {
 
 	public UnitFeature createUnitFeature() {
 		initPrefs();
-		UnitFeature feature = new UnitFeature();
+		final UnitFeature feature = new UnitFeature();
 		feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE));
 		feature.setRunActivatedObjectsOnly(prefs.getBoolean(PreferenceConstants.PREF_UNIT_RUN_ACTIVATED_OBJECTS_ONLY));
 		return feature;
@@ -39,7 +39,7 @@ public class FeatureCreator {
 
 	public AtcFeature createAtcFeature() {
 		initPrefs();
-		AtcFeature feature = new AtcFeature();
+		final AtcFeature feature = new AtcFeature();
 		feature.setRunActivatedObjects(prefs.getBoolean(PreferenceConstants.PREF_ATC_RUN_ACTIVATED_OBJECTS_ONLY));
 		feature.setAnnotationhandlingEnabled(
 				prefs.getBoolean(PreferenceConstants.PREF_ATC_ANNOTATION_HANDLING_ENABLED));
@@ -50,25 +50,27 @@ public class FeatureCreator {
 
 	public SourceCodeVisualisationFeature createSourceCodeVisualisationFeature() {
 		initPrefs();
-		SourceCodeVisualisationFeature feature = new SourceCodeVisualisationFeature();
+		final SourceCodeVisualisationFeature feature = new SourceCodeVisualisationFeature();
 		feature.setChangeStatusBarBackgroundColorEnabled(
 				prefs.getBoolean(PreferenceConstants.PREF_CHANGE_STATUS_BAR_BACKGROUND_COLOR));
 		feature.setShowStatusBarWidgetEnabled(
 				prefs.getBoolean(PreferenceConstants.PREF_VISUALISATION_STATUS_BAR_WIDGET_ENABLED));
+		feature.setThemeUpdateEnabled(
+				prefs.getBoolean(PreferenceConstants.PREF_VISUALISATION_STATUS_CHANGE_THEME_ENABLED));
 		return feature;
 
 	}
 
 	public TddModeFeature createTddModeFeature() {
 		initPrefs();
-		TddModeFeature feature = new TddModeFeature();
+		final TddModeFeature feature = new TddModeFeature();
 		feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_TDD_MODE));
 		return feature;
 	}
 
 	public ColoredProjectFeature createColoredProjectFeature() {
 		initPrefs();
-		ColoredProjectFeature feature = new ColoredProjectFeature();
+		final ColoredProjectFeature feature = new ColoredProjectFeature();
 		feature.setChangeStatusBarActive(
 				prefs.getBoolean(PreferenceConstants.PREF_COLORED_PROJECTS_STATUS_BAR_ENABLED));
 		feature.setLeftRulerActive(prefs.getBoolean(PreferenceConstants.PREF_COLORED_PROJECTS_LEFT_RULER_ENABLED));
@@ -85,15 +87,15 @@ public class FeatureCreator {
 
 	public JenkinsFeature createJenkinsFeature() {
 		initPrefs();
-		JenkinsFeature feature = new JenkinsFeature();
+		final JenkinsFeature feature = new JenkinsFeature();
 		feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_JENKINS_RUN_AFTER_UNIT_TESTS_TURN_GREEN));
 		return feature;
 	}
 
 	public PrettyPrinterFeature createSourcecodeFormattingFeature() {
 		initPrefs();
-		String prefix = prefs.getString(PreferenceConstants.PREF_SOURCE_CODE_FORMATTING_PREFIX);
-		PrettyPrinterFeature feature = new PrettyPrinterFeature(prefix);
+		final String prefix = prefs.getString(PreferenceConstants.PREF_SOURCE_CODE_FORMATTING_PREFIX);
+		final PrettyPrinterFeature feature = new PrettyPrinterFeature(prefix);
 		feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_SOURCE_CODE_FORMATTING_ENABLED));
 		feature.setCleanupVariablesEnabled(
 				prefs.getBoolean(PreferenceConstants.PREF_SOURCE_CODE_CLEANUP_NOT_USED_VARIABLES));
@@ -102,14 +104,14 @@ public class FeatureCreator {
 
 	public AbapGitPackageChangeFeature createAbapGitPackageChangeFeature() {
 		initPrefs();
-		AbapGitPackageChangeFeature feature = new AbapGitPackageChangeFeature();
+		final AbapGitPackageChangeFeature feature = new AbapGitPackageChangeFeature();
 		feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_ABAP_GIT_PACKAGE_CHANGE_ENABLED));
 		return feature;
 	}
 
 	public SimpleToggleFeature createSimpleToggleFeature(FeatureType featureType) {
 		initPrefs();
-		SimpleToggleFeature feature = new SimpleToggleFeature();
+		final SimpleToggleFeature feature = new SimpleToggleFeature();
 
 		switch (featureType) {
 		case UNIT_RUN_CRITICAL_TESTS:
@@ -146,7 +148,7 @@ public class FeatureCreator {
 	public ColorFeature createSimpleColorFeature(ColorFeatureType colorFeatureType) {
 		initPrefs();
 
-		ColorFeature colorFeature = new ColorFeature();
+		final ColorFeature colorFeature = new ColorFeature();
 
 		switch (colorFeatureType) {
 		case PREF_UNIT_TEST_OK_BACKGROUND_COLOR:
@@ -167,7 +169,7 @@ public class FeatureCreator {
 	}
 
 	public DeveloperFeature createDeveloperFeature() {
-		DeveloperFeature developerFeature = new DeveloperFeature();
+		final DeveloperFeature developerFeature = new DeveloperFeature();
 		developerFeature
 				.setJavaSimuModeEnabled(prefs.getBoolean(PreferenceConstants.PREF_DEVELOPER_JAVA_SIMU_MODE_ENABLED));
 		developerFeature.setTracingEnabled(prefs.getBoolean(PreferenceConstants.PREF_DEVELOPER_TRACING_ENABLED));

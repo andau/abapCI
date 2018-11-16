@@ -43,13 +43,12 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 	ContinuousIntegrationConfig ciConfig;
 
 	Button unitTestsEnabled;
-	Button atcEnabled; 
+	Button atcEnabled;
 	Button showPopUpYes;
 	boolean showPopUpButton;
-	
-	AtcFeature atcFeature; 
-	UnitFeature unitFeature; 
 
+	AtcFeature atcFeature;
+	UnitFeature unitFeature;
 
 	public AddOrUpdateContinuousIntegrationConfigPage(Shell parentShell, ContinuousIntegrationPresenter presenter,
 			ContinuousIntegrationConfig ciConfig, boolean showPopUpButton) {
@@ -57,9 +56,9 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 		this.presenter = presenter;
 		this.ciConfig = ciConfig;
 		this.showPopUpButton = showPopUpButton;
-		
-		atcFeature = presenter.getAtcFeature(); 
-		unitFeature = presenter.getUnitFeature(); 
+
+		atcFeature = presenter.getAtcFeature();
+		unitFeature = presenter.getUnitFeature();
 
 	}
 
@@ -72,14 +71,14 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 
-		Composite container = (Composite) super.createDialogArea(parent);
+		final Composite container = (Composite) super.createDialogArea(parent);
 
 		addProjectComboBox(container);
 
 		addPackageTextfield(container);
 
 		addUnitTestsCheckbox(container, unitFeature.isActive());
-		
+
 		addAtcCheckbox(container, atcFeature.isActive());
 
 		addEmptyLine(container);
@@ -95,18 +94,18 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 	}
 
 	private void addDescriptionPart(Composite parent, Composite container) {
-		Label descriptionLabel = new Label(container, SWT.NONE);
+		final Label descriptionLabel = new Label(container, SWT.NONE);
 
 		descriptionLabel.setText("Description");
 		descriptionLabel.setForeground(HEADER_COLOR);
 
-		Text description = new Text(container, SWT.WRAP | SWT.MULTI | SWT.BORDER);
+		final Text description = new Text(container, SWT.WRAP | SWT.MULTI | SWT.BORDER);
 
-		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_FILL);
+		final GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.VERTICAL_ALIGN_FILL);
 		gridData.horizontalSpan = 3;
 		gridData.grabExcessVerticalSpace = true;
 
-		StringBuilder descriptionTextBuilder = new StringBuilder();
+		final StringBuilder descriptionTextBuilder = new StringBuilder();
 		descriptionTextBuilder.append("An ABAP package was detected which is not already configured for the CI run");
 		descriptionTextBuilder.append(System.lineSeparator() + System.lineSeparator());
 		descriptionTextBuilder
@@ -128,7 +127,7 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 
 		addEmptyLine(container);
 
-		Link link = new Link(container, SWT.NONE);
+		final Link link = new Link(container, SWT.NONE);
 		link.setText(
 				"Unit test and ATC runs and the type of visualisation of the test run results can be configured in the <a>Eclipse preferences</a>");
 
@@ -148,15 +147,15 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 	}
 
 	private void addShowAgainCheckbox(Composite container) {
-		Label lblShowPopUpAgain = new Label(container, SWT.READ_ONLY);
+		final Label lblShowPopUpAgain = new Label(container, SWT.READ_ONLY);
 		lblShowPopUpAgain.setText("Show this popup again, when the next new package is detected?");
 
-		Composite compShowPopUp = new Composite(container, SWT.NULL);
+		final Composite compShowPopUp = new Composite(container, SWT.NULL);
 		compShowPopUp.setLayout(new RowLayout());
 		showPopUpYes = new Button(compShowPopUp, SWT.RADIO);
 		showPopUpYes.setSelection(true);
 		showPopUpYes.setText("Yes");
-		Button showPopUpNo = new Button(compShowPopUp, SWT.RADIO);
+		final Button showPopUpNo = new Button(compShowPopUp, SWT.RADIO);
 		showPopUpNo.setSelection(false);
 		showPopUpNo.setText("No");
 
@@ -165,50 +164,50 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 	}
 
 	private void addUnitTestsCheckbox(Composite container, boolean featureActivated) {
-		Label lblActivated = new Label(container, SWT.READ_ONLY);
+		final Label lblActivated = new Label(container, SWT.READ_ONLY);
 		lblActivated.setText("Include package into Unit testrun?");
 		lblActivated.setForeground(HEADER_COLOR);
 
-		boolean isActivated = ciConfig == null ? featureActivated : ciConfig.getUtActivated();
+		final boolean isActivated = ciConfig == null ? featureActivated : ciConfig.getUtActivated();
 
-		Composite compActivated = new Composite(container, SWT.NULL);
+		final Composite compActivated = new Composite(container, SWT.NULL);
 		compActivated.setLayout(new RowLayout());
 		unitTestsEnabled = new Button(compActivated, SWT.RADIO);
 		unitTestsEnabled.setSelection(isActivated);
 		unitTestsEnabled.setText("Yes");
-		Button deactivated = new Button(compActivated, SWT.RADIO);
+		final Button deactivated = new Button(compActivated, SWT.RADIO);
 		deactivated.setSelection(!isActivated);
 		deactivated.setText("No");
-	
+
 	}
 
 	private void addAtcCheckbox(Composite container, boolean featureActivated) {
-		Label lblActivated = new Label(container, SWT.READ_ONLY);
+		final Label lblActivated = new Label(container, SWT.READ_ONLY);
 		lblActivated.setText("Include package into ATC run?");
 		lblActivated.setForeground(HEADER_COLOR);
 
-		boolean isActivated = ciConfig == null ? featureActivated : ciConfig.getUtActivated();
+		final boolean isActivated = ciConfig == null ? featureActivated : ciConfig.getUtActivated();
 
-		Composite compActivated = new Composite(container, SWT.NULL);
+		final Composite compActivated = new Composite(container, SWT.NULL);
 		compActivated.setLayout(new RowLayout());
 		atcEnabled = new Button(compActivated, SWT.RADIO);
 		atcEnabled.setSelection(isActivated);
 		atcEnabled.setText("Yes");
-		Button deactivated = new Button(compActivated, SWT.RADIO);
+		final Button deactivated = new Button(compActivated, SWT.RADIO);
 		deactivated.setSelection(!isActivated);
 		deactivated.setText("No");
 
 	}
 
 	private void addPackageTextfield(Composite container) {
-		Label lblPackageHeader = new Label(container, SWT.READ_ONLY);
+		final Label lblPackageHeader = new Label(container, SWT.READ_ONLY);
 		lblPackageHeader.setToolTipText("Select a package");
 		lblPackageHeader.setText("Package:");
 		lblPackageHeader.setForeground(HEADER_COLOR);
 
 		packageText = new Text(container, SWT.BORDER);
 		packageText.setSize(200, packageText.getSize().y);
-		packageText.setLayoutData(new GridData(GridData.BEGINNING));
+		packageText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		if (ciConfig != null) {
 			packageText.setText(ciConfig.getPackageName());
@@ -217,7 +216,7 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 	}
 
 	private void addProjectComboBox(Composite container) {
-		Label lblProjectHeader = new Label(container, SWT.READ_ONLY);
+		final Label lblProjectHeader = new Label(container, SWT.READ_ONLY);
 		lblProjectHeader.setText("Project:");
 		lblProjectHeader.setToolTipText("Select a ABAP project");
 		lblProjectHeader.setBounds(10, 50, 100, 65);
@@ -233,15 +232,15 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 	}
 
 	private String[] getAbapProjectsArray() {
-		ArrayList<String> projectNames = new ArrayList<>();
-		IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
-		IProject[] availableProjects = workspaceRoot.getProjects();
+		final ArrayList<String> projectNames = new ArrayList<>();
+		final IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
+		final IProject[] availableProjects = workspaceRoot.getProjects();
 
 		// IProject[] availableProjects =
 		// AdtCoreProjectServiceFactory.createCoreProjectService()
 		// .getAvailableAdtCoreProjects();
 
-		for (IProject project : availableProjects) {
+		for (final IProject project : availableProjects) {
 			// if (AbapProjectService.getInstance().isAbapProject(project)) {
 			projectNames.add(project.getName());
 			// }
@@ -279,7 +278,7 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 	}
 
 	private void disableNewConfigurationDialog() {
-		IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore();
+		final IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore();
 		prefs.setValue(PreferenceConstants.PREF_DIALOG_NEW_PACKAGE_FOR_CI_RUN_ENABLED, false);
 	}
 

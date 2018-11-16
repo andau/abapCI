@@ -53,8 +53,7 @@ public class AtcResultAnalyzerTest {
 		suppressedAtcFinding = PowerMockito.mock(IAtcFinding.class);
 
 		PowerMockito.when(atcWorklist.getObjects()).thenReturn(atcObjectList);
-		PowerMockito.when(atcWorklist.getObjects().getObject())
-				.thenReturn(new BasicEList<>(Arrays.asList(atcObject)));
+		PowerMockito.when(atcWorklist.getObjects().getObject()).thenReturn(new BasicEList<>(Arrays.asList(atcObject)));
 		PowerMockito.when(atcObject.getFindings()).thenReturn(atcFindingList);
 
 		PowerMockito.when(activeAtcFinding.getPriority()).thenReturn(1);
@@ -62,7 +61,7 @@ public class AtcResultAnalyzerTest {
 		PowerMockito.when(suppressedAtcFinding.getPriority()).thenReturn(1);
 		PowerMockito.when(suppressedAtcFinding.getLocation()).thenReturn("/" + SUPPRESSED_FINDING_LOC + "/");
 		PowerMockito.when(suppressedAtcFinding.getUri()).thenReturn(SUPPRESSED_FINDING_URI);
-		ViewModel viewModelInstance = PowerMockito.mock(ViewModel.class);
+		final ViewModel viewModelInstance = PowerMockito.mock(ViewModel.class);
 		Whitebox.setInternalState(ViewModel.class, "INSTANCE", viewModelInstance);
 		PowerMockito.when(viewModelInstance.getSuppressions())
 				.thenReturn(Arrays.asList(new Suppression(SUPPRESSED_FINDING_LOC)));
@@ -71,9 +70,8 @@ public class AtcResultAnalyzerTest {
 	@Test
 	@Ignore
 	public void oneActiveFindingTest() {
-		PowerMockito.when(atcFindingList.getFinding())
-				.thenReturn(new BasicEList<>(Arrays.asList(activeAtcFinding)));
-		TestResult testResult = AtcResultAnalyzer.getTestResult(atcWorklist, null);
+		PowerMockito.when(atcFindingList.getFinding()).thenReturn(new BasicEList<>(Arrays.asList(activeAtcFinding)));
+		final TestResult testResult = AtcResultAnalyzer.getTestResult(atcWorklist, null);
 		assertEquals(TestState.NOK, testResult.getTestState());
 	}
 
@@ -82,7 +80,7 @@ public class AtcResultAnalyzerTest {
 	public void oneSuppressedFindingTest() {
 		PowerMockito.when(atcFindingList.getFinding())
 				.thenReturn(new BasicEList<>(Arrays.asList(suppressedAtcFinding)));
-		TestResult testResult = AtcResultAnalyzer.getTestResult(atcWorklist, null);
+		final TestResult testResult = AtcResultAnalyzer.getTestResult(atcWorklist, null);
 		assertEquals(TestState.OK, testResult.getTestState());
 	}
 

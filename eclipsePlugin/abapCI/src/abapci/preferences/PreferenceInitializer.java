@@ -18,7 +18,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	@Override
 	public void initializeDefaultPreferences() {
 
-		IPreferenceStore store = abapCiPluginHelper.getPreferenceStore();
+		final IPreferenceStore store = abapCiPluginHelper.getPreferenceStore();
 		store.setDefault(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE, true);
 		store.setDefault(PreferenceConstants.PREF_UNIT_RUN_ACTIVATED_OBJECTS_ONLY, false);
 
@@ -42,10 +42,10 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_LEFT_RULER_ENABLED, false);
 		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_RIGHT_RULER_ENABLED, false);
-		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_STATUS_BAR_ENABLED, false);
-		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_ENABLED, true);
-		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_WIDTH_PERCENT, 35);
-		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_HEIGTH_PERCENT, 100);
+		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_STATUS_BAR_ENABLED, true);
+		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_ENABLED, false);
+		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_WIDTH_PERCENT, 100);
+		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_HEIGTH_PERCENT, 50);
 		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_STATUS_BAR_WIDGET_ENABLED, false);
 		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_NEW_DIALOG_ENABLED, true);
 

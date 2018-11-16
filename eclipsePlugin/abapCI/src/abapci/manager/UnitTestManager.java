@@ -26,37 +26,39 @@ public class UnitTestManager extends AbstractTestManager {
 			List<Activation> activatedObjects) {
 
 		TestResultSummary unitTestResultSummary = null;
-		ProgLanguageFactorySelector progLanguageFactorySelector = new ProgLanguageFactorySelector(); 
-		  
-		IUnitHandler unitHandler = progLanguageFactorySelector.determine(project).createUnitHandler();
+		final ProgLanguageFactorySelector progLanguageFactorySelector = new ProgLanguageFactorySelector();
+
+		final IUnitHandler unitHandler = progLanguageFactorySelector.determine(project).createUnitHandler();
 
 		overallTestState = TestState.UNDEF;
-		for (AbapPackageTestState abapPackageTestState : activeAbapPackageTestStates) {
+		for (final AbapPackageTestState abapPackageTestState : activeAbapPackageTestStates) {
 
 			if (!abapPackageTestState.getUnitTestState().equals(TestState.DEACT)
 					&& packageNames.stream().anyMatch(item -> item.equals(abapPackageTestState.getPackageName()))) {
 
 				if (activatedObjects == null) {
-						unitTestResultSummary = unitHandler.executePackage(project,
-								abapPackageTestState.getPackageName(), new HashSet<Activation>());
+					unitTestResultSummary = unitHandler.executePackage(project, abapPackageTestState.getPackageName(),
+							new HashSet<Activation>());
 
-						abapPackageTestState.setUnitTestResult(unitTestResultSummary.getTestResult());
-						mergePackageTestStateIntoGlobalTestState(unitTestResultSummary.getTestResult().getTestState());
+					abapPackageTestState.setUnitTestResult(unitTestResultSummary.getTestResult());
+					mergePackageTestStateIntoGlobalTestState(unitTestResultSummary.getTestResult().getTestState());
 
-					} else {
-						Set<Activation> inactiveObjectsForPackage = activatedObjects.stream()
-								.filter(item -> item.getPackageName().equals(abapPackageTestState.getPackageName()))
-								.collect(Collectors.toSet());
+				} else {
+					final Set<Activation> inactiveObjectsForPackage = activatedObjects.stream()
+							.filter(item -> item.getPackageName().equals(abapPackageTestState.getPackageName()))
+							.collect(Collectors.toSet());
 
-						if (inactiveObjectsForPackage.size() > 0) {
-							unitTestResultSummary = unitHandler.executeObjects(project,
-									abapPackageTestState.getPackageName(), inactiveObjectsForPackage);
-							continuousIntegrationPresenter.mergeUnitTestResult(unitTestResultSummary);
-						}
+					if (inactiveObjectsForPackage.size() > 0) {
+						unitTestResultSummary = unitHandler.executeObjects(project,
+								abapPackageTestState.getPackageName(), inactiveObjectsForPackage);
+						continuousIntegrationPresenter.mergeUnitTestResult(unitTestResultSummary);
 					}
+					mergePackageTestStateIntoGlobalTestState(unitTestResultSummary.getTestResult().getTestState());
+				}
 			}
 
 		}
+
 		return overallTestState;
 	}
 

@@ -3,8 +3,6 @@ package abapci.feature;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
@@ -12,12 +10,10 @@ import org.eclipse.swt.widgets.Display;
 import abapci.AbapCiPluginHelper;
 import abapci.activation.Activation;
 import abapci.ci.presenter.ContinuousIntegrationPresenter;
-import abapci.domain.TestState;
 import abapci.feature.activeFeature.AtcFeature;
 import abapci.feature.activeFeature.DeveloperFeature;
 import abapci.feature.activeFeature.UnitFeature;
 import abapci.manager.AtcTestManager;
-import abapci.manager.DevelopmentProcessManager;
 import abapci.manager.IAtcTestManager;
 import abapci.manager.JavaSimAtcTestManager;
 import abapci.manager.ThemeUpdateManager;
@@ -32,7 +28,6 @@ public class FeatureProcessor {
 
 	private final ContinuousIntegrationPresenter presenter;
 	private List<Activation> inactiveObjects;
-	private final DevelopmentProcessManager developmentProcessManager;
 	private UnitFeature unitFeature;
 	private AtcFeature atcFeature;
 	private SourceCodeVisualisationFeature sourceCodeVisualisationFeature;
@@ -44,34 +39,32 @@ public class FeatureProcessor {
 
 		aUnitTestManager = new UnitTestManager(presenter, project, initialPackages);
 
-		developmentProcessManager = new DevelopmentProcessManager();
-
 		themeUpdateManager = new ThemeUpdateManager();
 
 		initFeatures();
 
 		registerPreferencePropertyChangeListener();
-		
-			if (developerFeature.isJavaSimuModeEnabled()) {
-				atcTestManager = new JavaSimAtcTestManager(presenter, project, initialPackages);
-			} else {
-				atcTestManager = new AtcTestManager(presenter, project, initialPackages);
-			}
+
+		if (developerFeature.isJavaSimuModeEnabled()) {
+			atcTestManager = new JavaSimAtcTestManager(presenter, project, initialPackages);
+		} else {
+			atcTestManager = new AtcTestManager(presenter, project, initialPackages);
+		}
 	}
 
 	private void initFeatures() {
 
-		FeatureFacade featureFacade = new FeatureFacade();
+		final FeatureFacade featureFacade = new FeatureFacade();
 		unitFeature = featureFacade.getUnitFeature();
 		atcFeature = featureFacade.getAtcFeature();
 		sourceCodeVisualisationFeature = featureFacade.getSourceCodeVisualisationFeature();
-		developerFeature = featureFacade.getDeveloperFeature(); 
+		developerFeature = featureFacade.getDeveloperFeature();
 
 	}
 
 	private void registerPreferencePropertyChangeListener() {
 
-		AbapCiPluginHelper abapCiPluginHelper = new AbapCiPluginHelper();
+		final AbapCiPluginHelper abapCiPluginHelper = new AbapCiPluginHelper();
 		abapCiPluginHelper.getPreferenceStore().addPropertyChangeListener(event -> {
 			initFeatures();
 		});
@@ -89,44 +82,34 @@ public class FeatureProcessor {
 		try {
 			if (unitFeature.isActive()) {
 
-				TestState unitTestState = TestState.UNDEF;
 				if (unitFeature.isRunActivatedObjectsOnly()) {
 					if (inactiveObjects != null) {
-						unitTestState = aUnitTestManager.executeAllPackages(presenter.getCurrentProject(),
+						aUnitTestManager.executeAllPackages(presenter.getCurrentProject(),
 								presenter.getAbapPackageTestStatesForCurrentProject(), inactiveObjects);
 					}
 				} else {
-					unitTestState = aUnitTestManager.executeAllPackages(presenter.getCurrentProject(),
+					aUnitTestManager.executeAllPackages(presenter.getCurrentProject(),
 							presenter.getAbapPackageTestStatesForCurrentProject(), null);
 				}
 
-				developmentProcessManager.setUnitTeststate(unitTestState);
-
 				if (sourceCodeVisualisationFeature.isThemeUpdateEnabled()) {
-					themeUpdateManager.updateTheme(developmentProcessManager.getSourcecodeState());
+					themeUpdateManager.updateTheme(presenter.getSourcecodeState());
 				}
 
 			}
 
 			if (atcFeature.isActive()) {
-				TestState atcTestState = null;
 				if (atcFeature.isRunActivatedObjects() && inactiveObjects != null) {
-
-					atcTestState = atcTestManager.executeAllPackages(presenter.getCurrentProject(),
+					atcTestManager.executeAllPackages(presenter.getCurrentProject(),
 							presenter.getAbapPackageTestStatesForCurrentProject(), inactiveObjects);
-				}
-
-				if (atcTestState != null) {
-					developmentProcessManager.setAtcTeststate(atcTestState);
-					if (sourceCodeVisualisationFeature.isThemeUpdateEnabled()) {
-						themeUpdateManager.updateTheme(developmentProcessManager.getSourcecodeState());
-					}
 				}
 			}
 
-			presenter.updateViewsAsync(developmentProcessManager.getSourcecodeState());
+			if (sourceCodeVisualisationFeature.isThemeUpdateEnabled()) {
+				themeUpdateManager.updateTheme(presenter.getSourcecodeState());
+			}
 
-		} catch (Exception ex) {
+		} catch (final Exception ex) {
 			presenter.setStatusMessage("Testrun failed, exception: " + ex.getMessage(),
 					new Color(Display.getCurrent(), new RGB(255, 0, 0)));
 		}

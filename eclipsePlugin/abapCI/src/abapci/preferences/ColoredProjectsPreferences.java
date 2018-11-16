@@ -54,7 +54,7 @@ public class ColoredProjectsPreferences extends FieldEditorPreferencePage implem
 				"&Change color of the left ruler of text editors", getFieldEditorParent()));
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_COLORED_PROJECTS_RIGHT_RULER_ENABLED,
-				"&Change color of right ruler inside the editor", getFieldEditorParent()));
+				"&Change color of the right ruler of text editors", getFieldEditorParent()));
 
 		preferencesUiHelper.addEmptyLabel(getFieldEditorParent());
 

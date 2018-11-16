@@ -35,7 +35,7 @@ public class ThemeUpdateManager {
 		}
 
 		final String changeToTheme = targetTheme;
-		Runnable task = () -> PlatformUI.getWorkbench().getThemeManager().setCurrentTheme(changeToTheme);
+		final Runnable task = () -> PlatformUI.getWorkbench().getThemeManager().setCurrentTheme(changeToTheme);
 		Display.getDefault().asyncExec(task);
 	}
 

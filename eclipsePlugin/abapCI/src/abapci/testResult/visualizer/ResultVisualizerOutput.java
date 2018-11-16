@@ -7,12 +7,16 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.graphics.Color;
 
 import abapci.domain.AbapPackageTestState;
-import abapci.domain.InvalidItem;
 import abapci.utils.ColorChooser;
 import abapci.utils.InvalidItemUtil;
+import abapci.utils.StringUtils;
 
 public class ResultVisualizerOutput {
 
+	public static final String FAILING_UNIT_TESTS_HEADER = "Failing unit tests:";
+	public static final String FAILING_ATC_CHECKS_HEADER = "Failing atc checks:";
+
+	private static final int MAX_VISUALIZED_INVALID_ITEMS = 10;
 	private String globalTestState;
 	private Color backgroundColor;
 	private List<AbapPackageTestState> abapPackageTestStatesForCurrentProject;
@@ -53,7 +57,7 @@ public class ResultVisualizerOutput {
 	}
 
 	public void setBackgroundColor(Color color) {
-		this.backgroundColor = color;
+		backgroundColor = color;
 	}
 
 	public Color getBackgroundColor() {
@@ -69,28 +73,38 @@ public class ResultVisualizerOutput {
 
 	public String getTooltip() {
 
-		List<AbapPackageTestState> packagesWithFailedTests = abapPackageTestStatesForCurrentProject.stream()
-				.filter(item -> item.getFirstFailedUnitTest() != null)
-				.collect(Collectors.<AbapPackageTestState>toList());
+		final List<String> failedUnitTestClasses = getFailingUnitTests();
 
-		List<AbapPackageTestState> packagesWithFailedAtc = abapPackageTestStatesForCurrentProject.stream()
-				.filter(item -> item.getFirstFailedAtc() != null).collect(Collectors.<AbapPackageTestState>toList());
-
-		if (packagesWithFailedTests.size() > 0) {
-			List<InvalidItem> firstFailedTests = packagesWithFailedTests.stream()
-					.map(item -> item.getFirstFailedUnitTest()).collect(Collectors.toList());
-			return InvalidItemUtil.getOutputForUnitTest(firstFailedTests);
+		if (!failedUnitTestClasses.isEmpty()) {
+			return FAILING_UNIT_TESTS_HEADER + System.lineSeparator() + System.lineSeparator()
+					+ String.join(System.lineSeparator(), failedUnitTestClasses);
 		} else {
-			if (packagesWithFailedAtc.size() > 0) {
-				List<InvalidItem> firstFailedTests = packagesWithFailedAtc.stream()
-						.map(item -> item.getFirstFailedAtc()).collect(Collectors.toList());
-				return InvalidItemUtil.getOutputForAtcTest(firstFailedTests);
-			} else {
-				return "";
-			}
+			final List<String> failedAtcFiles = getFailingAtcChecks();
 
+			if (!failedAtcFiles.isEmpty()) {
+				return FAILING_ATC_CHECKS_HEADER + System.lineSeparator() + System.lineSeparator()
+						+ String.join(System.lineSeparator(), failedAtcFiles);
+			} else {
+				return StringUtils.EMPTY;
+			}
 		}
 
+	}
+
+	private List<String> getFailingUnitTests() {
+		final List<String> failedUnitTestClasses = abapPackageTestStatesForCurrentProject.stream()
+				.flatMap(item -> item.getUnitTestResult().getActiveErrors().stream())
+				.map(item -> InvalidItemUtil.getOutputForUnitTest(item)).limit(MAX_VISUALIZED_INVALID_ITEMS)
+				.collect(Collectors.<String>toList());
+		return failedUnitTestClasses;
+	}
+
+	private List<String> getFailingAtcChecks() {
+		final List<String> failedAtcFiles = abapPackageTestStatesForCurrentProject.stream()
+				.flatMap(item -> item.getAtcTestResult().getActiveErrors().stream())
+				.map(item -> InvalidItemUtil.getOutputForAtcTest(item)).limit(MAX_VISUALIZED_INVALID_ITEMS)
+				.collect(Collectors.<String>toList());
+		return failedAtcFiles;
 	}
 
 }

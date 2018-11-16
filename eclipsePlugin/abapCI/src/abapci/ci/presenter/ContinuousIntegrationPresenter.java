@@ -438,4 +438,8 @@ public class ContinuousIntegrationPresenter {
 	public UnitFeature getUnitFeature() {
 		return unitFeature;
 	}
+
+	public SourcecodeState getSourcecodeState() {
+		return evalSourceCodeTestState();
+	}
 }

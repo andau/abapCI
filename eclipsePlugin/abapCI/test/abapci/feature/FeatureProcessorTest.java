@@ -66,7 +66,7 @@ public class FeatureProcessorTest {
 		Whitebox.setInternalState(featureCreator, "prefs", preferenceStore);
 		Whitebox.setInternalState(featureFacade, "featureCreator", featureCreator);
 
-		ContinuousIntegrationPresenter presenter = new ContinuousIntegrationPresenter(null,
+		final ContinuousIntegrationPresenter presenter = new ContinuousIntegrationPresenter(null,
 				new ContinuousIntegrationTestModel(), null);
 		featureProcessor = new FeatureProcessor(presenter, project, new ArrayList<String>());
 
