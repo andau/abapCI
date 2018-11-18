@@ -270,22 +270,24 @@ public class ContinuousIntegrationPresenter {
 		try {
 
 			final IProjectColorFactory projectColorFactory = new ProjectColorFactory();
-			IProjectColor projectColor;
+			IProjectColor testStateprojectColor;
 
 			if (globalTestState.getColor() == null) {
-				projectColor = new DefaultEclipseProjectColor();
+				testStateprojectColor = new DefaultEclipseProjectColor();
 			} else {
-				final Color currentColor = globalTestState.getColor();
-				projectColor = projectColorFactory.create(currentColor.getRGB());
+				final Color currentTestStateColor = globalTestState.getColor();
+				testStateprojectColor = projectColorFactory.create(currentTestStateColor.getRGB());
 			}
 
 			final IColoringConfigFactory coloringConfigFatory = new TestStateColoringConfigFactory(
 					sourceCodeVisualisationFeature);
-			final ColoredProject coloredProject = new ColoredProject(currentProject.getName(), projectColor, false);
-			final IColoringConfig testStateConfig = coloringConfigFatory.create(coloredProject);
+			final ColoredProject testStateColoredProject = new ColoredProject(currentProject.getName(),
+					testStateprojectColor, false);
+			final IColoringConfig testStateConfig = coloringConfigFatory.create(testStateColoredProject);
 
-			final WorkspaceColorConfiguration workspaceColorConfiguration = abapCiPluginHelper
+			WorkspaceColorConfiguration workspaceColorConfiguration = abapCiPluginHelper
 					.getWorkspaceColorConfiguration();
+			workspaceColorConfiguration.addOrUpdateTestStateColoring(testStateConfig, globalTestStateString);
 
 			final ResultVisualizerOutput resultVisualizerOutput = new ResultVisualizerOutput();
 			resultVisualizerOutput.setGlobalTestState(globalTestStateString);

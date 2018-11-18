@@ -1,13 +1,9 @@
 package abapci.handlers;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -21,7 +17,6 @@ import com.sap.adt.atc.IAtcCheckableItem;
 import com.sap.adt.atc.IAtcWorklistBackendAccess;
 import com.sap.adt.atc.model.atcworklist.IAtcWorklist;
 import com.sap.adt.atc.model.atcworklist.IAtcWorklistRun;
-import com.sap.adt.atc.ui.internal.launch.AtcLaunchShortcut;
 import com.sap.adt.tools.core.internal.AbapProjectService;
 import com.sap.adt.tools.core.project.IAbapProject;
 
@@ -76,17 +71,6 @@ public class AbapAtcHandler extends AbstractHandler {
 					new MyAtcCheckableItem(activation.getUri(), activation.getClass().getName(), activation.getType()));
 		}
 
-		if (atcFeature.isAnnotationHandlingEnabled()) {
-			try {
-				runAtcLaunchShortcut(project, checkableItems);
-			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
-					| NoSuchMethodException | SecurityException e) {
-				// currently this is only an experimental function therefore we log the
-				// exception and go on
-				e.printStackTrace();
-			}
-		}
-
 		IAtcWorklistRun worklistRun = worklistBackendAccess.startAtcRunForWorklist(abapProject, checkableItems,
 				worklistId, progressMonitor);
 
@@ -97,18 +81,6 @@ public class AbapAtcHandler extends AbstractHandler {
 		return worklistBackendAccess.getWorklist(abapProject, worklistRun.getWorklistId(),
 				worklistRun.getWorklistTimestamp().toString(), objectSetName, forceObjectSet, includeExemptedFindings,
 				progressMonitor);
-
-	}
-
-	private void runAtcLaunchShortcut(IProject project, List<IAtcCheckableItem> checkableItems)
-			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException,
-			SecurityException {
-
-		Set<IAtcCheckableItem> adtItems = new HashSet<>(checkableItems);
-
-		AtcLaunchShortcut atcLaunchShortcut = new AtcLaunchShortcut();
-		Method launchShortcut = AtcLaunchShortcut.class.getMethod("runAtcForSelectedItems", Set.class, IProject.class);
-		launchShortcut.invoke(atcLaunchShortcut, adtItems, project);
 
 	}
 

@@ -41,7 +41,8 @@ public class ColoredProjectsPreferences extends FieldEditorPreferencePage implem
 		preferencesUiHelper.addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "Colored Editor title icon");
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_ENABLED,
-				"&Add a rectangle to the right bottom of the editor title icon", getFieldEditorParent()));
+				"&Add a rectangle to the right bottom of the editor title icon (experimental)",
+				getFieldEditorParent()));
 		addField(new IntegerFieldEditor(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_WIDTH_PERCENT,
 				"&Width of rectangle in percent of the icon width", getFieldEditorParent()));
 

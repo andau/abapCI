@@ -25,7 +25,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.PREF_ATC_RUN_ACTIVATED_OBJECTS_ONLY, true);
 		store.setDefault(PreferenceConstants.PREF_ATC_VARIANT, "DEFAULT");
 		store.setDefault(PreferenceConstants.PREF_TDD_MODE, false);
-		store.setDefault(PreferenceConstants.PREF_TDD_MIN_REQUIRED_SECONDS, 30);
+		store.setDefault(PreferenceConstants.PREF_TDD_MIN_REQUIRED_SECONDS, 10);
 
 		store.setDefault(PreferenceConstants.PREF_JENKINS_URL, "<jenkins_host>:<jenkins_port>");
 		store.setDefault(PreferenceConstants.PREF_JENKINS_USERNAME, "jenkins_username");
