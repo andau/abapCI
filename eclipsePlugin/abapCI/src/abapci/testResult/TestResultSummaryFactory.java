@@ -30,32 +30,32 @@ public class TestResultSummaryFactory {
 
 	public static TestResultSummary create(IProject project, String packageName, IAbapUnitResult abapUnitResult,
 			Set<Activation> activations) {
-		List<IAbapUnitAlert> criticalAlerts = getCriticalAlerts(abapUnitResult.getAlerts(), false);
+		final List<IAbapUnitAlert> criticalAlerts = getCriticalAlerts(abapUnitResult.getAlerts(), false);
 
-		for (IAbapUnitResultItem abapUnitResultItem : abapUnitResult.getItems()) {
-			boolean isSuppressed = ViewModel.INSTANCE.getSuppressions().stream()
+		for (final IAbapUnitResultItem abapUnitResultItem : abapUnitResult.getItems()) {
+			final boolean isSuppressed = ViewModel.INSTANCE.getSuppressions().stream()
 					.anyMatch(item -> item.getClassName().equals(abapUnitResultItem.getName()));
 			criticalAlerts.addAll(getCriticalAlerts(abapUnitResultItem, isSuppressed));
 		}
 
 		// TODO Split criticalAlerts into active alerts and suppressed alerts
 
-		List<InvalidItem> invalidItems = new ArrayList<>();
-		for (IAbapUnitAlert criticalAlert : criticalAlerts) {
+		final List<InvalidItem> invalidItems = new ArrayList<>();
+		for (final IAbapUnitAlert criticalAlert : criticalAlerts) {
 
 			IAbapUnitAlertStackEntry firstStackEntry = null;
 			if (criticalAlert.getStackEntries() != null && !criticalAlert.getStackEntries().isEmpty()) {
 				firstStackEntry = criticalAlert.getStackEntries().get(0);
 			}
 
-			String extractedDetailMessage = AlertDetailMessageExtractor.extractMessageForUi(criticalAlert);
+			final String extractedDetailMessage = AlertDetailMessageExtractor.extractMessageForUi(criticalAlert);
 			invalidItems.add(new InvalidItem(InvalidItemUtil.extractClassName(firstStackEntry.getDescription()),
 					criticalAlert.getTitle(), false, firstStackEntry.getUri(), extractedDetailMessage,
 					ErrorPriority.ERROR));
 		}
 
 		int numTests = 0;
-		for (IAbapUnitResultItem childItem : abapUnitResult.getItems()) {
+		for (final IAbapUnitResultItem childItem : abapUnitResult.getItems()) {
 
 			if (childItem.getType().equals(AbapUnitResultItemType.TEST_METHOD)) {
 				numTests++;
@@ -70,7 +70,7 @@ public class TestResultSummaryFactory {
 
 	private static int getNumTests(IAbapUnitResultItem item) {
 		int numTests = 0;
-		for (IAbapUnitResultItem childItem : item.getChildItems()) {
+		for (final IAbapUnitResultItem childItem : item.getChildItems()) {
 			if (childItem.getType().equals(AbapUnitResultItemType.TEST_METHOD)) {
 				numTests++;
 			} else {
@@ -83,9 +83,9 @@ public class TestResultSummaryFactory {
 	private static List<IAbapUnitAlert> getCriticalAlerts(IAbapUnitResultItem abapUnitResultItem,
 			boolean isSuppressed) {
 
-		List<IAbapUnitAlert> criticalAlerts = getCriticalAlerts(abapUnitResultItem.getAlerts(), isSuppressed);
+		final List<IAbapUnitAlert> criticalAlerts = getCriticalAlerts(abapUnitResultItem.getAlerts(), isSuppressed);
 
-		for (IAbapUnitResultItem abapUnitResultSubItem : abapUnitResultItem.getChildItems()) {
+		for (final IAbapUnitResultItem abapUnitResultSubItem : abapUnitResultItem.getChildItems()) {
 			criticalAlerts.addAll(getCriticalAlerts(abapUnitResultSubItem, isSuppressed));
 		}
 
@@ -93,8 +93,8 @@ public class TestResultSummaryFactory {
 	}
 
 	private static List<IAbapUnitAlert> getCriticalAlerts(List<IAbapUnitAlert> alerts, boolean isSuppressed) {
-		List<IAbapUnitAlert> criticalAlerts = new ArrayList<>();
-		for (IAbapUnitAlert alert : alerts) {
+		final List<IAbapUnitAlert> criticalAlerts = new ArrayList<>();
+		for (final IAbapUnitAlert alert : alerts) {
 			if (alert != null && alert.getSeverity() != AbapUnitAlertSeverity.TOLERABLE
 					&& (alert.getTitle() == null || !alert.getTitle().contains("Invalid parameter ID"))) {
 

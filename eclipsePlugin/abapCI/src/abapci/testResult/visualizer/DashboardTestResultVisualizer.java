@@ -12,6 +12,7 @@ import abapci.domain.InvalidItem;
 import abapci.utils.InvalidItemUtil;
 
 public class DashboardTestResultVisualizer implements ITestResultVisualizer {
+	private static final int MAX_NUMBER_OF_INVALID_ITEMS_VISUALIZED = 10;
 	AbapCiDashboardView view;
 
 	public DashboardTestResultVisualizer(AbapCiDashboardView abapCiDashboardView) {
@@ -41,24 +42,21 @@ public class DashboardTestResultVisualizer implements ITestResultVisualizer {
 	private void rebuildHyperlink(Composite container, Hyperlink link,
 			List<AbapPackageTestState> abapPackageTestStates) {
 
-		final List<AbapPackageTestState> packagesWithFailedTests = abapPackageTestStates.stream()
-				.filter(item -> item.getFirstFailedUnitTest() != null)
-				.collect(Collectors.<AbapPackageTestState>toList());
+		final List<InvalidItem> invalidUnitTestItems = abapPackageTestStates.stream()
+				.flatMap(item -> item.getFirstUnitTestErrors().stream()).limit(MAX_NUMBER_OF_INVALID_ITEMS_VISUALIZED)
+				.collect(Collectors.<InvalidItem>toList());
 
-		final List<AbapPackageTestState> packagesWithFailedAtc = abapPackageTestStates.stream()
-				.filter(item -> item.getFirstFailedAtc() != null).collect(Collectors.<AbapPackageTestState>toList());
+		final List<InvalidItem> invalidAtcTestItems = abapPackageTestStates.stream()
+				.flatMap(item -> item.getFirstFailedAtcErrors().stream()).limit(MAX_NUMBER_OF_INVALID_ITEMS_VISUALIZED)
+				.collect(Collectors.<InvalidItem>toList());
 
-		if (packagesWithFailedTests.size() > 0) {
+		if (invalidUnitTestItems.size() > 0) {
 			link.setVisible(true);
-			final List<InvalidItem> firstFailedTests = packagesWithFailedTests.stream()
-					.map(item -> item.getFirstFailedUnitTest()).collect(Collectors.toList());
-			link.setText(InvalidItemUtil.getOutputForUnitTest(firstFailedTests));
+			link.setText(InvalidItemUtil.getOutputForUnitTest(invalidUnitTestItems));
 		} else {
-			if (packagesWithFailedAtc.size() > 0) {
+			if (invalidAtcTestItems.size() > 0) {
 				link.setVisible(true);
-				final List<InvalidItem> firstFailedTests = packagesWithFailedAtc.stream()
-						.map(item -> item.getFirstFailedAtc()).collect(Collectors.toList());
-				link.setText(InvalidItemUtil.getOutputForAtcTest(firstFailedTests));
+				link.setText(InvalidItemUtil.getOutputForAtcTest(invalidAtcTestItems));
 			} else {
 				link.setVisible(false);
 			}

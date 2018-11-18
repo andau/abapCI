@@ -24,21 +24,21 @@ public class AbapUnitCiActionOpenFirstError extends AbstractCiAction {
 	@Override
 	public void run() {
 
-		for (AbapPackageTestState abapPackageTestState : getSelectedAbapPackageTestStates()) {
+		for (final AbapPackageTestState abapPackageTestState : getSelectedAbapPackageTestStates()) {
 
 			try {
 
-				URI uriToError = abapPackageTestState.getFirstFailedUnitTest() != null
-						? abapPackageTestState.getFirstFailedUnitTest().getUriToError()
+				URI uriToError = abapPackageTestState.getFirstUnitTestErrors().iterator().hasNext()
+						? abapPackageTestState.getFirstUnitTestErrors().iterator().next().getUriToError()
 						: null;
 				if (uriToError == null) {
-					uriToError = abapPackageTestState.getFirstFailedAtc() != null
-							? abapPackageTestState.getFirstFailedAtc().getUriToError()
+					uriToError = abapPackageTestState.getFirstFailedAtcErrors().iterator().hasNext()
+							? abapPackageTestState.getFirstFailedAtcErrors().iterator().next().getUriToError()
 							: null;
 				}
 
 				if (uriToError != null) {
-					IAdtObjectReference objRef = AdtObjectReferenceAdapterFactory.create(uriToError.toString());
+					final IAdtObjectReference objRef = AdtObjectReferenceAdapterFactory.create(uriToError.toString());
 					AdtNavigationServiceFactory.createNavigationService()
 							.navigate(continuousIntegrationPresenter.getCurrentProject(), objRef, true);
 
@@ -48,7 +48,7 @@ public class AbapUnitCiActionOpenFirstError extends AbstractCiAction {
 							"No failed test or ATC findings found, development object could not be openend");
 				}
 
-			} catch (Exception ex) {
+			} catch (final Exception ex) {
 				TestResultSummaryFactory.createOffline(null, abapPackageTestState.getPackageName());
 			}
 

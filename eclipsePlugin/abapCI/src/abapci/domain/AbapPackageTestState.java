@@ -3,6 +3,8 @@ package abapci.domain;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.text.SimpleDateFormat;
+import java.util.HashSet;
+import java.util.Set;
 
 import abapci.testResult.TestResult;
 
@@ -13,7 +15,7 @@ public class AbapPackageTestState {
 	private TestResult unitTestResult;
 	private TestResult atcTestResult;
 
-	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+	private final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
 	public AbapPackageTestState() {
 	}
@@ -24,7 +26,7 @@ public class AbapPackageTestState {
 		this.projectName = projectName;
 		this.packageName = packageName;
 		this.jenkinsInfo = jenkinsInfo;
-		this.unitTestResult = aUnitTestResult;
+		unitTestResult = aUnitTestResult;
 		this.atcTestResult = atcTestResult;
 	}
 
@@ -32,9 +34,9 @@ public class AbapPackageTestState {
 		super();
 		this.projectName = projectName;
 		this.packageName = packageName;
-		this.jenkinsInfo = TestState.UNDEF.toString();
-		this.unitTestResult = new TestResult();
-		this.atcTestResult = new TestResult();
+		jenkinsInfo = TestState.UNDEF.toString();
+		unitTestResult = new TestResult();
+		atcTestResult = new TestResult();
 	}
 
 	public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
@@ -84,8 +86,8 @@ public class AbapPackageTestState {
 	}
 
 	public void setUnitTestResult(TestResult aUnitTestResult) {
-		this.unitTestResult = aUnitTestResult;
-		propertyChangeSupport.firePropertyChange("aUnitTestResult", this.unitTestResult, aUnitTestResult);
+		unitTestResult = aUnitTestResult;
+		propertyChangeSupport.firePropertyChange("aUnitTestResult", unitTestResult, aUnitTestResult);
 	}
 
 	public TestState getAtcTestState() {
@@ -93,23 +95,23 @@ public class AbapPackageTestState {
 	}
 
 	public int getAtcNumFiles() {
-		return this.atcTestResult.getNumItems();
+		return atcTestResult.getNumItems();
 	}
 
 	public int getAtcNumErr() {
-		return this.atcTestResult.getActiveErrors(ErrorPriority.ERROR).size();
+		return atcTestResult.getActiveErrors(ErrorPriority.ERROR).size();
 	}
 
 	public int getAtcNumWarn() {
-		return this.atcTestResult.getActiveErrors(ErrorPriority.WARNING).size();
+		return atcTestResult.getActiveErrors(ErrorPriority.WARNING).size();
 	}
 
 	public int getAtcNumInfo() {
-		return this.atcTestResult.getActiveErrors(ErrorPriority.INFO).size();
+		return atcTestResult.getActiveErrors(ErrorPriority.INFO).size();
 	}
 
 	public int getAtcNumSuppressed() {
-		return this.atcTestResult.getSuppressedErrors().size();
+		return atcTestResult.getSuppressedErrors().size();
 	}
 
 	public String getAtcLastRun() {
@@ -128,16 +130,44 @@ public class AbapPackageTestState {
 				+ atcTestResult.getTestState();
 	}
 
+	@Deprecated
 	public InvalidItem getFirstFailedUnitTest() {
 		return unitTestResult.getActiveErrors(ErrorPriority.ERROR).size() > 0
 				? unitTestResult.getActiveErrors(ErrorPriority.ERROR).iterator().next()
 				: null;
 	}
 
+	public Set<InvalidItem> getFirstUnitTestErrors() {
+		final Set<InvalidItem> firstFailedUnitTestErrors = new HashSet<InvalidItem>();
+
+		for (final InvalidItem invalidItem : unitTestResult.getActiveErrors(ErrorPriority.ERROR)) {
+			if (setDoesNotContainClassNameAlready(firstFailedUnitTestErrors, invalidItem)) {
+				firstFailedUnitTestErrors.add(invalidItem);
+			}
+		}
+		return firstFailedUnitTestErrors;
+	}
+
+	@Deprecated
 	public InvalidItem getFirstFailedAtc() {
 		return atcTestResult.getActiveErrors(ErrorPriority.ERROR).size() > 0
 				? atcTestResult.getActiveErrors(ErrorPriority.ERROR).iterator().next()
 				: null;
+	}
+
+	public Set<InvalidItem> getFirstFailedAtcErrors() {
+		final Set<InvalidItem> firstFailedAtcErrors = new HashSet<InvalidItem>();
+
+		for (final InvalidItem invalidItem : atcTestResult.getActiveErrors(ErrorPriority.ERROR)) {
+			if (setDoesNotContainClassNameAlready(firstFailedAtcErrors, invalidItem)) {
+				firstFailedAtcErrors.add(invalidItem);
+			}
+		}
+		return firstFailedAtcErrors;
+	}
+
+	private boolean setDoesNotContainClassNameAlready(Set<InvalidItem> firstFailedAtcErrors, InvalidItem invalidItem) {
+		return !firstFailedAtcErrors.stream().anyMatch(item -> item.getClassName().equals(invalidItem.getClassName()));
 	}
 
 	public TestResult getAtcTestResult() {

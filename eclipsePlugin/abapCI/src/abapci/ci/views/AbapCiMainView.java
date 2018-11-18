@@ -461,14 +461,20 @@ public class AbapCiMainView extends ViewPart {
 				}
 			}
 
-			uriToFirstError = p.getFirstFailedUnitTest() != null ? p.getFirstFailedUnitTest().getUriToError() : null;
-			m_control.setText(
-					uriToFirstError != null ? InvalidItemUtil.getOutputForUnitTest(p.getFirstFailedUnitTest()) : "");
+			uriToFirstError = p.getFirstUnitTestErrors().size() > 0
+					? p.getFirstUnitTestErrors().iterator().next().getUriToError()
+					: null;
+			m_control.setText(uriToFirstError != null
+					? InvalidItemUtil.getOutputForUnitTest(p.getFirstUnitTestErrors().iterator().next())
+					: StringUtils.EMPTY);
 
 			if (atcFeature.isActive() && uriToFirstError == null) {
-				uriToFirstError = p.getFirstFailedAtc() != null ? p.getFirstFailedAtc().getUriToError() : null;
-				m_control.setText(
-						uriToFirstError != null ? InvalidItemUtil.getOutputForAtcTest(p.getFirstFailedAtc()) : "");
+				uriToFirstError = p.getFirstFailedAtcErrors().size() > 0
+						? p.getFirstFailedAtcErrors().iterator().next().getUriToError()
+						: null;
+				m_control.setText(uriToFirstError != null
+						? InvalidItemUtil.getOutputForAtcTest(p.getFirstFailedAtcErrors().iterator().next())
+						: StringUtils.EMPTY);
 			}
 			m_control.addHyperlinkListener(new HyperlinkAdapter() {
 				@Override

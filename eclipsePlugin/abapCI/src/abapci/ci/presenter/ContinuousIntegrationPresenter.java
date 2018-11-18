@@ -29,6 +29,7 @@ import abapci.coloredProject.model.projectColor.ProjectColorFactory;
 import abapci.domain.AbapPackageTestState;
 import abapci.domain.ContinuousIntegrationConfig;
 import abapci.domain.GlobalTestState;
+import abapci.domain.InvalidItem;
 import abapci.domain.SourcecodeState;
 import abapci.domain.TestState;
 import abapci.feature.FeatureFacade;
@@ -48,6 +49,7 @@ import abapci.utils.EditorHandler;
 
 public class ContinuousIntegrationPresenter {
 
+	private static final int MAX_INVALID_ITEMS_OPENED = 10;
 	private AbapCiMainView view;
 	private final IContinuousIntegrationModel model;
 	private IProject currentProject;
@@ -342,19 +344,21 @@ public class ContinuousIntegrationPresenter {
 
 	private void openEditorsForFailedTests() {
 
-		final List<AbapPackageTestState> packagesWithFailedTests = getAbapPackageTestStatesForCurrentProject().stream()
-				.filter(item -> item.getFirstFailedUnitTest() != null)
-				.collect(Collectors.<AbapPackageTestState>toList());
+		final List<InvalidItem> invalidItems = getAbapPackageTestStatesForCurrentProject().stream()
+				.flatMap(item -> item.getFirstUnitTestErrors().stream()).limit(MAX_INVALID_ITEMS_OPENED)
+				.collect(Collectors.<InvalidItem>toList());
 
-		EditorHandler.openUnit(currentProject, packagesWithFailedTests);
+		EditorHandler.openInvalidItem(currentProject, invalidItems);
 	}
 
 	private void openEditorsForFailedAtc() {
 
-		final List<AbapPackageTestState> packagesWithFailedAtc = getAbapPackageTestStatesForCurrentProject().stream()
-				.filter(item -> item.getFirstFailedAtc() != null).collect(Collectors.<AbapPackageTestState>toList());
+		final List<InvalidItem> invalidItems = getAbapPackageTestStatesForCurrentProject().stream()
+				.flatMap(item -> item.getFirstFailedAtcErrors().stream()).limit(MAX_INVALID_ITEMS_OPENED)
+				.collect(Collectors.<InvalidItem>toList());
 
-		EditorHandler.openAtc(currentProject, packagesWithFailedAtc);
+		EditorHandler.openInvalidItem(currentProject, invalidItems);
+
 	}
 
 	private SourcecodeState evalSourceCodeTestState() {

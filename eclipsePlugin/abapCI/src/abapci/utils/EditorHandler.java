@@ -9,23 +9,17 @@ import com.sap.adt.tools.core.model.adtcore.IAdtObjectReference;
 import com.sap.adt.tools.core.model.util.AdtObjectReferenceAdapterFactory;
 import com.sap.adt.tools.core.ui.navigation.AdtNavigationServiceFactory;
 
-import abapci.domain.AbapPackageTestState;
+import abapci.domain.InvalidItem;
 
 public class EditorHandler {
 
 	public static void open(IProject project, URI uri) {
-		IAdtObjectReference objRef = AdtObjectReferenceAdapterFactory.create(uri.toString());
+		final IAdtObjectReference objRef = AdtObjectReferenceAdapterFactory.create(uri.toString());
 		AdtNavigationServiceFactory.createNavigationService().navigate(project, objRef, true);
 	}
 
-	public static void openUnit(IProject currentProject, List<AbapPackageTestState> packagesWithFailedTests) {
-		packagesWithFailedTests.stream()
-				.forEach(item -> open(currentProject, item.getFirstFailedUnitTest().getUriToError()));
-	}
-
-	public static void openAtc(IProject currentProject, List<AbapPackageTestState> packagesWithFailedTests) {
-		packagesWithFailedTests.stream()
-				.forEach(item -> open(currentProject, item.getFirstFailedAtc().getUriToError()));
+	public static void openInvalidItem(IProject currentProject, List<InvalidItem> invalidItems) {
+		invalidItems.stream().forEach(item -> open(currentProject, item.getUriToError()));
 	}
 
 }
