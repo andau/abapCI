@@ -108,10 +108,15 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 
 							IProject activatedProject = activationPool.getCurrentProject();
 							
-							if (atcFeature.isAnnotationHandlingEnabled()) 
-							{
-							   executeAtcShortcut(activatedProject, activatedInactiveObjects);
+							try {
+								if (atcFeature.isAnnotationHandlingEnabled()) 
+								{
+								   executeAtcShortcut(activatedProject, activatedInactiveObjects);
+								}								
+							}catch (Exception ex) {
+								//experimental function, therefore in error case we move on 
 							}
+							
 							if (activatedProject != null) {
 								continuousIntegrationPresenter.setCurrentProject(activationPool.getCurrentProject());
 							}
@@ -181,9 +186,7 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 
 	}
 
-	private void runAtcLaunchShortcut(IProject project, List<IAtcCheckableItem> checkableItems)
-			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException,
-			SecurityException {
+	private void runAtcLaunchShortcut(IProject project, List<IAtcCheckableItem> checkableItems) {
 
 		try {
 

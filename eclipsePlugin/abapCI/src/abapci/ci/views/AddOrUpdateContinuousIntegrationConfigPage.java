@@ -24,6 +24,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.PreferencesUtil;
 
 import abapci.AbapCiPlugin;
@@ -77,11 +79,11 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 
 		addPackageTextfield(container);
 
+		addEmptyLine(container);
+
 		addUnitTestsCheckbox(container, unitFeature.isActive());
 
 		addAtcCheckbox(container, atcFeature.isActive());
-
-		addEmptyLine(container);
 
 		addEmptyLine(container);
 
@@ -106,19 +108,17 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 		gridData.grabExcessVerticalSpace = true;
 
 		final StringBuilder descriptionTextBuilder = new StringBuilder();
-		descriptionTextBuilder.append("An ABAP package was detected which is not already configured for the CI run");
-		descriptionTextBuilder.append(System.lineSeparator() + System.lineSeparator());
-		descriptionTextBuilder
-				.append("By activating the option Unit test, unit tests are performed after each activation");
+		descriptionTextBuilder.append(
+				"If this dialog appeared automatically an ABAP package was detected which is not already configured for the CI run. You can include/exclude this package by activating or deactivating the two checkboxes above.");
 		descriptionTextBuilder.append(System.lineSeparator() + System.lineSeparator());
 		descriptionTextBuilder.append(
-				"By activation the checkbox ATC checks, after each Activation the activated ABAP classes are checked for findings.");
+				"When the checkbox Unit test is checked, unit tests are run automatically after each activation of an ABAP development object which belongs to this package.");
+		descriptionTextBuilder.append(System.lineSeparator() + System.lineSeparator());
+		descriptionTextBuilder.append(
+				"By activating the checkbox ATC checks, after each activation the activated ABAP classes are checked for ATC findings.");
 		descriptionTextBuilder.append(System.lineSeparator());
 		descriptionTextBuilder.append(
-				"! Please be aware that this  functionality generates some data in the table TBD. Please reorganise this table with the ABAP program TBD continuously !");
-		descriptionTextBuilder.append(System.lineSeparator());
-		descriptionTextBuilder
-				.append("General configuration of this feature can be found in the <a>Eclipse preferences</a>");
+				"! Please be aware that this functionality generates some data in the table SATC_AC_RESULTVT. Reorganise this table with the ABAP program SATC_AC_CLEANUP continuously !");
 		descriptionTextBuilder.append(System.lineSeparator());
 
 		description.setLayoutData(gridData);
@@ -128,8 +128,7 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 		addEmptyLine(container);
 
 		final Link link = new Link(container, SWT.NONE);
-		link.setText(
-				"Unit test and ATC runs and the type of visualisation of the test run results can be configured in the <a>Eclipse preferences</a>");
+		link.setText("General configuration settings for this feature can be done in the <a>Eclipse preferences</a>");
 
 		link.addSelectionListener(new SelectionAdapter() {
 
@@ -140,6 +139,16 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 				dialog.open();
 			}
 		});
+
+		try {
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+					.showView("abapci.ci.views.AbapCiMainView.java");
+		} catch (PartInitException e) {
+			// if ABAP CI view can not be opened we keep on going as this is not
+			// a critical function
+			e.printStackTrace();
+		}
+
 	}
 
 	private void addEmptyLine(Composite container) {
@@ -148,7 +157,7 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 
 	private void addShowAgainCheckbox(Composite container) {
 		final Label lblShowPopUpAgain = new Label(container, SWT.READ_ONLY);
-		lblShowPopUpAgain.setText("Show this popup again, when the next new package is detected?");
+		lblShowPopUpAgain.setText("Show this dialog again, when the next not configured ABAP package is detected?");
 
 		final Composite compShowPopUp = new Composite(container, SWT.NULL);
 		compShowPopUp.setLayout(new RowLayout());
@@ -165,7 +174,7 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 
 	private void addUnitTestsCheckbox(Composite container, boolean featureActivated) {
 		final Label lblActivated = new Label(container, SWT.READ_ONLY);
-		lblActivated.setText("Include package into Unit testrun?");
+		lblActivated.setText("Include ABAP package into the automatic Unit testrun?");
 		lblActivated.setForeground(HEADER_COLOR);
 
 		final boolean isActivated = ciConfig == null ? featureActivated : ciConfig.getUtActivated();
@@ -183,7 +192,7 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 
 	private void addAtcCheckbox(Composite container, boolean featureActivated) {
 		final Label lblActivated = new Label(container, SWT.READ_ONLY);
-		lblActivated.setText("Include package into ATC run?");
+		lblActivated.setText("Include ABAP package into the automatic ATC run (see description)?");
 		lblActivated.setForeground(HEADER_COLOR);
 
 		final boolean isActivated = ciConfig == null ? featureActivated : ciConfig.getUtActivated();

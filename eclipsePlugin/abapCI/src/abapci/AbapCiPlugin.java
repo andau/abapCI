@@ -81,8 +81,8 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 			workspaceColorConfiguration = new WorkspaceColorConfiguration(true);
 
 			coloredProjectsPresenter = new ColoredProjectsPresenter(null, new ColoredProjectModel());
-			updateProjectColors();
 			registerPreferencePropertyChangeListener();
+			updateProjectColors();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			// if here is a problem we will go on as these are no critical feature

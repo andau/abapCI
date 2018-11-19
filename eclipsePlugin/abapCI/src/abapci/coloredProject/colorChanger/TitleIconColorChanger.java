@@ -87,20 +87,8 @@ public class TitleIconColorChanger extends ColorChanger {
 				// titleImage.setAccessible(true);
 				// titleImage.set(workbenchPart, newTitleImage);
 
-			} catch (IllegalArgumentException | IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SecurityException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (NoSuchFieldException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
+			} catch (Exception e) {
+				//when an error occurs while decorating the title icon we move on as this function is not critical 
 				e.printStackTrace();
 			}
 		}

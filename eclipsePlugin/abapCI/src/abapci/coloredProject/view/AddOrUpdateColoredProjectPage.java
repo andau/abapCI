@@ -21,10 +21,8 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PartInitException;
@@ -37,8 +35,6 @@ import abapci.coloredProject.model.projectColor.IProjectColor;
 import abapci.coloredProject.model.projectColor.IProjectColorFactory;
 import abapci.coloredProject.model.projectColor.ProjectColorFactory;
 import abapci.coloredProject.presenter.ColoredProjectsPresenter;
-import abapci.feature.FeatureFacade;
-import abapci.feature.activeFeature.ColoredProjectFeature;
 import abapci.preferences.PreferenceConstants;
 import abapci.utils.ResourcePluginHelper;
 import abapci.utils.StringUtils;
@@ -135,11 +131,10 @@ public class AddOrUpdateColoredProjectPage extends Dialog {
 			}
 		}
 
-		if (colorSelector.getColorValue() == null) 
-		{
-		colorSelector.setColorValue(new RGB(255, 255, 255));
+		if (colorSelector.getColorValue() == null) {
+			colorSelector.setColorValue(new RGB(255, 255, 255));
 		}
-		
+
 		boolean isSuppressed = coloredProject == null ? true : coloredProject.isSuppressedColoring();
 		colorSelector.setEnabled(!isSuppressed);
 	}
@@ -150,13 +145,11 @@ public class AddOrUpdateColoredProjectPage extends Dialog {
 		btnSuppressColoring.setSelection(coloredProject != null ? coloredProject.isSuppressedColoring() : true);
 		btnSuppressColoring.setToolTipText("Check this checkbox if the selected project should not be colored");
 
-		btnSuppressColoring.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event e) {
-				switch (e.type) {
-				case SWT.Selection:
-					colorSelector.setEnabled(!btnSuppressColoring.getSelection());
-					break;
-				}
+		btnSuppressColoring.addListener(SWT.Selection, e -> {
+			switch (e.type) {
+			case SWT.Selection:
+				colorSelector.setEnabled(!btnSuppressColoring.getSelection());
+				break;
 			}
 		});
 	}
@@ -177,9 +170,10 @@ public class AddOrUpdateColoredProjectPage extends Dialog {
 		descriptionTextBuilder.append(
 				"Assign a color to a project. The color will be used to indicate the current selected project by coloring specific UI components.");
 		descriptionTextBuilder.append(System.lineSeparator() + System.lineSeparator());
-		descriptionTextBuilder.append("The recommended standard configuration for a DEV, QAS, PRD system is: ");
+		descriptionTextBuilder.append(
+				"The recommended standard configuration for an standard ABAP environment with DEV, QAS, PRD instance is: ");
 		descriptionTextBuilder.append(System.lineSeparator());
-		descriptionTextBuilder.append("   DEV: Check checkbox 'Do not color this project' ");
+		descriptionTextBuilder.append("   DEV: Check the checkbox 'Do not color this project' ");
 		descriptionTextBuilder.append(System.lineSeparator());
 		descriptionTextBuilder.append("   QAS: Choose for example the color 'orange'");
 		descriptionTextBuilder.append(System.lineSeparator());
@@ -193,7 +187,8 @@ public class AddOrUpdateColoredProjectPage extends Dialog {
 		addEmptyLine(container);
 
 		Link link = new Link(container, SWT.NONE);
-		link.setText("The details can be configured in the <a>Eclipse preferences</a>");
+		link.setText(
+				"The exact display behaviour for the selected coloring can be configured in the <a>Eclipse preferences</a>");
 
 		link.addSelectionListener(new SelectionAdapter() {
 
@@ -212,7 +207,8 @@ public class AddOrUpdateColoredProjectPage extends Dialog {
 
 	private void addCheckBoxForDialogPopUp(Composite container, boolean showPopUpCheckBox) {
 		Label lblShowPopUpAgain = new Label(container, SWT.READ_ONLY);
-		lblShowPopUpAgain.setText("Show this dialog again, when a project without an color assignment is opened?");
+		lblShowPopUpAgain.setText(
+				"Show this dialog again, when a project without an color assignment is opened the first time?");
 
 		Composite compShowPopUp = new Composite(container, SWT.NULL);
 		compShowPopUp.setLayout(new RowLayout());
@@ -242,34 +238,35 @@ public class AddOrUpdateColoredProjectPage extends Dialog {
 	protected void okPressed() {
 
 		handleShowPopUpCheckbox();
-		
+
 		if (inputIsComplete()) {
 			IProjectColorFactory projectColorFactory = new ProjectColorFactory();
-			IProjectColor projectColor = projectColorFactory.create(colorSelector.getColorValue(), btnSuppressColoring.getSelection());
+			IProjectColor projectColor = projectColorFactory.create(colorSelector.getColorValue(),
+					btnSuppressColoring.getSelection());
 			presenter.addColoredProject(new ColoredProject(comboColoredProject.getText(), projectColor,
 					btnSuppressColoring.getSelection()));
 			presenter.setViewerInput();
 			super.okPressed();
-		}
-		else {
+		} else {
 			presenter.setStatusErrorMessage("Eingaben sind nicht korrekt");
 		}
 	}
 
 	private boolean inputIsComplete() {
-		boolean projectValid = comboColoredProject.getText() != null && !comboColoredProject.getText().equals(StringUtils.EMPTY);
+		boolean projectValid = comboColoredProject.getText() != null
+				&& !comboColoredProject.getText().equals(StringUtils.EMPTY);
 		boolean rgbValid = colorSelector.getColorValue() != null;
-		
-		return  (projectValid  &&  rgbValid);
+
+		return (projectValid && rgbValid);
 	}
-	
+
 	@Override
 	protected void cancelPressed() {
 		handleShowPopUpCheckbox();
 
 		super.cancelPressed();
 	}
-	
+
 	private void handleShowPopUpCheckbox() {
 		if (!showPopUpYes.getSelection()) {
 			disableNewConfigurationDialog();
