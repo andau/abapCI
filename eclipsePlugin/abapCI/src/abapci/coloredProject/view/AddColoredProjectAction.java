@@ -20,7 +20,7 @@ public class AddColoredProjectAction extends Action {
 	@Override
 	public void run() {
 
-		AddOrUpdateColoredProjectPage coloredProjectDialog = new AddOrUpdateColoredProjectPage(
+		final AddOrUpdateColoredProjectPage coloredProjectDialog = new AddOrUpdateColoredProjectPage(
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), presenter, null, false);
 		if (coloredProjectDialog.open() == Window.OK) {
 

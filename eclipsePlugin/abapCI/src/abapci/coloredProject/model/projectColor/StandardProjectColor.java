@@ -6,7 +6,7 @@ import org.eclipse.swt.widgets.Display;
 
 public class StandardProjectColor implements IProjectColor {
 
-	private RGB rgb;
+	private final RGB rgb;
 	private boolean suppressed;
 
 	public StandardProjectColor(RGB rgb) {
@@ -14,11 +14,12 @@ public class StandardProjectColor implements IProjectColor {
 	}
 
 	public StandardProjectColor(Color generalColor) {
-		this.rgb = generalColor.getRGB(); 
+		rgb = generalColor.getRGB();
 	}
 
+	@Override
 	public Color getColor() {
-		return new Color(Display.getCurrent(), rgb.red, rgb.green, rgb.blue);
+		return new Color(Display.getDefault(), rgb.red, rgb.green, rgb.blue);
 	}
 
 	@Override

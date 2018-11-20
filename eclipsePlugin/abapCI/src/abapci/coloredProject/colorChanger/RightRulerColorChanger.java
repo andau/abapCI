@@ -14,17 +14,17 @@ public class RightRulerColorChanger extends ARulerColorChanger {
 
 	public RightRulerColorChanger(IEditorPart editorPart, IProjectColor projectColor) {
 		super(editorPart);
-		this.projectColor = projectColor; 
+		this.projectColor = projectColor;
 	}
 
 	@Override
 	public void change() throws ActiveEditorNotSetException {
 
 		if (getTextViewer() != null && projectColor != null && !projectColor.isSuppressed()) {
-			OverviewRuler overviewRuler = (OverviewRuler) getOverviewRuler((SourceViewer) getTextViewer());
+			final OverviewRuler overviewRuler = (OverviewRuler) getOverviewRuler((SourceViewer) getTextViewer());
 
 			if (overviewRuler != null) {
-				overviewRuler.getHeaderControl().setBackground(projectColor.getColor());
+				// overviewRuler.getHeaderControl().setBackground(projectColor.getColor());
 				overviewRuler.getControl().setBackground(projectColor.getColor());
 			}
 		}
@@ -32,10 +32,10 @@ public class RightRulerColorChanger extends ARulerColorChanger {
 
 	private IOverviewRuler getOverviewRuler(SourceViewer viewer) {
 		try {
-			Field f = SourceViewer.class.getDeclaredField("fOverviewRuler"); //$NON-NLS-1$
+			final Field f = SourceViewer.class.getDeclaredField("fOverviewRuler"); //$NON-NLS-1$
 			f.setAccessible(true);
 			return (IOverviewRuler) f.get(viewer);
-		} catch (Exception err) {
+		} catch (final Exception err) {
 			return null;
 		}
 	}

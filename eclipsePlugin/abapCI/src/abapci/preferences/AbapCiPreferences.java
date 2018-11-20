@@ -5,8 +5,11 @@ import org.eclipse.jface.preference.ColorFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.preference.StringFieldEditor;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -47,7 +50,8 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 				"6. Trigger Jenkins from Eclipse (experimental)");
 		createJenkinsChapter();
 
-		preferencesUiHelper.addHeaderLabelWithSpaceBefore(getFieldEditorParent(), "7. Developer configuration");
+		preferencesUiHelper.addHeaderLabelWithSpaceBefore(getFieldEditorParent(),
+				"7. Plugin development configuration");
 		createDeveloperChapter();
 
 		// Unit test level selection seems currently not supported ( at least with 7.50)
@@ -68,21 +72,10 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 
 	private void createAtcChapter() {
 
-		// final Label atcInfoLabel1 = new Label(getFieldEditorParent(), SWT.NONE);
-		// atcInfoLabel1.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3,
-		// 1));
-		// atcInfoLabel1.setText("! Reorganize table SATC_AC_RESULTVT continously !");
-
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ATC_RUN_ACTIVATED_OBJECTS_ONLY,
 				"&Run ABAP Test Cockpit for activated ABAP objects", getFieldEditorParent()));
 
 		addField(new StringFieldEditor(PreferenceConstants.PREF_ATC_VARIANT, "&Run ATC with variant:",
-				getFieldEditorParent()));
-
-		preferencesUiHelper.addEmptyLabel(getFieldEditorParent());
-
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ATC_ANNOTATION_HANDLING_ENABLED,
-				"&Update editor annotations for ATC findings on each activation (experimental)",
 				getFieldEditorParent()));
 
 	}
@@ -90,13 +83,13 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 	private void createSourceCodeVisualisationChapter() {
 
 		addField(new ColorFieldEditor(PreferenceConstants.PREF_UNIT_TEST_OK_BACKGROUND_COLOR,
-				"Backgroundcolor for 'OK' Sourcecode State", getFieldEditorParent()));
+				"Background color for 'OK' Sourcecode State", getFieldEditorParent()));
 
 		addField(new ColorFieldEditor(PreferenceConstants.PREF_UNIT_TEST_FAIL_BACKGROUND_COLOR,
-				"Backgroundcolor for 'UNIT TESTS FAIL' Sourcecode State", getFieldEditorParent()));
+				"Background color for 'UNIT TESTS FAIL' Sourcecode State", getFieldEditorParent()));
 
 		addField(new ColorFieldEditor(PreferenceConstants.PREF_ATC_TEST_FAIL_BACKGROUND_COLOR,
-				"Backgroundcolor for 'ATC ERRORS' Sourcecode State", getFieldEditorParent()));
+				"Background color for 'ATC ERRORS' Sourcecode State", getFieldEditorParent()));
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_CHANGE_STATUS_BAR_BACKGROUND_COLOR,
 				"&Change background color of the Eclipse statusbar", getFieldEditorParent()));
@@ -105,7 +98,7 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 				"&Show widget with source code state and info in Eclipse statusbar", getFieldEditorParent()));
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_VISUALISATION_STATUS_CHANGE_THEME_ENABLED,
-				"&Change theme layout (do not use with Dark Theme, works only with some Eclipse versions)",
+				"&Change theme layout (works only with Standard Theme and needs Eclipse Color Theme Plugin)",
 				getFieldEditorParent()));
 
 		preferencesUiHelper.addEmptyLabel(getFieldEditorParent());
@@ -157,7 +150,7 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 	private void createHelperDialogsChapter() {
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_DIALOG_NEW_PACKAGE_FOR_CI_RUN_ENABLED,
-				"&Show a dialog when a new package for the CI Run is detected", getFieldEditorParent()));
+				"&Show a dialog when a not configured package for the CI Run is detected", getFieldEditorParent()));
 	}
 
 	private void createDeveloperChapter() {
@@ -166,6 +159,20 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_DEVELOPER_TRACING_ENABLED, "&Enable tracing",
 				getFieldEditorParent()));
+
+		preferencesUiHelper.addEmptyLabel(getFieldEditorParent());
+
+		final Label warningLabel1 = new Label(getFieldEditorParent(), SWT.NONE);
+		warningLabel1.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
+		warningLabel1.setText("Do not activate without the necessary changes in ADT.");
+
+		final Label warningLabel2 = new Label(getFieldEditorParent(), SWT.NONE);
+		warningLabel2.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 3, 1));
+		warningLabel2.setText("See Unit test AtcLaunchShortcutTest for further description");
+
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ATC_ANNOTATION_HANDLING_ENABLED,
+				"&Dynamic editor annotations for ATC findings (experimental)", getFieldEditorParent()));
+
 	}
 
 	@Override
