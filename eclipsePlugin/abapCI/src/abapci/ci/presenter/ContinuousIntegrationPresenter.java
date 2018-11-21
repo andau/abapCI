@@ -438,6 +438,15 @@ public class ContinuousIntegrationPresenter {
 		updateViewsAsync();
 	}
 
+	public void resetPackageTestStates() {
+		for (final AbapPackageTestState packageTestState : getAbapPackageTestStatesForCurrentProject()) {
+			packageTestState.reset();
+		}
+
+		updateViewsAsync();
+
+	}
+
 	public AtcFeature getAtcFeature() {
 		return atcFeature;
 	}
@@ -449,4 +458,5 @@ public class ContinuousIntegrationPresenter {
 	public SourcecodeState getSourcecodeState() {
 		return evalSourceCodeTestState();
 	}
+
 }

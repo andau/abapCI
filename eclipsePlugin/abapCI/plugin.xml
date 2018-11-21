@@ -149,24 +149,28 @@
        <command
              commandId="com.abapci.coloredProject"
              id="com.abapci.coloredProject"
-             label="Set coloring for project"
+             label="Change color assignment for this project"
              icon="icons/abapci_logo.ico"
              style="push"
-             tooltip="Set background color for objects of this ABAP project">
+             tooltip="Add, modify or delete the color assignment for this project">
           <visibleWhen
                 checkEnabled="false">
              <iterate
                    ifEmpty="false"
                    operator="or">
                 <and>
-                      property="com.sap.adt.project.hasNature"
-                         value="com.sap.adt.abapnature">
                   <or>
                       <instanceof
                          value="com.sap.adt.tools.core.project.IAbapProject">
                       </instanceof>
                       <adapt
                             type="com.sap.adt.tools.core.project.IAbapProject">
+                      </adapt>
+                      <instanceof
+                         value="org.eclipse.core.resources.IProject">
+                      </instanceof>
+                      <adapt
+                            type="org.eclipse.core.resources.IProject">
                       </adapt>
                    </or>
                 </and>

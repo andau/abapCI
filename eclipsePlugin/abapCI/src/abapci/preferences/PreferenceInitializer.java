@@ -45,10 +45,11 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_LEFT_RULER_ENABLED, false);
 		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_RIGHT_RULER_ENABLED, false);
 		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_STATUS_BAR_ENABLED, true);
+		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_STATUS_BAR_WIDGET_ENABLED, false);
 		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_ENABLED, false);
 		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_WIDTH_PERCENT, 100);
 		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_TITLE_ICON_HEIGTH_PERCENT, 50);
-		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_STATUS_BAR_WIDGET_ENABLED, false);
+		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_HEADER_TAB_ENABLED, false);
 		store.setDefault(PreferenceConstants.PREF_COLORED_PROJECTS_NEW_DIALOG_ENABLED, true);
 
 		store.setDefault(PreferenceConstants.PREF_UNIT_RUN_CRITICAL_TESTS_ENABLED, true);
@@ -59,6 +60,9 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.PREF_UNIT_RUN_DURATION_MEDIUM_TESTS_ENABLED, true);
 		store.setDefault(PreferenceConstants.PREF_UNIT_RUN_DURATION_SHORT_TESTS_ENABLED, true);
 		store.setDefault(PreferenceConstants.PREF_DIALOG_NEW_PACKAGE_FOR_CI_RUN_ENABLED, true);
+
+		store.setDefault(PreferenceConstants.PREF_DEVELOPER_JAVA_SIMU_MODE_ENABLED, false);
+		store.setDefault(PreferenceConstants.PREF_DEVELOPER_TRACING_ENABLED, false);
 
 		PreferenceConverter.setDefault(store, PreferenceConstants.PREF_UNIT_TEST_OK_BACKGROUND_COLOR,
 				new RGB(255, 255, 255));

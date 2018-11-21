@@ -15,35 +15,35 @@ import abapci.domain.TestState;
 
 public class TestResult {
 
-	private boolean activated;
+	private final boolean activated;
 	private boolean undefined;
 	private boolean testrunOk;
 	private int numItems;
 	private Collection<InvalidItem> invalidItems;
-	private Date lastRun;
+	private final Date lastRun;
 	private Collection<Activation> activatedObjects;
 
 	public TestResult(boolean testrunOk, int numItems, Collection<InvalidItem> invalidItems,
 			Collection<Activation> inactiveObjects) {
-		this.activated = true;
+		activated = true;
 		this.testrunOk = testrunOk;
 		this.numItems = numItems;
 		this.invalidItems = new ArrayList<InvalidItem>(invalidItems);
-		this.activatedObjects = inactiveObjects;
-		this.lastRun = Calendar.getInstance().getTime();
+		activatedObjects = inactiveObjects;
+		lastRun = Calendar.getInstance().getTime();
 	}
 
 	public TestResult(boolean activated) {
 		this.activated = activated;
-		this.invalidItems = new ArrayList<>();
-		this.lastRun = null;
+		invalidItems = new ArrayList<>();
+		lastRun = null;
 	}
 
 	public TestResult() {
-		this.activated = true;
+		activated = true;
 		undefined = true;
-		this.invalidItems = new ArrayList<>();
-		this.lastRun = null;
+		invalidItems = new ArrayList<>();
+		lastRun = null;
 	}
 
 	public TestState getTestState() {
@@ -98,8 +98,8 @@ public class TestResult {
 	}
 
 	public void removeActiveErrorsFor(Collection<Activation> activations) {
-		List<InvalidItem> newInvalidItems = invalidItems.stream().collect(Collectors.toList());
-		for (InvalidItem invalidItem : invalidItems) {
+		final List<InvalidItem> newInvalidItems = invalidItems.stream().collect(Collectors.toList());
+		for (final InvalidItem invalidItem : invalidItems) {
 			if (activations.stream().anyMatch(
 					item -> item.getObjectName().toLowerCase().contains(invalidItem.getClassName().toLowerCase()))) {
 				newInvalidItems.remove(invalidItem);
@@ -126,6 +126,12 @@ public class TestResult {
 		numItems = (activatedObjects != null)
 				? activatedObjects.stream().map(item -> item.getObjectName()).collect(Collectors.toSet()).size()
 				: 0;
+	}
+
+	public void resetCalculationInfo() {
+		numItems = 0;
+		invalidItems = new ArrayList<InvalidItem>();
+		activatedObjects = new ArrayList<Activation>();
 	}
 
 }

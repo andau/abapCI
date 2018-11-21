@@ -9,6 +9,8 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.menus.AbstractWorkbenchTrimWidget;
 
@@ -82,6 +84,30 @@ public class StatusBarWidget extends AbstractWorkbenchTrimWidget implements ISta
 				abapCiHelper.getContinousIntegrationPresenter().openEditorsForFailedItems();
 			}
 		});
+
+		final Menu popupMenu = new Menu(statusButton);
+
+		final MenuItem resetItem = new MenuItem(popupMenu, SWT.CASCADE);
+		resetItem.setText("Reset error information");
+		resetItem.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				final AbapCiPluginHelper abapCiHelper = new AbapCiPluginHelper();
+				abapCiHelper.getContinousIntegrationPresenter().resetPackageTestStates();
+			}
+		});
+
+		final MenuItem openItem = new MenuItem(popupMenu, SWT.CASCADE);
+		openItem.setText("Open active errors");
+		openItem.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				final AbapCiPluginHelper abapCiHelper = new AbapCiPluginHelper();
+				abapCiHelper.getContinousIntegrationPresenter().openEditorsForFailedItems();
+			}
+		});
+
+		statusButton.setMenu(popupMenu);
 	}
 
 	/**

@@ -13,6 +13,8 @@ public class PreferenceConstants {
 
 	public static final String PREF_JENKINS_BUILD_TOKEN = "jenkinsBuildTokenPreference";
 
+	public static final String PREF_JENKINS_RUN_AFTER_UNIT_TESTS_TURN_GREEN = "jenkinsRunAfterUnitTestsTurnGreenPreference";
+
 	public static final String PREF_UNIT_RUN_ON_SAVE = "abapUnitRunOnSavePreference";
 
 	public static final String PREF_UNIT_RUN_ACTIVATED_OBJECTS_ONLY = "unitTestRunActivatedObjectsOnlyPreference";
@@ -21,13 +23,11 @@ public class PreferenceConstants {
 
 	public static final String PREF_ATC_VARIANT = "atcVariantPreference";
 
-	public static final String PREF_JENKINS_RUN_AFTER_UNIT_TESTS_TURN_GREEN = "jenkinsRunAfterUnitTestsTurnGreenPreference";
-
 	public static final String PREF_COLORED_PROJECTS_LEFT_RULER_ENABLED = "coloredProjectsLeftRulerEnabled";
 
 	public static final String PREF_COLORED_PROJECTS_RIGHT_RULER_ENABLED = "coloredProjectsRightRulerEnabled";
 
-	public static final String PREF_COLORED_PROJECTS_TAB_HEADER_ENABLED = "coloredProjectsTabHeaderEnabled";
+	public static final String PREF_COLORED_PROJECTS_HEADER_TAB_ENABLED = "coloredProjectsHeaderTabEnabled";
 
 	public static final String PREF_COLORED_PROJECTS_STATUS_BAR_ENABLED = "coloredProjectsStatusBarEnabled";
 
@@ -80,6 +80,7 @@ public class PreferenceConstants {
 	public static final String PREF_VISUALISATION_STATUS_CHANGE_THEME_ENABLED = "visualisationStatusChangeThemeEnabled";
 
 	public static final String PREF_DEVELOPER_JAVA_SIMU_MODE_ENABLED = "developerJavaSimuModeEnabled";
+
 	public static final String PREF_DEVELOPER_TRACING_ENABLED = "developerTracingEnabled";
 
 	public static final String PREF_ATC_ANNOTATION_HANDLING_ENABLED = "atcAnnotationHandlingEnabled";

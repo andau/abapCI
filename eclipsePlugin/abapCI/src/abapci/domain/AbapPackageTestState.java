@@ -178,4 +178,10 @@ public class AbapPackageTestState {
 		return unitTestResult;
 	}
 
+	public void reset() {
+		unitTestResult.resetCalculationInfo();
+		atcTestResult.resetCalculationInfo();
+
+	}
+
 }
