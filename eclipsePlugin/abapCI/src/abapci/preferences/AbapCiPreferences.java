@@ -64,18 +64,18 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 
 	private void createUnitTestChapter() {
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_UNIT_RUN_ON_SAVE,
-				"&Run Unit tests after an ABAP object was activated", getFieldEditorParent()));
+				"Run Unit tests after an ABAP object was activated", getFieldEditorParent()));
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_UNIT_RUN_ACTIVATED_OBJECTS_ONLY,
-				"&Run Unit tests only for the activated ABAP objects, not for whole package", getFieldEditorParent()));
+				"Run Unit tests only for the activated ABAP objects, not for whole package", getFieldEditorParent()));
 	}
 
 	private void createAtcChapter() {
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ATC_RUN_ACTIVATED_OBJECTS_ONLY,
-				"&Run ABAP Test Cockpit for activated ABAP objects", getFieldEditorParent()));
+				"Run ABAP Test Cockpit for activated ABAP objects", getFieldEditorParent()));
 
-		addField(new StringFieldEditor(PreferenceConstants.PREF_ATC_VARIANT, "&Run ATC with variant:",
+		addField(new StringFieldEditor(PreferenceConstants.PREF_ATC_VARIANT, "Run ATC with variant:",
 				getFieldEditorParent()));
 
 	}
@@ -92,22 +92,22 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 				"Background color for 'ATC ERRORS' Sourcecode State", getFieldEditorParent()));
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_CHANGE_STATUS_BAR_BACKGROUND_COLOR,
-				"&Change background color of the Eclipse statusbar", getFieldEditorParent()));
+				"Change background color of the Eclipse statusbar", getFieldEditorParent()));
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_VISUALISATION_STATUS_BAR_WIDGET_ENABLED,
-				"&Show widget with source code state and info in Eclipse statusbar", getFieldEditorParent()));
+				"Show widget with source code state and info in Eclipse statusbar", getFieldEditorParent()));
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_VISUALISATION_STATUS_CHANGE_THEME_ENABLED,
-				"&Change theme layout (works only with Standard Theme and needs Eclipse Color Theme Plugin)",
+				"Change theme layout (works only with Standard Theme and needs Eclipse Color Theme Plugin)",
 				getFieldEditorParent()));
 
 		preferencesUiHelper.addEmptyLabel(getFieldEditorParent());
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_TDD_MODE,
-				"&Show TDD Labels for source code state output", getFieldEditorParent()));
+				"Show TDD Labels for source code state output", getFieldEditorParent()));
 
 		addField(new IntegerFieldEditor(PreferenceConstants.PREF_TDD_MIN_REQUIRED_SECONDS,
-				"&Minimal time the TDD cycle will remain in the refactor state", getFieldEditorParent()));
+				"Minimal time the TDD cycle will remain in the refactor state", getFieldEditorParent()));
 
 		preferencesUiHelper.addEmptyLabel(getFieldEditorParent());
 
@@ -118,46 +118,46 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 	private void createSourceCodeFormattingChapter() {
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_SOURCE_CODE_FORMATTING_ENABLED,
-				"&Automatic sourcecode formatting enabled", getFieldEditorParent()));
+				"Automatic sourcecode formatting enabled", getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.PREF_SOURCE_CODE_FORMATTING_PREFIX,
-				"&Mandatory prefix in source code to enable formatter", getFieldEditorParent()));
+				"Mandatory prefix in source code to enable formatter", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_SOURCE_CODE_CLEANUP_NOT_USED_VARIABLES,
-				"&Automatically cleanup not used variabels (when formatting enabled)", getFieldEditorParent()));
+				"Automatically cleanup not used variabels (when formatting enabled)", getFieldEditorParent()));
 
 	}
 
 	private void createJenkinsChapter() {
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_JENKINS_RUN_AFTER_UNIT_TESTS_TURN_GREEN,
-				"&Run Jenkins Builds when file saved", getFieldEditorParent()));
+				"Run Jenkins Builds when file saved", getFieldEditorParent()));
 
-		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_URL, "&Jenkins BaseUrl (eg. localhost:8080):",
+		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_URL, "Jenkins BaseUrl (eg. localhost:8080):",
 				getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_USERNAME, "&Jenkins Username:",
+		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_USERNAME, "Jenkins Username:",
 				getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_PASSWORD, "&Jenkins Password:",
+		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_PASSWORD, "Jenkins Password:",
 				getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_BUILD_TOKEN, "&Jenkins Build Token:",
+		addField(new StringFieldEditor(PreferenceConstants.PREF_JENKINS_BUILD_TOKEN, "Jenkins Build Token:",
 				getFieldEditorParent()));
 	}
 
 	private void createAbapGitChapter() {
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ABAP_GIT_PACKAGE_CHANGE_ENABLED,
-				"&Package changer for abapGit (not yet implemented on the ABAP backend)", getFieldEditorParent()));
+				"Package changer for abapGit (not yet implemented on the ABAP backend)", getFieldEditorParent()));
 
 	}
 
 	private void createHelperDialogsChapter() {
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_DIALOG_NEW_PACKAGE_FOR_CI_RUN_ENABLED,
-				"&Show a dialog when a not configured package for the CI Run is detected", getFieldEditorParent()));
+				"Show a dialog when a not configured package for the CI Run is detected", getFieldEditorParent()));
 	}
 
 	private void createDeveloperChapter() {
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_DEVELOPER_JAVA_SIMU_MODE_ENABLED,
-				"&Activate Java Simulation mode", getFieldEditorParent()));
+				"Activate Java Simulation mode", getFieldEditorParent()));
 
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_DEVELOPER_TRACING_ENABLED, "&Enable tracing",
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_DEVELOPER_TRACING_ENABLED, "Enable tracing",
 				getFieldEditorParent()));
 
 		preferencesUiHelper.addEmptyLabel(getFieldEditorParent());
@@ -171,7 +171,7 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 		warningLabel2.setText("See Unit test AtcLaunchShortcutTest for further description");
 
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ATC_ANNOTATION_HANDLING_ENABLED,
-				"&Dynamic editor annotations for ATC findings (experimental)", getFieldEditorParent()));
+				"Dynamic editor annotations for ATC findings (experimental)", getFieldEditorParent()));
 
 	}
 

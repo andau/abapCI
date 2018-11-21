@@ -3,7 +3,6 @@ package abapci;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IPartListener2;
@@ -29,7 +28,6 @@ import abapci.coloredProject.model.ColoredProjectModel;
 import abapci.coloredProject.presenter.ColoredProjectsPresenter;
 import abapci.feature.FeatureFacade;
 import abapci.feature.activeFeature.ColoredProjectFeature;
-import abapci.preferences.PreferenceConstants;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -63,9 +61,6 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 
-		IPreferenceStore prefs = AbapCiPlugin.getDefault().getPreferenceStore();
-		prefs.setValue(PreferenceConstants.PREF_COLORED_PROJECTS_STATUS_BAR_WIDGET_ENABLED, true);
-
 		featureFacade = new FeatureFacade();
 
 		if (featureFacade.getUnitFeature().isActive() || featureFacade.getAtcFeature().isActive()
@@ -83,13 +78,13 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 			coloredProjectsPresenter = new ColoredProjectsPresenter(null, new ColoredProjectModel());
 			registerPreferencePropertyChangeListener();
 			updateProjectColors();
-		} catch (Exception ex) {
+		} catch (final Exception ex) {
 			ex.printStackTrace();
 			// if here is a problem we will go on as these are no critical feature
 		}
 		initializePartChangeListener();
 
-		ICommandService service = PlatformUI.getWorkbench().getService(ICommandService.class);
+		final ICommandService service = PlatformUI.getWorkbench().getService(ICommandService.class);
 		service.addExecutionListener(new ActivationExecutionListener());
 
 	}
@@ -99,7 +94,7 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 		getPreferenceStore().addPropertyChangeListener(event -> {
 			try {
 				workspaceColorConfiguration = new WorkspaceColorConfiguration(true);
-			} catch (AbapCiColoredProjectFileParseException e) {
+			} catch (final AbapCiColoredProjectFileParseException e) {
 				// if here is a problem we will go on as these are no critical feature
 				e.printStackTrace();
 			}
@@ -109,20 +104,20 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 	private void updateProjectColors() throws ColorChangerNotImplementedException,
 			AbapCiColoredProjectFileParseException, ActiveEditorNotSetException, ProjectColorNotSetException {
 
-		ColoredProjectFeature coloredProjectFeature = featureFacade.getColoredProjectFeature();
+		final ColoredProjectFeature coloredProjectFeature = featureFacade.getColoredProjectFeature();
 		if (coloredProjectFeature.isTitleIconActive()) {
-			IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 			activePage.getActiveEditor();
 
-			IEditorReference[] editorReferences = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-					.getEditorReferences();
+			final IEditorReference[] editorReferences = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+					.getActivePage().getEditorReferences();
 
-			ColorChangerFactory colorChangerFactory = new ColorChangerFactory();
+			final ColorChangerFactory colorChangerFactory = new ColorChangerFactory();
 
-			for (IEditorReference editorReference : editorReferences) {
-				DisplayColor displayColor = workspaceColorConfiguration
+			for (final IEditorReference editorReference : editorReferences) {
+				final DisplayColor displayColor = workspaceColorConfiguration
 						.getColoring(GeneralProjectUtil.getProject(editorReference.getEditor(true)));
-				ColorChanger colorChanger = colorChangerFactory.create(ColorChangerType.TITLE_ICON,
+				final ColorChanger colorChanger = colorChangerFactory.create(ColorChangerType.TITLE_ICON,
 						editorReference.getEditor(true), coloredProjectFeature, displayColor.getTitleIconColor());
 				colorChanger.change();
 			}

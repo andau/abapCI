@@ -42,7 +42,7 @@ public class UnitTestManager extends AbstractTestManager {
 
 					abapPackageTestState.setUnitTestResult(unitTestResultSummary.getTestResult());
 					mergePackageTestStateIntoGlobalTestState(unitTestResultSummary.getTestResult().getTestState());
-
+					continuousIntegrationPresenter.mergeUnitTestResult(unitTestResultSummary);
 				} else {
 					final Set<Activation> inactiveObjectsForPackage = activatedObjects.stream()
 							.filter(item -> item.getPackageName().equals(abapPackageTestState.getPackageName()))

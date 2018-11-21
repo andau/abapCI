@@ -14,6 +14,7 @@ import org.eclipse.ui.menus.AbstractWorkbenchTrimWidget;
 
 import abapci.AbapCiPlugin;
 import abapci.AbapCiPluginHelper;
+import abapci.feature.FeatureFacade;
 import abapci.testResult.visualizer.ITestResultVisualizer;
 import abapci.testResult.visualizer.ResultVisualizerOutput;
 import abapci.testResult.visualizer.StatusBarWidgetTestVisualizer;
@@ -40,6 +41,7 @@ public class StatusBarWidget extends AbstractWorkbenchTrimWidget implements ISta
 	public void init(IWorkbenchWindow workbenchWindow) {
 		testResultVisualizer = new StatusBarWidgetTestVisualizer(this);
 		AbapCiPlugin.getDefault().attachStatusBarWidget(this);
+
 	}
 
 	@Override
@@ -59,10 +61,12 @@ public class StatusBarWidget extends AbstractWorkbenchTrimWidget implements ISta
 		layout.marginWidth = 0;
 		layout.center = true;
 		composite.setLayout(layout);
-
-		// addStatusLabel(newSide);
 		addButton(newSide);
 		composite.layout();
+
+		final FeatureFacade featureFacade = new FeatureFacade();
+		this.setVisible(featureFacade.getColoredProjectFeature().isStatusBarWidgetActive()
+				|| featureFacade.getSourceCodeVisualisationFeature().isShowStatusBarWidgetEnabled());
 	}
 
 	private void addButton(int newSide) {
@@ -116,12 +120,16 @@ public class StatusBarWidget extends AbstractWorkbenchTrimWidget implements ISta
 
 	@Override
 	public void setToolTip(final String tooltip) {
-		Display.getDefault().asyncExec(() -> statusButton.setToolTipText(tooltip));
+		if (statusButton != null) {
+			Display.getDefault().asyncExec(() -> statusButton.setToolTipText(tooltip));
+		}
 	}
 
 	@Override
 	public void setTextColor(final Color color) {
-		Display.getDefault().asyncExec(() -> statusButton.setForeground((color)));
+		if (statusButton != null) {
+			Display.getDefault().asyncExec(() -> statusButton.setForeground((color)));
+		}
 	}
 
 	public Color getColor(int color) {
@@ -130,11 +138,14 @@ public class StatusBarWidget extends AbstractWorkbenchTrimWidget implements ISta
 
 	@Override
 	public void setVisible(boolean visible) {
-		// FeatureFacade featureFacade = new FeatureFacade();
-		// ColoredProjectFeature projectColorFeature =
-		// featureFacade.getColoredProjectFeature();
-		// composite.setVisible(projectColorFeature.isStatusBarWidgetActive());
-		composite.setVisible(visible);
+		if (composite != null) {
+			composite.setVisible(visible);
+		}
+	}
+
+	@Override
+	public boolean isVisible() {
+		return composite != null && composite.isVisible();
 	}
 
 }

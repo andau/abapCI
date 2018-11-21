@@ -19,14 +19,17 @@ public class StatusBarWidgetColorChanger extends ColorChanger {
 
 	@Override
 	public void change() {
-		AbapCiPluginHelper abapCiPluginHelper = new AbapCiPluginHelper();
-		IStatusBarWidget statusBarWidget = abapCiPluginHelper.getStatusBarWidget();
-		Color backgroundColor = StatusBarColorHelper.getColor(projectColor);
-		statusBarWidget.setBackgroundColor(backgroundColor);
-		statusBarWidget.setTextColor(contrastColorDeterminer.getContrastColor(backgroundColor));
-		statusBarWidget.setVisible(true);
-		if (displayText != null && !displayText.equals(StringUtils.EMPTY)) {
-			statusBarWidget.setText(displayText);
+
+		final AbapCiPluginHelper abapCiPluginHelper = new AbapCiPluginHelper();
+		final IStatusBarWidget statusBarWidget = abapCiPluginHelper.getStatusBarWidget();
+		if (statusBarWidget.isVisible()) {
+			final Color backgroundColor = StatusBarColorHelper.getColor(projectColor);
+			statusBarWidget.setBackgroundColor(backgroundColor);
+			statusBarWidget.setTextColor(contrastColorDeterminer.getContrastColor(backgroundColor));
+			statusBarWidget.setVisible(true);
+			if (displayText != null && !displayText.equals(StringUtils.EMPTY)) {
+				statusBarWidget.setText(displayText);
+			}
 		}
 	}
 }

@@ -13,9 +13,11 @@ public interface IStatusBarWidget {
 	void setTextColor(Color color);
 
 	void setToolTip(String tooltip);
-	
+
 	void setVisible(boolean visible);
 
-	ITestResultVisualizer getTestResultVisualizer(); 
+	ITestResultVisualizer getTestResultVisualizer();
+
+	boolean isVisible();
 
 }
