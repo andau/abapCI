@@ -1,6 +1,6 @@
 package abapci.handlers;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -49,8 +49,8 @@ public class AbapUnitHandlerTest {
 
 	@Test
 	public void testExecutePackage() {
-		Set<Activation> activations = new HashSet<Activation>();
-		TestResultSummary testResultSummary = cut.executePackage(project, TEST_PACKAGE_NAME, activations);
+		final Set<Activation> activations = new HashSet<Activation>();
+		final TestResultSummary testResultSummary = cut.executePackage(project, TEST_PACKAGE_NAME, activations);
 		assertEquals(TEST_PACKAGE_NAME, testResultSummary.getPackageName());
 		assertEquals(project.getName(), testResultSummary.getProject().getName());
 		assertEquals(0, testResultSummary.getTestResult().getActivatedObjects().size());
@@ -63,9 +63,9 @@ public class AbapUnitHandlerTest {
 
 	@Test
 	public void testExecuteObjects() {
-		Set<Activation> activations = new HashSet<Activation>();
+		final Set<Activation> activations = new HashSet<Activation>();
 		activations.add(new Activation("Testobject", TEST_PACKAGE_NAME, project, null, "ABAP_CLASS_TYPE"));
-		TestResultSummary testResultSummary = cut.executeObjects(project, TEST_PACKAGE_NAME, activations);
+		final TestResultSummary testResultSummary = cut.executeObjects(project, TEST_PACKAGE_NAME, activations);
 		assertEquals(1, testResultSummary.getTestResult().getActivatedObjects().size());
 		assertEquals(0, testResultSummary.getTestResult().getActiveErrors().size());
 	}

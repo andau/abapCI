@@ -133,7 +133,7 @@ In this part the colors and text labels which are used to indicate the current s
 `Background color for OK Sourcecode State` - this color indicates that there are no Unit test failures and no ATC errors<br>
 `Background color for UNIT TESTS FAIL Sourcecode State` - this color is triggered if there is at least one failing Unit Test<br>
 `Background color for ATC ERRORS Sourcecode State` - this color is triggered if there is at least on ATC error and not failing Unit Test<br>
-<br>
+&nbsp;<br>
 `Change background color of the Eclipse statusbar` - if this checkbox is enabled the whole status bar is colored with the current Source code state color <br>
 `Show widget with source code state and info in Eclipse statusbar` - this option is activated by default, it shows a widget in the status bar with information of the current source code state and as background color the above defined colors for OK, UNIT TEST FAIL, ATC ERRORS are used<br>
 &nbsp;<br>
@@ -144,7 +144,6 @@ In this part the colors and text labels which are used to indicate the current s
 `Minimal time the TDD cycle will remain in the refactor state` - this option defines the minimum time the TDD cycle will stay in the REFACTOR phase. The REFACTOR phase will be active until there are no remaining ATC errors, but if there are no ATC errors at all this time comes into play. Thus it is ensured that the REFACTOR phase will not be skipped.<br>
 &nbsp;<br>
 The last setting `Show a dialog when a new package for the CI run is detected.` is a helper dialog to add the ABAP packages  to the CI run. Each time an object is activated which belongs to a package that is not yet configured for the CI run, this dialog is shown. The dialog is shown for each package only onces, as there are two options (activate or deactivate) in the dialog and in any case a configuration for the package will be set.<br>
-&nbsp;<br>
 4. Automatic source code formatting<br>
 &nbsp;<br>
 `Automatic sourcecode formatting enabled` - when this option is selected the ABAP development objects are automatically formatted with the Pretty Printer on each save action.<br>

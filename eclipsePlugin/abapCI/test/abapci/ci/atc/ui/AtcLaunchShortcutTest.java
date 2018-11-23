@@ -3,7 +3,7 @@ package abapci.ci.atc.ui;
 import org.eclipse.jface.viewers.ISelection;
 import org.junit.Before;
 import org.junit.Ignore;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.sap.adt.atc.ui.internal.launch.AtcLaunchShortcut;
