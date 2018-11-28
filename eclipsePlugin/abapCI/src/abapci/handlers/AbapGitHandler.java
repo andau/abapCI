@@ -1,5 +1,8 @@
 package abapci.handlers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -16,8 +19,10 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.sap.adt.project.AdtCoreProjectServiceFactory;
+import com.sap.adt.project.IAdtCoreProjectService;
 import com.sap.adt.projectexplorer.ui.node.AbapRepositoryBaseNode;
 import com.sap.adt.sapgui.ui.editors.AdtSapGuiEditorUtilityFactory;
+import com.sap.adt.sapgui.ui.editors.IAdtSapGuiEditorUtility;
 import com.sap.adt.sapgui.ui.internal.editors.GuiEditorInput;
 
 import abapci.GeneralProjectUtil;
@@ -29,33 +34,49 @@ public class AbapGitHandler extends AbstractHandler {
 	private static final String ABAP_GIT_TRANSACTION_NAME = "ZABAPGIT";
 	final boolean PACKAGE_CHANGE_FEATURE_ENABLED = false;
 
+	IAdtCoreProjectService coreProjectService;
+	IWorkbench workbench;
+	IAdtSapGuiEditorUtility sapGuiEditorUtility;
+
+	public AbapGitHandler() {
+		coreProjectService = AdtCoreProjectServiceFactory.createCoreProjectService();
+		workbench = PlatformUI.getWorkbench();
+		sapGuiEditorUtility = AdtSapGuiEditorUtilityFactory.createSapGuiEditorUtility();
+	}
+
+	public AbapGitHandler(boolean raw) {
+		if (!raw) {
+			new AbapGitHandler();
+		}
+	}
+
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 
 		String projectname = null;
+		String packagename = "";
 
-		ISelection selection = HandlerUtil.getCurrentSelection(event);
+		final ISelection selection = HandlerUtil.getCurrentSelection(event);
 		if (!selection.isEmpty()) {
 			if (selection instanceof TreeSelection) {
 				if (!((TreeSelection) selection).isEmpty()
 						&& ((TreeSelection) selection).getFirstElement() instanceof AbapRepositoryBaseNode) {
-					AbapRepositoryBaseNode packageNode = (AbapRepositoryBaseNode) ((TreeSelection) selection)
+					final AbapRepositoryBaseNode packageNode = (AbapRepositoryBaseNode) ((TreeSelection) selection)
 							.getFirstElement();
 
 					projectname = packageNode.getProject().getName();
+					packagename = packageNode.getPackageName();
 
 					// abapGit Package change is currently not yet implemented on ABAP side
-					FeatureFacade featureFacade = new FeatureFacade();
+					final FeatureFacade featureFacade = new FeatureFacade();
 					if (featureFacade.getAbapGitPackageChangeFeature().isActive()) {
 
-						String packagename = packageNode.getPackageName();
-
-						AbapGitPackageChanger packageChanger = new AbapGitPackageChanger();
+						final AbapGitPackageChanger packageChanger = new AbapGitPackageChanger();
 						packageChanger.changePackage(projectname, packagename);
 					}
 				} else if (!((TreeSelection) selection).isEmpty()
 						&& ((TreeSelection) selection).getFirstElement() instanceof IProject) {
-					IProject project = (IProject) ((TreeSelection) selection).getFirstElement();
+					final IProject project = (IProject) ((TreeSelection) selection).getFirstElement();
 
 					projectname = project.getName();
 				}
@@ -68,28 +89,28 @@ public class AbapGitHandler extends AbstractHandler {
 			projectname = GeneralProjectUtil.getCurrentProject().getName();
 		}
 
-		execute(projectname);
+		execute(projectname, packagename);
 
 		return null;
 	}
 
-	public Object execute(String projectname) {
+	public Object execute(String projectname, String packagename) {
 
-		IProject project = AdtCoreProjectServiceFactory.createCoreProjectService().findProject(projectname);
+		final IProject project = coreProjectService.findProject(projectname);
 
 		if (project == null) {
 			showMissingProjectInfo(projectname);
 		} else {
-			String transactionName = ABAP_GIT_TRANSACTION_NAME;
-			IEditorReference abapGitEditor = getAbapGitEditorReference(project.getName());
+			final IEditorReference abapGitEditor = getAbapGitEditorReference(project.getName());
 
 			if (abapGitEditor == null) {
-				AdtSapGuiEditorUtilityFactory.createSapGuiEditorUtility().openEditorAndStartTransaction(project,
-						transactionName, true);
+				final Map<String, String> params = new HashMap<>();
+				params.put("PACKAGE_NAME", packagename);
+				sapGuiEditorUtility.openEditorAndStartTransaction(project, ABAP_GIT_TRANSACTION_NAME, true, params,
+						params);
 			} else {
-				IWorkbench workbench = PlatformUI.getWorkbench();
-				IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
-				IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
+				final IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
+				final IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
 				activePage.activate(abapGitEditor.getPart(false));
 			}
 		}
@@ -110,21 +131,20 @@ public class AbapGitHandler extends AbstractHandler {
 
 	private IEditorReference getAbapGitEditorReference(String referenceProjectname) {
 
-		IWorkbench workbench = PlatformUI.getWorkbench();
-		IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
-		IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
-		IEditorReference[] editorReferences = activePage.getEditorReferences();
+		final IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
+		final IWorkbenchPage activePage = activeWorkbenchWindow.getActivePage();
+		final IEditorReference[] editorReferences = activePage.getEditorReferences();
 
-		for (IEditorReference editorReference : editorReferences) {
+		for (final IEditorReference editorReference : editorReferences) {
 			if (editorReference.getTitle().endsWith(ABAP_GIT_TRANSACTION_NAME)) {
 				try {
-					GuiEditorInput editorInput = (GuiEditorInput) editorReference.getEditorInput();
-					IProject project = editorInput.getProject();
+					final GuiEditorInput editorInput = (GuiEditorInput) editorReference.getEditorInput();
+					final IProject project = editorInput.getProject();
 					if (project.getName().equals(referenceProjectname)) {
 						return editorReference;
 					}
 
-				} catch (PartInitException e) {
+				} catch (final PartInitException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}

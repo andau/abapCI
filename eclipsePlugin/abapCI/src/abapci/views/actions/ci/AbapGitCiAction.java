@@ -16,8 +16,9 @@ public class AbapGitCiAction extends AbstractCiAction {
 		this.continuousIntegrationPresenter = continuousIntegrationPresenter;
 	}
 
+	@Override
 	public void run() {
-		new AbapGitHandler().execute("");
+		new AbapGitHandler().execute("", "");
 	}
 
 }
