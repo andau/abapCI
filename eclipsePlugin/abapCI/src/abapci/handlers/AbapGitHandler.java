@@ -32,6 +32,7 @@ import abapci.feature.FeatureFacade;
 public class AbapGitHandler extends AbstractHandler {
 
 	private static final String ABAP_GIT_TRANSACTION_NAME = "ZABAPGIT";
+	private static final String PARAMETER_PACKAGE_NAME_KEY = "p_package_name";
 	final boolean PACKAGE_CHANGE_FEATURE_ENABLED = false;
 
 	IAdtCoreProjectService coreProjectService;
@@ -105,7 +106,7 @@ public class AbapGitHandler extends AbstractHandler {
 
 			if (abapGitEditor == null) {
 				final Map<String, String> params = new HashMap<>();
-				params.put("PACKAGE_NAME", packagename);
+				params.put(PARAMETER_PACKAGE_NAME_KEY, packagename);
 				sapGuiEditorUtility.openEditorAndStartTransaction(project, ABAP_GIT_TRANSACTION_NAME, true, params,
 						params);
 			} else {
