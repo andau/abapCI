@@ -41,7 +41,7 @@
 		commandId="abapci.commands.abapCiViewCommand">
       </handler>
       <handler
-       class="abapci.handlers.AbapGitHandler"
+       class="abapci.abapgit.handlers.AbapGitHandler"
        commandId="com.abapci.abapgit.open">
 	 </handler>
       <handler
@@ -59,7 +59,7 @@
    <extension
          point="org.eclipse.ui.bindings">
       <key
-            commandId="com.abapci.abapgit.open"
+            commandId="abapci.abapgit.open"
             contextId="org.eclipse.ui.contexts.dialogAndWindow"
             sequence="M1+M2+K"							
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">

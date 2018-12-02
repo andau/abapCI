@@ -1,4 +1,4 @@
-package abapci.handlers;
+package abapci.abapgit.handlers;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,39 +22,51 @@ import org.powermock.reflect.Whitebox;
 import com.sap.adt.project.IAdtCoreProjectService;
 import com.sap.adt.sapgui.ui.editors.IAdtSapGuiEditorUtility;
 
+import abapci.AbapCiPluginHelper;
+import abapci.feature.activeFeature.AbapGitFeature;
+
 public class AbapGitHandlerTest {
 
 	private String abapGitTransactionName;
 
 	private static final String TEST_PROJECT_NAME = "TEST_PROJECT_NAME";
 	private static final String TEST_PACKAGE_NAME = "TEST_PACKAGE_NAME";
+	private static final IProject TEST_PROJECT = Mockito.mock(IProject.class);
+
 	private AbapGitHandler cut;
 
 	private final IAdtCoreProjectService coreProjectService = Mockito.mock(IAdtCoreProjectService.class);
 	IAdtSapGuiEditorUtility sapGuiEditorUtility = Mockito.mock(IAdtSapGuiEditorUtility.class);
+	AbapGitFeature abapGitFeature = Mockito.mock(AbapGitFeature.class);
+	AbapCiPluginHelper abapCiPluginHelper = Mockito.mock(AbapCiPluginHelper.class);
+	AbapGitHandlerHelper abapGitHandlerHelper = Mockito.mock(AbapGitHandlerHelper.class);
 
 	IWorkbench workbench = Mockito.mock(IWorkbench.class);
 	IWorkbenchWindow workbenchWindow = Mockito.mock(IWorkbenchWindow.class);
 	IWorkbenchPage workbenchPage = Mockito.mock(IWorkbenchPage.class);
 	IEditorReference[] editorReferences = new IEditorReference[] {};
 
-	private final IProject testProject = Mockito.mock(IProject.class);
-
 	@Before
 	public void before() throws IllegalArgumentException, IllegalAccessException {
-		cut = new AbapGitHandler(true);
-		Whitebox.setInternalState(cut, "coreProjectService", coreProjectService);
-		Whitebox.setInternalState(cut, "workbench", workbench);
-		Whitebox.setInternalState(cut, "sapGuiEditorUtility", sapGuiEditorUtility);
+		cut = new AbapGitHandler();
+		Whitebox.setInternalState(cut, "abapCiPluginHelper", abapCiPluginHelper);
+		Whitebox.setInternalState(cut, "abapGitHandlerHelper", abapGitHandlerHelper);
 
 		abapGitTransactionName = (String) Whitebox.getField(AbapGitHandler.class, "ABAP_GIT_TRANSACTION_NAME")
 				.get(null);
 
-		Mockito.when(coreProjectService.findProject(TEST_PROJECT_NAME)).thenReturn(testProject);
+		Mockito.when(coreProjectService.findProject(TEST_PROJECT_NAME)).thenReturn(TEST_PROJECT);
+
+		Mockito.when(abapGitHandlerHelper.getSapGuiEditorUtility()).thenReturn(sapGuiEditorUtility);
+		Mockito.when(abapGitHandlerHelper.getWorkbench()).thenReturn(workbench);
+		Mockito.when(abapGitHandlerHelper.getAbapGitFeature()).thenReturn(abapGitFeature);
 
 		Mockito.when(workbench.getActiveWorkbenchWindow()).thenReturn(workbenchWindow);
 		Mockito.when(workbenchWindow.getActivePage()).thenReturn(workbenchPage);
 		Mockito.when(workbenchPage.getEditorReferences()).thenReturn(editorReferences);
+		Mockito.when(abapGitFeature.isOnlyOneAbapGitTransactionActive()).thenReturn(false);
+
+		Mockito.when(TEST_PROJECT.getName()).thenReturn(TEST_PROJECT_NAME);
 	}
 
 	@Ignore("ExecutionEvent is not mockable with mockito standard")
@@ -77,13 +89,13 @@ public class AbapGitHandlerTest {
 
 	@Test
 	public void testExecuteString() {
-		cut.execute(TEST_PROJECT_NAME, TEST_PACKAGE_NAME);
+		cut.execute(TEST_PROJECT, TEST_PACKAGE_NAME);
 		// TODO decide whether get or set params should be used for package name
 		// transfer
 		final Map<String, String> params = new HashMap<>();
-		params.put("PACKAGE_NAME", TEST_PACKAGE_NAME);
+		params.put("p_package_name", TEST_PACKAGE_NAME);
 
-		Mockito.verify(sapGuiEditorUtility).openEditorAndStartTransaction(testProject, abapGitTransactionName, true,
+		Mockito.verify(sapGuiEditorUtility).openEditorAndStartTransaction(TEST_PROJECT, abapGitTransactionName, true,
 				params, params);
 	}
 

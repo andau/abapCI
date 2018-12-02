@@ -1,7 +1,6 @@
 package abapci.coloredProject.colorChanger;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.eclipse.swt.SWT;
@@ -29,7 +28,7 @@ public class TitleIconColorChanger extends ColorChanger {
 
 	@Override
 	public void change() {
-		Runnable task = () -> {
+		final Runnable task = () -> {
 			try {
 				changeWithShortDelay();
 			} catch (ActiveEditorNotSetException | ProjectColorNotSetException | InterruptedException e) {
@@ -57,38 +56,35 @@ public class TitleIconColorChanger extends ColorChanger {
 
 			try {
 
-				Image currentTitleImage = getTitleIcon(editorPart);
+				final Image currentTitleImage = getTitleIcon(editorPart);
 
-				Image newTitleImage = new Image(Display.getCurrent(), currentTitleImage, SWT.IMAGE_COPY);
+				final Image newTitleImage = new Image(Display.getCurrent(), currentTitleImage, SWT.IMAGE_COPY);
 				newTitleImage.setBackground(projectColor.getColor());
 
-				Field f = Image.class.getDeclaredField("transparentPixel");
+				final Field f = Image.class.getDeclaredField("transparentPixel");
 				f.setAccessible(true);
 				f.set(newTitleImage, 100);
 
-				GC gc = new GC(newTitleImage);
+				final GC gc = new GC(newTitleImage);
 				gc.setForeground(projectColor.getColor());
-				int imageWidth = newTitleImage.getBounds().width;
+				final int imageWidth = newTitleImage.getBounds().width;
 
-				int rectangleWidth = imageWidth * rectangle.getWidth() / 100;
-				int rectangleHeight = imageWidth * rectangle.getHeight() / 100;
+				final int rectangleWidth = imageWidth * rectangle.getWidth() / 100;
+				final int rectangleHeight = imageWidth * rectangle.getHeight() / 100;
 				gc.setLineWidth(rectangleHeight);
-				int yDrawingLineCenterPosition = newTitleImage.getBounds().height - gc.getLineWidth() / 2;
+				final int yDrawingLineCenterPosition = newTitleImage.getBounds().height - gc.getLineWidth() / 2;
 				gc.drawLine(imageWidth - rectangleWidth, yDrawingLineCenterPosition, imageWidth,
 						yDrawingLineCenterPosition);
 				gc.dispose();
 
-				WorkbenchPart workbenchPart = (WorkbenchPart) editorPart;
-				Method m = WorkbenchPart.class.getDeclaredMethod("setTitleImage", Image.class);
+				final WorkbenchPart workbenchPart = (WorkbenchPart) editorPart;
+				final Method m = WorkbenchPart.class.getDeclaredMethod("setTitleImage", Image.class);
 				m.setAccessible(true);
 				m.invoke(workbenchPart, newTitleImage);
 
-				// Field titleImage = WorkbenchPart.class.getDeclaredField("titleImage");
-				// titleImage.setAccessible(true);
-				// titleImage.set(workbenchPart, newTitleImage);
-
-			} catch (Exception e) {
-				//when an error occurs while decorating the title icon we move on as this function is not critical 
+			} catch (final Exception e) {
+				// when an error occurs while decorating the title icon we move on as this
+				// function is not critical
 				e.printStackTrace();
 			}
 		}
@@ -101,10 +97,10 @@ public class TitleIconColorChanger extends ColorChanger {
 	private Image getTitleIcon(IEditorPart editorPart) {
 
 		try {
-			Field f = WorkbenchPart.class.getDeclaredField("titleImage");
+			final Field f = WorkbenchPart.class.getDeclaredField("titleImage");
 			f.setAccessible(true);
 			return (Image) f.get(editorPart);
-		} catch (Exception err) {
+		} catch (final Exception err) {
 			return null;
 		}
 	}

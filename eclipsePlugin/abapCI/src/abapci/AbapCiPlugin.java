@@ -4,6 +4,7 @@ import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPage;
@@ -14,6 +15,8 @@ import org.osgi.framework.BundleContext;
 
 import abapci.Exception.AbapCiColoredProjectFileParseException;
 import abapci.Exception.ActiveEditorNotSetException;
+import abapci.abapgit.ActiveGitEditors;
+import abapci.abapgit.GitEditorIdentifier;
 import abapci.ci.model.ContinuousIntegrationModel;
 import abapci.ci.presenter.ContinuousIntegrationPresenter;
 import abapci.coloredProject.colorChanger.ColorChanger;
@@ -45,8 +48,9 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 	private static IResourceChangeListener resourceChangeListener;
 	private static IPartListener2 partListener;
 	private static WorkspaceColorConfiguration workspaceColorConfiguration;
+	private static ActiveGitEditors activeGitEditors;
 
-	private FeatureFacade featureFacade;
+	private static FeatureFacade featureFacade;
 
 	private IStatusBarWidget statusBarWidget;
 
@@ -179,4 +183,26 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 	public static ContinuousIntegrationPresenter getContinuousIntegrationPresenter() {
 		return continuousIntegrationPresenter;
 	}
+
+	public static IEditorPart getParticularOrGeneralGitEditor(GitEditorIdentifier identifier) {
+		identifier = resetIdentifierIfPreferenceOnlyOneGitEditorIsSet(identifier);
+		return activeGitEditors.getEditor(identifier);
+	}
+
+	public static void addGitEditor(GitEditorIdentifier identifier, IEditorPart newEditor) {
+
+		identifier = resetIdentifierIfPreferenceOnlyOneGitEditorIsSet(identifier);
+		activeGitEditors.addEditor(identifier, newEditor);
+	}
+
+	private static GitEditorIdentifier resetIdentifierIfPreferenceOnlyOneGitEditorIsSet(
+			GitEditorIdentifier identifier) {
+
+		if (featureFacade.getAbapGitFeature().isOnlyOneAbapGitTransactionActive()) {
+			identifier = null;
+		}
+
+		return identifier;
+	}
+
 }

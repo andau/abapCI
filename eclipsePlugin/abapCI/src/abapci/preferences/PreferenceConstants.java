@@ -47,7 +47,7 @@ public class PreferenceConstants {
 
 	public static final String PREF_SOURCE_CODE_CLEANUP_NOT_USED_VARIABLES = "sourceCodeCleanupNotUsedVariables";
 
-	public static final String PREF_ABAP_GIT_PACKAGE_CHANGE_ENABLED = "abapGitPackageChangeEnabled";
+	public static final String PREF_ABAP_GIT_ONLY_ONE_ABAP_GIT_TRANSACTION_ENABLED = "abapGitOnlyOneAbapGitTransactionEnabled";
 
 	public static final String PREF_UNIT_RUN_CRITICAL_TESTS_ENABLED = "unitRunCriticalTestsEnabled";
 
@@ -84,6 +84,8 @@ public class PreferenceConstants {
 	public static final String PREF_DEVELOPER_TRACING_ENABLED = "developerTracingEnabled";
 
 	public static final String PREF_ATC_ANNOTATION_HANDLING_ENABLED = "atcAnnotationHandlingEnabled";
+
+	public static final String PREF_ABAP_GIT_ENABLED = "abapGitEnabled";
 
 	private PreferenceConstants() {
 	}

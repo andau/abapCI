@@ -142,8 +142,8 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 	}
 
 	private void createAbapGitChapter() {
-		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ABAP_GIT_PACKAGE_CHANGE_ENABLED,
-				"Package changer for abapGit (not yet implemented on the ABAP backend)", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ABAP_GIT_ONLY_ONE_ABAP_GIT_TRANSACTION_ENABLED,
+				"Open only one abapGit transaction (not one for each ABAP package)", getFieldEditorParent()));
 
 	}
 

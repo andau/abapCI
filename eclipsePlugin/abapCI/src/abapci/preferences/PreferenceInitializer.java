@@ -61,6 +61,9 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.PREF_UNIT_RUN_DURATION_SHORT_TESTS_ENABLED, true);
 		store.setDefault(PreferenceConstants.PREF_DIALOG_NEW_PACKAGE_FOR_CI_RUN_ENABLED, true);
 
+		store.setDefault(PreferenceConstants.PREF_ABAP_GIT_ENABLED, true);
+		store.setDefault(PreferenceConstants.PREF_ABAP_GIT_ONLY_ONE_ABAP_GIT_TRANSACTION_ENABLED, false);
+
 		store.setDefault(PreferenceConstants.PREF_DEVELOPER_JAVA_SIMU_MODE_ENABLED, false);
 		store.setDefault(PreferenceConstants.PREF_DEVELOPER_TRACING_ENABLED, false);
 

@@ -1,8 +1,10 @@
 package abapci;
 
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.ui.IEditorPart;
 
 import abapci.Exception.AbapCiColoredProjectFileParseException;
+import abapci.abapgit.GitEditorIdentifier;
 import abapci.ci.presenter.ContinuousIntegrationPresenter;
 import abapci.coloredProject.general.IStatusBarWidget;
 import abapci.coloredProject.general.WorkspaceColorConfiguration;
@@ -35,6 +37,14 @@ public class AbapCiPluginHelper {
 	public ContinuousIntegrationPresenter getContinousIntegrationPresenter() {
 		// TODO Auto-generated method stub
 		return AbapCiPlugin.getContinuousIntegrationPresenter();
+	}
+
+	public void addGitEditor(GitEditorIdentifier identifier, IEditorPart newEditor) {
+		AbapCiPlugin.addGitEditor(identifier, newEditor);
+	}
+
+	public IEditorPart getParticularOrGeneralGitEditor(GitEditorIdentifier identifier) {
+		return AbapCiPlugin.getParticularOrGeneralGitEditor(identifier);
 	}
 
 }

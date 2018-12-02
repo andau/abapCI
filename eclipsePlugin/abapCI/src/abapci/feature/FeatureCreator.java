@@ -3,7 +3,7 @@ package abapci.feature;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import abapci.AbapCiPluginHelper;
-import abapci.feature.activeFeature.AbapGitPackageChangeFeature;
+import abapci.feature.activeFeature.AbapGitFeature;
 import abapci.feature.activeFeature.AtcFeature;
 import abapci.feature.activeFeature.ColorFeature;
 import abapci.feature.activeFeature.ColoredProjectFeature;
@@ -102,10 +102,11 @@ public class FeatureCreator {
 		return feature;
 	}
 
-	public AbapGitPackageChangeFeature createAbapGitPackageChangeFeature() {
+	public AbapGitFeature createAbapGitFeature() {
 		initPrefs();
-		final AbapGitPackageChangeFeature feature = new AbapGitPackageChangeFeature();
-		feature.setActive(prefs.getBoolean(PreferenceConstants.PREF_ABAP_GIT_PACKAGE_CHANGE_ENABLED));
+		final AbapGitFeature feature = new AbapGitFeature();
+		feature.setOnlyOneAbapGitTransactionActive(
+				prefs.getBoolean(PreferenceConstants.PREF_ABAP_GIT_ONLY_ONE_ABAP_GIT_TRANSACTION_ENABLED));
 		return feature;
 	}
 

@@ -3,7 +3,7 @@ package abapci.feature;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 import abapci.AbapCiPlugin;
-import abapci.feature.activeFeature.AbapGitPackageChangeFeature;
+import abapci.feature.activeFeature.AbapGitFeature;
 import abapci.feature.activeFeature.ActiveFeature;
 import abapci.feature.activeFeature.AtcFeature;
 import abapci.feature.activeFeature.ColorFeature;
@@ -48,8 +48,8 @@ public class FeatureFacade {
 		return featureCreator.createSourcecodeFormattingFeature();
 	}
 
-	public AbapGitPackageChangeFeature getAbapGitPackageChangeFeature() {
-		return featureCreator.createAbapGitPackageChangeFeature();
+	public AbapGitFeature getAbapGitFeature() {
+		return featureCreator.createAbapGitFeature();
 	}
 
 	public SimpleToggleFeature getUnitCriticalActiveFeature() {
