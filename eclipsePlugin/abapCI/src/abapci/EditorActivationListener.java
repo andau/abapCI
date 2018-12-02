@@ -1,13 +1,21 @@
 package abapci;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Map;
+
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.part.WorkbenchPart;
 
 import abapci.Exception.AbapCiColoredProjectFileParseException;
 import abapci.Exception.ActiveEditorNotSetException;
+import abapci.abapgit.GitEditorIdentifier;
 import abapci.coloredProject.colorChanger.ColorChanger;
 import abapci.coloredProject.colorChanger.ColorChangerFactory;
 import abapci.coloredProject.colorChanger.ColorChangerType;
@@ -17,14 +25,22 @@ import abapci.coloredProject.general.DisplayColor;
 import abapci.coloredProject.general.EditorActivationHandler;
 import abapci.coloredProject.general.WorkspaceColorConfiguration;
 import abapci.feature.FeatureFacade;
+import abapci.feature.activeFeature.AbapGitFeature;
 import abapci.feature.activeFeature.ColoredProjectFeature;
 
 public class EditorActivationListener implements IPartListener2 {
+
+	private static final String ICONS_GIT = "icons/git.ico";
+
+	AbapCiPluginHelper abapCiPluginHelper = new AbapCiPluginHelper();
+
 	ColoredProjectFeature coloredProjectFeature;
+	AbapGitFeature abapGitFeature;
 
 	public EditorActivationListener() {
-		FeatureFacade featureFacade = new FeatureFacade();
+		final FeatureFacade featureFacade = new FeatureFacade();
 		coloredProjectFeature = featureFacade.getColoredProjectFeature();
+		abapGitFeature = featureFacade.getAbapGitFeature();
 	}
 
 	@Override
@@ -34,6 +50,8 @@ public class EditorActivationListener implements IPartListener2 {
 			editorActivationHandler.updateDisplayColoring();
 
 			updateProjectColorsExperimental();
+			updateGitLabelsExperimental();
+
 		} catch (final Exception ex) {
 			// if there happens any error while formatting the editor, we skip it as this
 			// function is not mandatory
@@ -93,27 +111,69 @@ public class EditorActivationListener implements IPartListener2 {
 			AbapCiColoredProjectFileParseException, ActiveEditorNotSetException, ProjectColorNotSetException {
 
 		if (coloredProjectFeature.isTitleIconActive()) {
-			IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 			activePage.getActiveEditor();
 
-			IEditorReference[] editorReferences = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-					.getEditorReferences();
+			final IEditorReference[] editorReferences = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+					.getActivePage().getEditorReferences();
 
-			ColorChangerFactory colorChangerFactory = new ColorChangerFactory();
+			final ColorChangerFactory colorChangerFactory = new ColorChangerFactory();
 
-			AbapCiPluginHelper abapCiPluginHelper = new AbapCiPluginHelper();
-			WorkspaceColorConfiguration workspaceColorConfiguration = abapCiPluginHelper
+			final AbapCiPluginHelper abapCiPluginHelper = new AbapCiPluginHelper();
+			final WorkspaceColorConfiguration workspaceColorConfiguration = abapCiPluginHelper
 					.getWorkspaceColorConfiguration();
 
-			for (IEditorReference editorReference : editorReferences) {
-				DisplayColor displayColor = workspaceColorConfiguration
+			for (final IEditorReference editorReference : editorReferences) {
+				final DisplayColor displayColor = workspaceColorConfiguration
 						.getColoring(GeneralProjectUtil.getProject(editorReference.getEditor(true)));
-				ColorChanger colorChanger = colorChangerFactory.create(ColorChangerType.TITLE_ICON,
+				final ColorChanger colorChanger = colorChangerFactory.create(ColorChangerType.TITLE_ICON,
 						editorReference.getEditor(true), coloredProjectFeature, displayColor.getTitleIconColor());
 				colorChanger.change();
 			}
 		}
 
+	}
+
+	private void updateGitLabelsExperimental() {
+
+		if (abapGitFeature.isChangeTransactionLabelActive()) {
+
+			for (final Map.Entry<GitEditorIdentifier, IEditorPart> entry : abapCiPluginHelper.getGitEditors()
+					.entrySet()) {
+				try {
+
+					final Image newTitleImage = abapCiPluginHelper.getImageDescriptor(ICONS_GIT).createImage();
+
+					final WorkbenchPart workbenchPart = (WorkbenchPart) entry.getValue();
+					final Method imageMethod = WorkbenchPart.class.getDeclaredMethod("setTitleImage", Image.class);
+					imageMethod.setAccessible(true);
+					imageMethod.invoke(workbenchPart, newTitleImage);
+
+					final Method partNameMethod = WorkbenchPart.class.getDeclaredMethod("setPartName", Image.class);
+					partNameMethod.setAccessible(true);
+					partNameMethod.invoke(workbenchPart, entry.getKey().getPackageName());
+
+				} catch (final Exception e) {
+					// when an error occurs while changing the title icon with the git icon we move
+					// on as this
+					// function is not critical
+					e.printStackTrace();
+				}
+			}
+		}
+
+	}
+
+	@Deprecated
+	private Image getTitleIcon(IEditorPart editorPart) {
+
+		try {
+			final Field f = WorkbenchPart.class.getDeclaredField("titleImage");
+			f.setAccessible(true);
+			return (Image) f.get(editorPart);
+		} catch (final Exception err) {
+			return null;
+		}
 	}
 
 }

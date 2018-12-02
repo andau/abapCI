@@ -1,6 +1,9 @@
 package abapci;
 
+import java.util.Map;
+
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorPart;
 
 import abapci.Exception.AbapCiColoredProjectFileParseException;
@@ -45,6 +48,15 @@ public class AbapCiPluginHelper {
 
 	public IEditorPart getParticularOrGeneralGitEditor(GitEditorIdentifier identifier) {
 		return AbapCiPlugin.getParticularOrGeneralGitEditor(identifier);
+	}
+
+	public Map<GitEditorIdentifier, IEditorPart> getGitEditors() {
+		return AbapCiPlugin.getGitEditors();
+
+	}
+
+	public ImageDescriptor getImageDescriptor(String imageString) {
+		return AbapCiPlugin.getImageDescriptor(imageString);
 	}
 
 }

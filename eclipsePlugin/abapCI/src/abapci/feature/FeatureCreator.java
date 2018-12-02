@@ -107,6 +107,8 @@ public class FeatureCreator {
 		final AbapGitFeature feature = new AbapGitFeature();
 		feature.setOnlyOneAbapGitTransactionActive(
 				prefs.getBoolean(PreferenceConstants.PREF_ABAP_GIT_ONLY_ONE_ABAP_GIT_TRANSACTION_ENABLED));
+		feature.setChangeTransactionLabelActive(
+				prefs.getBoolean(PreferenceConstants.PREF_ABAP_GIT_CHANGE_TRANSACTION_LABEL_ENABLED));
 		return feature;
 	}
 

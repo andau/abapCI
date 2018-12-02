@@ -41,6 +41,7 @@ public class AbapGitHandlerTest {
 	AbapGitFeature abapGitFeature = Mockito.mock(AbapGitFeature.class);
 	AbapCiPluginHelper abapCiPluginHelper = Mockito.mock(AbapCiPluginHelper.class);
 	AbapGitHandlerHelper abapGitHandlerHelper = Mockito.mock(AbapGitHandlerHelper.class);
+	final IEditorPart editorPart = Mockito.mock(IEditorPart.class);
 
 	IWorkbench workbench = Mockito.mock(IWorkbench.class);
 	IWorkbenchWindow workbenchWindow = Mockito.mock(IWorkbenchWindow.class);
@@ -63,6 +64,7 @@ public class AbapGitHandlerTest {
 		Mockito.when(abapGitHandlerHelper.getWorkbench()).thenReturn(workbench);
 		Mockito.when(abapGitHandlerHelper.getAbapGitFeature()).thenReturn(abapGitFeature);
 		Mockito.when(abapGitHandlerHelper.getCoreProjectService()).thenReturn(coreProjectService);
+		Mockito.when(abapGitHandlerHelper.getActiveEditor()).thenReturn(editorPart);
 
 		Mockito.when(workbench.getActiveWorkbenchWindow()).thenReturn(workbenchWindow);
 		Mockito.when(workbenchWindow.getActivePage()).thenReturn(workbenchPage);
@@ -116,7 +118,6 @@ public class AbapGitHandlerTest {
 
 	@Test
 	public void testExecuteStringActiveGitEditor() {
-		final IEditorPart editorPart = Mockito.mock(IEditorPart.class);
 
 		final GitEditorIdentifier identifier = new GitEditorIdentifier(ABAP_TEST_PROJECT, TEST_PACKAGE_NAME);
 		Mockito.when(abapCiPluginHelper.getParticularOrGeneralGitEditor(identifier)).thenReturn(editorPart);

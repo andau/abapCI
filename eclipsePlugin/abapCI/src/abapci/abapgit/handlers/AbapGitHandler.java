@@ -67,12 +67,15 @@ public class AbapGitHandler extends AbstractHandler {
 
 			final IEditorPart activeEditor = findActiveGitEditor(identifier);
 
-			if (activeEditor != null) {
-				reactivateEditor(activeEditor);
-			} else {
-				openNewEditor(identifier);
+			boolean editorReactivated = false;
 
+			if (activeEditor != null) {
+				editorReactivated = reactivateEditor(activeEditor);
 			}
+			if (!editorReactivated) {
+				openNewEditor(identifier);
+			}
+
 		} catch (final ProjectIsNullException pne) {
 			showProjectNullInfo();
 		} catch (final NoAbapProjectException nae) {
@@ -109,12 +112,14 @@ public class AbapGitHandler extends AbstractHandler {
 				identifier.getProject(), ABAP_GIT_TRANSACTION_NAME, true, params, params);
 
 		abapCiPluginHelper.addGitEditor(identifier, newEditor);
+
 	}
 
-	private void reactivateEditor(IEditorPart activeEditor) {
+	private boolean reactivateEditor(IEditorPart activeEditor) {
 
 		final IWorkbenchPage activePage = getActivePage();
 		activePage.activate(activeEditor);
+		return abapGitHandlerHelper.getActiveEditor().equals(activeEditor);
 	}
 
 	private IWorkbenchPage getActivePage() {

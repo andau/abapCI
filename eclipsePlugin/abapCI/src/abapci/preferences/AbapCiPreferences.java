@@ -145,6 +145,8 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ABAP_GIT_ONLY_ONE_ABAP_GIT_TRANSACTION_ENABLED,
 				"Open only one abapGit transaction (not one for each ABAP package)", getFieldEditorParent()));
 
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ABAP_GIT_CHANGE_TRANSACTION_LABEL_ENABLED,
+				"Set Git icon in header label of abapGit Transactions", getFieldEditorParent()));
 	}
 
 	private void createHelperDialogsChapter() {

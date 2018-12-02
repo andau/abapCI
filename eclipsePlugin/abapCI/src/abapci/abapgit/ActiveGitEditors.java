@@ -26,4 +26,9 @@ public class ActiveGitEditors {
 		return activeEditors.get(identifier);
 	}
 
+	public Map<GitEditorIdentifier, IEditorPart> getAllEditors() {
+		// TODO Auto-generated method stub
+		return activeEditors;
+	}
+
 }

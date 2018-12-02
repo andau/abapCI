@@ -1,5 +1,7 @@
 package abapci;
 
+import java.util.Map;
+
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -38,7 +40,7 @@ import abapci.feature.activeFeature.ColoredProjectFeature;
 public class AbapCiPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "com.abapci.core"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "com.abapci.plugin"; //$NON-NLS-1$
 	// The shared instance
 	private static AbapCiPlugin plugin;
 
@@ -204,6 +206,10 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 		}
 
 		return identifier;
+	}
+
+	public static Map<GitEditorIdentifier, IEditorPart> getGitEditors() {
+		return activeGitEditors.getAllEditors();
 	}
 
 }

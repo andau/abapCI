@@ -63,6 +63,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 		store.setDefault(PreferenceConstants.PREF_ABAP_GIT_ENABLED, true);
 		store.setDefault(PreferenceConstants.PREF_ABAP_GIT_ONLY_ONE_ABAP_GIT_TRANSACTION_ENABLED, false);
+		store.setDefault(PreferenceConstants.PREF_ABAP_GIT_CHANGE_TRANSACTION_LABEL_ENABLED, false);
 
 		store.setDefault(PreferenceConstants.PREF_DEVELOPER_JAVA_SIMU_MODE_ENABLED, false);
 		store.setDefault(PreferenceConstants.PREF_DEVELOPER_TRACING_ENABLED, false);

@@ -2,7 +2,8 @@ package abapci.feature.activeFeature;
 
 public class AbapGitFeature extends ActiveFeature {
 
-	boolean onlyOneAbapGitTransactionActive;
+	private boolean onlyOneAbapGitTransactionActive;
+	private boolean changeTransactionLabelActive;
 
 	public boolean isOnlyOneAbapGitTransactionActive() {
 		return onlyOneAbapGitTransactionActive;
@@ -10,5 +11,13 @@ public class AbapGitFeature extends ActiveFeature {
 
 	public void setOnlyOneAbapGitTransactionActive(boolean active) {
 		onlyOneAbapGitTransactionActive = active;
+	}
+
+	public boolean isChangeTransactionLabelActive() {
+		return changeTransactionLabelActive;
+	}
+
+	public void setChangeTransactionLabelActive(boolean active) {
+		changeTransactionLabelActive = active;
 	}
 }

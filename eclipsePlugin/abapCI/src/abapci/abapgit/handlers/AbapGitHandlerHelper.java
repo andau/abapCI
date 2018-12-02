@@ -43,4 +43,8 @@ public class AbapGitHandlerHelper {
 
 	}
 
+	public Object getActiveEditor() {
+		return getWorkbench().getActiveWorkbenchWindow().getActivePage();
+	}
+
 }

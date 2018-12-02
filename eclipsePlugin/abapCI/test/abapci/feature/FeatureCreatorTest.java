@@ -31,8 +31,10 @@ public class FeatureCreatorTest {
 	public void testAbapGitPackageChangeFeature() {
 
 		cut.createAbapGitFeature();
-		Mockito.verify(prefs, times(1)).getBoolean(PreferenceConstants.PREF_ABAP_GIT_ONLY_ONE_ABAP_GIT_TRANSACTION_ENABLED);
-		Mockito.verify(prefs, times(1)).getBoolean(Mockito.any(String.class));
+		Mockito.verify(prefs, times(1))
+				.getBoolean(PreferenceConstants.PREF_ABAP_GIT_ONLY_ONE_ABAP_GIT_TRANSACTION_ENABLED);
+		Mockito.verify(prefs, times(1)).getBoolean(PreferenceConstants.PREF_ABAP_GIT_CHANGE_TRANSACTION_LABEL_ENABLED);
+		Mockito.verify(prefs, times(2)).getBoolean(Mockito.any(String.class));
 
 	}
 
