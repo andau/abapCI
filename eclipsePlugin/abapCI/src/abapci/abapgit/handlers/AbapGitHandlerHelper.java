@@ -3,6 +3,7 @@ package abapci.abapgit.handlers;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -43,8 +44,8 @@ public class AbapGitHandlerHelper {
 
 	}
 
-	public Object getActiveEditor() {
-		return getWorkbench().getActiveWorkbenchWindow().getActivePage();
+	public IEditorPart getActiveEditor() {
+		return getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor();
 	}
 
 }

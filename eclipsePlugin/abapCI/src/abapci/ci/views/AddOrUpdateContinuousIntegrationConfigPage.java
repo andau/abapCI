@@ -142,7 +142,7 @@ public class AddOrUpdateContinuousIntegrationConfigPage extends Dialog {
 
 		try {
 			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-					.showView("abapci.ci.views.AbapCiMainView.java");
+					.showView("abapci.ci.views.AbapCiMainView");
 		} catch (PartInitException e) {
 			// if ABAP CI view can not be opened we keep on going as this is not
 			// a critical function

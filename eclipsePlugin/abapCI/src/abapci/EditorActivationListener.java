@@ -149,7 +149,7 @@ public class EditorActivationListener implements IPartListener2 {
 					imageMethod.setAccessible(true);
 					imageMethod.invoke(workbenchPart, newTitleImage);
 
-					final Method partNameMethod = WorkbenchPart.class.getDeclaredMethod("setPartName", Image.class);
+					final Method partNameMethod = WorkbenchPart.class.getDeclaredMethod("setPartName", String.class);
 					partNameMethod.setAccessible(true);
 					partNameMethod.invoke(workbenchPart, entry.getKey().getPackageName());
 
