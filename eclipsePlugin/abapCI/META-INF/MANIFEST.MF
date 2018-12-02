@@ -67,9 +67,7 @@ Require-Bundle: org.eclipse.ui,
  org.junit.vintage.engine,
  org.hamcrest.core,
  org.opentest4j,
- org.apiguardian,
- com.sap.adt.ddic;bundle-version="2.102.0",
- com.sap.adt.ddic.ui;bundle-version="2.102.0"
+ org.apiguardian
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: abapci;
   uses:="org.osgi.framework,

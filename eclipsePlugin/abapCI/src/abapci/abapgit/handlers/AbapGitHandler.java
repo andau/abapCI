@@ -71,6 +71,7 @@ public class AbapGitHandler extends AbstractHandler {
 				reactivateEditor(activeEditor);
 			} else {
 				openNewEditor(identifier);
+
 			}
 		} catch (final ProjectIsNullException pne) {
 			showProjectNullInfo();

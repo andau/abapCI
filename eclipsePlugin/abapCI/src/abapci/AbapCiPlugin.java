@@ -77,6 +77,7 @@ public class AbapCiPlugin extends AbstractUIPlugin {
 		}
 
 		try {
+			activeGitEditors = new ActiveGitEditors();
 			workspaceColorConfiguration = new WorkspaceColorConfiguration(true);
 
 			coloredProjectsPresenter = new ColoredProjectsPresenter(null, new ColoredProjectModel());
