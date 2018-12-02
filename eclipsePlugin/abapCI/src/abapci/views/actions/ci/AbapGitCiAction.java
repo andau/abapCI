@@ -7,6 +7,7 @@ import org.eclipse.swt.widgets.Display;
 
 import abapci.AbapCiPlugin;
 import abapci.GeneralProjectUtil;
+import abapci.abapgit.GitEditorIdentifier;
 import abapci.abapgit.handlers.AbapGitHandler;
 import abapci.ci.presenter.ContinuousIntegrationPresenter;
 import abapci.domain.AbapPackageTestState;
@@ -32,7 +33,8 @@ public class AbapGitCiAction extends AbstractCiAction {
 						.getAbapProjectByProjectName(abapPackageTestState.getProjectName());
 				final String packageName = abapPackageTestState.getPackageName();
 
-				new AbapGitHandler().execute(project, packageName);
+				final GitEditorIdentifier identifier = new GitEditorIdentifier(project, packageName);
+				new AbapGitHandler().execute(identifier);
 
 			} catch (final Exception ex) {
 				final String errormessage = String.format("Error while opening abapGit, errormessage: %s",

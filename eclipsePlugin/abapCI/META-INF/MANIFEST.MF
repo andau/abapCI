@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-Vendor: %Bundle-Vendor
 Bundle-SymbolicName: com.abapci.plugin;singleton:=true
-Bundle-Version: 0.5.4.3
+Bundle-Version: 0.5.4.31
 Bundle-Activator: abapci.AbapCiPlugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,

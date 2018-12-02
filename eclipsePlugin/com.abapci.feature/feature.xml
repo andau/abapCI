@@ -2,7 +2,7 @@
 <feature
       id="com.abapci.feature"
       label="ABAP Continuous Integration"
-      version="0.5.4.3"
+      version="0.5.4.31"
       provider-name="andau">
 
    <description url="http://www.example.com/description">

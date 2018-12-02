@@ -7,23 +7,17 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.handlers.HandlerUtil;
-
-import com.sap.adt.projectexplorer.ui.node.AbapRepositoryBaseNode;
-import com.sap.adt.sapgui.ui.internal.editors.GuiEditorInput;
 
 import abapci.AbapCiPluginHelper;
 import abapci.GeneralProjectUtil;
 import abapci.abapgit.GitEditorIdentifier;
+import abapci.abapgit.GitEditorIdentifierAdapter;
+import abapci.abapgit.exception.NoAbapProjectException;
+import abapci.abapgit.exception.ProjectIsNullException;
 
 public class AbapGitHandler extends AbstractHandler {
 
@@ -42,69 +36,67 @@ public class AbapGitHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 
-		IProject project = null;
-		String packagename = "";
+		final ISelection selection = abapGitHandlerHelper.getCurrentSelection(event);
 
-		final ISelection selection = HandlerUtil.getCurrentSelection(event);
-		if (!selection.isEmpty()) {
-			if (selection instanceof TreeSelection) {
-				if (!((TreeSelection) selection).isEmpty()
-						&& ((TreeSelection) selection).getFirstElement() instanceof AbapRepositoryBaseNode) {
-					final AbapRepositoryBaseNode packageNode = (AbapRepositoryBaseNode) ((TreeSelection) selection)
-							.getFirstElement();
+		final GitEditorIdentifier identifier = getGitIdentifierFromSelection(selection);
 
-					project = packageNode.getProject();
-					packagename = packageNode.getPackageName();
+		setToCurrentProjectIfProjectIsNull(identifier);
 
-				} else if (!((TreeSelection) selection).isEmpty()
-						&& ((TreeSelection) selection).getFirstElement() instanceof IProject) {
-					project = (IProject) ((TreeSelection) selection).getFirstElement();
-				}
-			}
-		}
-
-		if (project == null && GeneralProjectUtil.getCurrentProject() != null)
-
-		{
-			project = GeneralProjectUtil.getCurrentProject();
-		}
-
-		execute(project, packagename);
+		execute(identifier);
 
 		return null;
 	}
 
-	public Object execute(IProject project, String packagename) {
+	private void setToCurrentProjectIfProjectIsNull(GitEditorIdentifier identifier) {
+		if (identifier.getProject() == null && GeneralProjectUtil.getCurrentProject() != null) {
+			identifier = new GitEditorIdentifier(GeneralProjectUtil.getCurrentProject(), identifier.getPackageName());
+		}
+	}
 
-		final GitEditorIdentifier identifier = new GitEditorIdentifier(project, packagename);
+	private GitEditorIdentifier getGitIdentifierFromSelection(final ISelection selection) {
 
-		if (project == null) {
-			showMissingProjectInfo(project);
-		} else {
+		final GitEditorIdentifierAdapter gitEditorIdentifierAdapter = new GitEditorIdentifierAdapter();
+		return gitEditorIdentifierAdapter.adapt(selection);
+	}
 
-			final IEditorPart activeEditor = findActiveGitEditor(project, identifier);
+	public Object execute(GitEditorIdentifier identifier) {
+
+		try {
+
+			checkValidAbapProject(identifier.getProject());
+
+			final IEditorPart activeEditor = findActiveGitEditor(identifier);
 
 			if (activeEditor != null) {
 				reactivateEditor(activeEditor);
 			} else {
 				openNewEditor(identifier);
 			}
+		} catch (final ProjectIsNullException pne) {
+			showProjectNullInfo();
+		} catch (final NoAbapProjectException nae) {
+			showMissingProjectInfo(identifier.getProject());
 		}
 
 		return null;
+
 	}
 
-	private IEditorPart findActiveGitEditor(IProject project, final GitEditorIdentifier identifier) {
-		IEditorPart activeEditor;
-		if (abapGitHandlerHelper.getAbapGitFeature().isOnlyOneAbapGitTransactionActive()) {
+	private boolean checkValidAbapProject(IProject project) throws ProjectIsNullException, NoAbapProjectException {
 
-			final IEditorReference abapGitEditor = getAbapGitEditorReference(project.getName());
-			activeEditor = abapGitEditor != null ? abapGitEditor.getEditor(false) : null;
-
-		} else {
-			activeEditor = abapCiPluginHelper.getParticularOrGeneralGitEditor(identifier);
+		if (project == null) {
+			throw new ProjectIsNullException();
 		}
-		return activeEditor;
+
+		if (!abapGitHandlerHelper.getCoreProjectService().isAdtCoreProject(project)) {
+			throw new NoAbapProjectException();
+		}
+
+		return true;
+	}
+
+	private IEditorPart findActiveGitEditor(final GitEditorIdentifier identifier) {
+		return abapCiPluginHelper.getParticularOrGeneralGitEditor(identifier);
 	}
 
 	private void openNewEditor(final GitEditorIdentifier identifier) {
@@ -129,38 +121,14 @@ public class AbapGitHandler extends AbstractHandler {
 		return activeWorkbenchWindow.getActivePage();
 	}
 
+	private void showProjectNullInfo() {
+		abapGitHandlerHelper.showMessage("For calling abapGit select an ABAP package in the package explorer");
+	}
+
 	private void showMissingProjectInfo(IProject project) {
-		if (project == null) {
-			MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Info",
-					"For calling abapGit select an ABAP package in the package explorer");
-		} else {
-			MessageDialog.openInformation(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Info",
-					String.format("Project %s could not be determined as valid ABAP project", project));
-		}
+
+		abapGitHandlerHelper
+				.showMessage(String.format("Project %s could not be determined as valid ABAP project", project));
 
 	}
-
-	private IEditorReference getAbapGitEditorReference(String referenceProjectname) {
-
-		final IEditorReference[] editorReferences = getActivePage().getEditorReferences();
-
-		for (final IEditorReference editorReference : editorReferences) {
-			if (editorReference.getTitle().endsWith(ABAP_GIT_TRANSACTION_NAME)) {
-				try {
-					final GuiEditorInput editorInput = (GuiEditorInput) editorReference.getEditorInput();
-					final IProject project = editorInput.getProject();
-					if (project.getName().equals(referenceProjectname)) {
-						return editorReference;
-					}
-
-				} catch (final PartInitException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-		return null;
-
-	}
-
 }
