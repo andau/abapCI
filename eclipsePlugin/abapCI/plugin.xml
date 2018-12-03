@@ -2,6 +2,16 @@
 <?eclipse version="3.4"?> 
 <plugin>
  
+ 	<extension point="org.eclipse.core.expressions.propertyTesters">
+		<propertyTester
+			id="abapci.preferences.PreferencesPropertyTester"
+			type="java.lang.Object"
+			namespace="abapci"
+			properties="hasPreference"
+			class="abapci.preferences.PreferencesPropertyTester">
+		</propertyTester>
+  </extension>
+ 
    <extension
          point="org.eclipse.ui.commands">
       <category
@@ -29,10 +39,7 @@
             categoryId="abapci.commands.category"
             id="com.abapci.coloredProject">
       </command>
-      
-      
-
-   </extension>
+  </extension>
    
    <extension
          point="org.eclipse.ui.handlers">
@@ -59,7 +66,7 @@
    <extension
          point="org.eclipse.ui.bindings">
       <key
-            commandId="abapci.abapgit.open"
+            commandId="com.abapci.abapgit.open"
             contextId="org.eclipse.ui.contexts.dialogAndWindow"
             sequence="M1+M2+K"							
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
@@ -78,37 +85,12 @@
    <extension
          point="org.eclipse.ui.menus">
 
-     <menuContribution
-            locationURI="popup:#EditorContext?after=group.edit">
-         <command
-             commandId="com.abapci.abapgit.open"
-             label="abapGit"
-             icon="icons/git.ico"
-             style="push"
-             tooltip="Open abapGit with SAP Transaction">
-               <visibleWhen
-                  checkEnabled="false">
-             <iterate
-                   ifEmpty="false"
-                   operator="or">
-                <and>
-                      property="com.sap.adt.project.hasNature"
-                         value="com.sap.adt.abapnature">
-                </and>
-             </iterate>
-            </visibleWhen>
-         </command>
-      </menuContribution>
-      
-
-    
-      
-        <menuContribution          
+      <menuContribution          
           locationURI="popup:org.eclipse.ui.navigator.ProjectExplorer#PopupMenu?before=additions">
        <command
              commandId="com.abapci.abapgit.open"
              id="com.abapci.abapgit.open"
-             label="abapGit"
+             label="AbapGit"
              icon="icons/git.ico"
              style="push"
              tooltip="Open abapGit with SAP Transaction">
@@ -121,10 +103,7 @@
                 <or>
                       property="com.sap.adt.project.hasNature"
                          value="com.sap.adt.abapnature">
- 
-                      property="com.sap.adt.project.hasNature"
-                         value="org.eclipse.jdt.core.javanature">     
- 
+  
                       <instanceof
                             value="com.sap.adt.tools.core.IAdtObjectReference">
                       </instanceof>
@@ -138,6 +117,7 @@
                             type="com.sap.adt.tools.core.project.IAbapProject">
                       </adapt>
                    </or>
+                     <test property="abapci.hasPreference" value="abapGitEnabled" />
                 </and>
              </iterate>
           </visibleWhen>
@@ -202,7 +182,7 @@
                       </instanceof>
                       <adapt
                             type="com.sap.adt.tools.core.IAdtObjectReference">
-                      </adapt>
+                      </adapt>                      
                    </or>
                 </and>
              </iterate>
@@ -503,4 +483,5 @@
 
    </extension>
 	
+  
 </plugin>

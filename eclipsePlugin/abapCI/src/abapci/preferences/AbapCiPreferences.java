@@ -142,6 +142,9 @@ public class AbapCiPreferences extends FieldEditorPreferencePage implements IWor
 	}
 
 	private void createAbapGitChapter() {
+		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ABAP_GIT_ENABLED,
+				"Enable abapGit connectivity and show menu entry in project explorer", getFieldEditorParent()));
+
 		addField(new BooleanFieldEditor(PreferenceConstants.PREF_ABAP_GIT_ONLY_ONE_ABAP_GIT_TRANSACTION_ENABLED,
 				"Open only one abapGit transaction (not one for each ABAP package)", getFieldEditorParent()));
 
