@@ -11,7 +11,7 @@ public class JenkinsCiAction extends AbstractCiAction {
 			String tooltip) {
 		this.setText(label);
 		this.setToolTipText(tooltip);
-		this.setImageDescriptor(AbapCiPlugin.getImageDescriptor("icons/jenkins.ico"));
+		this.setImageDescriptor(AbapCiPlugin.getImageDescriptor("icons/jenkins.git"));
 		this.continuousIntegrationPresenter = continuousIntegrationPresenter;
 	}
 

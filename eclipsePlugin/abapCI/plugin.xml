@@ -91,7 +91,7 @@
              commandId="com.abapci.abapgit.open"
              id="com.abapci.abapgit.open"
              label="AbapGit"
-             icon="icons/git.ico"
+             icon="icons/abapgit.ico"
              style="push"
              tooltip="Open abapGit with SAP Transaction">
           <visibleWhen
@@ -130,7 +130,7 @@
              commandId="com.abapci.coloredProject"
              id="com.abapci.coloredProject"
              label="Change color assignment for this project"
-             icon="icons/abapci_logo.ico"
+             icon="icons/abapci_logo.png"
              style="push"
              tooltip="Add, modify or delete the color assignment for this project">
           <visibleWhen
@@ -165,7 +165,7 @@
              commandId="com.abapci.ciRun.add"
              id="com.abapci.ciRun.add"
              label="Add to CI Run"
-             icon="icons/abapci_logo.ico"
+             icon="icons/abapci_logo.png"
              style="push"
              tooltip="Add ABAP package to CI Run">
           <visibleWhen
@@ -243,28 +243,28 @@
       </category>
       <view
             name="ABAP Continuous Integration"
-            icon="icons/abapci_logo.ico"
+            icon="icons/abapci_logo.png"
             category="abapCI"
             class="abapci.ci.views.AbapCiMainView"
             id="abapci.ci.views.AbapCiMainView">
       </view>
       <view
             name="ABAP CI Dashboard"
-            icon="icons/abapci_logo.ico"
+            icon="icons/abapci_logo.png"
             category="abapCI"
             class="abapci.ci.views.AbapCiDashboardView"
             id="abapci.ci.views.AbapCiDashboardView">
       </view>
       <view
             name="ABAP CI Suppressions"
-            icon="icons/abapci_logo.ico"
+            icon="icons/abapci_logo.png"
             category="abapCI"
             class="abapci.suppression.views.AbapCiSuppressionView"
             id="abapci.suppression.views.AbapCiSuppressionView">
       </view>
       <view
             name="ABAP Colored Projects"
-            icon="icons/abapci_logo.ico"
+            icon="icons/abapci_logo.png"
             category="abapCI"
             class="abapci.coloredProject.view.AbapCiColoredProjectView"
             id="abapci.coloredProject.views.AbapCiColoredProjectView">

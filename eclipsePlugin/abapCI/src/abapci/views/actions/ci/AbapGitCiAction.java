@@ -14,7 +14,7 @@ import abapci.domain.AbapPackageTestState;
 
 public class AbapGitCiAction extends AbstractCiAction {
 
-	private static final String ICONS_GIT = "icons/git.ico";
+	private static final String ICONS_GIT = "icons/abapgit.png";
 
 	public AbapGitCiAction(ContinuousIntegrationPresenter continuousIntegrationPresenter, String label,
 			String tooltip) {
