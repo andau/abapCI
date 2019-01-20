@@ -30,7 +30,7 @@ import abapci.feature.activeFeature.ColoredProjectFeature;
 
 public class EditorActivationListener implements IPartListener2 {
 
-	private static final String ICONS_GIT = "icons/abapgit.ico";
+	private static final String ICONS_GIT = "icons/abapgit.png";
 
 	AbapCiPluginHelper abapCiPluginHelper = new AbapCiPluginHelper();
 

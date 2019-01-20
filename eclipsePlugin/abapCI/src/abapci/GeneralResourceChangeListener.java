@@ -1,6 +1,5 @@
 package abapci;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,8 +39,8 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 	private final CiJob job;
 	private final ContinuousIntegrationPresenter continuousIntegrationPresenter;
 	private final ActivationPool activationPool;
-	
-	private AtcFeature atcFeature; 
+
+	private final AtcFeature atcFeature;
 
 	public GeneralResourceChangeListener(ContinuousIntegrationPresenter continuousIntegrationPresenter) {
 		sapConnection = new SapConnection();
@@ -49,21 +48,21 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 		this.continuousIntegrationPresenter = continuousIntegrationPresenter;
 		job = CiJob.getInstance(continuousIntegrationPresenter);
 		activationPool = ActivationPool.getInstance();
-		
-		FeatureFacade featureFacade = new FeatureFacade(); 
-		atcFeature = featureFacade.getAtcFeature(); 
+
+		final FeatureFacade featureFacade = new FeatureFacade();
+		atcFeature = featureFacade.getAtcFeature();
 	}
 
 	@Override
 	public void resourceChanged(IResourceChangeEvent event) {
 
 		if (event.getType() == IResourceChangeEvent.POST_CHANGE) {
-			IResourceDelta delta = event.getDelta();
+			final IResourceDelta delta = event.getDelta();
 			if (delta == null) {
 				return;
 			}
 
-			IResourceDelta[] resourceDeltas = delta.getAffectedChildren(IResourceDelta.CHANGED);
+			final IResourceDelta[] resourceDeltas = delta.getAffectedChildren(IResourceDelta.CHANGED);
 
 			try {
 				if (resourceDeltas.length > 0) {
@@ -72,7 +71,7 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 
 					try {
 						currentProject = resourceDeltas[0].getResource().getProject();
-					} catch (Exception ex) {
+					} catch (final Exception ex) {
 						currentProject = continuousIntegrationPresenter.getCurrentProject();
 					}
 
@@ -83,7 +82,7 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 						List<Activation> activatedInactiveObjects = new ArrayList<>();
 
 						// TODO merge activation and activatedInactive
-						List<Activation> activations = activationPool.findAllActiveOrIncludedInJob();
+						final List<Activation> activations = activationPool.findAllActiveOrIncludedInJob();
 
 						if (activations != null && !activations.isEmpty()) {
 							activatedInactiveObjects = activations;
@@ -106,17 +105,16 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 						} else if (!activations.isEmpty() && (activationPool.hasUnprocessedActivationClicks()
 								|| currentProject.hasNature(JavaCore.NATURE_ID))) {
 
-							IProject activatedProject = activationPool.getCurrentProject();
-							
+							final IProject activatedProject = activationPool.getCurrentProject();
+
 							try {
-								if (atcFeature.isAnnotationHandlingEnabled()) 
-								{
-								   executeAtcShortcut(activatedProject, activatedInactiveObjects);
-								}								
-							}catch (Exception ex) {
-								//experimental function, therefore in error case we move on 
+								if (atcFeature.isAnnotationHandlingEnabled()) {
+									executeAtcShortcut(activatedProject, activatedInactiveObjects);
+								}
+							} catch (final Exception ex) {
+								// experimental function, therefore in error case we move on
 							}
-							
+
 							if (activatedProject != null) {
 								continuousIntegrationPresenter.setCurrentProject(activationPool.getCurrentProject());
 							}
@@ -132,8 +130,8 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 					}
 				}
 
-			} catch (Exception ex) {
-				Runnable runnable = () -> continuousIntegrationPresenter
+			} catch (final Exception ex) {
+				final Runnable runnable = () -> continuousIntegrationPresenter
 						.setStatusMessage(String.format("CI Run failed, errormessage %s", ex.getMessage()));
 				Display.getDefault().asyncExec(runnable);
 
@@ -143,25 +141,28 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 	}
 
 	private void showDialogForPackages(IProject currentProject, List<String> packages) {
-		for (String triggerPackage : packages) {
+		for (final String triggerPackage : packages) {
 			if (!continuousIntegrationPresenter.containsPackage(currentProject.getName(), triggerPackage)) {
-				ContinuousIntegrationConfig ciConfig = new ContinuousIntegrationConfig(currentProject.getName(),
+				final ContinuousIntegrationConfig ciConfig = new ContinuousIntegrationConfig(currentProject.getName(),
 						triggerPackage, true, true);
 
-				Runnable runnable = () -> handleNewConfig(ciConfig);
+				final Runnable runnable = () -> handleNewConfig(ciConfig);
 				Display.getDefault().asyncExec(runnable);
 			}
 		}
 	}
 
 	private void handleNewConfig(ContinuousIntegrationConfig ciConfig) {
+		final FeatureFacade featureFacade = new FeatureFacade();
 
-		AddOrUpdateContinuousIntegrationConfigPage addContinuousIntegrationConfigPage = new AddOrUpdateContinuousIntegrationConfigPage(
-				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), continuousIntegrationPresenter,
-				ciConfig, true);
-		if (addContinuousIntegrationConfigPage.open() == Window.OK) {
-			continuousIntegrationPresenter.setStatusMessage(
-					String.format("Configuration for package %s added to CI run", ciConfig.getPackageName()));
+		if (featureFacade.getShowDialogNewPackageForCiRun().isActive()) {
+			final AddOrUpdateContinuousIntegrationConfigPage addContinuousIntegrationConfigPage = new AddOrUpdateContinuousIntegrationConfigPage(
+					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), continuousIntegrationPresenter,
+					ciConfig, true);
+			if (addContinuousIntegrationConfigPage.open() == Window.OK) {
+				continuousIntegrationPresenter.setStatusMessage(
+						String.format("Configuration for package %s added to CI run", ciConfig.getPackageName()));
+			}
 		}
 
 	}
@@ -169,16 +170,16 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 	// EXPERIMENTAL
 
 	private void executeAtcShortcut(IProject project, Collection<Activation> inactiveObjects) {
-		List<IAtcCheckableItem> checkableItems = new ArrayList<>();
+		final List<IAtcCheckableItem> checkableItems = new ArrayList<>();
 
-		for (Activation activation : inactiveObjects) {
+		for (final Activation activation : inactiveObjects) {
 			checkableItems.add(
 					new MyAtcCheckableItem(activation.getUri(), activation.getClass().getName(), activation.getType()));
 		}
 
 		try {
 			runAtcLaunchShortcut(project, checkableItems);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			// currently this is only an experimental function therefore we log the
 			// exception and go on
 			e.printStackTrace();
@@ -190,15 +191,15 @@ public class GeneralResourceChangeListener implements IResourceChangeListener {
 
 		try {
 
-			Set<IAtcCheckableItem> adtItems = new HashSet<>(checkableItems);
+			final Set<IAtcCheckableItem> adtItems = new HashSet<>(checkableItems);
 
-			AtcLaunchShortcut atcLaunchShortcut = new AtcLaunchShortcut();
-			Method launchShortcut = AtcLaunchShortcut.class.getDeclaredMethod("runAtcForSelectedItems", Set.class,
+			final AtcLaunchShortcut atcLaunchShortcut = new AtcLaunchShortcut();
+			final Method launchShortcut = AtcLaunchShortcut.class.getDeclaredMethod("runAtcForSelectedItems", Set.class,
 					IProject.class);
 			launchShortcut.setAccessible(true);
 			launchShortcut.invoke(atcLaunchShortcut, adtItems, project);
 
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			// currently this is only an experimental function therefore we log the
 			// exception and go on
 			e.printStackTrace();
