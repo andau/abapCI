@@ -2,7 +2,6 @@ package abapci.connections;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
@@ -29,31 +28,27 @@ public class SapConnection {
 		return AdtLogonServiceFactory.createLogonService().isLoggedOn(projectName);
 	}
 
-	public List<Activation> unprocessedActivatedObjects(IProject project) throws InactivatedObjectEvaluationException {
-		return getInactiveObjects(project);
-	}
-
 	public List<Activation> getInactiveObjects(IProject project) throws InactivatedObjectEvaluationException {
 
 		try {
-			IActivationServiceFactory activationServiceFactory = AdtActivationPlugin.getDefault()
+			final IActivationServiceFactory activationServiceFactory = AdtActivationPlugin.getDefault()
 					.getActivationServiceFactory();
-			IActivationService activationService = activationServiceFactory.createActivationService(project.getName());
-			IInactiveCtsObjectList newInactiveCtsObjectList = activationService
+			final IActivationService activationService = activationServiceFactory
+					.createActivationService(project.getName());
+			final IInactiveCtsObjectList newInactiveCtsObjectList = activationService
 					.getInactiveCtsObjects(new NullProgressMonitor());
 			return convertToActivationObjectList(newInactiveCtsObjectList);
-		} catch (Exception ex) {
+		} catch (final Exception ex) {
 			throw new InactivatedObjectEvaluationException(ex);
 		}
 
 	}
 
 	private List<Activation> convertToActivationObjectList(IInactiveCtsObjectList inactiveCtsObjectList) {
-		List<Activation> activationObjects = new ArrayList<>();
-		for (Iterator<IInactiveCtsObject> iterator = inactiveCtsObjectList.getEntry().iterator(); iterator.hasNext();) {
-			IInactiveCtsObject ctsObject = iterator.next();
+		final List<Activation> activationObjects = new ArrayList<>();
+		for (final IInactiveCtsObject ctsObject : inactiveCtsObjectList.getEntry()) {
 			if (ctsObject.hasObjectRef()) {
-				IAdtObjectReference ref = ctsObject.getObject().getRef();
+				final IAdtObjectReference ref = ctsObject.getObject().getRef();
 				if (!ref.getName().equals("Z_BAPI_HE_VARIANT_CALC")) {
 					activationObjects.add(new Activation(ref.getName(), ref.getPackageName(), null,
 							URI.create(ref.getUri()), ref.getType()));

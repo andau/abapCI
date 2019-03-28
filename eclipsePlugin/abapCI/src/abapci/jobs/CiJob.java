@@ -60,7 +60,7 @@ public class CiJob extends Job {
 
 		try {
 			Thread.sleep(300);
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
 			return Status.CANCEL_STATUS;
 		}
@@ -69,13 +69,13 @@ public class CiJob extends Job {
 			if (!project.hasNature(JavaCore.NATURE_ID) && evaluateRerun()) {
 				schedule();
 			}
-		} catch (CoreException e) {
+		} catch (final CoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		if (triggerProcessor) {
-			SimpleDateFormat timeformat = new SimpleDateFormat("HH:mm:ss");
+			final SimpleDateFormat timeformat = new SimpleDateFormat("HH:mm:ss");
 			System.out.println(String.format("Feature processor started at %s", timeformat.format(new Date())));
 			featureProcessor.setPackagesAndObjects(triggerPackages, inactiveObjects);
 			featureProcessor.processEnabledFeatures();
@@ -91,17 +91,17 @@ public class CiJob extends Job {
 		boolean timeup = false;
 
 		try {
-			List<Activation> newInactiveObjects = sapConnection.getInactiveObjects(project);
+			final List<Activation> newInactiveObjects = sapConnection.getInactiveObjects(project);
 			if (newInactiveObjects.size() != currentInactiveObjects.size()) {
 				triggerProcessor = true;
 				currentInactiveObjects = newInactiveObjects;
 				System.out.println(String.format("Number of inactive objects %d", currentInactiveObjects.size()));
 			}
-		} catch (InactivatedObjectEvaluationException e) {
+		} catch (final InactivatedObjectEvaluationException e) {
 			e.printStackTrace();
 		}
 
-		long timeSinceLastTrigger = new Date().getTime() - triggerDate.getTime();
+		final long timeSinceLastTrigger = new Date().getTime() - triggerDate.getTime();
 
 		if (currentInactiveObjects.size() == 0) {
 			ActivationPool.getInstance().unregisterAllActivated();
@@ -109,7 +109,7 @@ public class CiJob extends Job {
 			System.out.println(String.format("Ci job - no rerun necessary"));
 		}
 
-		if (timeSinceLastTrigger < MAX_PROCESSING_DELAY) {
+		if (timeSinceLastTrigger > MAX_PROCESSING_DELAY) {
 			timeup = true;
 			System.out.println(String.format("Ci job - run out of time"));
 		}

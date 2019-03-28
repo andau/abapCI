@@ -2,7 +2,7 @@
 <feature
       id="com.abapci.feature"
       label="ABAP Continuous Integration"
-      version="0.5.5.0"
+      version="0.5.5.1"
       provider-name="Andreas Gautsch">
 
    <description url="http://www.example.com/description">
